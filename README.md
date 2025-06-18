@@ -1,5 +1,9 @@
 # Nebuchadnezzar
 
+<div align="center">
+  <img src="assets/img/logo.png" alt="Nebuchadnezzar Logo" width="400"/>
+</div>
+
 ## Hierarchical Probabilistic Electric Circuit System for Biological Simulation
 
 **Nebuchadnezzar** is a revolutionary systems biology framework that models intracellular processes through hierarchical probabilistic electrical circuits, using ATP as the fundamental rate unit instead of time. Named after the ancient king who built magnificent structures, Nebuchadnezzar constructs foundational biological evidence through multi-scale electrical circuit simulation.
