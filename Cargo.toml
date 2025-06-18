@@ -1,0 +1,25 @@
+[package]
+name = "nebuchadnezzar"
+version = "0.1.0"
+edition = "2021"
+authors = ["Kundai Farai Sachikonye <kundai.f.sachikonye@gmail.com>"]
+description = "Nebuchadnezzar: Hierarchical Probabilistic Electric Circuit System for Biological Simulation"
+license = "MIT"
+repository = "https://github.com/fullscreen-triangle/nebuchadnezzar"
+keywords = ["cli", "tool"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bin]]
+name = "my_binary"
+path = "src/bin/my_binary.rs"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
