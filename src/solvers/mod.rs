@@ -1,483 +1,514 @@
-//! # Solvers Module: ATP-Based Differential Equation Integration
+//! # ATP-Based Differential Equation Solvers
 //! 
-//! This module provides the core numerical methods for solving ATP-based differential equations,
-//! the mathematical foundation of the Nebuchadnezzar framework. It implements both explicit and
-//! implicit integration methods specifically designed for ATP-coupled systems.
-//!
-//! ## Core Innovation: ATP-Based Integration
-//!
-//! Instead of traditional time-based integration (dx/dt), this module implements:
-//! - dx/dATP integration methods
-//! - ATP consumption-driven adaptive stepping
-//! - Energy-aware error control
-//! - Stiff system handling for ATP-coupled reactions
-//!
-//! ## Mathematical Foundation
-//!
-//! The fundamental transformation: dx/dATP = (dx/dt) / (dATP/dt)
-//! This allows integration with respect to ATP consumption rather than time.
-
-pub mod ode_solvers;
-pub mod stochastic;
-pub mod adaptive;
-pub mod linear_algebra;
+//! This module provides numerical integration methods for solving differential equations
+//! with ATP consumption as the independent variable (dx/dATP instead of dx/dt).
+//! 
+//! ## Solver Architecture
+//! 
+//! The solver system includes:
+//! - **Basic ATP Integrators**: Euler, RK4, Adaptive methods
+//! - **Advanced Solvers**: Linear/nonlinear, Laplace domain, stochastic
+//! - **Interfacial Process Modeling**: O2 uptake, temperature, pH effects
+//! - **Multi-scale Hybrid Solvers**: Combining multiple approaches
 
 use crate::error::{NebuchadnezzarError, Result};
 use crate::systems_biology::AtpPool;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-/// System state vector for ATP-based integration
+pub mod advanced_solvers;
+
+pub use advanced_solvers::*;
+
+/// System state representation for ATP-based differential equations
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SystemState {
-    /// Metabolite concentrations (mM)
     pub concentrations: Vec<f64>,
-    
-    /// ATP pool state
+    pub fluxes: Vec<f64>,
+    pub voltages: Vec<f64>,
     pub atp_pool: AtpPool,
-    
-    /// Electrical state variables (mV, pA)
-    pub electrical_state: Vec<f64>,
-    
-    /// Gating variables for ion channels [0,1]
-    pub gating_variables: Vec<f64>,
-    
-    /// System time (s)
     pub time: f64,
-    
-    /// Cumulative ATP consumption (mM)
     pub cumulative_atp: f64,
-    
-    /// Additional state variables
-    pub additional_variables: HashMap<String, f64>,
+    pub metabolite_names: Vec<String>,
 }
 
 impl SystemState {
-    pub fn new(n_metabolites: usize, n_electrical: usize, n_gating: usize) -> Self {
+    pub fn new(n_concentrations: usize, n_fluxes: usize, n_voltages: usize) -> Self {
         Self {
-            concentrations: vec![0.0; n_metabolites],
-            atp_pool: AtpPool::new_physiological(),
-            electrical_state: vec![0.0; n_electrical],
-            gating_variables: vec![0.0; n_gating],
+            concentrations: vec![0.0; n_concentrations],
+            fluxes: vec![0.0; n_fluxes],
+            voltages: vec![0.0; n_voltages],
+            atp_pool: AtpPool::new(5.0, 1.0, 0.5),
             time: 0.0,
             cumulative_atp: 0.0,
-            additional_variables: HashMap::new(),
+            metabolite_names: Vec::new(),
         }
     }
 
-    pub fn zeros(size: usize) -> Self {
-        Self::new(size, 0, 0)
+    pub fn set_metabolite_names(&mut self, names: Vec<String>) {
+        self.metabolite_names = names;
     }
 
-    pub fn size(&self) -> usize {
-        self.concentrations.len() + 
-        5 + // ATP pool components
-        self.electrical_state.len() + 
-        self.gating_variables.len() +
-        self.additional_variables.len()
+    pub fn get_concentration(&self, metabolite: &str) -> Option<f64> {
+        self.metabolite_names.iter()
+            .position(|name| name == metabolite)
+            .map(|index| self.concentrations[index])
     }
 
-    /// Convert to flat vector for numerical operations
-    pub fn to_vector(&self) -> Vec<f64> {
-        let mut vec = Vec::new();
-        
-        // Metabolite concentrations
-        vec.extend_from_slice(&self.concentrations);
-        
-        // ATP pool state
-        vec.push(self.atp_pool.atp_concentration);
-        vec.push(self.atp_pool.adp_concentration);
-        vec.push(self.atp_pool.amp_concentration);
-        vec.push(self.atp_pool.pi_concentration);
-        vec.push(self.atp_pool.energy_charge);
-        
-        // Electrical state
-        vec.extend_from_slice(&self.electrical_state);
-        
-        // Gating variables
-        vec.extend_from_slice(&self.gating_variables);
-        
-        // Additional variables (in deterministic order)
-        let mut additional_keys: Vec<_> = self.additional_variables.keys().collect();
-        additional_keys.sort();
-        for key in additional_keys {
-            vec.push(self.additional_variables[key]);
+    pub fn set_concentration(&mut self, metabolite: &str, concentration: f64) -> Result<()> {
+        if let Some(index) = self.metabolite_names.iter().position(|name| name == metabolite) {
+            self.concentrations[index] = concentration;
+            Ok(())
+        } else {
+            Err(NebuchadnezzarError::ComputationError(
+                format!("Metabolite not found: {}", metabolite)
+            ))
         }
-        
-        vec
-    }
-
-    /// Create from flat vector
-    pub fn from_vector(&self, vec: &[f64]) -> Result<Self> {
-        let mut index = 0;
-        let mut new_state = self.clone();
-
-        // Metabolite concentrations
-        let n_metabolites = self.concentrations.len();
-        if vec.len() < index + n_metabolites {
-            return Err(NebuchadnezzarError::ComputationError(
-                "Vector too short for metabolite concentrations".to_string()
-            ));
-        }
-        new_state.concentrations.copy_from_slice(&vec[index..index + n_metabolites]);
-        index += n_metabolites;
-
-        // ATP pool
-        if vec.len() < index + 5 {
-            return Err(NebuchadnezzarError::ComputationError(
-                "Vector too short for ATP pool".to_string()
-            ));
-        }
-        new_state.atp_pool.atp_concentration = vec[index];
-        new_state.atp_pool.adp_concentration = vec[index + 1];
-        new_state.atp_pool.amp_concentration = vec[index + 2];
-        new_state.atp_pool.pi_concentration = vec[index + 3];
-        new_state.atp_pool.energy_charge = vec[index + 4];
-        index += 5;
-
-        // Electrical state
-        let n_electrical = self.electrical_state.len();
-        if vec.len() < index + n_electrical {
-            return Err(NebuchadnezzarError::ComputationError(
-                "Vector too short for electrical state".to_string()
-            ));
-        }
-        new_state.electrical_state.copy_from_slice(&vec[index..index + n_electrical]);
-        index += n_electrical;
-
-        // Gating variables
-        let n_gating = self.gating_variables.len();
-        if vec.len() < index + n_gating {
-            return Err(NebuchadnezzarError::ComputationError(
-                "Vector too short for gating variables".to_string()
-            ));
-        }
-        new_state.gating_variables.copy_from_slice(&vec[index..index + n_gating]);
-        index += n_gating;
-
-        // Additional variables
-        let mut additional_keys: Vec<_> = self.additional_variables.keys().collect();
-        additional_keys.sort();
-        for key in additional_keys {
-            if vec.len() <= index {
-                return Err(NebuchadnezzarError::ComputationError(
-                    "Vector too short for additional variables".to_string()
-                ));
-            }
-            new_state.additional_variables.insert(key.clone(), vec[index]);
-            index += 1;
-        }
-
-        Ok(new_state)
     }
 }
 
-/// Trait for ATP-based derivative calculation
-pub trait AtpDerivativeFunction {
-    fn calculate_derivatives(
-        &self,
-        state: &SystemState,
-        parameters: &SystemParameters,
-    ) -> Result<SystemState>;
-    
-    fn calculate_atp_consumption_rate(
-        &self,
-        state: &SystemState,
-        parameters: &SystemParameters,
-    ) -> Result<f64>;
-}
-
-/// System parameters for ATP-based differential equations
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SystemParameters {
-    /// Metabolite names
-    pub metabolites: Vec<String>,
-    
-    /// Reaction parameters
-    pub reactions: Vec<ReactionParameters>,
-    
-    /// Membrane parameters for electrical dynamics
-    pub membranes: Vec<MembraneParameters>,
-    
-    /// ATP synthesis/consumption parameters
-    pub atp_parameters: AtpParameters,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ReactionParameters {
-    pub name: String,
-    pub rate_constant: f64,
-    pub atp_stoichiometry: f64, // ATP consumed (+) or produced (-)
-    pub substrates: HashMap<String, f64>, // substrate name -> stoichiometry
-    pub products: HashMap<String, f64>,   // product name -> stoichiometry
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MembraneParameters {
-    pub name: String,
-    pub capacitance: f64, // pF
-    pub area: f64,        // μm²
-    pub ion_channels: Vec<IonChannelParameters>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IonChannelParameters {
-    pub name: String,
-    pub max_conductance: f64, // pS
-    pub reversal_potential: f64, // mV
-    pub gating_variables: Vec<String>,
-    pub atp_dependence: Option<AtpDependence>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AtpDependence {
-    pub km: f64,
-    pub hill_coefficient: f64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AtpParameters {
-    pub synthesis_rate: f64,  // mM/s
-    pub basal_consumption_rate: f64, // mM/s
-    pub adenylate_kinase_keq: f64, // Equilibrium constant
-}
-
-/// ATP-based integration methods
+/// Base trait for ATP-based integrators
 pub trait AtpIntegrator {
-    fn step(
-        &mut self,
-        state: &SystemState,
-        d_atp: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<SystemState>;
-    
-    fn step_adaptive(
-        &mut self,
-        state: &SystemState,
-        d_atp_initial: f64,
-        tolerance: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<(SystemState, f64)>;
+    fn integrate_step(&mut self, state: &SystemState, delta_atp: f64) -> Result<SystemState>;
+    fn set_step_size(&mut self, step_size: f64);
+    fn get_step_size(&self) -> f64;
 }
 
-/// Forward Euler method for ATP-based ODEs
-pub struct AtpEulerIntegrator;
+/// Euler integrator for ATP-based systems
+pub struct AtpEulerIntegrator {
+    step_size: f64,
+}
+
+impl AtpEulerIntegrator {
+    pub fn new(step_size: f64) -> Self {
+        Self { step_size }
+    }
+}
 
 impl AtpIntegrator for AtpEulerIntegrator {
-    fn step(
-        &mut self,
-        state: &SystemState,
-        d_atp: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<SystemState> {
-        let derivatives = derivative_fn.calculate_derivatives(state, parameters)?;
-        let state_vec = state.to_vector();
-        let deriv_vec = derivatives.to_vector();
+    fn integrate_step(&mut self, state: &SystemState, delta_atp: f64) -> Result<SystemState> {
+        let mut new_state = state.clone();
         
-        let new_vec: Vec<f64> = state_vec.iter()
-            .zip(deriv_vec.iter())
-            .map(|(s, d)| s + d * d_atp)
-            .collect();
-        
-        let mut new_state = state.from_vector(&new_vec)?;
-        new_state.cumulative_atp += d_atp;
-        
-        // Update time based on ATP consumption rate
-        let atp_rate = derivative_fn.calculate_atp_consumption_rate(state, parameters)?;
-        if atp_rate.abs() > f64::EPSILON {
-            new_state.time += d_atp / atp_rate;
-        }
-        
-        Ok(new_state)
-    }
-    
-    fn step_adaptive(
-        &mut self,
-        state: &SystemState,
-        d_atp_initial: f64,
-        tolerance: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<(SystemState, f64)> {
-        // Simple adaptive stepping for Euler method
-        let mut d_atp = d_atp_initial;
-        
-        loop {
-            // Calculate with full step
-            let result_full = self.step(state, d_atp, derivative_fn, parameters)?;
+        // Simple Euler integration: x_new = x_old + (dx/dATP) * delta_ATP
+        for i in 0..state.concentrations.len() {
+            let derivative = self.compute_derivative(state, i, delta_atp)?;
+            new_state.concentrations[i] += derivative * delta_atp;
             
-            // Calculate with two half steps
-            let intermediate = self.step(state, d_atp / 2.0, derivative_fn, parameters)?;
-            let result_half = self.step(&intermediate, d_atp / 2.0, derivative_fn, parameters)?;
-            
-            // Estimate error
-            let error = calculate_error_estimate(&result_full, &result_half)?;
-            
-            if error < tolerance {
-                // Accept step, possibly increase step size
-                let new_d_atp = d_atp * (tolerance / error).powf(0.2).min(2.0);
-                return Ok((result_half, new_d_atp));
-            } else {
-                // Reject step, decrease step size
-                d_atp *= (tolerance / error).powf(0.25).max(0.1);
-                if d_atp < 1e-12 {
-                    return Err(NebuchadnezzarError::ConvergenceError(
-                        "ATP step size too small".to_string()
-                    ));
-                }
+            // Ensure non-negative concentrations
+            if new_state.concentrations[i] < 0.0 {
+                new_state.concentrations[i] = 0.0;
             }
         }
+
+        // Update ATP pool
+        new_state.atp_pool.consume_atp(delta_atp)?;
+        new_state.cumulative_atp += delta_atp;
+
+        Ok(new_state)
+    }
+
+    fn set_step_size(&mut self, step_size: f64) {
+        self.step_size = step_size;
+    }
+
+    fn get_step_size(&self) -> f64 {
+        self.step_size
     }
 }
 
-/// 4th-order Runge-Kutta method for ATP-based ODEs
-pub struct AtpRk4Integrator;
+impl AtpEulerIntegrator {
+    fn compute_derivative(&self, state: &SystemState, metabolite_index: usize, delta_atp: f64) -> Result<f64> {
+        // Simplified derivative calculation
+        // In practice, this would involve complex biochemical rate laws
+        let concentration = state.concentrations[metabolite_index];
+        let atp_effect = state.atp_pool.atp_concentration / (1.0 + state.atp_pool.atp_concentration);
+        
+        // Simple first-order kinetics with ATP dependence
+        Ok(-0.1 * concentration * atp_effect)
+    }
+}
+
+/// Runge-Kutta 4th order integrator for ATP-based systems
+pub struct AtpRk4Integrator {
+    step_size: f64,
+}
+
+impl AtpRk4Integrator {
+    pub fn new(step_size: f64) -> Self {
+        Self { step_size }
+    }
+}
 
 impl AtpIntegrator for AtpRk4Integrator {
-    fn step(
-        &mut self,
-        state: &SystemState,
-        d_atp: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<SystemState> {
-        // k1 = f(y_n)
-        let k1 = derivative_fn.calculate_derivatives(state, parameters)?;
+    fn integrate_step(&mut self, state: &SystemState, delta_atp: f64) -> Result<SystemState> {
+        let mut new_state = state.clone();
         
-        // k2 = f(y_n + d_atp/2 * k1)
-        let state_k2 = add_scaled_derivative(state, &k1, d_atp / 2.0)?;
-        let k2 = derivative_fn.calculate_derivatives(&state_k2, parameters)?;
-        
-        // k3 = f(y_n + d_atp/2 * k2)
-        let state_k3 = add_scaled_derivative(state, &k2, d_atp / 2.0)?;
-        let k3 = derivative_fn.calculate_derivatives(&state_k3, parameters)?;
-        
-        // k4 = f(y_n + d_atp * k3)
-        let state_k4 = add_scaled_derivative(state, &k3, d_atp)?;
-        let k4 = derivative_fn.calculate_derivatives(&state_k4, parameters)?;
-        
-        // Combine derivatives with RK4 weights
-        let combined = combine_derivatives(&[k1, k2, k3, k4], &[1.0/6.0, 1.0/3.0, 1.0/3.0, 1.0/6.0])?;
-        
-        let mut new_state = add_scaled_derivative(state, &combined, d_atp)?;
-        new_state.cumulative_atp += d_atp;
-        
-        // Update time
-        let atp_rate = derivative_fn.calculate_atp_consumption_rate(state, parameters)?;
-        if atp_rate.abs() > f64::EPSILON {
-            new_state.time += d_atp / atp_rate;
+        // RK4 integration for each concentration
+        for i in 0..state.concentrations.len() {
+            let k1 = self.compute_derivative(state, i, delta_atp)?;
+            
+            // Create intermediate state for k2
+            let mut temp_state = state.clone();
+            temp_state.concentrations[i] += k1 * delta_atp * 0.5;
+            let k2 = self.compute_derivative(&temp_state, i, delta_atp)?;
+            
+            // Create intermediate state for k3
+            temp_state.concentrations[i] = state.concentrations[i] + k2 * delta_atp * 0.5;
+            let k3 = self.compute_derivative(&temp_state, i, delta_atp)?;
+            
+            // Create intermediate state for k4
+            temp_state.concentrations[i] = state.concentrations[i] + k3 * delta_atp;
+            let k4 = self.compute_derivative(&temp_state, i, delta_atp)?;
+            
+            // RK4 formula
+            new_state.concentrations[i] += (k1 + 2.0 * k2 + 2.0 * k3 + k4) * delta_atp / 6.0;
+            
+            // Ensure non-negative concentrations
+            if new_state.concentrations[i] < 0.0 {
+                new_state.concentrations[i] = 0.0;
+            }
         }
-        
+
+        // Update ATP pool
+        new_state.atp_pool.consume_atp(delta_atp)?;
+        new_state.cumulative_atp += delta_atp;
+
         Ok(new_state)
     }
-    
-    fn step_adaptive(
-        &mut self,
-        state: &SystemState,
-        d_atp_initial: f64,
-        tolerance: f64,
-        derivative_fn: &dyn AtpDerivativeFunction,
-        parameters: &SystemParameters,
-    ) -> Result<(SystemState, f64)> {
-        let mut d_atp = d_atp_initial;
+
+    fn set_step_size(&mut self, step_size: f64) {
+        self.step_size = step_size;
+    }
+
+    fn get_step_size(&self) -> f64 {
+        self.step_size
+    }
+}
+
+impl AtpRk4Integrator {
+    fn compute_derivative(&self, state: &SystemState, metabolite_index: usize, delta_atp: f64) -> Result<f64> {
+        // More sophisticated derivative calculation for RK4
+        let concentration = state.concentrations[metabolite_index];
+        let atp_effect = state.atp_pool.atp_concentration / (0.5 + state.atp_pool.atp_concentration);
         
+        // Include flux terms if available
+        let flux_contribution = if metabolite_index < state.fluxes.len() {
+            state.fluxes[metabolite_index]
+        } else {
+            0.0
+        };
+        
+        // Michaelis-Menten-like kinetics with ATP dependence
+        let km = 1.0;
+        let vmax = 2.0;
+        let rate = vmax * concentration / (km + concentration) * atp_effect;
+        
+        Ok(flux_contribution - rate)
+    }
+}
+
+/// Adaptive step size integrator
+pub struct AdaptiveStepIntegrator {
+    base_integrator: AtpRk4Integrator,
+    min_step: f64,
+    max_step: f64,
+    tolerance: f64,
+    safety_factor: f64,
+}
+
+impl AdaptiveStepIntegrator {
+    pub fn new(initial_step: f64, tolerance: f64) -> Self {
+        Self {
+            base_integrator: AtpRk4Integrator::new(initial_step),
+            min_step: initial_step * 0.01,
+            max_step: initial_step * 100.0,
+            tolerance,
+            safety_factor: 0.9,
+        }
+    }
+
+    fn estimate_error(&self, state1: &SystemState, state2: &SystemState) -> f64 {
+        let mut max_error = 0.0;
+        
+        for i in 0..state1.concentrations.len() {
+            let error = (state1.concentrations[i] - state2.concentrations[i]).abs();
+            let scale = state1.concentrations[i].abs().max(state2.concentrations[i].abs()).max(1e-10);
+            let relative_error = error / scale;
+            max_error = max_error.max(relative_error);
+        }
+        
+        max_error
+    }
+
+    fn adjust_step_size(&mut self, error: f64) {
+        if error > self.tolerance {
+            // Reduce step size
+            let factor = self.safety_factor * (self.tolerance / error).powf(0.25);
+            let new_step = self.base_integrator.get_step_size() * factor.max(0.1);
+            self.base_integrator.set_step_size(new_step.max(self.min_step));
+        } else if error < self.tolerance * 0.1 {
+            // Increase step size
+            let factor = self.safety_factor * (self.tolerance / error).powf(0.2);
+            let new_step = self.base_integrator.get_step_size() * factor.min(2.0);
+            self.base_integrator.set_step_size(new_step.min(self.max_step));
+        }
+    }
+}
+
+impl AtpIntegrator for AdaptiveStepIntegrator {
+    fn integrate_step(&mut self, state: &SystemState, delta_atp: f64) -> Result<SystemState> {
         loop {
-            // Calculate with full step
-            let result_full = self.step(state, d_atp, derivative_fn, parameters)?;
+            // Take a full step
+            let full_step = self.base_integrator.integrate_step(state, delta_atp)?;
             
-            // Calculate with two half steps
-            let intermediate = self.step(state, d_atp / 2.0, derivative_fn, parameters)?;
-            let result_half = self.step(&intermediate, d_atp / 2.0, derivative_fn, parameters)?;
+            // Take two half steps
+            let half_step = delta_atp * 0.5;
+            let intermediate = self.base_integrator.integrate_step(state, half_step)?;
+            let double_step = self.base_integrator.integrate_step(&intermediate, half_step)?;
             
-            // Estimate error (RK4 has higher order, so error is O(h^5))
-            let error = calculate_error_estimate(&result_full, &result_half)?;
+            // Estimate error
+            let error = self.estimate_error(&full_step, &double_step);
             
-            if error < tolerance {
-                // Accept step, possibly increase step size
-                let new_d_atp = d_atp * (tolerance / error).powf(0.2).min(2.0);
-                return Ok((result_half, new_d_atp));
+            if error <= self.tolerance {
+                // Accept the step and adjust step size for next iteration
+                self.adjust_step_size(error);
+                return Ok(double_step); // Use the more accurate double step
             } else {
-                // Reject step, decrease step size
-                d_atp *= (tolerance / error).powf(0.25).max(0.1);
-                if d_atp < 1e-12 {
-                    return Err(NebuchadnezzarError::ConvergenceError(
-                        "ATP step size too small".to_string()
+                // Reject the step and try again with smaller step size
+                self.adjust_step_size(error);
+                
+                // Prevent infinite loop
+                if self.base_integrator.get_step_size() <= self.min_step {
+                    return Err(NebuchadnezzarError::ComputationError(
+                        "Step size too small, integration failed".to_string()
                     ));
                 }
             }
         }
     }
+
+    fn set_step_size(&mut self, step_size: f64) {
+        self.base_integrator.set_step_size(step_size);
+    }
+
+    fn get_step_size(&self) -> f64 {
+        self.base_integrator.get_step_size()
+    }
 }
 
-// Helper functions for ATP-based integration
-
-fn add_scaled_derivative(
-    state: &SystemState,
-    derivative: &SystemState,
-    scale: f64,
-) -> Result<SystemState> {
-    let state_vec = state.to_vector();
-    let deriv_vec = derivative.to_vector();
-    
-    let new_vec: Vec<f64> = state_vec.iter()
-        .zip(deriv_vec.iter())
-        .map(|(s, d)| s + d * scale)
-        .collect();
-    
-    state.from_vector(&new_vec)
+/// Specialized integrator for stiff systems
+pub struct StiffAtpIntegrator {
+    step_size: f64,
+    jacobian_cache: HashMap<String, Vec<Vec<f64>>>,
 }
 
-fn combine_derivatives(
-    derivatives: &[SystemState],
-    weights: &[f64],
-) -> Result<SystemState> {
-    if derivatives.is_empty() {
-        return Err(NebuchadnezzarError::ComputationError(
-            "No derivatives to combine".to_string()
-        ));
-    }
-    
-    if derivatives.len() != weights.len() {
-        return Err(NebuchadnezzarError::ComputationError(
-            "Derivatives and weights length mismatch".to_string()
-        ));
-    }
-    
-    let size = derivatives[0].size();
-    let mut combined_vec = vec![0.0; size];
-    
-    for (derivative, weight) in derivatives.iter().zip(weights.iter()) {
-        let deriv_vec = derivative.to_vector();
-        for (i, &val) in deriv_vec.iter().enumerate() {
-            combined_vec[i] += weight * val;
+impl StiffAtpIntegrator {
+    pub fn new(step_size: f64) -> Self {
+        Self {
+            step_size,
+            jacobian_cache: HashMap::new(),
         }
     }
-    
-    derivatives[0].from_vector(&combined_vec)
-}
 
-fn calculate_error_estimate(
-    result_full: &SystemState,
-    result_half: &SystemState,
-) -> Result<f64> {
-    let full_vec = result_full.to_vector();
-    let half_vec = result_half.to_vector();
-    
-    let mut error = 0.0;
-    for (full, half) in full_vec.iter().zip(half_vec.iter()) {
-        let diff = (full - half).abs();
-        let scale = full.abs().max(half.abs()).max(1e-10);
-        error = error.max(diff / scale);
+    fn compute_jacobian(&self, state: &SystemState) -> Result<Vec<Vec<f64>>> {
+        let n = state.concentrations.len();
+        let mut jacobian = vec![vec![0.0; n]; n];
+        
+        // Compute numerical Jacobian
+        let epsilon = 1e-8;
+        
+        for i in 0..n {
+            for j in 0..n {
+                let mut state_plus = state.clone();
+                let mut state_minus = state.clone();
+                
+                state_plus.concentrations[j] += epsilon;
+                state_minus.concentrations[j] -= epsilon;
+                
+                let f_plus = self.compute_derivative_vector(&state_plus)?;
+                let f_minus = self.compute_derivative_vector(&state_minus)?;
+                
+                jacobian[i][j] = (f_plus[i] - f_minus[i]) / (2.0 * epsilon);
+            }
+        }
+        
+        Ok(jacobian)
     }
-    
-    Ok(error)
+
+    fn compute_derivative_vector(&self, state: &SystemState) -> Result<Vec<f64>> {
+        let mut derivatives = vec![0.0; state.concentrations.len()];
+        
+        for i in 0..state.concentrations.len() {
+            let concentration = state.concentrations[i];
+            let atp_effect = state.atp_pool.atp_concentration / (1.0 + state.atp_pool.atp_concentration);
+            
+            // Stiff system example: fast equilibrium reactions
+            derivatives[i] = -10.0 * concentration * atp_effect; // Fast reaction
+            
+            if i > 0 {
+                derivatives[i] += 0.1 * state.concentrations[i-1]; // Slow coupling
+            }
+        }
+        
+        Ok(derivatives)
+    }
 }
 
-// Re-export key components
-pub use ode_solvers::*;
-pub use stochastic::*;
-pub use adaptive::*;
-pub use linear_algebra::*; 
+impl AtpIntegrator for StiffAtpIntegrator {
+    fn integrate_step(&mut self, state: &SystemState, delta_atp: f64) -> Result<SystemState> {
+        let mut new_state = state.clone();
+        
+        // Implicit Euler method for stiff systems
+        // (I - h*J) * (x_new - x_old) = h * f(x_old)
+        
+        let jacobian = self.compute_jacobian(state)?;
+        let derivatives = self.compute_derivative_vector(state)?;
+        
+        // Solve linear system (simplified implementation)
+        // In practice, would use proper linear algebra library
+        for i in 0..state.concentrations.len() {
+            let implicit_term = 1.0 + delta_atp * jacobian[i][i];
+            new_state.concentrations[i] = (state.concentrations[i] + delta_atp * derivatives[i]) / implicit_term;
+            
+            // Ensure non-negative concentrations
+            if new_state.concentrations[i] < 0.0 {
+                new_state.concentrations[i] = 0.0;
+            }
+        }
+
+        // Update ATP pool
+        new_state.atp_pool.consume_atp(delta_atp)?;
+        new_state.cumulative_atp += delta_atp;
+
+        Ok(new_state)
+    }
+
+    fn set_step_size(&mut self, step_size: f64) {
+        self.step_size = step_size;
+    }
+
+    fn get_step_size(&self) -> f64 {
+        self.step_size
+    }
+}
+
+/// Factory for creating integrators
+pub struct IntegratorFactory;
+
+impl IntegratorFactory {
+    pub fn create_euler(step_size: f64) -> Box<dyn AtpIntegrator> {
+        Box::new(AtpEulerIntegrator::new(step_size))
+    }
+
+    pub fn create_rk4(step_size: f64) -> Box<dyn AtpIntegrator> {
+        Box::new(AtpRk4Integrator::new(step_size))
+    }
+
+    pub fn create_adaptive(initial_step: f64, tolerance: f64) -> Box<dyn AtpIntegrator> {
+        Box::new(AdaptiveStepIntegrator::new(initial_step, tolerance))
+    }
+
+    pub fn create_stiff(step_size: f64) -> Box<dyn AtpIntegrator> {
+        Box::new(StiffAtpIntegrator::new(step_size))
+    }
+
+    pub fn create_hybrid(config: HybridSolverConfig) -> Box<dyn AtpIntegrator> {
+        Box::new(HybridMultiScaleSolver::new(config))
+    }
+
+    /// Create solver based on problem characteristics
+    pub fn create_auto(problem_type: ProblemType, step_size: f64) -> Box<dyn AtpIntegrator> {
+        match problem_type {
+            ProblemType::Stiff => Self::create_stiff(step_size),
+            ProblemType::Oscillatory => {
+                let config = HybridSolverConfig {
+                    linear_config: LinearSolverConfig {
+                        matrix_solver: MatrixSolverType::LU,
+                        tolerance: 1e-6,
+                        max_iterations: 100,
+                        use_laplace_analysis: true,
+                    },
+                    nonlinear_config: NonlinearSolverConfig {
+                        method: NonlinearMethod::NewtonRaphson,
+                        tolerance: 1e-6,
+                        max_iterations: 50,
+                        step_size_control: true,
+                    },
+                    coupling_strength: 0.1,
+                    scale_separation_threshold: 10.0,
+                };
+                Self::create_hybrid(config)
+            },
+            ProblemType::FastSlow => Self::create_adaptive(step_size, 1e-6),
+            ProblemType::Standard => Self::create_rk4(step_size),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ProblemType {
+    Standard,    // Regular biochemical kinetics
+    Stiff,       // Fast equilibrium reactions
+    Oscillatory, // Circadian rhythms, action potentials
+    FastSlow,    // Multi-timescale dynamics
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_system_state() {
+        let mut state = SystemState::new(3, 2, 1);
+        state.set_metabolite_names(vec!["glucose".to_string(), "atp".to_string(), "adp".to_string()]);
+        
+        assert!(state.set_concentration("glucose", 5.0).is_ok());
+        assert_eq!(state.get_concentration("glucose"), Some(5.0));
+        assert_eq!(state.get_concentration("unknown"), None);
+    }
+
+    #[test]
+    fn test_euler_integrator() {
+        let mut integrator = AtpEulerIntegrator::new(0.01);
+        let state = SystemState::new(2, 0, 0);
+        
+        let result = integrator.integrate_step(&state, 0.1);
+        assert!(result.is_ok());
+        
+        let new_state = result.unwrap();
+        assert_eq!(new_state.cumulative_atp, 0.1);
+    }
+
+    #[test]
+    fn test_rk4_integrator() {
+        let mut integrator = AtpRk4Integrator::new(0.01);
+        let state = SystemState::new(2, 0, 0);
+        
+        let result = integrator.integrate_step(&state, 0.1);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_adaptive_integrator() {
+        let mut integrator = AdaptiveStepIntegrator::new(0.01, 1e-6);
+        let state = SystemState::new(2, 0, 0);
+        
+        let result = integrator.integrate_step(&state, 0.1);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_integrator_factory() {
+        let euler = IntegratorFactory::create_euler(0.01);
+        assert_eq!(euler.get_step_size(), 0.01);
+        
+        let rk4 = IntegratorFactory::create_rk4(0.01);
+        assert_eq!(rk4.get_step_size(), 0.01);
+        
+        let adaptive = IntegratorFactory::create_adaptive(0.01, 1e-6);
+        assert_eq!(adaptive.get_step_size(), 0.01);
+
+        let auto_solver = IntegratorFactory::create_auto(ProblemType::Oscillatory, 0.01);
+        assert_eq!(auto_solver.get_step_size(), 0.001); // Hybrid solver default
+    }
+} 
