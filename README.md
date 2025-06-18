@@ -1,10 +1,22 @@
-# Nebuchadnezzar
-
 <div align="center">
-  <img src="assets/img/logo.png" alt="Nebuchadnezzar Logo" width="400"/>
-</div>
+     <h1 align="center">Nebuchadnezzar</h1>
+
+
+
+<img src="assets/img/logo.png" alt="Nebuchadnezzar Logo" width="400"/>
 
 ## Hierarchical Probabilistic Electric Circuit System for Biological Simulation
+
+[![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/fullscreen-triangle/nebuchadnezzar/ci.yml?branch=master&style=for-the-badge)](https://github.com/fullscreen-triangle/nebuchadnezzar/actions)
+[![Crates.io](https://img.shields.io/crates/v/nebuchadnezzar?style=for-the-badge)](https://crates.io/crates/nebuchadnezzar)
+[![Documentation](https://img.shields.io/docsrs/nebuchadnezzar?style=for-the-badge)](https://docs.rs/nebuchadnezzar)
+[![GitHub Stars](https://img.shields.io/github/stars/fullscreen-triangle/nebuchadnezzar?style=for-the-badge)](https://github.com/fullscreen-triangle/nebuchadnezzar/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/fullscreen-triangle/nebuchadnezzar?style=for-the-badge)](https://github.com/fullscreen-triangle/nebuchadnezzar/issues)
+[![GitHub Forks](https://img.shields.io/github/forks/fullscreen-triangle/nebuchadnezzar?style=for-the-badge)](https://github.com/fullscreen-triangle/nebuchadnezzar/network/members)
+
+</div>
 
 **Nebuchadnezzar** is a revolutionary systems biology framework that models intracellular processes through hierarchical probabilistic electrical circuits, using ATP as the fundamental rate unit instead of time. Named after the ancient king who built magnificent structures, Nebuchadnezzar constructs foundational biological evidence through multi-scale electrical circuit simulation.
 
