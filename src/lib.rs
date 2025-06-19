@@ -1,21 +1,24 @@
-//! # Nebuchadnezzar: ATP-Driven Intracellular Circuit Simulation
+//! # Nebuchadnezzar: Quantum-Enhanced ATP-Driven Biological Circuit Simulation
 //! 
-//! A comprehensive system for simulating intracellular cellular processes using hierarchical 
-//! probabilistic electric circuits with differential equations based on ATP as the rate unit.
+//! A comprehensive system for simulating biological processes using quantum-enhanced
+//! hierarchical probabilistic electric circuits with foundational theorems for
+//! membrane quantum computation, universal oscillatory dynamics, and entropy manipulation.
 //! 
-//! ## Key Features
+//! ## Foundational Framework
 //! 
+//! - **Membrane Quantum Computation**: ENAQT-based room-temperature quantum computation in biological membranes
+//! - **Universal Oscillatory Dynamics**: Causal Selection theorem governing oscillatory behavior in bounded nonlinear systems  
+//! - **Entropy Reformulation**: Probabilistic points and resolutions for direct entropy manipulation
 //! - **ATP-based Rate Modeling**: Uses dx/dATP instead of dx/dt for biologically meaningful rates
 //! - **Hierarchical Probabilistic Circuits**: 4-level framework from molecular to tissue level
-//! - **Dynamic Circuit Resolution**: Converts probabilistic nodes to detailed circuits adaptively
-//! - **Multi-level Voltage Hierarchy**: Cellular, organelle, compartment, and molecular levels
-//! - **Temporal Evidence Decay**: Across timescales from milliseconds to days
-//! - **Enzyme Logic Gates**: Biochemical transformations as probabilistic logic circuits
 //! 
 //! ## Architecture
 //! 
 //! The system is organized into several key modules:
 //! 
+//! - **quantum_membranes**: Environment-Assisted Quantum Transport (ENAQT) implementation
+//! - **oscillatory_dynamics**: Universal oscillatory framework with Causal Selection
+//! - **entropy_manipulation**: Probabilistic points and resolutions system
 //! - **circuits**: Electrical circuit foundation with ion channels, enzyme circuits, and grid systems
 //! - **solvers**: ATP-based differential equation integration
 //! - **systems_biology**: ATP kinetics and cellular energy management
@@ -44,6 +47,9 @@
 //! ```
 
 pub mod error;
+pub mod quantum_membranes;
+pub mod oscillatory_dynamics;
+pub mod entropy_manipulation;
 pub mod circuits;
 pub mod solvers;
 pub mod systems_biology;
@@ -51,6 +57,31 @@ pub mod utils;
 
 // Re-export commonly used types
 pub use error::{NebuchadnezzarError, Result};
+
+// Foundational framework exports
+pub use quantum_membranes::{
+    EnaqtProcessor,
+    QuantumMembrane,
+    CoherenceController,
+    TunnelingJunction,
+    EnvironmentalCoupling,
+};
+
+pub use oscillatory_dynamics::{
+    CausalSelector,
+    UniversalOscillator,
+    PhaseLocker,
+    FrequencyEntrainer,
+    OscillatorNetwork,
+};
+
+pub use entropy_manipulation::{
+    EntropyPoint,
+    Resolution,
+    PerturbationEngine,
+    ValidationNetwork,
+    EntropyManipulator,
+};
 
 pub use circuits::{
     Circuit,

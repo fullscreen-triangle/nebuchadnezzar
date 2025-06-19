@@ -18,11 +18,87 @@
 
 </div>
 
-**Nebuchadnezzar** is a revolutionary systems biology framework that models intracellular processes through hierarchical probabilistic electrical circuits, using ATP as the fundamental rate unit instead of time. Named after the ancient king who built magnificent structures, Nebuchadnezzar constructs foundational biological evidence through multi-scale electrical circuit simulation.
+**Nebuchadnezzar** is a systems biology framework that models intracellular processes through hierarchical probabilistic electrical circuits, using ATP as the fundamental rate unit instead of time. The framework is built on three foundational theorems that enable quantum computation in biological membranes, universal oscillatory dynamics, and manipulation of entropy as a tangible quantity.
+
+## Foundational Theoretical Framework
+
+### 1. Membrane Quantum Computation Theorem
+
+Biological membranes function as room-temperature quantum computers through Environment-Assisted Quantum Transport (ENAQT). Unlike artificial quantum computers that require isolation from environmental noise, biological systems optimize environmental coupling to enhance quantum coherence.
+
+**Core Principle:**
+```
+Coherence_biological = f(environmental_coupling, thermal_noise, membrane_structure)
+```
+
+**Mathematical Foundation:**
+- **Quantum State Evolution:** |ψ(t)⟩ = exp(-iHt/ℏ)|ψ(0)⟩ where H includes environmental interactions
+- **Decoherence Suppression:** Environmental noise constructively interferes to maintain coherence
+- **Transport Efficiency:** Quantum tunneling and superposition optimize energy transfer rates
+
+**Implementation in Circuits:**
+```rust
+struct QuantumMembrane {
+    coherence_time: f64,           // Quantum coherence duration
+    environmental_coupling: f64,   // Coupling strength to environment
+    tunneling_probability: f64,    // Quantum tunneling rate
+    superposition_states: Vec<QuantumState>,
+}
+```
+
+### 2. Universal Oscillatory Framework
+
+Oscillatory behavior emerges mathematically in any bounded nonlinear system. All biological processes exhibit oscillatory dynamics governed by Causal Selection principles.
+
+**Causal Selection Theorem:**
+```
+For system S with constraints C: lim(t→∞) behavior(S) → oscillatory_attractor
+```
+
+**Mathematical Formulation:**
+- **Phase Space Constraint:** dx/dt = F(x) where x ∈ bounded_domain
+- **Lyapunov Stability:** Oscillatory attractors are globally stable
+- **Frequency Locking:** Multiple oscillators synchronize through nonlinear coupling
+
+**Oscillatory Categories:**
+1. **Metabolic Oscillations:** ATP/ADP cycles, glycolytic oscillations
+2. **Membrane Oscillations:** Action potentials, calcium waves
+3. **Genetic Oscillations:** Circadian rhythms, cell cycle progression
+4. **Mechanical Oscillations:** Muscle contractions, flagellar motion
+
+### 3. Entropy Reformulation
+
+Entropy is reformulated as a manipulable quantity through probabilistic points and resolutions. This enables direct control and optimization of thermodynamic processes.
+
+**Probabilistic Points Framework:**
+```
+Entropy = ∑(probability_points × resolution_strength)
+```
+
+**Key Concepts:**
+- **Points:** Discrete probability masses representing system states
+- **Resolutions:** Transformation operators that modify point distributions
+- **Perturbation Validation:** Changes propagate through resolution networks
+- **Streaming Semantics:** Real-time entropy manipulation through point flow
+
+**Mathematical Implementation:**
+```rust
+struct EntropyPoint {
+    probability_mass: f64,
+    position: Vec<f64>,
+    resolution_connections: Vec<ResolutionId>,
+}
+
+struct Resolution {
+    transformation_matrix: Matrix<f64>,
+    perturbation_sensitivity: f64,
+    validation_criteria: Vec<Constraint>,
+}
+```
 
 ## Core Philosophy
 
-### Revolutionary Approach: ATP-Based Rate Modeling
+### ATP-Based Rate Modeling
 
 Traditional systems biology uses time-based differential equations:
 ```
@@ -40,14 +116,70 @@ This fundamental shift provides:
 - **Metabolic constraints**: Natural rate limiting based on ATP availability
 - **Pathway optimization**: Clear energetic objectives for pathway efficiency
 
-### Hierarchical Probabilistic Abstraction
+### Quantum-Enhanced Circuit Modeling
 
-Unlike traditional approaches requiring complete cellular knowledge, Nebuchadnezzar:
+The framework integrates quantum mechanical effects into classical circuit models:
 
-1. **Starts with probabilistic nodes** representing uncertain or abstracted processes
-2. **Expands to detailed circuits** only when needed for optimization or analysis
-3. **Represents cross-reactions and feedback** as probabilistic relationships
-4. **Maintains computational efficiency** through intelligent abstraction levels
+**Quantum Circuit Elements:**
+- **Quantum Resistors:** Resistance varies with quantum state coherence
+- **Coherence Capacitors:** Store quantum coherence as electrical charge
+- **Tunneling Junctions:** Enable quantum transport across membrane barriers
+- **Entanglement Networks:** Couple distant circuit elements through quantum correlations
+
+**Mathematical Integration:**
+```rust
+// Quantum-classical hybrid circuit equation
+dV/dt = (I_classical + I_quantum) / C_total
+where:
+I_quantum = ∑(tunneling_current + coherent_transport)
+C_total = C_classical + C_coherence
+```
+
+### Oscillatory Circuit Dynamics
+
+All circuit elements exhibit inherent oscillatory behavior:
+
+**Oscillator Classification:**
+```rust
+enum BiologicalOscillator {
+    Metabolic {
+        atp_frequency: f64,
+        coupling_strength: f64,
+    },
+    Membrane {
+        action_potential_freq: f64,
+        calcium_wave_period: f64,
+    },
+    Genetic {
+        transcription_cycle: f64,
+        protein_degradation_rate: f64,
+    },
+}
+```
+
+**Synchronization Networks:**
+- **Phase Locking:** Oscillators maintain fixed phase relationships
+- **Frequency Entrainment:** External signals drive oscillator frequencies
+- **Amplitude Modulation:** Oscillator strength varies with metabolic state
+
+### Entropy-Based Optimization
+
+Direct manipulation of system entropy through probabilistic point control:
+
+**Optimization Objectives:**
+```rust
+enum EntropyObjective {
+    MinimizeSystemEntropy,              // Increase order
+    MaximizeInformationEntropy,         // Increase information content
+    OptimizeEntropyProduction,          // Balance order vs. information
+    ConstrainEntropyFlow(f64),          // Limit entropy change rate
+}
+```
+
+**Resolution Networks:**
+- **Point Migration:** Probability masses flow between system states
+- **Resolution Cascades:** Changes propagate through connected resolutions
+- **Validation Loops:** System maintains thermodynamic consistency
 
 ## Architecture Overview
 
@@ -57,23 +189,22 @@ Unlike traditional approaches requiring complete cellular knowledge, Nebuchadnez
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────┐  │
-│  │   PHYSICAL LAYER    │    │   BIOLOGICAL LAYER  │    │ OPTIMIZATION│  │
-│  │   (Rust Core)       │    │   (ATP Kinetics)    │    │   LAYER     │  │
+│  │   QUANTUM LAYER     │    │   OSCILLATORY LAYER │    │  ENTROPY    │  │
+│  │   (Membranes)       │    │   (Dynamics)        │    │  LAYER      │  │
 │  │                     │    │                     │    │             │  │
-│  │ • Ion Channels      │◄──►│ • ATP Pools         │◄──►│ • Objective │  │
-│  │ • Membranes         │    │ • Rate Constants    │    │   Functions │  │
-│  │ • Circuit Networks  │    │ • Energetics       │    │ • Constraints│  │
-│  │ • Differential Eqs  │    │ • Pathway Models    │    │ • Optimizers│  │
+│  │ • ENAQT Computation │◄──►│ • Causal Selection  │◄──►│ • Points    │  │
+│  │ • Coherence Control │    │ • Phase Locking     │    │ • Resolutions│  │
+│  │ • Tunneling Events  │    │ • Frequency Sync    │    │ • Validation│  │
 │  └─────────────────────┘    └─────────────────────┘    └─────────────┘  │
 │           │                            │                         │       │
 │           └────────────────────────────┼─────────────────────────┘       │
 │                                        │                                 │
 │  ┌─────────────────────────────────────┼─────────────────────────────┐   │
-│  │              HIERARCHICAL PROBABILISTIC NODES                   │   │
+│  │              ATP-BASED CIRCUIT MODELING                        │   │
 │  │                                     │                           │   │
 │  │  ┌────────────────┐  ┌─────────────┼──────────┐  ┌─────────────┐ │   │
-│  │  │ Abstract Nodes │  │ Detailed Circuits     │  │ Expansion   │ │   │
-│  │  │ (Probabilistic)│◄─┤ (When Needed)        │◄─┤ Criteria    │ │   │
+│  │  │ Circuit Grids  │  │ Hierarchical Networks │  │ Solvers     │ │   │
+│  │  │ (Electrical)   │◄─┤ (Probabilistic)      │◄─┤ (Adaptive)  │ │   │
 │  │  └────────────────┘  └──────────────────────┘  └─────────────┘ │   │
 │  └─────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
@@ -177,106 +308,130 @@ fn should_expand_node(node: &ProbabilisticNode, criteria: &ExpansionCriteria) ->
 
 ## Core Components
 
-### 1. Physical Layer (Electrical Circuits)
+### 1. Quantum-Enhanced Physical Layer
 
-**Ion Channel Networks:**
-- Hodgkin-Huxley dynamics with ATP dependence
-- Voltage-gated and ligand-gated channels
-- Gap junction coupling between cellular compartments
-
-**Membrane Circuit Models:**
-- Capacitive membrane properties
-- Ion-specific conductances
-- Electrochemical gradient calculations
-
-**Circuit Network Simulation:**
-- Multi-compartment electrical models
-- Time-dependent and ATP-dependent dynamics
-- Stochastic and deterministic solvers
-
-### 2. Biological Layer (ATP Kinetics)
-
-**ATP Pool Dynamics:**
+**Quantum Membrane Circuits:**
 ```rust
-struct AtpPool {
-    atp_concentration: f64,    // [ATP] in mM
-    adp_concentration: f64,    // [ADP] in mM  
-    energy_charge: f64,        // (ATP + 0.5*ADP)/(ATP+ADP+AMP)
-    synthesis_rate: f64,       // ATP production rate
-    hydrolysis_rate: f64,      // ATP consumption rate
+struct QuantumMembraneCircuit {
+    coherence_elements: Vec<CoherenceCapacitor>,
+    tunneling_junctions: Vec<TunnelingJunction>,
+    entanglement_network: EntanglementMatrix,
+    environmental_coupling: f64,
 }
 ```
 
-**ATP-Dependent Rate Constants:**
+**ENAQT Implementation:**
+- Environment-assisted quantum transport modeling
+- Coherence time calculations under thermal noise
+- Quantum tunneling probability distributions
+- Superposition state management
+
+### 2. Oscillatory Dynamics Layer
+
+**Universal Oscillator Framework:**
 ```rust
-// Michaelis-Menten ATP dependence
-v = V_max * [S] * [ATP] / ((K_m + [S]) * (K_ATP + [ATP]))
-
-// Hill equation for cooperative ATP binding
-v = V_max * [S] * [ATP]^n / ((K_m + [S]) * (K_ATP^n + [ATP]^n))
-
-// Linear ATP dependence
-v = k * [S] * [ATP]
-```
-
-**Energetic Profiles:**
-- Total ATP cost/yield analysis
-- Energy efficiency calculations
-- Rate-limiting step identification
-- Pathway energetic feasibility
-
-### 3. Differential Equation Solvers
-
-**ATP-Based ODE System:**
-```rust
-// System state vector including ATP pool
-struct SystemState {
-    concentrations: Vec<f64>,  // Metabolite concentrations
-    atp_pool: AtpPool,         // Energy state
-    electrical_state: Vec<f64>, // Membrane potentials, currents
-}
-
-// ATP-based derivative calculation
-fn calculate_derivatives(
-    state: &SystemState, 
-    atp_change: f64
-) -> SystemState {
-    // Calculate dx/dATP for each variable
-    // Update ATP pool based on consumption/production
-    // Update electrical states based on ATP-dependent processes
+struct BiologicalOscillator {
+    intrinsic_frequency: f64,
+    amplitude: f64,
+    phase: f64,
+    coupling_matrix: Matrix<f64>,
+    synchronization_state: SyncState,
 }
 ```
 
-**Solver Methods:**
-- **Explicit Methods:** Euler, Runge-Kutta for ATP-based ODEs
-- **Implicit Methods:** Backward Euler for stiff ATP-coupled systems
-- **Adaptive Methods:** Variable step-size based on ATP consumption rate
-- **Stochastic Methods:** Gillespie-like algorithms for ATP-discrete events
+**Causal Selection Engine:**
+- Automatic oscillator detection in nonlinear systems
+- Phase-locking mechanism implementation
+- Frequency entrainment algorithms
+- Multi-scale oscillatory coupling
 
-### 4. Optimization Framework
+### 3. Entropy Manipulation System
 
-**Objective Functions:**
+**Probabilistic Point Management:**
 ```rust
-enum PathwayObjective {
-    MaximizeProduct(String),           // Maximize specific product yield
-    MinimizeAtpCost,                   // Minimize ATP consumption
-    MaximizeEnergyEfficiency,          // Maximize ATP yield/cost ratio
-    MaximizeFlux(String),              // Maximize pathway flux
-    MinimizeTime(f64),                 // Minimize time to target concentration
-    MaximizeRobustness(f64),           // Maximize stability to perturbations
+struct EntropyManipulator {
+    points: Vec<EntropyPoint>,
+    resolutions: Vec<Resolution>,
+    validation_network: ValidationGraph,
+    perturbation_engine: PerturbationEngine,
 }
 ```
 
-**Constraint Types:**
+**Resolution Network Operations:**
+- Point probability redistribution
+- Resolution cascade propagation
+- Thermodynamic consistency validation
+- Real-time entropy optimization
+
+## Advanced Mathematical Framework
+
+### 1. Quantum-ATP Coupled Equations
+
+Integration of quantum mechanical effects with ATP-based kinetics:
+
 ```rust
-enum OptimizationConstraint {
-    AtpAvailability(f64),              // Maximum ATP consumption rate
-    ConcentrationBounds(String, f64, f64), // Min/max metabolite levels
-    EnergyCharge(f64, f64),            // Energy charge bounds
-    SteadyState(Vec<String>),          // Steady-state requirements
-    KineticFeasibility(String),        // Realistic rate constants
-}
+// Quantum-enhanced ATP differential equations
+dS/dATP = -(k_classical + k_quantum) * [S] * [E] / (v_ATP * [ATP])
+
+where:
+k_quantum = k_tunneling + k_coherent_transport
+k_tunneling = A * exp(-B * barrier_height / kT) * coherence_factor
+k_coherent_transport = C * |⟨ψ_initial|ψ_final⟩|² * environmental_coupling
 ```
+
+### 2. Oscillatory Circuit Networks
+
+Circuit equations incorporating universal oscillatory dynamics:
+
+```rust
+// Oscillatory circuit element
+dV/dt = (I_total + I_oscillatory) / C_effective
+I_oscillatory = A * sin(ωt + φ) * coupling_matrix * V_neighbors
+
+// Multi-frequency coupling
+ω_effective = ω_intrinsic + Σ(coupling_i * ω_i * phase_diff_i)
+```
+
+### 3. Entropy Point Dynamics
+
+Mathematical formulation of probabilistic point evolution:
+
+```rust
+// Point migration equation
+dp_i/dt = Σ(R_ij * p_j) - Σ(R_ji * p_i) + source_i - sink_i
+
+// Resolution transformation
+R_ij = resolution_strength * exp(-energy_barrier_ij / kT) * validation_factor
+
+// Entropy calculation
+S = -Σ(p_i * ln(p_i)) + perturbation_correction
+```
+
+## Advanced Applications
+
+### Quantum Biology Simulation
+- Photosynthetic light harvesting complex modeling
+- Quantum effects in enzyme catalysis
+- Coherent energy transfer in biological systems
+- Room-temperature quantum computation validation
+
+### Oscillatory Pattern Analysis
+- Circadian rhythm optimization
+- Metabolic oscillation control
+- Neural network synchronization
+- Cell cycle progression modeling
+
+### Entropy Engineering
+- Thermodynamic efficiency optimization
+- Information processing capacity enhancement
+- Self-organization pattern control
+- Dissipative structure design
+
+### Multi-Scale Integration
+- Molecular to cellular level coupling
+- Tissue-level emergent behavior prediction
+- Organ system coordination modeling
+- Whole-organism metabolic optimization
 
 ## Getting Started
 
