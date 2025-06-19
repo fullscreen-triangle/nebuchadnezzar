@@ -12,6 +12,12 @@ categories = ["command-line-utilities"]
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.0", features = ["full"] }
+ndarray = "0.15"
+num-complex = "0.4"
+rand = "0.8"
+nalgebra = "0.32"
+rayon = "1.8"
+approx = "0.5"
 
 [dev-dependencies]
 criterion = "0.5"

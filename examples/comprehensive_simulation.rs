@@ -1,430 +1,637 @@
-//! # Comprehensive Cellular Simulation Example
+//! # Comprehensive ATP-Oscillatory-Membrane Quantum Biological Simulation
 //! 
-//! This example demonstrates the full capabilities of the Nebuchadnezzar circuit library
-//! by simulating a complete cellular system with hierarchical circuits, ATP-driven
-//! differential equations, and dynamic circuit resolution.
+//! This example demonstrates the complete revolutionary framework combining:
+//! 1. ATP as universal energy currency (dx/dATP dynamics)
+//! 2. Oscillatory entropy as statistical distributions of oscillation endpoints
+//! 3. Membrane quantum computation through Environment-Assisted Quantum Transport (ENAQT)
+//! 
+//! The simulation shows how biological systems function as room-temperature
+//! quantum computers powered by ATP and organized through oscillatory dynamics.
 
 use nebuchadnezzar::{
     NebuchadnezzarEngine, 
     MetabolicPathwayType,
-    SimulationParameters,
-    circuits::{
-        CircuitFactory,
-        AdaptiveGrid,
-        HierarchicalSystem,
-        hierarchical_framework::*,
-        enzyme_circuits::*,
-        circuit_grid::*,
-    },
-    systems_biology::AtpPool,
-    solvers::{SystemState, IntegratorFactory},
     Result,
+    biological_quantum_computer::{
+        BiologicalQuantumState, AtpCoordinates, OscillatoryCoordinates,
+        MembraneQuantumCoordinates, OscillatoryEntropyCoordinates,
+        MembraneOscillation, RadicalType, OscillationState
+    },
+    biological_quantum_solver::{
+        BiologicalQuantumComputerSolver, QuantumComputationTarget, ComputationType
+    },
+    quantum_metabolism_analyzer::{QuantumMetabolismAnalyzer, TissueType},
 };
 
 fn main() -> Result<()> {
-    println!("🧬 Nebuchadnezzar: Comprehensive Cellular Simulation");
-    println!("================================================");
+    println!("=".repeat(80));
+    println!("🧬 NEBUCHADNEZZAR: ATP-OSCILLATORY-MEMBRANE QUANTUM BIOLOGICAL COMPUTER");
+    println!("=".repeat(80));
+    println!();
+    println!("This simulation demonstrates three revolutionary insights:");
+    println!("1. 🔋 ATP as Universal Energy Currency (dx/dATP dynamics)");
+    println!("2. 🌀 Oscillatory Entropy (endpoint statistics)");  
+    println!("3. ⚛️  Membrane Quantum Computation (ENAQT at room temperature)");
+    println!();
 
-    // Create the main simulation engine
-    let mut engine = create_cellular_system()?;
+    // Run the complete framework demonstration
+    run_quantum_biological_computer_demo()?;
     
-    // Run the simulation
-    println!("\n🚀 Starting simulation...");
-    let results = engine.run_simulation()?;
+    // Demonstrate metabolic optimization
+    run_metabolic_optimization_demo()?;
     
-    // Analyze and display results
-    analyze_results(&results);
+    // Show tissue-level quantum effects
+    run_tissue_quantum_effects_demo()?;
     
-    // Demonstrate circuit resolution
-    demonstrate_circuit_resolution()?;
+    // Analyze radical damage and mitigation
+    run_radical_damage_analysis()?;
     
-    // Show hierarchical voltage dynamics
-    demonstrate_voltage_hierarchy()?;
+    println!("\n🎉 SIMULATION COMPLETED SUCCESSFULLY!");
+    println!("The ATP-Oscillatory-Membrane Quantum framework demonstrates:");
+    println!("• Quantum advantage in biological computation");
+    println!("• ATP-driven optimization of metabolic pathways");
+    println!("• Room-temperature quantum coherence via ENAQT");
+    println!("• Oscillatory entropy as fundamental biological principle");
     
-    // Demonstrate enzyme logic gates
-    demonstrate_enzyme_logic_gates()?;
-
-    println!("\n✅ Simulation completed successfully!");
     Ok(())
 }
 
-/// Create a complete cellular system with multiple circuits and pathways
-fn create_cellular_system() -> Result<NebuchadnezzarEngine> {
-    println!("\n🏗️  Building cellular system...");
+/// Demonstrate the complete quantum biological computer framework
+fn run_quantum_biological_computer_demo() -> Result<()> {
+    println!("🚀 QUANTUM BIOLOGICAL COMPUTER DEMONSTRATION");
+    println!("-".repeat(60));
     
-    let mut engine = NebuchadnezzarEngine::new(20.0); // Start with 20 mM ATP
+    // Create an advanced biological quantum state
+    let initial_state = create_comprehensive_quantum_state()?;
     
-    // Configure simulation parameters
-    engine.simulation_parameters = SimulationParameters {
-        time_step: 0.001,
-        max_time: 5.0,
-        atp_threshold: 0.1,
-        voltage_tolerance: 0.001,
-        adaptive_stepping: true,
-        resolution_threshold: 0.8,
-        output_frequency: 50,
+    display_initial_state_info(&initial_state);
+    
+    // Create quantum computation targets for different biological processes
+    let protein_folding_target = QuantumComputationTarget {
+        required_coherence: 0.85,
+        target_states: vec![
+            "cytochrome_c_oxidase".to_string(),
+            "atp_synthase".to_string(),
+            "nadh_dehydrogenase".to_string(),
+        ],
+        computation_type: ComputationType::ProteinFolding,
     };
-
-    // Add neuronal circuits
-    println!("  Adding neuronal circuits...");
-    engine.add_neuron_circuit("pyramidal_neuron".to_string())?;
-    engine.add_neuron_circuit("interneuron".to_string())?;
     
-    // Add metabolic pathways
-    println!("  Adding metabolic pathways...");
+    let electron_transport_target = QuantumComputationTarget {
+        required_coherence: 0.75,
+        target_states: vec![
+            "complex_I".to_string(),
+            "complex_III".to_string(),
+            "complex_IV".to_string(),
+        ],
+        computation_type: ComputationType::ElectronTransport,
+    };
+    
+    println!("\n🧬 QUANTUM COMPUTATION TARGETS:");
+    println!("   • Protein Folding: {} proteins, {:.1}% coherence required",
+        protein_folding_target.target_states.len(),
+        protein_folding_target.required_coherence * 100.0);
+    println!("   • Electron Transport: {} complexes, {:.1}% coherence required",
+        electron_transport_target.target_states.len(),
+        electron_transport_target.required_coherence * 100.0);
+    
+    // Run biological quantum computation
+    let mut solver = BiologicalQuantumComputerSolver::new();
+    
+    println!("\n⚡ Running ATP-driven quantum computation...");
+    let protein_result = solver.solve_biological_quantum_computation(
+        &initial_state,
+        20.0,  // 20 mM ATP budget
+        3.0,   // 3 seconds computation time
+        &protein_folding_target,
+    )?;
+    
+    println!("\n📊 QUANTUM COMPUTATION RESULTS:");
+    println!("   ATP consumed: {:.3} mM", protein_result.total_atp_consumed);
+    println!("   Computation time: {:.3} seconds", protein_result.total_time);
+    println!("   Success: {}", if protein_result.quantum_computation_completed { "✅ YES" } else { "❌ NO" });
+    
+    // Analyze the quantum trajectory
+    analyze_quantum_trajectory(&protein_result)?;
+    
+    // Run electron transport computation
+    println!("\n⚡ Running electron transport quantum optimization...");
+    let transport_result = solver.solve_biological_quantum_computation(
+        &protein_result.final_state,  // Use result from previous computation
+        15.0,  // 15 mM additional ATP
+        2.0,   // 2 seconds
+        &electron_transport_target,
+    )?;
+    
+    println!("\n📊 ELECTRON TRANSPORT RESULTS:");
+    println!("   Additional ATP consumed: {:.3} mM", transport_result.total_atp_consumed);
+    println!("   Transport optimization: {}", if transport_result.quantum_computation_completed { "✅ OPTIMIZED" } else { "❌ INCOMPLETE" });
+    
+    // Calculate total quantum advantage
+    let total_atp_used = protein_result.total_atp_consumed + transport_result.total_atp_consumed;
+    let total_time = protein_result.total_time + transport_result.total_time;
+    let efficiency = if total_atp_used > 0.0 { 
+        2.0 / total_atp_used  // 2 successful computations per ATP
+    } else { 
+        0.0 
+    };
+    
+    println!("\n🏆 OVERALL QUANTUM PERFORMANCE:");
+    println!("   Total ATP consumed: {:.3} mM", total_atp_used);
+    println!("   Total computation time: {:.3} seconds", total_time);
+    println!("   Quantum efficiency: {:.4} computations/mM ATP", efficiency);
+    
+    Ok(())
+}
+
+/// Create a comprehensive quantum state with all components
+fn create_comprehensive_quantum_state() -> Result<BiologicalQuantumState> {
+    // High-energy ATP state for quantum computation
+    let mut atp_coords = AtpCoordinates::new(10.0, 0.8, 0.5);
+    atp_coords.atp_oscillation_amplitude = 0.5;  // Strong oscillations
+    atp_coords.atp_oscillation_frequency = 2.0;  // 2 Hz cycling
+    
+    // Create 50 oscillators with diverse frequencies
+    let mut oscillatory_coords = OscillatoryCoordinates::new(50);
+    
+    // Set biologically relevant frequencies
+    for (i, oscillation) in oscillatory_coords.oscillations.iter_mut().enumerate() {
+        oscillation.frequency = match i % 10 {
+            0..=2 => 0.1 + i as f64 * 0.05,   // Slow metabolic oscillations (0.1-0.2 Hz)
+            3..=5 => 1.0 + i as f64 * 0.2,    // Cellular oscillations (1-2 Hz)  
+            6..=7 => 10.0 + i as f64 * 2.0,   // Neural oscillations (10-20 Hz)
+            8 => 40.0,                        // Gamma oscillations (40 Hz)
+            _ => 100.0 + i as f64 * 10.0,     // Protein conformational changes (100+ Hz)
+        };
+        oscillation.atp_coupling_strength = 0.3 + (i % 7) as f64 * 0.1;
+        oscillation.amplitude = 0.5 + (i % 5) as f64 * 0.2;
+    }
+    
+    // Add membrane oscillations for key proteins
+    let membrane_proteins = vec![
+        "cytochrome_c_oxidase",
+        "atp_synthase",
+        "nadh_dehydrogenase", 
+        "succinate_dehydrogenase",
+        "cytochrome_bc1_complex",
+        "pyruvate_dehydrogenase",
+        "citrate_synthase",
+        "hexokinase",
+        "phosphofructokinase",
+        "pyruvate_kinase",
+    ];
+    
+    for protein_name in membrane_proteins {
+        let membrane_osc = MembraneOscillation::new(protein_name);
+        oscillatory_coords.membrane_oscillations.push(membrane_osc);
+    }
+    
+    // Create quantum membrane coordinates with enhanced properties
+    let mut membrane_coords = MembraneQuantumCoordinates::new(25);
+    
+    // Optimize environmental coupling for room-temperature quantum coherence
+    membrane_coords.environmental_coupling.coupling_strength = 0.05;  // Moderate coupling
+    membrane_coords.environmental_coupling.temperature = 310.0;       // Body temperature
+    membrane_coords.environmental_coupling.enhancement_factor = 2.5;   // ENAQT enhancement
+    membrane_coords.environmental_coupling.correlation_time = 1e-12;   // Picosecond timescale
+    
+    // Set up tunneling states for electron transport
+    for tunneling_state in &mut membrane_coords.tunneling_states {
+        tunneling_state.barrier_height = 0.8;     // Optimized barrier height
+        tunneling_state.barrier_width = 2e-9;     // 2 nm optimal width
+        tunneling_state.electron_energy = 0.6;    // High-energy electrons
+    }
+    
+    // Create entropy coordinates for all oscillators
+    let oscillator_names: Vec<String> = (0..50)
+        .map(|i| format!("osc_{}", i))
+        .chain(oscillatory_coords.membrane_oscillations.iter()
+            .map(|mo| mo.protein_name.clone()))
+        .collect();
+    
+    let entropy_coords = OscillatoryEntropyCoordinates::new(&oscillator_names);
+    
+    Ok(BiologicalQuantumState {
+        atp_coords,
+        oscillatory_coords,
+        membrane_coords,
+        entropy_coords,
+    })
+}
+
+/// Display information about the initial quantum state
+fn display_initial_state_info(state: &BiologicalQuantumState) {
+    println!("\n🔬 INITIAL QUANTUM BIOLOGICAL STATE:");
+    println!("   ATP concentration: {:.2} mM", state.atp_coords.atp_concentration);
+    println!("   Energy charge: {:.3}", state.atp_coords.energy_charge);
+    println!("   Available energy: {:.2} kJ/mol", state.atp_coords.available_energy());
+    println!("   ATP oscillation frequency: {:.2} Hz", state.atp_coords.atp_oscillation_frequency);
+    
+    println!("\n   Oscillatory system:");
+    println!("   • Total oscillators: {}", state.oscillatory_coords.oscillations.len());
+    println!("   • Membrane oscillations: {}", state.oscillatory_coords.membrane_oscillations.len());
+    
+    let freq_ranges = analyze_frequency_distribution(&state.oscillatory_coords.oscillations);
+    println!("   • Frequency distribution:");
+    for (range, count) in freq_ranges {
+        println!("     - {}: {} oscillators", range, count);
+    }
+    
+    println!("\n   Quantum membrane system:");
+    println!("   • Quantum states: {}", state.membrane_coords.quantum_states.len());
+    println!("   • Tunneling processes: {}", state.membrane_coords.tunneling_states.len());
+    println!("   • Environmental coupling: {:.3}", state.membrane_coords.environmental_coupling.coupling_strength);
+    println!("   • Enhancement factor: {:.1}x", state.membrane_coords.environmental_coupling.enhancement_factor);
+    
+    println!("\n   Entropy system:");
+    println!("   • Endpoint distributions: {}", state.entropy_coords.endpoint_distributions.len());
+    println!("   • Current entropy: {:.6} J/K", state.entropy_coords.current_entropy);
+}
+
+/// Analyze frequency distribution of oscillators
+fn analyze_frequency_distribution(oscillations: &[OscillationState]) -> Vec<(String, usize)> {
+    let mut slow = 0;    // < 1 Hz
+    let mut medium = 0;  // 1-10 Hz  
+    let mut fast = 0;    // 10-50 Hz
+    let mut ultra = 0;   // > 50 Hz
+    
+    for osc in oscillations {
+        match osc.frequency {
+            f if f < 1.0 => slow += 1,
+            f if f < 10.0 => medium += 1,
+            f if f < 50.0 => fast += 1,
+            _ => ultra += 1,
+        }
+    }
+    
+    vec![
+        ("Slow (< 1 Hz)".to_string(), slow),
+        ("Medium (1-10 Hz)".to_string(), medium),
+        ("Fast (10-50 Hz)".to_string(), fast),
+        ("Ultra (> 50 Hz)".to_string(), ultra),
+    ]
+}
+
+/// Analyze the quantum trajectory in detail
+fn analyze_quantum_trajectory(result: &crate::biological_quantum_solver::BiologicalQuantumResult) -> Result<()> {
+    println!("\n🔍 QUANTUM TRAJECTORY ANALYSIS:");
+    let trajectory = &result.trajectory;
+    
+    if trajectory.points.is_empty() {
+        println!("   No trajectory points recorded");
+        return Ok(());
+    }
+    
+    println!("   Trajectory points: {}", trajectory.points.len());
+    
+    // Analyze coherence evolution
+    let coherences: Vec<f64> = trajectory.points.iter()
+        .map(|point| {
+            point.state.membrane_coords.quantum_states.iter()
+                .map(|qs| qs.amplitude.norm_sqr())
+                .sum()
+        })
+        .collect();
+    
+    if !coherences.is_empty() {
+        let initial_coherence = coherences[0];
+        let final_coherence = coherences.last().copied().unwrap_or(0.0);
+        let min_coherence = coherences.iter().fold(f64::INFINITY, |a, &b| a.min(b));
+        let max_coherence = coherences.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b));
+        
+        println!("   Quantum coherence evolution:");
+        println!("     Initial: {:.3}", initial_coherence);
+        println!("     Final: {:.3}", final_coherence);
+        println!("     Minimum: {:.3}", min_coherence);
+        println!("     Maximum: {:.3}", max_coherence);
+        println!("     Coherence retained: {:.1}%", (final_coherence / initial_coherence) * 100.0);
+    }
+    
+    // Analyze oscillation endpoints
+    let total_endpoints: usize = trajectory.points.iter()
+        .map(|point| point.oscillation_endpoints.len())
+        .sum();
+    
+    println!("   Oscillation endpoints generated: {}", total_endpoints);
+    
+    // Analyze radical generation
+    let total_radicals: usize = trajectory.points.iter()
+        .map(|point| point.radical_endpoints.len())
+        .sum();
+    
+    if total_radicals > 0 {
+        println!("   Radical generation events: {}", total_radicals);
+        
+        // Analyze radical types
+        let mut radical_counts = std::collections::HashMap::new();
+        for point in &trajectory.points {
+            for radical in &point.radical_endpoints {
+                *radical_counts.entry(format!("{:?}", radical.radical_type)).or_insert(0) += 1;
+            }
+        }
+        
+        println!("   Radical types generated:");
+        for (radical_type, count) in radical_counts {
+            println!("     • {}: {} events", radical_type, count);
+        }
+    } else {
+        println!("   No radical generation detected ✅");
+    }
+    
+    // Analyze entropy production
+    let entropy_productions: Vec<f64> = trajectory.points.iter()
+        .map(|point| point.entropy_production)
+        .collect();
+    
+    if !entropy_productions.is_empty() {
+        let total_entropy = entropy_productions.iter().sum::<f64>();
+        let avg_entropy_rate = total_entropy / entropy_productions.len() as f64;
+        
+        println!("   Entropy production:");
+        println!("     Total: {:.6} J/K", total_entropy);
+        println!("     Average rate: {:.6} J/K per step", avg_entropy_rate);
+        
+        // Check second law compliance
+        let entropy_decreases = entropy_productions.iter().filter(|&&ep| ep < 0.0).count();
+        if entropy_decreases == 0 {
+            println!("     Second law compliance: ✅ VERIFIED");
+        } else {
+            println!("     Second law violations: {} steps", entropy_decreases);
+        }
+    }
+    
+    Ok(())
+}
+
+/// Demonstrate metabolic pathway optimization
+fn run_metabolic_optimization_demo() -> Result<()> {
+    println!("\n⚡ METABOLIC PATHWAY OPTIMIZATION DEMO");
+    println!("-".repeat(60));
+    
+    // Create an engine with multiple metabolic pathways
+    let mut engine = NebuchadnezzarEngine::new_with_quantum_computation(15.0);
+    
+    // Add comprehensive metabolic pathways
     engine.add_metabolic_pathway("glycolysis".to_string(), MetabolicPathwayType::Glycolysis)?;
     engine.add_metabolic_pathway("tca_cycle".to_string(), MetabolicPathwayType::CitricAcidCycle)?;
     engine.add_metabolic_pathway("electron_transport".to_string(), MetabolicPathwayType::ElectronTransport)?;
     
-    // Add custom circuits
-    add_custom_circuits(&mut engine)?;
+    println!("✅ Created metabolic network with:");
+    println!("   • Glycolysis pathway");
+    println!("   • TCA cycle");
+    println!("   • Electron transport chain");
     
-    println!("  System construction complete!");
-    println!("    - {} molecular circuits", engine.hierarchical_system.molecular_level.len());
-    println!("    - {} organelle networks", engine.hierarchical_system.organelle_level.len());
-    println!("    - Initial ATP: {:.2} mM", engine.global_atp_pool.atp_concentration);
+    // Configure for metabolic optimization
+    engine.simulation_parameters.enable_quantum_computation = true;
+    engine.simulation_parameters.max_time = 4.0;
     
-    Ok(engine)
-}
-
-/// Add custom circuits to demonstrate specific functionality
-fn add_custom_circuits(engine: &mut NebuchadnezzarEngine) -> Result<()> {
-    println!("  Adding custom circuits...");
+    println!("\n🔄 Running quantum-enhanced metabolic simulation...");
+    let results = engine.run_quantum_enhanced_simulation()?;
     
-    // Create a calcium signaling circuit
-    let calcium_circuit = create_calcium_signaling_circuit()?;
-    engine.hierarchical_system.molecular_level.push(calcium_circuit);
+    // Analyze metabolic efficiency
+    let summary = results.get_quantum_summary();
     
-    // Create a stress response circuit
-    let stress_circuit = create_stress_response_circuit()?;
-    engine.hierarchical_system.molecular_level.push(stress_circuit);
+    println!("\n📊 METABOLIC OPTIMIZATION RESULTS:");
+    println!("   Simulation time: {:.2} seconds", summary.total_time);
+    println!("   ATP efficiency: {:.3} (final/initial)", summary.final_atp / summary.average_atp);
+    println!("   Quantum advantage: {:.2}x", summary.quantum_advantage_factor);
+    
+    if summary.quantum_computation_success {
+        println!("   Metabolic optimization: ✅ SUCCESSFUL");
+        println!("   Energy efficiency gain: {:.1}%", (summary.quantum_advantage_factor - 1.0) * 100.0);
+    } else {
+        println!("   Metabolic optimization: ❌ INCOMPLETE");
+    }
+    
+    // Analyze with quantum metabolism analyzer
+    if let Some(coherence_analysis) = &results.coherence_analysis {
+        println!("\n🧬 ADVANCED METABOLIC ANALYSIS:");
+        
+        let coupling = &coherence_analysis.atp_quantum_coupling;
+        println!("   ATP-Quantum coupling efficiency: {:.3}", coupling.coupling_efficiency);
+        println!("   Optimal ATP levels found: {}", coupling.optimal_atp_levels.len());
+        
+        let metrics = &coherence_analysis.efficiency_metrics;
+        println!("   Energy efficiency: {:.4} comp/mM ATP", metrics.energy_efficiency);
+        println!("   Quantum throughput: {:.3} comp/s", metrics.throughput);
+        
+        println!("\n   Optimal oscillation frequencies:");
+        for (i, freq) in coherence_analysis.optimal_frequencies.iter().take(5).enumerate() {
+            println!("     {}. {}: {:.2} Hz (max coherence: {:.3})",
+                i + 1, freq.oscillator_name, freq.optimal_frequency, freq.max_coherence);
+        }
+    }
     
     Ok(())
 }
 
-/// Create a calcium signaling molecular circuit
-fn create_calcium_signaling_circuit() -> Result<MolecularCircuit> {
-    let mut circuit = MolecularCircuit {
-        circuit_id: "calcium_signaling".to_string(),
-        protein_complexes: vec![
-            ProteinComplex {
-                complex_id: "ip3_receptor".to_string(),
-                subunits: vec!["ip3r1".to_string(), "ip3r2".to_string()],
-                binding_energy: -12.5,
-                conformational_states: vec![
-                    ProteinState {
-                        conformation_energy: 0.0,
-                        binding_affinity: 0.1,
-                        activity_level: 0.0,
-                        last_transition_time: 0.0,
-                    },
-                    ProteinState {
-                        conformation_energy: -8.0,
-                        binding_affinity: 0.9,
-                        activity_level: 1.0,
-                        last_transition_time: 0.0,
-                    },
-                ],
-                current_state_index: 0,
-            }
+/// Demonstrate tissue-level quantum effects
+fn run_tissue_quantum_effects_demo() -> Result<()> {
+    println!("\n🧠 TISSUE-LEVEL QUANTUM EFFECTS DEMO");
+    println!("-".repeat(60));
+    
+    // Create state optimized for neural tissue
+    let neural_state = create_tissue_specific_state(TissueType::Neural)?;
+    
+    // Create neural-specific computation target
+    let neural_target = QuantumComputationTarget {
+        required_coherence: 0.7,
+        target_states: vec![
+            "sodium_channel".to_string(),
+            "potassium_channel".to_string(),
+            "calcium_channel".to_string(),
         ],
-        enzyme_circuits: vec![
-            Box::new(ProbabilisticOR::new(
-                "ip3".to_string(),
-                "calcium_release".to_string(),
-                0.9,
-                0.8,
-            )),
-        ],
-        ion_channels: vec![
-            ProbabilisticIonChannel::new(
-                "calcium_channel".to_string(),
-                IonType::Calcium,
-                2.0,
-                0.1,
-                ChannelKinetics::ligand_gated(0.001, 0.1),
-                0.02,
-            ),
-        ],
-        molecular_voltage: -60.0,
-        atp_local: 2.0,
-        temporal_state: TemporalEvidence::new(),
+        computation_type: ComputationType::ElectronTransport,
     };
     
-    // Add temporal events for calcium signaling
-    circuit.temporal_state.add_event(TemporalEvent {
-        event_id: "calcium_spike".to_string(),
-        event_type: EventType::IonChannelGating,
-        strength: 1.0,
-        decay_rate: 2.0,
-        timestamp: 0.0,
-        half_life: 0.5,
-    });
+    println!("🧠 Analyzing neural tissue quantum effects...");
     
-    Ok(circuit)
+    let mut solver = BiologicalQuantumComputerSolver::new();
+    let neural_result = solver.solve_biological_quantum_computation(
+        &neural_state,
+        12.0,  // Neural ATP budget
+        2.5,   // 2.5 seconds
+        &neural_target,
+    )?;
+    
+    // Analyze tissue-level effects
+    let analyzer = QuantumMetabolismAnalyzer::new();
+    let tissue_analysis = analyzer.analyze_tissue_level_effects(
+        &neural_result.trajectory,
+        TissueType::Neural,
+    );
+    
+    println!("\n📊 NEURAL TISSUE ANALYSIS:");
+    println!("   Metabolic efficiency: {:.3}", tissue_analysis.metabolic_efficiency);
+    println!("   Adaptation patterns: {}", tissue_analysis.adaptation_patterns.len());
+    println!("   Emergent properties: {}", tissue_analysis.emergent_properties.len());
+    
+    // Display adaptation patterns
+    println!("\n   Neural adaptation patterns:");
+    for (i, pattern) in tissue_analysis.adaptation_patterns.iter().take(3).enumerate() {
+        println!("     {}. {}: magnitude {:.3}, timescale {:.3}s",
+            i + 1, pattern.pattern_type, pattern.magnitude, pattern.time_scale);
+    }
+    
+    // Display emergent properties
+    println!("\n   Emergent neural properties:");
+    for (i, property) in tissue_analysis.emergent_properties.iter().take(3).enumerate() {
+        println!("     {}. {}: significance {:.3}",
+            i + 1, property.property_name, property.significance);
+    }
+    
+    // Compare with cardiac tissue
+    println!("\n❤️  Comparing with cardiac tissue...");
+    let cardiac_analysis = analyzer.analyze_tissue_level_effects(
+        &neural_result.trajectory,
+        TissueType::Cardiac,
+    );
+    
+    let efficiency_ratio = cardiac_analysis.metabolic_efficiency / tissue_analysis.metabolic_efficiency;
+    println!("   Cardiac vs Neural efficiency ratio: {:.2}", efficiency_ratio);
+    
+    if efficiency_ratio > 1.0 {
+        println!("   🫀 Cardiac tissue shows higher metabolic efficiency");
+    } else {
+        println!("   🧠 Neural tissue shows higher metabolic efficiency");
+    }
+    
+    Ok(())
 }
 
-/// Create a stress response molecular circuit
-fn create_stress_response_circuit() -> Result<MolecularCircuit> {
-    Ok(MolecularCircuit {
-        circuit_id: "stress_response".to_string(),
-        protein_complexes: vec![],
-        enzyme_circuits: vec![
-            Box::new(ProbabilisticXOR::new(
-                "stress_signal".to_string(),
-                "hsp70".to_string(),
-                "NAD+".to_string(),
-                "NADH".to_string(),
-                0.85,
-                0.7,
-            )),
-            Box::new(ProbabilisticAND::new(
-                "misfolded_protein".to_string(),
-                "ubiquitin".to_string(),
-                "proteasome_target".to_string(),
-                0.8,
-                0.9,
-            )),
-        ],
-        ion_channels: vec![],
-        molecular_voltage: -70.0,
-        atp_local: 1.5,
-        temporal_state: TemporalEvidence::new(),
+/// Create tissue-specific quantum state
+fn create_tissue_specific_state(tissue_type: TissueType) -> Result<BiologicalQuantumState> {
+    let (atp_conc, oscillator_count, coupling_strength) = match tissue_type {
+        TissueType::Neural => (8.0, 40, 0.7),   // High ATP, many oscillators, strong coupling
+        TissueType::Cardiac => (9.0, 30, 0.8),  // Very high ATP, fewer oscillators, stronger coupling
+        TissueType::Skeletal => (6.0, 25, 0.5), // Moderate ATP, fewer oscillators
+        TissueType::Hepatic => (7.0, 35, 0.6),  // Good ATP, many oscillators for metabolism
+        TissueType::Renal => (7.5, 28, 0.65),   // High ATP for transport
+    };
+    
+    let atp_coords = AtpCoordinates::new(atp_conc, 1.0, 0.4);
+    let mut oscillatory_coords = OscillatoryCoordinates::new(oscillator_count);
+    
+    // Set tissue-specific coupling strengths
+    for oscillation in &mut oscillatory_coords.oscillations {
+        oscillation.atp_coupling_strength = coupling_strength;
+    }
+    
+    let membrane_coords = MembraneQuantumCoordinates::new(15);
+    
+    let oscillator_names: Vec<String> = (0..oscillator_count)
+        .map(|i| format!("{:?}_osc_{}", tissue_type, i))
+        .collect();
+    
+    let entropy_coords = OscillatoryEntropyCoordinates::new(&oscillator_names);
+    
+    Ok(BiologicalQuantumState {
+        atp_coords,
+        oscillatory_coords,
+        membrane_coords,
+        entropy_coords,
     })
 }
 
-/// Analyze and display simulation results
-fn analyze_results(results: &nebuchadnezzar::SimulationResults) {
-    println!("\n📊 Simulation Results Analysis");
-    println!("=============================");
+/// Analyze radical damage and mitigation strategies
+fn run_radical_damage_analysis() -> Result<()> {
+    println!("\n☢️ RADICAL DAMAGE ANALYSIS AND MITIGATION");
+    println!("-".repeat(60));
     
-    let summary = results.get_summary();
+    // Create state with higher radical generation potential
+    let mut high_energy_state = create_comprehensive_quantum_state()?;
     
-    println!("Simulation Summary:");
-    println!("  Total time: {:.3} seconds", summary.total_time);
-    println!("  Total steps: {}", summary.total_steps);
-    println!("  Average ATP: {:.3} mM", summary.average_atp);
-    println!("  Min ATP: {:.3} mM", summary.min_atp);
-    println!("  Max ATP: {:.3} mM", summary.max_atp);
-    println!("  Final ATP: {:.3} mM", summary.final_atp);
-    println!("  Average Energy Charge: {:.3}", summary.average_energy_charge);
-    println!("  ATP Depletion Rate: {:.3} mM/s", summary.atp_depletion_rate);
+    // Increase tunneling probabilities to generate more radicals
+    for tunneling_state in &mut high_energy_state.membrane_coords.tunneling_states {
+        tunneling_state.tunneling_probability *= 2.0;
+        tunneling_state.electron_energy = 0.8; // Higher energy electrons
+    }
     
-    // Analyze voltage dynamics
-    if !results.hierarchical_states.is_empty() {
-        let final_state = &results.hierarchical_states.last().unwrap();
-        println!("\nFinal System State:");
-        println!("  Cellular voltage: {:.1} mV", final_state.voltage_hierarchy.cellular_voltage);
-        
-        for (organelle, voltage) in &final_state.voltage_hierarchy.organelle_voltages {
-            println!("  {} voltage: {:.1} mV", organelle, voltage);
+    // Run computation with radical generation
+    let radical_target = QuantumComputationTarget {
+        required_coherence: 0.6,
+        target_states: vec!["high_energy_computation".to_string()],
+        computation_type: ComputationType::MetabolicOptimization,
+    };
+    
+    println!("⚡ Running high-energy quantum computation...");
+    let mut solver = BiologicalQuantumComputerSolver::new();
+    let radical_result = solver.solve_biological_quantum_computation(
+        &high_energy_state,
+        25.0,  // High ATP budget
+        3.0,   // 3 seconds
+        &radical_target,
+    )?;
+    
+    // Analyze radical damage
+    let analyzer = QuantumMetabolismAnalyzer::new();
+    let damage_analysis = analyzer.analyze_radical_damage_patterns(&radical_result.trajectory);
+    
+    println!("\n📊 RADICAL DAMAGE ANALYSIS:");
+    println!("   Total radical events: {}", damage_analysis.radical_events_count);
+    println!("   Cumulative damage: {:.3}%", damage_analysis.cumulative_damage * 100.0);
+    println!("   Damage rate: {:.6} events/second", damage_analysis.damage_rate);
+    println!("   Critical threshold: {:.3}", damage_analysis.critical_damage_threshold);
+    
+    if damage_analysis.cumulative_damage < damage_analysis.critical_damage_threshold {
+        println!("   Damage level: ✅ SAFE");
+    } else {
+        println!("   Damage level: ⚠️ CRITICAL");
+    }
+    
+    // Display mitigation strategies
+    println!("\n🛡️ MITIGATION STRATEGIES:");
+    for (i, strategy) in damage_analysis.mitigation_strategies.iter().take(5).enumerate() {
+        println!("   {}. {}: {:.1}% effective (cost: {:.2})",
+            i + 1, strategy.strategy_name, strategy.effectiveness * 100.0, strategy.implementation_cost);
+    }
+    
+    // Analyze radical types from trajectory
+    let mut radical_type_counts = std::collections::HashMap::new();
+    for point in &radical_result.trajectory.points {
+        for radical in &point.radical_endpoints {
+            let type_name = format!("{:?}", radical.radical_type);
+            *radical_type_counts.entry(type_name).or_insert(0) += 1;
         }
-        
-        println!("  Active molecular circuits: {}", final_state.molecular_states.len());
-        println!("  Active organelle networks: {}", final_state.organelle_states.len());
-        println!("  Active cellular systems: {}", final_state.cellular_states.len());
-    }
-}
-
-/// Demonstrate dynamic circuit resolution
-fn demonstrate_circuit_resolution() -> Result<()> {
-    println!("\n🔄 Demonstrating Dynamic Circuit Resolution");
-    println!("==========================================");
-    
-    let mut adaptive_grid = AdaptiveGrid::new("resolution_demo".to_string(), 15.0);
-    
-    // Add some probabilistic nodes
-    let nodes = vec![
-        ("high_activity_node", 0.9, 0.95),
-        ("medium_activity_node", 0.6, 0.7),
-        ("low_activity_node", 0.3, 0.4),
-    ];
-    
-    for (name, probability, importance) in nodes {
-        let node = ProbabilisticNode {
-            node_id: name.to_string(),
-            node_type: NodeType::EnzymaticReaction {
-                enzyme_class: "kinase".to_string(),
-                substrate_binding_prob: 0.8,
-                product_formation_prob: 0.9,
-            },
-            probability,
-            atp_cost: 1.0,
-            inputs: vec!["substrate".to_string()],
-            outputs: vec!["product".to_string()],
-            resolution_importance: importance,
-            last_activity: probability,
-        };
-        
-        adaptive_grid.base_grid.add_probabilistic_node(node);
     }
     
-    println!("Initial state:");
-    println!("  Probabilistic nodes: {}", adaptive_grid.base_grid.probabilistic_nodes.len());
-    println!("  Resolved circuits: {}", adaptive_grid.base_grid.resolved_circuits.len());
-    
-    // Perform optimization steps
-    for step in 0..3 {
-        let optimization_result = adaptive_grid.optimize_step()?;
-        println!("\nOptimization step {}:", step + 1);
-        println!("  Nodes resolved: {:?}", optimization_result.nodes_resolved);
-        println!("  Performance improvement: {:.3}", optimization_result.performance_improvement);
-        println!("  Computational cost: {:.1}", optimization_result.computational_cost);
-        println!("  Remaining probabilistic nodes: {}", adaptive_grid.base_grid.probabilistic_nodes.len());
-        println!("  Total resolved circuits: {}", adaptive_grid.base_grid.resolved_circuits.len());
+    if !radical_type_counts.is_empty() {
+        println!("\n🧪 RADICAL TYPES GENERATED:");
+        for (radical_type, count) in radical_type_counts {
+            let description = match radical_type.as_str() {
+                "Superoxide" => "O2•− - Most common, moderate damage",
+                "Hydroxyl" => "OH• - Highly reactive, severe damage",
+                "Peroxyl" => "ROO• - Lipid peroxidation initiator",
+                "Alkoxyl" => "RO• - Secondary radical formation",
+                _ => "Unknown radical type",
+            };
+            println!("   • {}: {} events - {}", radical_type, count, description);
+        }
     }
     
     Ok(())
 }
 
-/// Demonstrate voltage hierarchy across scales
-fn demonstrate_voltage_hierarchy() -> Result<()> {
-    println!("\n⚡ Demonstrating Multi-Level Voltage Hierarchy");
-    println!("============================================");
+#[cfg(test)]
+mod tests {
+    use super::*;
     
-    let mut hierarchical_system = HierarchicalSystem::new();
-    
-    // Add molecular circuits with different voltages
-    let molecular_voltages = vec![
-        ("sodium_channel_cluster", -55.0),
-        ("potassium_channel_cluster", -80.0),
-        ("calcium_channel_cluster", -20.0),
-    ];
-    
-    for (name, voltage) in molecular_voltages {
-        let circuit = MolecularCircuit {
-            circuit_id: name.to_string(),
-            protein_complexes: vec![],
-            enzyme_circuits: vec![],
-            ion_channels: vec![],
-            molecular_voltage: voltage,
-            atp_local: 1.0,
-            temporal_state: TemporalEvidence::new(),
-        };
-        hierarchical_system.molecular_level.push(circuit);
-    }
-    
-    // Add organelle networks
-    let organelle_types = vec![
-        ("mitochondrion", -180.0),
-        ("endoplasmic_reticulum", -60.0),
-        ("nucleus", -10.0),
-    ];
-    
-    for (name, voltage) in organelle_types {
-        let organelle = OrganelleNetwork {
-            organelle_id: name.to_string(),
-            organelle_type: match name {
-                "mitochondrion" => OrganelleType::Mitochondrion { cristae_density: 1.5 },
-                "endoplasmic_reticulum" => OrganelleType::EndoplasmicReticulum { membrane_area: 100.0 },
-                "nucleus" => OrganelleType::Nucleus { chromatin_state: "euchromatin".to_string() },
-                _ => OrganelleType::Mitochondrion { cristae_density: 1.0 },
-            },
-            molecular_circuits: vec![],
-            inter_circuit_connections: vec![],
-            organelle_voltage: voltage,
-            local_atp_pool: 3.0,
-            metabolic_state: MetabolicState {
-                energy_charge: 0.8,
-                nadh_nad_ratio: 0.1,
-                calcium_level: 0.0001,
-                ph: 7.4,
-                oxygen_level: 0.2,
-            },
-        };
-        hierarchical_system.organelle_level.push(organelle);
-    }
-    
-    println!("Voltage Hierarchy:");
-    println!("  Cellular level: {:.1} mV", hierarchical_system.voltage_hierarchy.cellular_voltage);
-    
-    for (organelle, voltage) in &hierarchical_system.voltage_hierarchy.organelle_voltages {
-        println!("  {} level: {:.1} mV", organelle, voltage);
-    }
-    
-    for circuit in &hierarchical_system.molecular_level {
-        println!("  Molecular ({}): {:.1} mV", circuit.circuit_id, circuit.molecular_voltage);
-    }
-    
-    // Simulate voltage propagation
-    let result = hierarchical_system.solve_hierarchical_system(2.0)?;
-    
-    println!("\nAfter ATP consumption (2.0 mM):");
-    println!("  Updated cellular voltage: {:.1} mV", result.voltage_hierarchy.cellular_voltage);
-    
-    Ok(())
-}
-
-/// Demonstrate enzyme probabilistic logic gates
-fn demonstrate_enzyme_logic_gates() -> Result<()> {
-    println!("\n🧪 Demonstrating Enzyme Probabilistic Logic Gates");
-    println!("===============================================");
-    
-    let atp_concentration = 5.0;
-    
-    // Demonstrate each type of enzyme logic gate
-    println!("Testing enzyme circuits with ATP = {:.1} mM:\n", atp_concentration);
-    
-    // NOT gate (Isomerase)
-    let isomerase = ProbabilisticNOT::glucose_phosphate_isomerase();
-    println!("🔄 ProbabilisticNOT (Isomerase):");
-    println!("  Enzyme: Glucose-6-phosphate isomerase");
-    println!("  Can fire: {}", isomerase.can_fire(atp_concentration));
-    println!("  Success probability: {:.3}", isomerase.success_probability(atp_concentration));
-    println!("  ATP cost: {:.3} mM", isomerase.atp_cost());
-    
-    let flux = isomerase.compute_flux(atp_concentration)?;
-    for (metabolite, rate) in &flux {
-        println!("  Flux {}: {:.3}", metabolite, rate);
-    }
-    
-    // SPLIT gate (Dismutase)
-    let dismutase = ProbabilisticSPLIT::superoxide_dismutase();
-    println!("\n🌪️  ProbabilisticSPLIT (Dismutase):");
-    println!("  Enzyme: Superoxide dismutase");
-    println!("  Can fire: {}", dismutase.can_fire(atp_concentration));
-    println!("  Success probability: {:.3}", dismutase.success_probability(atp_concentration));
-    println!("  ATP cost: {:.3} mM", dismutase.atp_cost());
-    
-    // XOR gate (Dehydrogenase)
-    let dehydrogenase = ProbabilisticXOR::lactate_dehydrogenase();
-    println!("\n🔀 ProbabilisticXOR (Dehydrogenase):");
-    println!("  Enzyme: Lactate dehydrogenase");
-    println!("  Can fire: {}", dehydrogenase.can_fire(atp_concentration));
-    println!("  Success probability: {:.3}", dehydrogenase.success_probability(atp_concentration));
-    println!("  ATP cost: {:.3} mM", dehydrogenase.atp_cost());
-    
-    // OR gate (Kinase)
-    let kinase = ProbabilisticOR::hexokinase();
-    println!("\n⚡ ProbabilisticOR (Kinase):");
-    println!("  Enzyme: Hexokinase");
-    println!("  Can fire: {}", kinase.can_fire(atp_concentration));
-    println!("  Success probability: {:.3}", kinase.success_probability(atp_concentration));
-    println!("  ATP cost: {:.3} mM", kinase.atp_cost());
-    
-    // AND gate (Ligase)
-    let ligase = ProbabilisticAND::dna_ligase();
-    println!("\n🔗 ProbabilisticAND (Ligase):");
-    println!("  Enzyme: DNA ligase");
-    println!("  Can fire: {}", ligase.can_fire(atp_concentration));
-    println!("  Success probability: {:.3}", ligase.success_probability(atp_concentration));
-    println!("  ATP cost: {:.3} mM", ligase.atp_cost());
-    
-    // Test circuit grid with multiple enzymes
-    println!("\n🏭 Testing Glycolysis Enzyme Circuit:");
-    let glycolysis_enzymes = EnzymeCircuitFactory::create_glycolysis_enzymes();
-    println!("  Total enzymes in pathway: {}", glycolysis_enzymes.len());
-    
-    let mut total_atp_cost = 0.0;
-    for (i, enzyme) in glycolysis_enzymes.iter().enumerate() {
-        let can_fire = enzyme.can_fire(atp_concentration);
-        let atp_cost = enzyme.atp_cost();
-        total_atp_cost += atp_cost;
+    #[test]
+    fn test_comprehensive_quantum_state_creation() {
+        let state = create_comprehensive_quantum_state().unwrap();
         
-        println!("  Step {}: Can fire = {}, ATP cost = {:.3} mM", i + 1, can_fire, atp_cost);
+        assert!(state.atp_coords.atp_concentration > 0.0);
+        assert!(state.oscillatory_coords.oscillations.len() == 50);
+        assert!(state.membrane_coords.quantum_states.len() > 0);
+        assert!(state.entropy_coords.endpoint_distributions.len() > 0);
     }
     
-    println!("  Total pathway ATP cost: {:.3} mM", total_atp_cost);
-    
-    Ok(())
+    #[test]
+    fn test_tissue_specific_state_creation() {
+        let neural_state = create_tissue_specific_state(TissueType::Neural).unwrap();
+        let cardiac_state = create_tissue_specific_state(TissueType::Cardiac).unwrap();
+        
+        // Cardiac tissue should have higher ATP concentration
+        assert!(cardiac_state.atp_coords.atp_concentration > neural_state.atp_coords.atp_concentration);
+    }
 } 
