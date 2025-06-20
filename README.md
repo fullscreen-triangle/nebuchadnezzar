@@ -1,9 +1,9 @@
 <div align="center">
      <h1 align="center">Nebuchadnezzar</h1>
 
-
-
-<img align="center" src="assets/img/logo.png" alt="Nebuchadnezzar Logo" width="400"/>
+<p align="center">
+<img src="assets/img/logo.png" alt="Nebuchadnezzar Logo" width="400"/>
+</p>
 
 ## Hierarchical Probabilistic Electric Circuit System for Biological Simulation
 
