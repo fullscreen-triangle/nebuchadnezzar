@@ -2,10 +2,10 @@
 name = "nebuchadnezzar"
 version = "0.1.0"
 edition = "2021"
-authors = ["Kundai Hove <kundai@example.com>"]
+authors = ["Kundai Farai Sachikonye <kundai.f.sachikonye@gmail.com>"]
 description = "A biological quantum computer framework using ATP as energy currency"
 license = "MIT"
-repository = "https://github.com/kundai/nebuchadnezzar"
+repository = "https://github.com/fullscreen-triangle/nebuchadnezzar"
 keywords = ["quantum", "biology", "atp", "simulation", "biophysics"]
 categories = ["science", "simulation"]
 
