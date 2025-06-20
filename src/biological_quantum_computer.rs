@@ -1,12 +1,9 @@
-//! # ATP-Oscillatory-Membrane Quantum Biological Simulator
+//! # ATP-Oscillatory-Membrane Quantum Biological Computer
 //! 
-//! This module implements the revolutionary insights combining:
+//! Implementation of the complete biological quantum computer combining:
 //! 1. ATP as the universal energy currency for biological differential equations
 //! 2. Oscillatory entropy as statistical distributions of oscillation endpoints  
 //! 3. Membrane quantum computation through Environment-Assisted Quantum Transport (ENAQT)
-//! 
-//! The simulator demonstrates how biological systems function as room-temperature
-//! quantum computers powered by ATP and organized through oscillatory dynamics.
 
 use std::collections::HashMap;
 use std::f64::consts::PI;
@@ -49,18 +46,18 @@ pub struct AtpCoordinates {
 
 impl AtpCoordinates {
     pub fn new(atp: f64, adp: f64, pi: f64) -> Self {
-        let energy_charge = atp / (atp + adp + 0.1); // Avoid division by zero
+        let energy_charge = atp / (atp + adp + 0.1); // Assume small AMP pool
         Self {
             atp_concentration: atp,
             adp_concentration: adp,
             pi_concentration: pi,
             energy_charge,
-            atp_oscillation_amplitude: 0.1 * atp,
+            atp_oscillation_amplitude: 0.1,
             atp_oscillation_phase: 0.0,
-            atp_oscillation_frequency: 1.0, // 1 Hz baseline
+            atp_oscillation_frequency: 1.0,
         }
     }
-    
+
     pub fn available_energy(&self) -> f64 {
         // Available energy from ATP hydrolysis with oscillatory modulation
         let base_energy = self.atp_concentration * 30.5; // kJ/mol * mM
@@ -84,18 +81,26 @@ pub struct OscillatoryCoordinates {
 
 impl OscillatoryCoordinates {
     pub fn new(num_oscillators: usize) -> Self {
-        let oscillations = (0..num_oscillators)
-            .map(|i| OscillationState::new(&format!("osc_{}", i), 1.0, 0.0, 1.0 + i as f64 * 0.1))
-            .collect();
-        let oscillatory_momenta = vec![0.0; num_oscillators];
-        let phase_coupling_matrix = Array2::zeros((num_oscillators, num_oscillators));
-        let membrane_oscillations = Vec::new();
+        let mut oscillations = Vec::new();
+        let mut momenta = Vec::new();
+        
+        for i in 0..num_oscillators {
+            oscillations.push(OscillationState::new(
+                &format!("osc_{}", i),
+                1.0,  // amplitude
+                0.0,  // phase
+                1.0,  // frequency
+            ));
+            momenta.push(0.0);
+        }
+        
+        let coupling_matrix = Array2::zeros((num_oscillators, num_oscillators));
         
         Self {
             oscillations,
-            oscillatory_momenta,
-            phase_coupling_matrix,
-            membrane_oscillations,
+            oscillatory_momenta: momenta,
+            phase_coupling_matrix: coupling_matrix,
+            membrane_oscillations: Vec::new(),
         }
     }
 }
@@ -133,23 +138,6 @@ pub struct MembraneOscillation {
     pub proton_transport_oscillation: OscillationState,
 }
 
-impl MembraneOscillation {
-    pub fn new(protein_name: &str) -> Self {
-        Self {
-            protein_name: protein_name.to_string(),
-            conformational_oscillation: OscillationState::new(
-                &format!("{}_conf", protein_name), 0.5, 0.0, 10.0
-            ),
-            electron_tunneling_oscillation: OscillationState::new(
-                &format!("{}_electron", protein_name), 0.1, 0.0, 100.0
-            ),
-            proton_transport_oscillation: OscillationState::new(
-                &format!("{}_proton", protein_name), 0.3, 0.0, 50.0
-            ),
-        }
-    }
-}
-
 /// Membrane quantum computation coordinates
 #[derive(Debug, Clone)]
 pub struct MembraneQuantumCoordinates {
@@ -165,41 +153,40 @@ pub struct MembraneQuantumCoordinates {
 
 impl MembraneQuantumCoordinates {
     pub fn new(num_proteins: usize) -> Self {
-        let quantum_states = (0..num_proteins)
-            .map(|i| QuantumStateAmplitude::new(
-                &format!("protein_{}", i), 
-                Complex::new(1.0 / (num_proteins as f64).sqrt(), 0.0)
-            ))
-            .collect();
+        let mut quantum_states = Vec::new();
+        let mut tunneling_states = Vec::new();
         
-        let environmental_coupling = EnvironmentalCoupling {
-            coupling_strength: 0.1,
-            correlation_time: 1e-12, // picoseconds
-            temperature: 310.0, // body temperature
-            enhancement_factor: 1.5,
-        };
-        
-        let tunneling_states = vec![
-            TunnelingState::new("electron_transport", 0.1),
-            TunnelingState::new("proton_pumping", 0.05),
-        ];
-        
-        let membrane_properties = MembraneProperties {
-            thickness: 5.0, // nm
-            dielectric_constant: 2.0,
-            protein_density: 1000.0, // proteins per nm²
-            lipid_composition: LipidComposition {
-                phospholipid_fraction: 0.7,
-                cholesterol_fraction: 0.2,
-                other_lipids_fraction: 0.1,
-            },
-        };
+        for i in 0..num_proteins {
+            quantum_states.push(QuantumStateAmplitude::new(
+                &format!("protein_{}", i),
+                Complex::new(1.0, 0.0),
+            ));
+            
+            tunneling_states.push(TunnelingState::new(
+                &format!("tunneling_{}", i),
+                0.1, // 10% tunneling probability
+            ));
+        }
         
         Self {
             quantum_states,
-            environmental_coupling,
+            environmental_coupling: EnvironmentalCoupling {
+                coupling_strength: 0.1,
+                correlation_time: 1e-12,
+                temperature: 310.0, // Body temperature
+                enhancement_factor: 1.5,
+            },
             tunneling_states,
-            membrane_properties,
+            membrane_properties: MembraneProperties {
+                thickness: 5e-9, // 5 nm
+                dielectric_constant: 2.0,
+                protein_density: 1000.0, // proteins per nm²
+                lipid_composition: LipidComposition {
+                    phospholipid_fraction: 0.7,
+                    cholesterol_fraction: 0.2,
+                    other_lipids_fraction: 0.1,
+                },
+            },
         }
     }
 }
@@ -291,7 +278,12 @@ impl OscillatoryEntropyCoordinates {
         for name in oscillator_names {
             endpoint_distributions.insert(
                 name.clone(),
-                EndpointDistribution::new(10) // 10 possible endpoints per oscillator
+                EndpointDistribution {
+                    positions: vec![0.0, 1.0, 2.0],
+                    probabilities: vec![0.33, 0.33, 0.34],
+                    velocities: vec![0.0, 0.5, 1.0],
+                    energies: vec![0.0, 0.25, 1.0],
+                },
             );
         }
         
@@ -319,22 +311,6 @@ pub struct EndpointDistribution {
 }
 
 impl EndpointDistribution {
-    pub fn new(num_endpoints: usize) -> Self {
-        let positions: Vec<f64> = (0..num_endpoints)
-            .map(|i| -1.0 + 2.0 * i as f64 / (num_endpoints - 1) as f64)
-            .collect();
-        let probabilities = vec![1.0 / num_endpoints as f64; num_endpoints];
-        let velocities = vec![0.0; num_endpoints];
-        let energies = vec![0.0; num_endpoints];
-        
-        Self {
-            positions,
-            probabilities,
-            velocities,
-            energies,
-        }
-    }
-    
     pub fn calculate_entropy(&self) -> f64 {
         // Shannon entropy: S = -Σ p_i ln(p_i)
         -self.probabilities.iter()
@@ -436,7 +412,7 @@ impl BiologicalQuantumHamiltonian {
         }
     }
 
-    /// ATP dynamics: dx/dATP from the framework
+    /// ATP dynamics: dx/dATP from original framework
     fn calculate_atp_derivatives(&self, state: &BiologicalQuantumState) -> AtpDerivatives {
         let atp_consumption_rate = self.calculate_atp_consumption_rate(state);
         let oscillatory_atp_coupling = self.calculate_oscillatory_atp_coupling(state);
@@ -453,31 +429,50 @@ impl BiologicalQuantumHamiltonian {
     }
 
     fn calculate_atp_consumption_rate(&self, state: &BiologicalQuantumState) -> f64 {
-        // Base consumption rate proportional to total oscillation energy
-        let oscillation_energy = self.oscillatory_energy.calculate(&state.oscillatory_coords);
-        let membrane_energy = self.membrane_quantum_energy.calculate(&state.membrane_coords);
+        // Base consumption rate proportional to oscillatory activity
+        let oscillatory_demand: f64 = state.oscillatory_coords.oscillations.iter()
+            .map(|osc| osc.amplitude * osc.frequency)
+            .sum();
         
-        0.1 * (oscillation_energy + membrane_energy) / state.atp_coords.available_energy().max(1.0)
+        // Membrane quantum computation demand
+        let quantum_demand: f64 = state.membrane_coords.quantum_states.iter()
+            .map(|qs| qs.amplitude.norm_sqr())
+            .sum();
+        
+        0.1 + 0.01 * oscillatory_demand + 0.05 * quantum_demand
     }
 
     fn calculate_oscillatory_atp_coupling(&self, state: &BiologicalQuantumState) -> f64 {
-        state.oscillatory_coords.oscillations.iter()
+        // Coupling depends on available ATP energy
+        let available_energy = state.atp_coords.available_energy();
+        let total_oscillatory_demand: f64 = state.oscillatory_coords.oscillations.iter()
             .map(|osc| osc.atp_coupling_strength * osc.amplitude)
-            .sum::<f64>() / state.oscillatory_coords.oscillations.len().max(1) as f64
+            .sum();
+        
+        if total_oscillatory_demand > 0.0 {
+            (available_energy / total_oscillatory_demand).min(1.0) * 0.1
+        } else {
+            0.0
+        }
     }
 
     fn calculate_membrane_atp_coupling(&self, state: &BiologicalQuantumState) -> f64 {
-        state.membrane_coords.quantum_states.iter()
-            .map(|qs| qs.amplitude.norm_sqr())
-            .sum::<f64>() * 0.1
+        // ATP drives membrane protein conformational changes
+        let membrane_demand: f64 = state.oscillatory_coords.membrane_oscillations.iter()
+            .map(|mem_osc| mem_osc.conformational_oscillation.amplitude)
+            .sum();
+        
+        0.05 * membrane_demand
     }
 
     fn calculate_energy_charge_rate(&self, state: &BiologicalQuantumState) -> f64 {
-        let total_nucleotides = state.atp_coords.atp_concentration + 
-                               state.atp_coords.adp_concentration + 0.1;
+        // Energy charge rate based on ATP/ADP ratio changes
+        let atp = state.atp_coords.atp_concentration;
+        let adp = state.atp_coords.adp_concentration;
+        let total = atp + adp + 0.1; // Assume small AMP pool
         
-        if total_nucleotides > 0.0 {
-            -self.calculate_atp_consumption_rate(state) / total_nucleotides
+        if total > 0.0 {
+            -0.01 * (atp / total) // Decreases as ATP is consumed
         } else {
             0.0
         }
@@ -506,19 +501,34 @@ impl BiologicalQuantumHamiltonian {
     }
 
     fn calculate_oscillatory_force(&self, oscillation: &OscillationState, _state: &BiologicalQuantumState) -> f64 {
-        // Harmonic oscillator force: F = -kx = -mω²x
-        let k = oscillation.frequency * oscillation.frequency;
-        k * oscillation.amplitude
+        // Harmonic oscillator force: F = -k*x
+        let k = oscillation.frequency * oscillation.frequency; // Spring constant
+        -k * oscillation.amplitude
     }
 
     fn calculate_atp_driving_force(&self, oscillation: &OscillationState, atp_coords: &AtpCoordinates) -> f64 {
-        oscillation.atp_coupling_strength * atp_coords.available_energy() * 0.01
+        // ATP provides driving force for oscillations
+        let atp_energy = atp_coords.available_energy();
+        oscillation.atp_coupling_strength * atp_energy * 0.01
     }
 
     fn calculate_phase_coupling_derivatives(&self, state: &BiologicalQuantumState) -> Vec<f64> {
-        state.oscillatory_coords.oscillations.iter()
-            .map(|osc| osc.frequency + 0.1 * osc.amplitude)
-            .collect()
+        // Phase coupling between oscillators
+        let n = state.oscillatory_coords.oscillations.len();
+        let mut phase_derivatives = vec![0.0; n];
+        
+        for i in 0..n {
+            for j in 0..n {
+                if i != j {
+                    let coupling = state.oscillatory_coords.phase_coupling_matrix[[i, j]];
+                    let phase_diff = state.oscillatory_coords.oscillations[i].phase - 
+                                   state.oscillatory_coords.oscillations[j].phase;
+                    phase_derivatives[i] += coupling * phase_diff.sin();
+                }
+            }
+        }
+        
+        phase_derivatives
     }
 
     /// Membrane quantum dynamics: Schrödinger equation with ENAQT
@@ -542,34 +552,37 @@ impl BiologicalQuantumHamiltonian {
     }
 
     fn calculate_enaqt_coupling(&self, quantum_state: &QuantumStateAmplitude, state: &BiologicalQuantumState) -> Complex<f64> {
-        let coupling = &state.membrane_coords.environmental_coupling;
-        let thermal_factor = (-coupling.coupling_strength / (1.381e-23 * coupling.temperature)).exp();
-        Complex::new(0.0, coupling.enhancement_factor * thermal_factor) * quantum_state.amplitude
+        // Environment-assisted quantum transport coupling
+        let coupling_strength = state.membrane_coords.environmental_coupling.coupling_strength;
+        let enhancement = state.membrane_coords.environmental_coupling.enhancement_factor;
+        
+        // Environmental coupling enhances rather than destroys coherence
+        Complex::new(0.0, coupling_strength * enhancement) * quantum_state.amplitude
     }
 
-    fn calculate_atp_quantum_coupling(&self, quantum_state: &QuantumStateAmplitude, state: &BiologicalQuantumState) -> Complex<f64> {
+    fn calculate_atp_quantum_coupling(&self, _quantum_state: &QuantumStateAmplitude, state: &BiologicalQuantumState) -> Complex<f64> {
+        // ATP energy affects quantum state evolution
         let atp_energy = state.atp_coords.available_energy();
-        Complex::new(atp_energy * 0.001, 0.0) * quantum_state.amplitude
+        Complex::new(atp_energy * 0.001, 0.0) // Small coupling to quantum evolution
     }
 
     fn calculate_tunneling_derivatives(&self, state: &BiologicalQuantumState) -> Vec<f64> {
+        // Tunneling probability evolution
         state.membrane_coords.tunneling_states.iter()
-            .map(|ts| {
-                let kappa = ((2.0 * 9.109e-31 * (ts.barrier_height - ts.electron_energy) * 1.602e-19) / 
-                            (1.055e-34 * 1.055e-34)).sqrt();
-                let transmission = (-2.0 * kappa * ts.barrier_width).exp();
-                0.1 * transmission
+            .map(|tunneling| {
+                // Tunneling probability changes with ATP availability
+                let atp_factor = state.atp_coords.energy_charge;
+                0.01 * atp_factor * (1.0 - tunneling.tunneling_probability)
             })
             .collect()
     }
 
-    fn calculate_environmental_derivatives(&self, state: &BiologicalQuantumState) -> EnvironmentalCouplingDerivatives {
-        let coupling = &state.membrane_coords.environmental_coupling;
-        
+    fn calculate_environmental_derivatives(&self, _state: &BiologicalQuantumState) -> EnvironmentalCouplingDerivatives {
+        // Environmental parameters evolve slowly
         EnvironmentalCouplingDerivatives {
-            coupling_strength_rate: -0.01 * coupling.coupling_strength,
-            correlation_time_rate: 0.0, // Assume constant correlation time
-            enhancement_factor_rate: 0.001 * state.atp_coords.available_energy(),
+            coupling_strength_rate: 0.0,
+            correlation_time_rate: 0.0,
+            enhancement_factor_rate: 0.0,
         }
     }
 
@@ -599,52 +612,54 @@ impl BiologicalQuantumHamiltonian {
     }
 
     fn calculate_endpoint_evolution_rate(&self, state: &BiologicalQuantumState) -> HashMap<String, Vec<f64>> {
-        let mut rates = HashMap::new();
+        let mut evolution_rates = HashMap::new();
         
         for (name, distribution) in &state.entropy_coords.endpoint_distributions {
-            let mut prob_rates = Vec::new();
-            
+            let mut rates = Vec::new();
             for (i, &prob) in distribution.probabilities.iter().enumerate() {
-                // Rate of change based on oscillation dynamics
-                let rate = if i < state.oscillatory_coords.oscillations.len() {
-                    let osc = &state.oscillatory_coords.oscillations[i];
-                    0.1 * osc.amplitude * osc.frequency * (prob - 1.0 / distribution.probabilities.len() as f64)
+                // Endpoint probabilities evolve based on oscillatory dynamics
+                let oscillation = state.oscillatory_coords.oscillations.iter()
+                    .find(|osc| osc.name == *name);
+                
+                if let Some(osc) = oscillation {
+                    let rate = 0.01 * osc.frequency * (1.0 - prob); // Tend toward equilibrium
+                    rates.push(rate);
                 } else {
-                    0.0
-                };
-                prob_rates.push(rate);
+                    rates.push(0.0);
+                }
             }
-            
-            rates.insert(name.clone(), prob_rates);
+            evolution_rates.insert(name.clone(), rates);
         }
         
-        rates
+        evolution_rates
     }
 
     fn calculate_atp_entropy_production(&self, state: &BiologicalQuantumState) -> f64 {
-        let consumption_rate = self.calculate_atp_consumption_rate(state);
-        1.381e-23 * state.membrane_coords.environmental_coupling.temperature * consumption_rate * 6.242e18
+        // Entropy production from ATP hydrolysis
+        let atp_consumption = self.calculate_atp_consumption_rate(state);
+        atp_consumption * 0.1 // Each ATP hydrolysis produces entropy
     }
 
     fn calculate_oscillatory_entropy_production(&self, state: &BiologicalQuantumState) -> f64 {
+        // Entropy from oscillatory dissipation
         state.oscillatory_coords.oscillations.iter()
             .map(|osc| osc.damping_coefficient * osc.amplitude * osc.amplitude)
-            .sum::<f64>() * 0.1
+            .sum::<f64>() * 0.01
     }
 
     fn calculate_membrane_entropy_production(&self, state: &BiologicalQuantumState) -> f64 {
-        let total_coherence: f64 = state.membrane_coords.quantum_states.iter()
-            .map(|qs| qs.amplitude.norm_sqr())
+        // Entropy from membrane processes
+        let coherence_loss: f64 = state.membrane_coords.quantum_states.iter()
+            .map(|qs| 1.0 - qs.amplitude.norm_sqr())
             .sum();
-        
-        let decoherence_rate = state.membrane_coords.environmental_coupling.coupling_strength;
-        decoherence_rate * total_coherence * 0.1
+        coherence_loss * 0.05
     }
 
     fn calculate_quantum_tunneling_entropy_production(&self, state: &BiologicalQuantumState) -> f64 {
+        // Entropy from quantum tunneling events (death mechanism)
         state.membrane_coords.tunneling_states.iter()
-            .map(|ts| ts.tunneling_probability * (-ts.tunneling_probability.ln()).max(0.0))
-            .sum::<f64>() * 0.01
+            .map(|ts| ts.tunneling_probability * 0.1)
+            .sum()
     }
 }
 
@@ -715,8 +730,7 @@ impl MembraneQuantumEnergyFunction {
     
     fn calculate_tunneling_energy(&self, tunneling: &TunnelingState) -> f64 {
         // Quantum tunneling energy based on barrier penetration
-        let kappa = ((2.0 * 9.109e-31 * (tunneling.barrier_height - tunneling.electron_energy) * 1.602e-19) / 
-                    (1.055e-34 * 1.055e-34)).sqrt();
+        let kappa = ((2.0 * 9.109e-31 * (tunneling.barrier_height - tunneling.electron_energy) * 1.602e-19) / (1.055e-34 * 1.055e-34)).sqrt();
         let tunneling_probability = (-2.0 * kappa * tunneling.barrier_width * 1e-9).exp();
         tunneling.electron_energy * tunneling_probability
     }
