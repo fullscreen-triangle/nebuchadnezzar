@@ -2,30 +2,72 @@
 name = "nebuchadnezzar"
 version = "0.1.0"
 edition = "2021"
-authors = ["Kundai Farai Sachikonye <kundai.f.sachikonye@gmail.com>"]
-description = "Nebuchadnezzar: Hierarchical Probabilistic Electric Circuit System for Biological Simulation"
+authors = ["Kundai Makufa"]
+description = "ATP-based differential equation framework for cellular process modeling using hierarchical probabilistic electrical circuits"
 license = "MIT"
-repository = "https://github.com/fullscreen-triangle/nebuchadnezzar"
-keywords = ["cli", "tool"]
-categories = ["command-line-utilities"]
+repository = "https://github.com/kundai/nebuchadnezzar"
+keywords = ["bioinformatics", "systems-biology", "quantum-computation", "atp", "circuits"]
+categories = ["science", "simulation"]
 
 [dependencies]
-serde = { version = "1.0", features = ["derive"] }
-tokio = { version = "1.0", features = ["full"] }
+# Linear algebra and numerical computation
 ndarray = "0.15"
-num-complex = "0.4"
-rand = "0.8"
 nalgebra = "0.32"
-rayon = "1.8"
+num-complex = "0.4"
+num-traits = "0.2"
+
+# Parallel computation
+rayon = "1.7"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Random number generation
+rand = "0.8"
+rand_distr = "0.4"
+
+# Optimization
+argmin = "0.8"
+argmin-math = "0.3"
+
+# Logging
+log = "0.4"
+env_logger = "0.10"
+
+# Configuration
+config = "0.13"
+
+# Testing utilities
 approx = "0.5"
 
 [dev-dependencies]
-criterion = "0.5"
+criterion = { version = "0.5", features = ["html_reports"] }
+proptest = "1.0"
 
-[[bin]]
-name = "my_binary"
-path = "src/bin/my_binary.rs"
+[[example]]
+name = "glycolysis_circuit"
+path = "examples/glycolysis_circuit.rs"
 
 [[bench]]
-name = "my_benchmark"
+name = "circuit_benchmarks"
 harness = false
+
+[features]
+default = []
+gpu = ["cudarc"]
+visualization = ["plotters"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.bench]
+opt-level = 3
+debug = true

@@ -9,6 +9,8 @@ use crate::circuits::enzyme_circuits::EnzymeProbCircuit;
 use crate::circuits::ion_channel::ProbabilisticIonChannel;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use crate::systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
+use crate::{BiochemicalPathway, BiochemicalReaction, ExpansionCriteria};
 
 /// Multi-level voltage hierarchy as specified
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -571,5 +573,476 @@ mod tests {
         
         evidence.add_event(event);
         assert_eq!(evidence.millisecond_events.len(), 1);
+    }
+}
+
+/// Hierarchical circuit system with probabilistic nodes
+#[derive(Debug, Clone)]
+pub struct HierarchicalCircuit {
+    pub nodes: Vec<ProbabilisticNode>,
+    pub connections: Vec<CircuitConnection>,
+    pub atp_pool: AtpPool,
+    pub expansion_criteria: ExpansionCriteria,
+    pub current_resolution_level: usize,
+}
+
+impl HierarchicalCircuit {
+    pub fn new() -> Self {
+        Self {
+            nodes: Vec::new(),
+            connections: Vec::new(),
+            atp_pool: AtpPool::new(5.0, 1.0, 0.5), // Default ATP pool
+            expansion_criteria: ExpansionCriteria::default(),
+            current_resolution_level: 0,
+        }
+    }
+
+    pub fn from_pathway(
+        pathway: BiochemicalPathway,
+        atp_pool: AtpPool,
+        expansion_criteria: ExpansionCriteria,
+    ) -> Self {
+        let mut circuit = Self {
+            nodes: Vec::new(),
+            connections: Vec::new(),
+            atp_pool,
+            expansion_criteria,
+            current_resolution_level: 0,
+        };
+
+        // Convert biochemical pathway to probabilistic nodes
+        for (i, reaction) in pathway.reactions.iter().enumerate() {
+            let node = ProbabilisticNode::from_reaction(i, reaction);
+            circuit.nodes.push(node);
+        }
+
+        // Create connections between nodes based on substrate/product relationships
+        circuit.create_pathway_connections(&pathway);
+
+        circuit
+    }
+
+    fn create_pathway_connections(&mut self, pathway: &BiochemicalPathway) {
+        // Create connections between reactions based on shared metabolites
+        for (i, reaction_i) in pathway.reactions.iter().enumerate() {
+            for (j, reaction_j) in pathway.reactions.iter().enumerate() {
+                if i != j {
+                    // Check if products of reaction_i are substrates of reaction_j
+                    for (product, _) in &reaction_i.products {
+                        for (substrate, _) in &reaction_j.substrates {
+                            if product == substrate {
+                                self.connections.push(CircuitConnection {
+                                    from_node: i,
+                                    to_node: j,
+                                    metabolite: product.clone(),
+                                    conductance: 1.0, // Default conductance
+                                    atp_dependence: 0.1,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /// Solve the hierarchical circuit system with ATP budget
+    pub fn solve_hierarchical_system(&mut self, atp_budget: f64) -> Result<HierarchicalState> {
+        let mut state = HierarchicalState::new();
+        let mut remaining_atp = atp_budget;
+
+        // Evaluate each node and decide on expansion
+        for (i, node) in self.nodes.iter_mut().enumerate() {
+            // Check if node should be expanded to detailed circuit
+            if self.should_expand_node(node) {
+                let detailed_circuit = self.expand_node_to_circuit(node, remaining_atp)?;
+                let node_result = self.solve_detailed_circuit(&detailed_circuit, remaining_atp)?;
+                
+                state.node_states.insert(i, NodeState::Detailed(node_result));
+                remaining_atp -= node_result.atp_consumed;
+            } else {
+                let node_result = self.solve_probabilistic_node(node, remaining_atp)?;
+                state.node_states.insert(i, NodeState::Probabilistic(node_result));
+                remaining_atp -= node_result.atp_consumed;
+            }
+
+            if remaining_atp <= 0.0 {
+                break;
+            }
+        }
+
+        state.total_atp_consumed = atp_budget - remaining_atp;
+        state.resolution_level = self.current_resolution_level;
+
+        Ok(state)
+    }
+
+    /// Determine if a probabilistic node should be expanded to detailed circuit
+    fn should_expand_node(&self, node: &ProbabilisticNode) -> bool {
+        let uncertainty = node.calculate_uncertainty();
+        let impact = self.calculate_optimization_impact(node);
+        let cost = self.estimate_expansion_cost(node);
+
+        uncertainty > self.expansion_criteria.uncertainty_threshold
+            && impact > self.expansion_criteria.impact_threshold
+            && cost < self.expansion_criteria.budget_limit
+    }
+
+    fn calculate_optimization_impact(&self, node: &ProbabilisticNode) -> f64 {
+        // Calculate how much this node affects overall system performance
+        let flux_sensitivity = node.rate_distribution.mean() * node.atp_cost_distribution.mean();
+        let connection_importance = self.connections.iter()
+            .filter(|conn| conn.from_node == node.id || conn.to_node == node.id)
+            .count() as f64;
+        
+        flux_sensitivity * connection_importance / 10.0
+    }
+
+    fn estimate_expansion_cost(&self, node: &ProbabilisticNode) -> f64 {
+        // Estimate computational cost of expanding this node
+        let complexity_factor = node.rate_distribution.samples.len() as f64;
+        let coupling_complexity = node.cross_reaction_strength.len() as f64;
+        
+        complexity_factor * coupling_complexity * 0.1
+    }
+
+    /// Expand a probabilistic node to a detailed circuit
+    fn expand_node_to_circuit(&self, node: &ProbabilisticNode, atp_available: f64) -> Result<DetailedCircuit> {
+        Ok(DetailedCircuit {
+            circuit_elements: self.create_detailed_elements(node, atp_available)?,
+            voltage_nodes: vec![0.0; 10], // Default 10 voltage nodes
+            current_flows: vec![0.0; 10],
+            atp_consumption_rate: node.atp_cost_distribution.mean(),
+        })
+    }
+
+    fn create_detailed_elements(&self, node: &ProbabilisticNode, _atp_available: f64) -> Result<Vec<CircuitElement>> {
+        let mut elements = Vec::new();
+
+        // Create resistor representing enzyme kinetics
+        elements.push(CircuitElement::Resistor {
+            resistance: 1.0 / node.rate_distribution.mean(),
+            from_node: 0,
+            to_node: 1,
+        });
+
+        // Create capacitor for substrate binding
+        elements.push(CircuitElement::Capacitor {
+            capacitance: 1.0,
+            from_node: 1,
+            to_node: 2,
+        });
+
+        // Create voltage source for ATP driving force
+        elements.push(CircuitElement::VoltageSource {
+            voltage: node.atp_cost_distribution.mean() * 10.0, // Scale to voltage
+            from_node: 2,
+            to_node: 3,
+        });
+
+        Ok(elements)
+    }
+
+    /// Solve a detailed circuit using electrical circuit analysis
+    fn solve_detailed_circuit(&self, circuit: &DetailedCircuit, atp_budget: f64) -> Result<DetailedCircuitResult> {
+        // Simplified circuit analysis - in practice would use matrix methods
+        let total_resistance: f64 = circuit.circuit_elements.iter()
+            .filter_map(|element| match element {
+                CircuitElement::Resistor { resistance, .. } => Some(*resistance),
+                _ => None,
+            })
+            .sum();
+
+        let total_voltage: f64 = circuit.circuit_elements.iter()
+            .filter_map(|element| match element {
+                CircuitElement::VoltageSource { voltage, .. } => Some(*voltage),
+                _ => None,
+            })
+            .sum();
+
+        let current = if total_resistance > 0.0 {
+            total_voltage / total_resistance
+        } else {
+            0.0
+        };
+
+        let atp_consumed = (current * 0.1).min(atp_budget);
+
+        Ok(DetailedCircuitResult {
+            current_flow: current,
+            voltage_distribution: circuit.voltage_nodes.clone(),
+            power_consumption: current * total_voltage,
+            atp_consumed,
+            converged: true,
+        })
+    }
+
+    /// Solve a probabilistic node using Monte Carlo sampling
+    fn solve_probabilistic_node(&self, node: &ProbabilisticNode, atp_budget: f64) -> Result<ProbabilisticNodeResult> {
+        let num_samples = 1000;
+        let mut total_flux = 0.0;
+        let mut total_atp_cost = 0.0;
+
+        for _ in 0..num_samples {
+            let rate = node.rate_distribution.sample();
+            let atp_cost = node.atp_cost_distribution.sample();
+            
+            // Simple flux calculation
+            let flux = rate * self.atp_pool.atp_concentration / (1.0 + atp_cost);
+            total_flux += flux;
+            total_atp_cost += atp_cost * flux;
+        }
+
+        let mean_flux = total_flux / num_samples as f64;
+        let mean_atp_consumption = (total_atp_cost / num_samples as f64).min(atp_budget);
+
+        Ok(ProbabilisticNodeResult {
+            mean_flux,
+            flux_uncertainty: node.calculate_uncertainty(),
+            atp_consumed: mean_atp_consumption,
+            probability_distribution: node.rate_distribution.clone(),
+        })
+    }
+
+    pub fn calculate_total_load(&self) -> Result<f64> {
+        // Calculate total computational load of the circuit
+        self.nodes.iter()
+            .map(|node| node.computational_importance)
+            .sum::<f64>()
+            .into()
+    }
+}
+
+/// Probabilistic node representing uncertain biochemical process
+#[derive(Debug, Clone)]
+pub struct ProbabilisticNode {
+    pub id: usize,
+    pub name: String,
+    pub rate_distribution: ProbabilityDistribution<f64>,
+    pub atp_cost_distribution: ProbabilityDistribution<f64>,
+    pub feedback_probability: f64,
+    pub cross_reaction_strength: HashMap<usize, f64>,
+    pub uncertainty_threshold: f64,
+    pub computational_importance: f64,
+}
+
+impl ProbabilisticNode {
+    pub fn from_reaction(id: usize, reaction: &BiochemicalReaction) -> Self {
+        let rate_mean = match &reaction.rate_constant {
+            AtpRateConstant::Linear(k) => *k,
+            AtpRateConstant::Michaelis(vmax, _) => *vmax,
+            AtpRateConstant::Cooperative(vmax, _, _) => *vmax,
+            AtpRateConstant::Inhibited(vmax, _, _) => *vmax,
+        };
+
+        Self {
+            id,
+            name: reaction.name.clone(),
+            rate_distribution: ProbabilityDistribution::normal(rate_mean, rate_mean * 0.1),
+            atp_cost_distribution: ProbabilityDistribution::normal(reaction.atp_cost, reaction.atp_cost * 0.05),
+            feedback_probability: 0.1,
+            cross_reaction_strength: HashMap::new(),
+            uncertainty_threshold: 0.3,
+            computational_importance: 1.0,
+        }
+    }
+
+    pub fn calculate_uncertainty(&self) -> f64 {
+        // Calculate uncertainty as coefficient of variation
+        let rate_cv = self.rate_distribution.std_dev() / self.rate_distribution.mean();
+        let cost_cv = self.atp_cost_distribution.std_dev() / self.atp_cost_distribution.mean();
+        
+        (rate_cv + cost_cv) / 2.0
+    }
+}
+
+/// Probability distribution for uncertain parameters
+#[derive(Debug, Clone)]
+pub struct ProbabilityDistribution<T> {
+    pub samples: Vec<T>,
+    distribution_type: DistributionType,
+    parameters: Vec<f64>,
+}
+
+#[derive(Debug, Clone)]
+enum DistributionType {
+    Normal,
+    Uniform,
+    Exponential,
+}
+
+impl ProbabilityDistribution<f64> {
+    pub fn normal(mean: f64, std_dev: f64) -> Self {
+        let mut samples = Vec::new();
+        for _ in 0..1000 {
+            // Simplified normal distribution sampling
+            let u1: f64 = rand::random();
+            let u2: f64 = rand::random();
+            let z = (-2.0 * u1.ln()).sqrt() * (2.0 * std::f64::consts::PI * u2).cos();
+            samples.push(mean + std_dev * z);
+        }
+
+        Self {
+            samples,
+            distribution_type: DistributionType::Normal,
+            parameters: vec![mean, std_dev],
+        }
+    }
+
+    pub fn uniform(min: f64, max: f64) -> Self {
+        let mut samples = Vec::new();
+        for _ in 0..1000 {
+            let u: f64 = rand::random();
+            samples.push(min + (max - min) * u);
+        }
+
+        Self {
+            samples,
+            distribution_type: DistributionType::Uniform,
+            parameters: vec![min, max],
+        }
+    }
+
+    pub fn sample(&self) -> f64 {
+        if self.samples.is_empty() {
+            0.0
+        } else {
+            let index = (rand::random::<f64>() * self.samples.len() as f64) as usize;
+            self.samples[index.min(self.samples.len() - 1)]
+        }
+    }
+
+    pub fn mean(&self) -> f64 {
+        if self.samples.is_empty() {
+            0.0
+        } else {
+            self.samples.iter().sum::<f64>() / self.samples.len() as f64
+        }
+    }
+
+    pub fn std_dev(&self) -> f64 {
+        if self.samples.len() < 2 {
+            return 0.0;
+        }
+
+        let mean = self.mean();
+        let variance = self.samples.iter()
+            .map(|x| (x - mean).powi(2))
+            .sum::<f64>() / (self.samples.len() - 1) as f64;
+        
+        variance.sqrt()
+    }
+}
+
+/// Connection between probabilistic nodes
+#[derive(Debug, Clone)]
+pub struct CircuitConnection {
+    pub from_node: usize,
+    pub to_node: usize,
+    pub metabolite: String,
+    pub conductance: f64,
+    pub atp_dependence: f64,
+}
+
+/// Detailed circuit representation for expanded nodes
+#[derive(Debug, Clone)]
+pub struct DetailedCircuit {
+    pub circuit_elements: Vec<CircuitElement>,
+    pub voltage_nodes: Vec<f64>,
+    pub current_flows: Vec<f64>,
+    pub atp_consumption_rate: f64,
+}
+
+/// Individual circuit elements
+#[derive(Debug, Clone)]
+pub enum CircuitElement {
+    Resistor {
+        resistance: f64,
+        from_node: usize,
+        to_node: usize,
+    },
+    Capacitor {
+        capacitance: f64,
+        from_node: usize,
+        to_node: usize,
+    },
+    Inductor {
+        inductance: f64,
+        from_node: usize,
+        to_node: usize,
+    },
+    VoltageSource {
+        voltage: f64,
+        from_node: usize,
+        to_node: usize,
+    },
+    CurrentSource {
+        current: f64,
+        from_node: usize,
+        to_node: usize,
+    },
+}
+
+/// State of the hierarchical circuit system
+#[derive(Debug)]
+pub struct HierarchicalState {
+    pub node_states: HashMap<usize, NodeState>,
+    pub total_atp_consumed: f64,
+    pub resolution_level: usize,
+}
+
+impl HierarchicalState {
+    pub fn new() -> Self {
+        Self {
+            node_states: HashMap::new(),
+            total_atp_consumed: 0.0,
+            resolution_level: 0,
+        }
+    }
+}
+
+/// State of individual nodes (either probabilistic or detailed)
+#[derive(Debug)]
+pub enum NodeState {
+    Probabilistic(ProbabilisticNodeResult),
+    Detailed(DetailedCircuitResult),
+}
+
+/// Result from solving a probabilistic node
+#[derive(Debug, Clone)]
+pub struct ProbabilisticNodeResult {
+    pub mean_flux: f64,
+    pub flux_uncertainty: f64,
+    pub atp_consumed: f64,
+    pub probability_distribution: ProbabilityDistribution<f64>,
+}
+
+/// Result from solving a detailed circuit
+#[derive(Debug, Clone)]
+pub struct DetailedCircuitResult {
+    pub current_flow: f64,
+    pub voltage_distribution: Vec<f64>,
+    pub power_consumption: f64,
+    pub atp_consumed: f64,
+    pub converged: bool,
+}
+
+// Add rand dependency simulation for now
+mod rand {
+    pub fn random<T>() -> T
+    where
+        T: From<f64>,
+    {
+        // Simplified random number generation for demonstration
+        // In practice, would use proper random number generator
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        use std::time::{SystemTime, UNIX_EPOCH};
+        
+        let mut hasher = DefaultHasher::new();
+        SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos().hash(&mut hasher);
+        let hash = hasher.finish();
+        
+        T::from((hash % 1000000) as f64 / 1000000.0)
     }
 } 

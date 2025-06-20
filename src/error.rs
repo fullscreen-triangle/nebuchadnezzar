@@ -67,6 +67,18 @@ pub enum NebuchadnezzarError {
         value: String,
         message: String,
     },
+    
+    /// Missing pathway error
+    MissingPathway,
+    
+    /// Missing ATP pool error
+    MissingAtpPool,
+    
+    /// Entropy violations
+    EntropyViolation(String),
+    
+    /// Invalid state errors
+    InvalidState(String),
 }
 
 /// Quantum membrane computation error types
@@ -208,6 +220,18 @@ impl fmt::Display for NebuchadnezzarError {
             }
             NebuchadnezzarError::ConfigError { parameter, value, message } => {
                 write!(f, "Config Error: Parameter '{}' with value '{}': {}", parameter, value, message)
+            }
+            NebuchadnezzarError::MissingPathway => {
+                write!(f, "Missing biochemical pathway")
+            }
+            NebuchadnezzarError::MissingAtpPool => {
+                write!(f, "Missing ATP pool")
+            }
+            NebuchadnezzarError::EntropyViolation(msg) => {
+                write!(f, "Entropy violation: {}", msg)
+            }
+            NebuchadnezzarError::InvalidState(msg) => {
+                write!(f, "Invalid state: {}", msg)
             }
         }
     }
