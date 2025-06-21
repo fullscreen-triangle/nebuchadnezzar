@@ -1,0 +1,79 @@
+[build]
+# Use all available CPU cores for compilation
+jobs = 0
+
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+# Cargo aliases for common tasks
+[alias]
+b = "build"
+br = "build --release"
+c = "check"
+ca = "check --all-features"
+t = "test"
+ta = "test --all-features"
+r = "run"
+rb = "run --release"
+f = "fmt"
+fc = "fmt -- --check"
+cl = "clippy"
+cla = "clippy --all-features --all-targets"
+d = "doc"
+do = "doc --open"
+da = "doc --all-features --no-deps"
+dao = "doc --all-features --no-deps --open"
+be = "bench"
+ex = "build --examples"
+clean-all = "clean"
+
+# Scientific computing specific aliases
+glycolysis = "run --example glycolysis_circuit"
+complete = "run --example atp_oscillatory_membrane_complete_demo"
+quantum = "run --example quantum_biological_computer_demo"
+comprehensive = "run --example comprehensive_simulation"
+
+# Development aliases
+dev = ["check", "test", "clippy"]
+quick = ["fmt", "clippy", "test"]
+ci = ["check", "fmt -- --check", "clippy --all-features --all-targets -- -D warnings", "test --all-features"]
+
+[env]
+# Optimize for scientific computing
+RUSTFLAGS = "-C target-cpu=native"
+# Enable backtrace on panic for debugging
+RUST_BACKTRACE = "1"
+
+# Profile configurations
+[profile.dev]
+# Enable debug info for better debugging
+debug = true
+# Faster compilation in debug mode
+opt-level = 0
+# Don't optimize dependencies in debug mode
+incremental = true
+
+[profile.release]
+# Maximum optimization for scientific computing
+opt-level = 3
+# Enable link-time optimization
+lto = true
+# Reduce binary size
+codegen-units = 1
+# Enable all optimizations
+panic = "abort"
+# Target native CPU features
+# Note: This is set via RUSTFLAGS above
+
+[profile.bench]
+# Inherit from release but allow debug info
+inherits = "release"
+debug = true
+
+[profile.test]
+# Faster test compilation
+opt-level = 1
+debug = true 

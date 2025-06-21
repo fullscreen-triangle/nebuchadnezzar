@@ -13,6 +13,17 @@ pub mod biological_quantum_solver;
 pub mod circuits;
 pub mod entropy_manipulation;
 pub mod error;
+pub mod hardware_integration;
+
+// Re-export environmental noise biology types for easy access
+pub use hardware_integration::{
+    EnvironmentalNoiseSystem, PixelPhotosynthenticAgent, ScreenRegion, ColorChangeEvent,
+    BiologicalColorResponse, ChlorophyllAnalog, ChlorophyllType, LightHarvestingComplex,
+    GlobalBiomassRegulator, EnvironmentalNoiseGenerator, NoiseSource, ColorChannel,
+    BiologicalNoiseCoupling, NoiseCharacteristics, NoiseType, EnvironmentalNoiseBiologyResult,
+    NoiseDrivenSolution, CausalityBoundaryDetector, StochasticCouplingSystem,
+    NoiseDrivenConstraints, ThermodynamicConstraint, KineticConstraint,
+};
 pub mod oscillatory_dynamics;
 pub mod quantum_membranes;
 pub mod quantum_metabolism_analyzer;
@@ -36,6 +47,37 @@ pub use biological_quantum_solver::{
 pub use circuits::{CircuitGrid, HierarchicalCircuit, ProbabilisticNode};
 pub use entropy_manipulation::{EntropyPoint, Resolution, EntropyManipulator};
 pub use error::{NebuchadnezzarError, Result};
+pub use hardware_integration::{
+    HardwareOscillatorSystem, SystemClockSync, HardwareLightSource, HardwareLightSensor,
+    HardwareBiologyMapping, LightReactionMapping, FireLightEnhancement,
+    // Advanced integration exports
+    AdvancedHardwareIntegration,
+    ElectromagneticFieldSystem, CPUFieldGenerator, GPUFieldGenerator, ParallelFieldChannel,
+    FieldPattern, BiologicalFieldCoupling, BiologicalEMField,
+    ThermalDynamicsSystem, HeatSource, HardwareComponent, TemperatureProfile, 
+    BiologicalHeatEffect, ThermalBiologyResult,
+    AcousticOscillationSystem, MechanicalOscillator, MechanicalSource, ResonanceMode, 
+    MechanobiologyTarget, AmplitudeControl, MechanobiologyResponse,
+    QuantumHardwareSystem, QuantumProcessor, QuantumAlgorithm, QuantumSensor,
+    QuantumSensorType, QuantumComputationResult,
+    NetworkCommunicationSystem, WirelessProtocol, ProtocolType, ModulationScheme,
+    BiologicalCommunicationAnalogy, BiologicalSignalingEvent,
+    PowerManagementSystem, PowerSource, PowerSourceType, VoltageProfile,
+    BiologicalEnergyAnalogy,
+    MemoryStateSystem, MemoryType, MemoryTechnology, BiologicalMemoryAnalogy,
+    RetentionCharacteristics,
+    SensorFusionSystem, MotionSensor, MotionSensorType, BiologicalMotionMapping,
+    AdvancedOpticsSystem, CameraSystem, CameraSensorType, BiologicalVisionMapping,
+    OpticalPatternGenerator, OpticalPatternType, BiologicalPatternEffect,
+    ChemicalSensorSystem, GasSensor, GasSensorTechnology, BiologicalGasEffect,
+    // Additional advanced types
+    RAMFieldOscillator, WirelessTransmitter, MagneticStorageField,
+    ThermalGradient, CoolingSystem, AcousticResonator, VibrationalTransducer,
+    QuantumCommunicationChannel, InformationEncoding, PowerCycle,
+    AccessPattern, InformationPattern, EnvironmentalSensor, BiometricSensor,
+    SensorFusionAlgorithm, DisplayMatrix, LaserSystem, HolographicProjector,
+    LiquidSensor, MolecularDetector,
+};
 pub use oscillatory_dynamics::{OscillationState, BiologicalOscillator};
 pub use quantum_membranes::{QuantumMembrane, EnvironmentalCoupling};
 pub use solvers::{AtpBasedSolver, NativeSolver};

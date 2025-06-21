@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  nebuchadnezzar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nebuchadnezzar-app
+    ports:
+      - "8080:8080"
+    environment:
+      - RUST_BACKTRACE=1
+      - RUST_LOG=info
+    volumes:
+      - ./results:/app/results
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+    healthcheck:
+      test: ["CMD", "./examples/atp_oscillatory_membrane_complete_demo", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Redis for caching computational results
+  redis:
+    image: redis:7-alpine
+    container_name: nebuchadnezzar-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+  # PostgreSQL for storing simulation metadata and results
+  postgres:
+    image: postgres:15-alpine
+    container_name: nebuchadnezzar-postgres
+    environment:
+      POSTGRES_DB: nebuchadnezzar
+      POSTGRES_USER: nebuchadnezzar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+  # Jupyter notebook for analysis and visualization
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    container_name: nebuchadnezzar-jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./results:/home/jovyan/work/results
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+  # Grafana for monitoring and visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nebuchadnezzar-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+    depends_on:
+      - prometheus
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: nebuchadnezzar-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+  # MinIO for object storage (simulation results, large datasets)
+  minio:
+    image: minio/minio:latest
+    container_name: nebuchadnezzar-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+  # Node exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: nebuchadnezzar-node-exporter
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    networks:
+      - nebuchadnezzar-network
+
+volumes:
+  redis-data:
+  postgres-data:
+  grafana-data:
+  prometheus-data:
+  minio-data:
+
+networks:
+  nebuchadnezzar-network:
+    driver: bridge 

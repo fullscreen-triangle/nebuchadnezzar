@@ -1,0 +1,37 @@
+# Clippy configuration for Nebuchadnezzar
+# Scientific computing specific linting rules
+
+# Complexity thresholds - scientific computing can be complex
+cognitive-complexity-threshold = 30
+type-complexity-threshold = 300
+too-many-arguments-threshold = 10
+too-many-lines-threshold = 150
+large-type-threshold = 600
+
+# Naming conventions
+enum-variant-name-threshold = 5
+struct-excessive-bools = 5
+fn-params-excessive-bools = 5
+
+# Performance - important for scientific computing
+vec-box-size-threshold = 4096
+trivial-copy-size-limit = 256
+
+# Documentation
+missing-docs-in-private-items = false
+doc-markdown = true
+
+# Scientific computing often uses single character variables (x, y, z, etc.)
+single-char-binding-names-threshold = 6
+
+# Allow certain patterns common in scientific code
+allow-expect-in-tests = true
+allow-unwrap-in-tests = true
+allow-panic-in-result-fn = false
+
+# Suppress some pedantic lints that don't apply well to scientific computing
+avoid-breaking-exported-api = false
+msrv = "1.70.0"
+
+# Performance lints - enable all performance-related lints
+# These are particularly important for scientific computing 
