@@ -14,6 +14,7 @@ pub mod circuits;
 pub mod entropy_manipulation;
 pub mod error;
 pub mod hardware_integration;
+pub mod biological_maxwell_demons;
 
 // Re-export environmental noise biology types for easy access
 pub use hardware_integration::{
@@ -86,6 +87,7 @@ pub use systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
 // Re-export the comprehensive ATP-oscillatory-membrane system
 pub use atp_oscillatory_membrane_simulator::*;
 pub use atp_oscillatory_membrane_solver::*;
+pub use biological_maxwell_demons::*;
 
 /// Prelude module for common imports
 pub mod prelude {
