@@ -1,0 +1,69 @@
+title: "Nebuchadnezzar Framework"
+description: "A hierarchical probabilistic electric circuit system for biological simulation"
+baseurl: "/nebuchadnezzar"
+url: "https://fullscreen-triangle.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Navigation
+header_pages:
+  - index.md
+  - getting-started.md
+  - theoretical-framework.md
+  - turbulance-language.md
+  - api-reference.md
+  - examples.md
+  - benchmarks.md
+
+# Collections
+collections:
+  fundamentals:
+    output: true
+    permalink: /:collection/:name/
+  api:
+    output: true
+    permalink: /:collection/:name/
+  examples:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "fundamentals"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "api"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "examples"
+    values:
+      layout: "page"
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Math support
+kramdown:
+  math_engine: mathjax
+  input: GFM
+  syntax_highlighter: rouge
+
+# Google Analytics (replace with your tracking ID)
+google_analytics: G-XXXXXXXXXX 

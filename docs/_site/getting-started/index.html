@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Getting Started | Nebuchadnezzar Framework</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Getting Started" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<meta property="og:description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<link rel="canonical" href="https://fullscreen-triangle.github.io/nebuchadnezzar/getting-started/" />
+<meta property="og:url" content="https://fullscreen-triangle.github.io/nebuchadnezzar/getting-started/" />
+<meta property="og:site_name" content="Nebuchadnezzar Framework" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Getting Started" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A hierarchical probabilistic electric circuit system for biological simulation","headline":"Getting Started","url":"https://fullscreen-triangle.github.io/nebuchadnezzar/getting-started/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/nebuchadnezzar/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://fullscreen-triangle.github.io/nebuchadnezzar/feed.xml" title="Nebuchadnezzar Framework" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><a class="page-link" href="/nebuchadnezzar/getting-started/">Getting Started</a><a class="page-link" href="/nebuchadnezzar/theoretical-framework/">Theoretical Framework</a><a class="page-link" href="/nebuchadnezzar/turbulance-language/">Turbulance Programming Language</a><a class="page-link" href="/nebuchadnezzar/api-reference/">API Reference</a><a class="page-link" href="/nebuchadnezzar/examples/">Examples</a><a class="page-link" href="/nebuchadnezzar/benchmarks/">Benchmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Getting Started</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="getting-started-with-nebuchadnezzar">Getting Started with Nebuchadnezzar</h1>
+
+<p>This guide will help you set up the Nebuchadnezzar framework and run your first biological simulations using ATP-based timing and quantum-coherent membrane modeling.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<h3 id="system-requirements">System Requirements</h3>
+<ul>
+  <li><strong>Operating System</strong>: Linux, macOS, or Windows</li>
+  <li><strong>Rust</strong>: Version 1.70.0 or later</li>
+  <li><strong>Memory</strong>: Minimum 4GB RAM (8GB recommended for complex simulations)</li>
+  <li><strong>Storage</strong>: 2GB free space for dependencies and simulation data</li>
+</ul>
+
+<h3 id="scientific-background">Scientific Background</h3>
+<p>While not required, familiarity with the following concepts will enhance your experience:</p>
+<ul>
+  <li><strong>Systems Biology</strong>: Understanding of cellular processes and energy metabolism</li>
+  <li><strong>Quantum Mechanics</strong>: Basic quantum coherence and tunneling concepts</li>
+  <li><strong>Circuit Theory</strong>: Electrical circuit analysis and probabilistic systems</li>
+  <li><strong>Bioinformatics</strong>: Biological data analysis and pattern recognition</li>
+</ul>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="option-1-from-source-recommended">Option 1: From Source (Recommended)</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Clone the repository</span>
+git clone https://github.com/username/nebuchadnezzar.git
+<span class="nb">cd </span>nebuchadnezzar
+
+<span class="c"># Build the framework</span>
+cargo build <span class="nt">--release</span>
+
+<span class="c"># Run tests to verify installation</span>
+cargo <span class="nb">test</span>
+
+<span class="c"># Run benchmarks to assess performance</span>
+cargo bench
+</code></pre></div></div>
+
+<h3 id="option-2-using-cargo">Option 2: Using Cargo</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Add to your Cargo.toml</span>
+<span class="o">[</span>dependencies]
+nebuchadnezzar <span class="o">=</span> <span class="s2">"0.1.0"</span>
+
+<span class="c"># Or install directly</span>
+cargo <span class="nb">install </span>nebuchadnezzar
+</code></pre></div></div>
+
+<h3 id="development-dependencies">Development Dependencies</h3>
+
+<p>For development and advanced features:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Install additional development tools</span>
+cargo <span class="nb">install </span>cargo-expand  <span class="c"># For macro expansion debugging</span>
+cargo <span class="nb">install </span>flamegraph     <span class="c"># For performance profiling</span>
+cargo <span class="nb">install </span>criterion     <span class="c"># For benchmarking</span>
+</code></pre></div></div>
+
+<h2 id="verification">Verification</h2>
+
+<p>Verify your installation by running the comprehensive simulation example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo run <span class="nt">--example</span> comprehensive_simulation
+</code></pre></div></div>
+
+<p>Expected output should include:</p>
+<ul>
+  <li>ATP oscillation analysis results</li>
+  <li>Quantum membrane coherence measurements</li>
+  <li>Maxwell’s demon information processing metrics</li>
+  <li>Circuit network analysis summary</li>
+</ul>
+
+<h2 id="first-simulation">First Simulation</h2>
+
+<h3 id="basic-atp-oscillatory-system">Basic ATP Oscillatory System</h3>
+
+<p>Create a new Rust project and add this minimal example:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="c1">// Initialize the ATP oscillatory membrane system</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">system</span> <span class="o">=</span> <span class="nn">AtpOscillatoryMembraneSimulator</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+        <span class="n">OscillatoryConfig</span> <span class="p">{</span>
+            <span class="n">atp_concentration</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>    <span class="c1">// 5mM ATP concentration</span>
+            <span class="n">adp_concentration</span><span class="p">:</span> <span class="mf">0.5e-3</span><span class="p">,</span>   <span class="c1">// 0.5mM ADP concentration  </span>
+            <span class="n">temperature</span><span class="p">:</span> <span class="mf">310.0</span><span class="p">,</span>          <span class="c1">// 37°C in Kelvin</span>
+            <span class="n">ph</span><span class="p">:</span> <span class="mf">7.4</span><span class="p">,</span>                     <span class="c1">// Physiological pH</span>
+            <span class="n">ionic_strength</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>        <span class="c1">// 150mM ionic strength</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+
+    <span class="c1">// Add quantum membrane with fire-light optimization</span>
+    <span class="k">let</span> <span class="n">membrane</span> <span class="o">=</span> <span class="nn">QuantumMembrane</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">MembraneConfig</span> <span class="p">{</span>
+        <span class="n">coherence_time</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>           <span class="c1">// 1ms quantum coherence</span>
+        <span class="n">tunneling_probability</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>     <span class="c1">// 10% tunneling rate</span>
+        <span class="n">fire_light_optimization</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>  <span class="c1">// 85% fire-light enhancement</span>
+        <span class="n">environmental_coupling</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>    <span class="c1">// 70% environmental coupling</span>
+    <span class="p">});</span>
+    <span class="n">system</span><span class="nf">.add_membrane</span><span class="p">(</span><span class="n">membrane</span><span class="p">);</span>
+
+    <span class="c1">// Add biological Maxwell's demon for information catalysis</span>
+    <span class="k">let</span> <span class="n">maxwell_demon</span> <span class="o">=</span> <span class="nn">BiologicalMaxwellsDemon</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">MaxwellDemonConfig</span> <span class="p">{</span>
+        <span class="n">information_filter_threshold</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">catalytic_cycles</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">agency_recognition</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+        <span class="n">associative_memory_size</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="p">});</span>
+    <span class="n">system</span><span class="nf">.add_maxwell_demon</span><span class="p">(</span><span class="n">maxwell_demon</span><span class="p">);</span>
+
+    <span class="c1">// Run simulation for 1000 ATP cycles</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Starting ATP oscillatory simulation..."</span><span class="p">);</span>
+    <span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">system</span><span class="nf">.simulate_atp_cycles</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+
+    <span class="c1">// Display results</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">=== Simulation Results ==="</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"ATP cycles completed: {}"</span><span class="p">,</span> <span class="n">results</span><span class="py">.cycles_completed</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Average oscillation frequency: {:.2} Hz"</span><span class="p">,</span> <span class="n">results</span><span class="py">.avg_frequency</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Quantum coherence maintained: {:.1}%"</span><span class="p">,</span> <span class="n">results</span><span class="py">.quantum_coherence</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Maxwell demon efficiency: {:.1}%"</span><span class="p">,</span> <span class="n">results</span><span class="py">.information_catalysis_efficiency</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Energy conservation: {:.6}"</span><span class="p">,</span> <span class="n">results</span><span class="py">.energy_conservation_ratio</span><span class="p">);</span>
+
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Run this example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo run
+</code></pre></div></div>
+
+<h3 id="turbulance-language-integration">Turbulance Language Integration</h3>
+
+<p>Create a Turbulance script to analyze the simulation results:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">turbulance</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">TurbulanceResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">turbulance_script</span> <span class="o">=</span> <span class="s">r#"
+        // Define research proposition
+        proposition atp_oscillation_analysis {
+            "ATP oscillations exhibit quantum-enhanced frequency stability"
+        }
+        
+        // Collect evidence from simulation
+        evidence oscillation_data = collect_atp_dynamics();
+        evidence coherence_data = analyze_quantum_coherence();
+        evidence demon_data = measure_information_catalysis();
+        
+        // Analyze patterns
+        item frequency_stability = pattern_stability(oscillation_data.frequency);
+        item coherence_correlation = correlate(coherence_data, oscillation_data);
+        
+        // Motion to test proposition
+        motion test_quantum_enhancement {
+            given frequency_stability &gt; 0.95 {
+                support atp_oscillation_analysis with coherence_correlation;
+            }
+            else {
+                contradict atp_oscillation_analysis with "insufficient stability";
+            }
+        }
+        
+        // Execute motion
+        considering test_quantum_enhancement;
+    "#</span><span class="p">;</span>
+
+    <span class="c1">// Initialize Turbulance engine with Nebuchadnezzar integration</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">engine</span> <span class="o">=</span> <span class="nn">TurbulanceEngine</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+    <span class="n">engine</span><span class="nf">.set_nebu_integration</span><span class="p">(</span><span class="nn">NebuIntegration</span><span class="p">::</span><span class="nf">new</span><span class="p">());</span>
+    
+    <span class="c1">// Execute the scientific reasoning script</span>
+    <span class="k">let</span> <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="nf">.execute_script</span><span class="p">(</span><span class="n">turbulance_script</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Proposition analysis complete:"</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Result: {:?}"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="core-concepts">Core Concepts</h2>
+
+<h3 id="atp-based-timing">ATP-Based Timing</h3>
+
+<p>Unlike traditional time-based simulations, Nebuchadnezzar uses ATP hydrolysis events as the fundamental timing unit:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Traditional time-based approach</span>
+<span class="k">let</span> <span class="n">time_step</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">;</span> <span class="c1">// 1ms</span>
+<span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">1000</span><span class="p">)</span><span class="nf">.map</span><span class="p">(|</span><span class="n">i</span><span class="p">|</span> <span class="n">i</span> <span class="k">as</span> <span class="nb">f64</span> <span class="o">*</span> <span class="n">time_step</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">system</span><span class="nf">.update</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Nebuchadnezzar ATP-based approach  </span>
+<span class="k">let</span> <span class="n">atp_cycles</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="k">for</span> <span class="n">cycle</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">atp_cycles</span> <span class="p">{</span>
+    <span class="n">system</span><span class="nf">.advance_atp_cycle</span><span class="p">();</span> <span class="c1">// Natural biological timing</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This approach ensures that:</p>
+<ul>
+  <li>All processes scale naturally with cellular energy availability</li>
+  <li>Simulation speed adapts to biological reality</li>
+  <li>Energy conservation is maintained throughout</li>
+  <li>Quantum effects remain coherent with metabolic processes</li>
+</ul>
+
+<h3 id="hierarchical-circuit-architecture">Hierarchical Circuit Architecture</h3>
+
+<p>Biological systems are modeled as hierarchical electrical circuits:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Create circuit hierarchy</span>
+<span class="k">let</span> <span class="k">mut</span> <span class="n">circuit_grid</span> <span class="o">=</span> <span class="nn">CircuitGrid</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span> <span class="c1">// 64x64 circuit grid</span>
+
+<span class="c1">// Add enzyme circuits (molecular level)</span>
+<span class="k">let</span> <span class="n">glycolysis_circuit</span> <span class="o">=</span> <span class="nn">EnzymeCircuit</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">EnzymeType</span><span class="p">::</span><span class="n">Hexokinase</span><span class="p">);</span>
+<span class="n">circuit_grid</span><span class="nf">.add_enzyme_circuit</span><span class="p">(</span><span class="n">glycolysis_circuit</span><span class="p">,</span> <span class="nn">Position</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+
+<span class="c1">// Add ion channel circuits (membrane level)  </span>
+<span class="k">let</span> <span class="n">sodium_channel</span> <span class="o">=</span> <span class="nn">IonChannelCircuit</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">IonType</span><span class="p">::</span><span class="n">Sodium</span><span class="p">);</span>
+<span class="n">circuit_grid</span><span class="nf">.add_ion_channel</span><span class="p">(</span><span class="n">sodium_channel</span><span class="p">,</span> <span class="nn">Position</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">));</span>
+
+<span class="c1">// Add fractal circuits (multi-scale organization)</span>
+<span class="k">let</span> <span class="n">fractal_circuit</span> <span class="o">=</span> <span class="nn">FractalCircuit</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">FractalType</span><span class="p">::</span><span class="n">Metabolic</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="c1">// 3 levels</span>
+<span class="n">circuit_grid</span><span class="nf">.add_fractal_circuit</span><span class="p">(</span><span class="n">fractal_circuit</span><span class="p">,</span> <span class="nn">Position</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">));</span>
+
+<span class="c1">// Simulate circuit interactions</span>
+<span class="k">let</span> <span class="n">circuit_results</span> <span class="o">=</span> <span class="n">circuit_grid</span><span class="nf">.simulate_interactions</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="quantum-classical-integration">Quantum-Classical Integration</h3>
+
+<p>The framework seamlessly integrates quantum effects with classical biological dynamics:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Quantum membrane transport</span>
+<span class="k">let</span> <span class="n">transport_result</span> <span class="o">=</span> <span class="n">quantum_membrane</span><span class="nf">.transport_ion</span><span class="p">(</span>
+    <span class="nn">Ion</span><span class="p">::</span><span class="n">Sodium</span><span class="p">,</span>
+    <span class="n">TransportConfig</span> <span class="p">{</span>
+        <span class="n">classical_diffusion</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>      <span class="c1">// Include classical diffusion</span>
+        <span class="n">quantum_tunneling</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>        <span class="c1">// Enable quantum tunneling</span>
+        <span class="n">coherence_enhancement</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>    <span class="c1">// Fire-light coherence boost</span>
+        <span class="n">environmental_noise</span><span class="p">:</span> <span class="nn">NoiseLevel</span><span class="p">::</span><span class="n">Biological</span><span class="p">,</span> <span class="c1">// Realistic noise</span>
+    <span class="p">}</span>
+<span class="p">)</span><span class="o">?</span><span class="p">;</span>
+
+<span class="nd">println!</span><span class="p">(</span><span class="s">"Transport efficiency: {:.1}%"</span><span class="p">,</span> <span class="n">transport_result</span><span class="py">.efficiency</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+<span class="nd">println!</span><span class="p">(</span><span class="s">"Quantum contribution: {:.1}%"</span><span class="p">,</span> <span class="n">transport_result</span><span class="py">.quantum_fraction</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="configuration">Configuration</h2>
+
+<h3 id="simulation-parameters">Simulation Parameters</h3>
+
+<p>Customize your simulations through configuration:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">config</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">let</span> <span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span> <span class="p">{</span>
+    <span class="c1">// ATP system parameters</span>
+    <span class="n">atp_config</span><span class="p">:</span> <span class="n">AtpConfig</span> <span class="p">{</span>
+        <span class="n">initial_concentration</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>
+        <span class="n">hydrolysis_rate</span><span class="p">:</span> <span class="mf">1000.0</span><span class="p">,</span>
+        <span class="n">synthesis_rate</span><span class="p">:</span> <span class="mf">800.0</span><span class="p">,</span>
+        <span class="n">temperature_dependence</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+    <span class="p">},</span>
+    
+    <span class="c1">// Quantum system parameters  </span>
+    <span class="n">quantum_config</span><span class="p">:</span> <span class="n">QuantumConfig</span> <span class="p">{</span>
+        <span class="n">coherence_time</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">decoherence_model</span><span class="p">:</span> <span class="nn">DecoherenceModel</span><span class="p">::</span><span class="n">Environmental</span><span class="p">,</span>
+        <span class="n">fire_light_wavelength</span><span class="p">:</span> <span class="mf">650e-9</span><span class="p">,</span> <span class="c1">// 650nm red light</span>
+        <span class="n">environmental_coupling_strength</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="p">},</span>
+    
+    <span class="c1">// Maxwell demon configuration</span>
+    <span class="n">demon_config</span><span class="p">:</span> <span class="n">MaxwellDemonConfig</span> <span class="p">{</span>
+        <span class="n">information_processing_rate</span><span class="p">:</span> <span class="mf">1e6</span><span class="p">,</span> <span class="c1">// 1 MHz</span>
+        <span class="n">catalytic_amplification</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+        <span class="n">agency_recognition_threshold</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">memory_persistence</span><span class="p">:</span> <span class="nn">Duration</span><span class="p">::</span><span class="nf">from_secs</span><span class="p">(</span><span class="mi">3600</span><span class="p">),</span> <span class="c1">// 1 hour</span>
+    <span class="p">},</span>
+    
+    <span class="c1">// Circuit system parameters</span>
+    <span class="n">circuit_config</span><span class="p">:</span> <span class="n">CircuitConfig</span> <span class="p">{</span>
+        <span class="n">grid_size</span><span class="p">:</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+        <span class="n">voltage_range</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">100e-3</span><span class="p">,</span> <span class="mf">100e-3</span><span class="p">),</span> <span class="c1">// ±100mV</span>
+        <span class="n">current_precision</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span>          <span class="c1">// 1pA precision</span>
+        <span class="n">noise_level</span><span class="p">:</span> <span class="nn">NoiseLevel</span><span class="p">::</span><span class="n">Thermal</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">};</span>
+
+<span class="k">let</span> <span class="k">mut</span> <span class="n">system</span> <span class="o">=</span> <span class="nn">NebuSystem</span><span class="p">::</span><span class="nf">with_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="performance-tuning">Performance Tuning</h3>
+
+<p>For large-scale simulations:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Enable parallel processing</span>
+<span class="k">let</span> <span class="n">parallel_config</span> <span class="o">=</span> <span class="n">ParallelConfig</span> <span class="p">{</span>
+    <span class="n">num_threads</span><span class="p">:</span> <span class="nn">num_cpus</span><span class="p">::</span><span class="nf">get</span><span class="p">(),</span>
+    <span class="n">chunk_size</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="n">load_balancing</span><span class="p">:</span> <span class="nn">LoadBalancing</span><span class="p">::</span><span class="n">WorkStealing</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// Use high-performance solvers</span>
+<span class="k">let</span> <span class="n">solver_config</span> <span class="o">=</span> <span class="n">SolverConfig</span> <span class="p">{</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nn">SolverMethod</span><span class="p">::</span><span class="n">QuantumBiological</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span>
+    <span class="n">max_iterations</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="n">adaptive_step_size</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="n">system</span><span class="nf">.set_parallel_config</span><span class="p">(</span><span class="n">parallel_config</span><span class="p">);</span>
+<span class="n">system</span><span class="nf">.set_solver_config</span><span class="p">(</span><span class="n">solver_config</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<ol>
+  <li><strong><a href="theoretical-framework">Explore the Theoretical Framework</a></strong>: Understand the six foundational theorems</li>
+  <li><strong><a href="turbulance-language">Learn Turbulance Language</a></strong>: Master the scientific programming language</li>
+  <li><strong><a href="examples">Review Examples</a></strong>: Study practical applications and use cases</li>
+  <li><strong><a href="api-reference">Check API Reference</a></strong>: Comprehensive API documentation</li>
+  <li><strong><a href="benchmarks">Run Benchmarks</a></strong>: Performance analysis and validation</li>
+</ol>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3 id="common-issues">Common Issues</h3>
+
+<p><strong>Compilation Errors</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Update Rust toolchain</span>
+rustup update
+
+<span class="c"># Clean and rebuild</span>
+cargo clean
+cargo build <span class="nt">--release</span>
+</code></pre></div></div>
+
+<p><strong>Memory Issues</strong>:</p>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Reduce simulation scale</span>
+<span class="k">let</span> <span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span> <span class="p">{</span>
+    <span class="n">circuit_config</span><span class="p">:</span> <span class="n">CircuitConfig</span> <span class="p">{</span>
+        <span class="n">grid_size</span><span class="p">:</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="c1">// Smaller grid</span>
+        <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="c1">// ...</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>Performance Issues</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Enable optimizations</span>
+<span class="nb">export </span><span class="nv">RUSTFLAGS</span><span class="o">=</span><span class="s2">"-C target-cpu=native"</span>
+cargo build <span class="nt">--release</span>
+
+<span class="c"># Profile performance</span>
+cargo <span class="nb">install </span>flamegraph
+<span class="nb">sudo </span>cargo flamegraph <span class="nt">--example</span> comprehensive_simulation
+</code></pre></div></div>
+
+<h3 id="getting-help">Getting Help</h3>
+
+<ul>
+  <li><strong>Documentation</strong>: Full API reference and examples</li>
+  <li><strong>GitHub Issues</strong>: Bug reports and feature requests</li>
+  <li><strong>Discussions</strong>: Community support and questions</li>
+  <li><strong>Scientific Publications</strong>: Theoretical background and validation studies</li>
+</ul>
+
+<hr />
+
+<p><em>Ready to explore quantum biology with Nebuchadnezzar? Continue to the <a href="theoretical-framework">Theoretical Framework</a> to understand the science behind the simulations.</em></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/nebuchadnezzar/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Nebuchadnezzar Framework</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Nebuchadnezzar Framework</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A hierarchical probabilistic electric circuit system for biological simulation</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

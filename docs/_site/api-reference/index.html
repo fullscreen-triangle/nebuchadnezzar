@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>API Reference | Nebuchadnezzar Framework</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="API Reference" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<meta property="og:description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<link rel="canonical" href="https://fullscreen-triangle.github.io/nebuchadnezzar/api-reference/" />
+<meta property="og:url" content="https://fullscreen-triangle.github.io/nebuchadnezzar/api-reference/" />
+<meta property="og:site_name" content="Nebuchadnezzar Framework" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="API Reference" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A hierarchical probabilistic electric circuit system for biological simulation","headline":"API Reference","url":"https://fullscreen-triangle.github.io/nebuchadnezzar/api-reference/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/nebuchadnezzar/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://fullscreen-triangle.github.io/nebuchadnezzar/feed.xml" title="Nebuchadnezzar Framework" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><a class="page-link" href="/nebuchadnezzar/getting-started/">Getting Started</a><a class="page-link" href="/nebuchadnezzar/theoretical-framework/">Theoretical Framework</a><a class="page-link" href="/nebuchadnezzar/turbulance-language/">Turbulance Programming Language</a><a class="page-link" href="/nebuchadnezzar/api-reference/">API Reference</a><a class="page-link" href="/nebuchadnezzar/examples/">Examples</a><a class="page-link" href="/nebuchadnezzar/benchmarks/">Benchmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">API Reference</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="api-reference">API Reference</h1>
+
+<p>Complete API documentation for the Nebuchadnezzar framework, including all modules, structs, traits, and functions.</p>
+
+<h2 id="core-modules">Core Modules</h2>
+
+<h3 id="nebuchadnezzarprelude"><code class="language-plaintext highlighter-rouge">nebuchadnezzar::prelude</code></h3>
+<p>Essential imports for most Nebuchadnezzar applications.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Includes:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">AtpOscillatoryMembraneSimulator</code></li>
+  <li><code class="language-plaintext highlighter-rouge">QuantumMembrane</code></li>
+  <li><code class="language-plaintext highlighter-rouge">BiologicalMaxwellsDemon</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CircuitGrid</code></li>
+  <li><code class="language-plaintext highlighter-rouge">TurbulanceEngine</code></li>
+  <li>Common result types and configurations</li>
+</ul>
+
+<h2 id="atp-oscillatory-systems">ATP Oscillatory Systems</h2>
+
+<h3 id="atposcillatorymembranesimulator"><code class="language-plaintext highlighter-rouge">AtpOscillatoryMembraneSimulator</code></h3>
+
+<p>Main simulation engine for ATP-based biological systems.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">AtpOscillatoryMembraneSimulator</span> <span class="p">{</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">OscillatoryConfig</span><span class="p">,</span>
+    <span class="n">membranes</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">QuantumMembrane</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">maxwell_demons</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">BiologicalMaxwellsDemon</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">circuits</span><span class="p">:</span> <span class="n">CircuitGrid</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="methods">Methods</h4>
+
+<h5 id="newconfig-oscillatoryconfig---self"><code class="language-plaintext highlighter-rouge">new(config: OscillatoryConfig) -&gt; Self</code></h5>
+<p>Creates a new ATP oscillatory system.</p>
+
+<p><strong>Parameters:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">config</code>: System configuration parameters</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">system</span> <span class="o">=</span> <span class="nn">AtpOscillatoryMembraneSimulator</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+    <span class="n">OscillatoryConfig</span> <span class="p">{</span>
+        <span class="n">atp_concentration</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>
+        <span class="n">adp_concentration</span><span class="p">:</span> <span class="mf">0.5e-3</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">:</span> <span class="mf">310.0</span><span class="p">,</span>
+        <span class="n">ph</span><span class="p">:</span> <span class="mf">7.4</span><span class="p">,</span>
+        <span class="n">ionic_strength</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="simulate_atp_cyclescycles-u64---resultsimulationresults"><code class="language-plaintext highlighter-rouge">simulate_atp_cycles(cycles: u64) -&gt; Result&lt;SimulationResults&gt;</code></h5>
+<p>Runs simulation for specified ATP cycles.</p>
+
+<p><strong>Parameters:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cycles</code>: Number of ATP hydrolysis cycles to simulate</li>
+</ul>
+
+<p><strong>Returns:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SimulationResults</code>: Comprehensive simulation data</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">system</span><span class="nf">.simulate_atp_cycles</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+<span class="nd">println!</span><span class="p">(</span><span class="s">"Coherence: {:.3}"</span><span class="p">,</span> <span class="n">results</span><span class="py">.quantum_coherence</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h5 id="add_membranemut-self-membrane-quantummembrane"><code class="language-plaintext highlighter-rouge">add_membrane(&amp;mut self, membrane: QuantumMembrane)</code></h5>
+<p>Adds quantum membrane to the system.</p>
+
+<h5 id="add_maxwell_demonmut-self-demon-biologicalmaxwellsdemon"><code class="language-plaintext highlighter-rouge">add_maxwell_demon(&amp;mut self, demon: BiologicalMaxwellsDemon)</code></h5>
+<p>Adds Maxwell’s demon for information catalysis.</p>
+
+<h3 id="oscillatoryconfig"><code class="language-plaintext highlighter-rouge">OscillatoryConfig</code></h3>
+
+<p>Configuration for ATP oscillatory systems.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">OscillatoryConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">atp_concentration</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>      <span class="c1">// Molar concentration</span>
+    <span class="k">pub</span> <span class="n">adp_concentration</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>      <span class="c1">// Molar concentration</span>
+    <span class="k">pub</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>            <span class="c1">// Kelvin</span>
+    <span class="k">pub</span> <span class="n">ph</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>                     <span class="c1">// pH units</span>
+    <span class="k">pub</span> <span class="n">ionic_strength</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>         <span class="c1">// Molar ionic strength</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="simulationresults"><code class="language-plaintext highlighter-rouge">SimulationResults</code></h3>
+
+<p>Results from ATP oscillatory simulation.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">SimulationResults</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">cycles_completed</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">avg_frequency</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>                    <span class="c1">// Hz</span>
+    <span class="k">pub</span> <span class="n">quantum_coherence</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>                <span class="c1">// 0.0-1.0</span>
+    <span class="k">pub</span> <span class="n">information_catalysis_efficiency</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>  <span class="c1">// 0.0-1.0</span>
+    <span class="k">pub</span> <span class="n">energy_conservation_ratio</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>         <span class="c1">// Energy conserved</span>
+    <span class="k">pub</span> <span class="n">oscillation_data</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">OscillationPoint</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">membrane_transport_data</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">TransportEvent</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="quantum-membrane-systems">Quantum Membrane Systems</h2>
+
+<h3 id="quantummembrane"><code class="language-plaintext highlighter-rouge">QuantumMembrane</code></h3>
+
+<p>Quantum-coherent biological membrane with ENAQT capabilities.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">QuantumMembrane</span> <span class="p">{</span>
+    <span class="n">coherence_time</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="n">environmental_coupling</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="n">tunneling_probability</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="n">fire_light_optimization</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="n">ion_collective_field</span><span class="p">:</span> <span class="n">CollectiveQuantumField</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="methods-1">Methods</h4>
+
+<h5 id="newconfig-membraneconfig---self"><code class="language-plaintext highlighter-rouge">new(config: MembraneConfig) -&gt; Self</code></h5>
+<p>Creates new quantum membrane.</p>
+
+<h5 id="transport_ionion-ion-config-transportconfig---resulttransportresult"><code class="language-plaintext highlighter-rouge">transport_ion(ion: Ion, config: TransportConfig) -&gt; Result&lt;TransportResult&gt;</code></h5>
+<p>Simulates ion transport through quantum membrane.</p>
+
+<p><strong>Parameters:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ion</code>: Ion type (Na+, K+, Ca2+, H+, etc.)</li>
+  <li><code class="language-plaintext highlighter-rouge">config</code>: Transport configuration</li>
+</ul>
+
+<p><strong>Returns:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">TransportResult</code>: Transport efficiency and quantum contribution data</li>
+</ul>
+
+<h5 id="evolve_quantum_statedt-f64---quantumstate"><code class="language-plaintext highlighter-rouge">evolve_quantum_state(dt: f64) -&gt; QuantumState</code></h5>
+<p>Evolves quantum state using Schrödinger equation.</p>
+
+<h3 id="membraneconfig"><code class="language-plaintext highlighter-rouge">MembraneConfig</code></h3>
+
+<p>Configuration for quantum membranes.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">MembraneConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">coherence_time</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>           <span class="c1">// Seconds</span>
+    <span class="k">pub</span> <span class="n">tunneling_probability</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>     <span class="c1">// 0.0-1.0</span>
+    <span class="k">pub</span> <span class="n">fire_light_optimization</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>   <span class="c1">// 0.0-1.0</span>
+    <span class="k">pub</span> <span class="n">environmental_coupling</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>    <span class="c1">// 0.0-1.0</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="ion"><code class="language-plaintext highlighter-rouge">Ion</code></h3>
+
+<p>Ion types for membrane transport.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">Ion</span> <span class="p">{</span>
+    <span class="n">Sodium</span><span class="p">,</span>      <span class="c1">// Na+</span>
+    <span class="n">Potassium</span><span class="p">,</span>   <span class="c1">// K+</span>
+    <span class="n">Calcium</span><span class="p">,</span>     <span class="c1">// Ca2+</span>
+    <span class="n">Hydrogen</span><span class="p">,</span>    <span class="c1">// H+</span>
+    <span class="n">Magnesium</span><span class="p">,</span>   <span class="c1">// Mg2+</span>
+    <span class="n">Chloride</span><span class="p">,</span>    <span class="c1">// Cl-</span>
+    <span class="n">Custom</span> <span class="p">{</span> <span class="n">charge</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">mass</span><span class="p">:</span> <span class="nb">f64</span> <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="biological-maxwells-demons">Biological Maxwell’s Demons</h2>
+
+<h3 id="biologicalmaxwellsdemon"><code class="language-plaintext highlighter-rouge">BiologicalMaxwellsDemon</code></h3>
+
+<p>Information catalyst for biological processes.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">BiologicalMaxwellsDemon</span> <span class="p">{</span>
+    <span class="n">input_filter</span><span class="p">:</span> <span class="n">InformationFilter</span><span class="p">,</span>
+    <span class="n">output_channel</span><span class="p">:</span> <span class="n">ResponseChannel</span><span class="p">,</span>
+    <span class="n">catalytic_cycles</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
+    <span class="n">agency_recognition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">associative_memory</span><span class="p">:</span> <span class="n">AssociativeMemoryNetwork</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="methods-2">Methods</h4>
+
+<h5 id="newconfig-maxwelldemonconfig---self"><code class="language-plaintext highlighter-rouge">new(config: MaxwellDemonConfig) -&gt; Self</code></h5>
+<p>Creates new Maxwell’s demon.</p>
+
+<h5 id="process_informationinput-informationset---processingresult"><code class="language-plaintext highlighter-rouge">process_information(input: &amp;InformationSet) -&gt; ProcessingResult</code></h5>
+<p>Processes information through catalytic amplification.</p>
+
+<p><strong>Returns:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ProcessingResult</code>: Information reduction and response data</li>
+</ul>
+
+<h5 id="detect_agencyinput-informationset---agencydetectionresult"><code class="language-plaintext highlighter-rouge">detect_agency(input: &amp;InformationSet) -&gt; AgencyDetectionResult</code></h5>
+<p>Detects individual agency in information patterns.</p>
+
+<h3 id="maxwelldemonconfig"><code class="language-plaintext highlighter-rouge">MaxwellDemonConfig</code></h3>
+
+<p>Configuration for Maxwell’s demons.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">MaxwellDemonConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">information_filter_threshold</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">catalytic_cycles</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">agency_recognition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">associative_memory_size</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="circuit-systems">Circuit Systems</h2>
+
+<h3 id="circuitgrid"><code class="language-plaintext highlighter-rouge">CircuitGrid</code></h3>
+
+<p>Hierarchical electrical circuit representation of biological systems.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">CircuitGrid</span> <span class="p">{</span>
+    <span class="n">dimensions</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">),</span>
+    <span class="n">enzyme_circuits</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">EnzymeCircuit</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">ion_channels</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">IonChannelCircuit</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">fractal_circuits</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">FractalCircuit</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">quantum_circuits</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">QuantumCircuit</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="methods-3">Methods</h4>
+
+<h5 id="newwidth-usize-height-usize---self"><code class="language-plaintext highlighter-rouge">new(width: usize, height: usize) -&gt; Self</code></h5>
+<p>Creates new circuit grid.</p>
+
+<h5 id="add_enzyme_circuitmut-self-circuit-enzymecircuit-position-position"><code class="language-plaintext highlighter-rouge">add_enzyme_circuit(&amp;mut self, circuit: EnzymeCircuit, position: Position)</code></h5>
+<p>Adds enzyme circuit at specified position.</p>
+
+<h5 id="add_ion_channelmut-self-channel-ionchannelcircuit-position-position"><code class="language-plaintext highlighter-rouge">add_ion_channel(&amp;mut self, channel: IonChannelCircuit, position: Position)</code></h5>
+<p>Adds ion channel circuit.</p>
+
+<h5 id="simulate_interactionsatp_cycles-u64---resultcircuitresults"><code class="language-plaintext highlighter-rouge">simulate_interactions(atp_cycles: u64) -&gt; Result&lt;CircuitResults&gt;</code></h5>
+<p>Simulates circuit interactions over ATP cycles.</p>
+
+<h3 id="enzymecircuit"><code class="language-plaintext highlighter-rouge">EnzymeCircuit</code></h3>
+
+<p>Electrical circuit model of enzyme function.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">EnzymeCircuit</span> <span class="p">{</span>
+    <span class="n">enzyme_type</span><span class="p">:</span> <span class="n">EnzymeType</span><span class="p">,</span>
+    <span class="n">kinetic_parameters</span><span class="p">:</span> <span class="n">KineticParameters</span><span class="p">,</span>
+    <span class="n">electrical_properties</span><span class="p">:</span> <span class="n">ElectricalProperties</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="enzymetype"><code class="language-plaintext highlighter-rouge">EnzymeType</code></h3>
+
+<p>Types of enzymes that can be modeled.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">EnzymeType</span> <span class="p">{</span>
+    <span class="n">Hexokinase</span><span class="p">,</span>
+    <span class="n">ATPSynthase</span><span class="p">,</span>
+    <span class="n">Kinase</span><span class="p">,</span>
+    <span class="n">Phosphatase</span><span class="p">,</span>
+    <span class="n">Transporter</span><span class="p">,</span>
+    <span class="nf">Custom</span><span class="p">(</span><span class="n">CustomEnzyme</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="turbulance-integration">Turbulance Integration</h2>
+
+<h3 id="turbulanceengine"><code class="language-plaintext highlighter-rouge">TurbulanceEngine</code></h3>
+
+<p>Main interface for Turbulance language execution.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">TurbulanceEngine</span> <span class="p">{</span>
+    <span class="n">compiler</span><span class="p">:</span> <span class="n">TurbulanceCompiler</span><span class="p">,</span>
+    <span class="n">runtime</span><span class="p">:</span> <span class="n">TurbulanceRuntime</span><span class="p">,</span>
+    <span class="n">nebu_integration</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">NebuIntegration</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="methods-4">Methods</h4>
+
+<h5 id="new---self"><code class="language-plaintext highlighter-rouge">new() -&gt; Self</code></h5>
+<p>Creates new Turbulance engine.</p>
+
+<h5 id="execute_scriptscript-str---turbulanceresultexecutionresult"><code class="language-plaintext highlighter-rouge">execute_script(script: &amp;str) -&gt; TurbulanceResult&lt;ExecutionResult&gt;</code></h5>
+<p>Executes Turbulance script.</p>
+
+<p><strong>Parameters:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">script</code>: Turbulance source code</li>
+</ul>
+
+<p><strong>Returns:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ExecutionResult</code>: Script execution results</li>
+</ul>
+
+<h5 id="set_nebu_integrationmut-self-integration-nebuintegration"><code class="language-plaintext highlighter-rouge">set_nebu_integration(&amp;mut self, integration: NebuIntegration)</code></h5>
+<p>Sets Nebuchadnezzar integration for biological function access.</p>
+
+<h3 id="nebuintegration"><code class="language-plaintext highlighter-rouge">NebuIntegration</code></h3>
+
+<p>Bridge between Turbulance and Nebuchadnezzar systems.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">NebuIntegration</span> <span class="p">{</span>
+    <span class="n">atp_simulator</span><span class="p">:</span> <span class="n">AtpOscillatoryMembraneSimulator</span><span class="p">,</span>
+    <span class="n">pattern_recognition</span><span class="p">:</span> <span class="n">PatternRecognitionSystem</span><span class="p">,</span>
+    <span class="n">evidence_collector</span><span class="p">:</span> <span class="n">EvidenceCollector</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="biological-functions">Biological Functions</h4>
+
+<h5 id="analyze_atp_dynamicsparams-atpanalysisparams---biologicaldatavalue"><code class="language-plaintext highlighter-rouge">analyze_atp_dynamics(params: AtpAnalysisParams) -&gt; BiologicalDataValue</code></h5>
+<p>Analyzes ATP oscillatory dynamics.</p>
+
+<h5 id="simulate_oscillationconfig-oscillationconfig---biologicaldatavalue"><code class="language-plaintext highlighter-rouge">simulate_oscillation(config: OscillationConfig) -&gt; BiologicalDataValue</code></h5>
+<p>Simulates biological oscillations.</p>
+
+<h5 id="quantum_membrane_transportparams-transportparams---biologicaldatavalue"><code class="language-plaintext highlighter-rouge">quantum_membrane_transport(params: TransportParams) -&gt; BiologicalDataValue</code></h5>
+<p>Simulates quantum membrane transport.</p>
+
+<h5 id="run_maxwell_demonconfig-demonconfig---biologicaldatavalue"><code class="language-plaintext highlighter-rouge">run_maxwell_demon(config: DemonConfig) -&gt; BiologicalDataValue</code></h5>
+<p>Executes Maxwell demon information processing.</p>
+
+<h2 id="data-types">Data Types</h2>
+
+<h3 id="turbulancevalue"><code class="language-plaintext highlighter-rouge">TurbulanceValue</code></h3>
+
+<p>Values in Turbulance runtime.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">TurbulanceValue</span> <span class="p">{</span>
+    <span class="nf">Integer</span><span class="p">(</span><span class="nb">i64</span><span class="p">),</span>
+    <span class="nf">Float</span><span class="p">(</span><span class="nb">f64</span><span class="p">),</span>
+    <span class="nf">String</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">Boolean</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="nf">Array</span><span class="p">(</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="n">TurbulanceValue</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="nf">Object</span><span class="p">(</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="n">TurbulanceValue</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="nf">Biological</span><span class="p">(</span><span class="n">BiologicalDataValue</span><span class="p">),</span>
+    <span class="nf">Function</span><span class="p">(</span><span class="n">TurbulanceFunction</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="biologicaldatavalue"><code class="language-plaintext highlighter-rouge">BiologicalDataValue</code></h3>
+
+<p>Biological data integration with Turbulance.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">BiologicalDataValue</span> <span class="p">{</span>
+    <span class="n">AtpPool</span> <span class="p">{</span>
+        <span class="n">concentration</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">compartment</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span>
+        <span class="n">turnover_rate</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">QuantumState</span> <span class="p">{</span>
+        <span class="n">coherence_time</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">entanglement_degree</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">decoherence_rate</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">MembranePotential</span> <span class="p">{</span>
+        <span class="n">voltage</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">capacitance</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">resistance</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">OscillationData</span> <span class="p">{</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">amplitude</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">phase</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+        <span class="n">stability</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="error-handling">Error Handling</h2>
+
+<h3 id="nebuerror"><code class="language-plaintext highlighter-rouge">NebuError</code></h3>
+
+<p>Main error type for Nebuchadnezzar operations.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">NebuError</span> <span class="p">{</span>
+    <span class="nf">SimulationError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">QuantumError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">CircuitError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">ConfigurationError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">TurbulanceError</span><span class="p">(</span><span class="n">TurbulanceError</span><span class="p">),</span>
+    <span class="nf">IoError</span><span class="p">(</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">Error</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="turbulanceerror"><code class="language-plaintext highlighter-rouge">TurbulanceError</code></h3>
+
+<p>Errors specific to Turbulance language operations.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">enum</span> <span class="n">TurbulanceError</span> <span class="p">{</span>
+    <span class="nf">ParseError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">CompileError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">RuntimeError</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">TypeMismatch</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="nf">FunctionNotFound</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="configuration-types">Configuration Types</h2>
+
+<h3 id="simulationconfig"><code class="language-plaintext highlighter-rouge">SimulationConfig</code></h3>
+
+<p>Master configuration for Nebuchadnezzar simulations.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">SimulationConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">atp_config</span><span class="p">:</span> <span class="n">AtpConfig</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">quantum_config</span><span class="p">:</span> <span class="n">QuantumConfig</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">demon_config</span><span class="p">:</span> <span class="n">MaxwellDemonConfig</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">circuit_config</span><span class="p">:</span> <span class="n">CircuitConfig</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">parallel_config</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">ParallelConfig</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="quantumconfig"><code class="language-plaintext highlighter-rouge">QuantumConfig</code></h3>
+
+<p>Quantum system configuration.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">QuantumConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">coherence_time</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">decoherence_model</span><span class="p">:</span> <span class="n">DecoherenceModel</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">fire_light_wavelength</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">environmental_coupling_strength</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="parallelconfig"><code class="language-plaintext highlighter-rouge">ParallelConfig</code></h3>
+
+<p>Parallel processing configuration.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">struct</span> <span class="n">ParallelConfig</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">num_threads</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">load_balancing</span><span class="p">:</span> <span class="n">LoadBalancing</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="utility-functions">Utility Functions</h2>
+
+<h3 id="time-conversion">Time Conversion</h3>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">fn</span> <span class="nf">atp_cycles_to_seconds</span><span class="p">(</span><span class="n">cycles</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span> <span class="n">atp_turnover_rate</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span>
+<span class="k">pub</span> <span class="k">fn</span> <span class="nf">seconds_to_atp_cycles</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">atp_turnover_rate</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">u64</span>
+</code></pre></div></div>
+
+<h3 id="energy-calculations">Energy Calculations</h3>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">fn</span> <span class="nf">calculate_atp_energy</span><span class="p">(</span><span class="n">concentration</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span>
+<span class="k">pub</span> <span class="k">fn</span> <span class="nf">gibbs_free_energy_hydrolysis</span><span class="p">(</span><span class="n">atp</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">adp</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span>
+</code></pre></div></div>
+
+<h3 id="quantum-utilities">Quantum Utilities</h3>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">fn</span> <span class="nf">quantum_tunneling_probability</span><span class="p">(</span><span class="n">barrier_height</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">barrier_width</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">particle_energy</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span>
+<span class="k">pub</span> <span class="k">fn</span> <span class="nf">decoherence_time</span><span class="p">(</span><span class="n">temperature</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">coupling_strength</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span>
+</code></pre></div></div>
+
+<h2 id="example-usage-patterns">Example Usage Patterns</h2>
+
+<h3 id="basic-simulation-setup">Basic Simulation Setup</h3>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="c1">// Configure system</span>
+<span class="k">let</span> <span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span> <span class="p">{</span>
+    <span class="n">atp_config</span><span class="p">:</span> <span class="n">AtpConfig</span> <span class="p">{</span>
+        <span class="n">initial_concentration</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>
+        <span class="n">hydrolysis_rate</span><span class="p">:</span> <span class="mf">1000.0</span><span class="p">,</span>
+        <span class="n">synthesis_rate</span><span class="p">:</span> <span class="mf">800.0</span><span class="p">,</span>
+        <span class="n">temperature_dependence</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">quantum_config</span><span class="p">:</span> <span class="n">QuantumConfig</span> <span class="p">{</span>
+        <span class="n">coherence_time</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">decoherence_model</span><span class="p">:</span> <span class="nn">DecoherenceModel</span><span class="p">::</span><span class="n">Environmental</span><span class="p">,</span>
+        <span class="n">fire_light_wavelength</span><span class="p">:</span> <span class="mf">650e-9</span><span class="p">,</span>
+        <span class="n">environmental_coupling_strength</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1">// ... other configs</span>
+<span class="p">};</span>
+
+<span class="c1">// Create and run system</span>
+<span class="k">let</span> <span class="k">mut</span> <span class="n">system</span> <span class="o">=</span> <span class="nn">NebuSystem</span><span class="p">::</span><span class="nf">with_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+<span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">system</span><span class="nf">.run_simulation</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="turbulance-integration-1">Turbulance Integration</h3>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">turbulance</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">let</span> <span class="n">script</span> <span class="o">=</span> <span class="s">r#"
+    proposition test_hypothesis {
+        "Quantum effects enhance ATP efficiency"
+    }
+    
+    evidence data = analyze_atp_dynamics(
+        concentration: 5.0e-3,
+        cycles: 1000
+    );
+    
+    motion evaluate {
+        given data.efficiency &gt; 0.8 {
+            support test_hypothesis with data.coherence_analysis;
+        }
+    }
+    
+    considering evaluate;
+"#</span><span class="p">;</span>
+
+<span class="k">let</span> <span class="k">mut</span> <span class="n">engine</span> <span class="o">=</span> <span class="nn">TurbulanceEngine</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+<span class="n">engine</span><span class="nf">.set_nebu_integration</span><span class="p">(</span><span class="nn">NebuIntegration</span><span class="p">::</span><span class="nf">new</span><span class="p">());</span>
+<span class="k">let</span> <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="nf">.execute_script</span><span class="p">(</span><span class="n">script</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><em>For more examples and tutorials, see <a href="examples">Examples</a> and <a href="getting-started">Getting Started</a>.</em></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/nebuchadnezzar/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Nebuchadnezzar Framework</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Nebuchadnezzar Framework</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A hierarchical probabilistic electric circuit system for biological simulation</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

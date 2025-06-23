@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Examples | Nebuchadnezzar Framework</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Examples" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<meta property="og:description" content="A hierarchical probabilistic electric circuit system for biological simulation" />
+<link rel="canonical" href="https://fullscreen-triangle.github.io/nebuchadnezzar/examples/" />
+<meta property="og:url" content="https://fullscreen-triangle.github.io/nebuchadnezzar/examples/" />
+<meta property="og:site_name" content="Nebuchadnezzar Framework" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Examples" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A hierarchical probabilistic electric circuit system for biological simulation","headline":"Examples","url":"https://fullscreen-triangle.github.io/nebuchadnezzar/examples/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/nebuchadnezzar/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://fullscreen-triangle.github.io/nebuchadnezzar/feed.xml" title="Nebuchadnezzar Framework" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/nebuchadnezzar/">Nebuchadnezzar Framework</a><a class="page-link" href="/nebuchadnezzar/getting-started/">Getting Started</a><a class="page-link" href="/nebuchadnezzar/theoretical-framework/">Theoretical Framework</a><a class="page-link" href="/nebuchadnezzar/turbulance-language/">Turbulance Programming Language</a><a class="page-link" href="/nebuchadnezzar/api-reference/">API Reference</a><a class="page-link" href="/nebuchadnezzar/examples/">Examples</a><a class="page-link" href="/nebuchadnezzar/benchmarks/">Benchmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Examples</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="examples">Examples</h1>
+
+<p>Practical examples demonstrating Nebuchadnezzar’s capabilities.</p>
+
+<h2 id="basic-atp-simulation">Basic ATP Simulation</h2>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">system</span> <span class="o">=</span> <span class="nn">AtpOscillatoryMembraneSimulator</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+        <span class="n">OscillatoryConfig</span> <span class="p">{</span>
+            <span class="n">atp_concentration</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>
+            <span class="n">adp_concentration</span><span class="p">:</span> <span class="mf">0.5e-3</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="p">:</span> <span class="mf">310.0</span><span class="p">,</span>
+            <span class="n">ph</span><span class="p">:</span> <span class="mf">7.4</span><span class="p">,</span>
+            <span class="n">ionic_strength</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+
+    <span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">system</span><span class="nf">.simulate_atp_cycles</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Cycles: {}"</span><span class="p">,</span> <span class="n">results</span><span class="py">.cycles_completed</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Frequency: {:.2} Hz"</span><span class="p">,</span> <span class="n">results</span><span class="py">.avg_frequency</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Quantum coherence: {:.1}%"</span><span class="p">,</span> <span class="n">results</span><span class="py">.quantum_coherence</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="quantum-membrane-transport">Quantum Membrane Transport</h2>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">ion_transport_example</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">membrane</span> <span class="o">=</span> <span class="nn">QuantumMembrane</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">MembraneConfig</span> <span class="p">{</span>
+        <span class="n">coherence_time</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">tunneling_probability</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">fire_light_optimization</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">environmental_coupling</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="p">});</span>
+
+    <span class="k">let</span> <span class="n">transport_result</span> <span class="o">=</span> <span class="n">membrane</span><span class="nf">.transport_ion</span><span class="p">(</span>
+        <span class="nn">Ion</span><span class="p">::</span><span class="n">Sodium</span><span class="p">,</span>
+        <span class="n">TransportConfig</span> <span class="p">{</span>
+            <span class="n">classical_diffusion</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">quantum_tunneling</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">coherence_enhancement</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">environmental_noise</span><span class="p">:</span> <span class="nn">NoiseLevel</span><span class="p">::</span><span class="n">Biological</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Transport efficiency: {:.1}%"</span><span class="p">,</span> <span class="n">transport_result</span><span class="py">.efficiency</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Quantum contribution: {:.1}%"</span><span class="p">,</span> <span class="n">transport_result</span><span class="py">.quantum_fraction</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="turbulance-scientific-programming">Turbulance Scientific Programming</h2>
+
+<pre><code class="language-turbulance">// Research hypothesis
+proposition quantum_enhancement {
+    "Quantum coherence enhances ATP stability"
+}
+
+// Evidence collection
+evidence baseline = analyze_atp_dynamics(quantum_enhancement: false);
+evidence quantum = analyze_atp_dynamics(quantum_enhancement: true);
+
+// Testing
+motion test_hypothesis {
+    item ratio = quantum.stability / baseline.stability;
+    
+    given ratio &gt; 1.2 {
+        support quantum_enhancement with ratio;
+    }
+    else {
+        contradict quantum_enhancement with "insufficient enhancement";
+    }
+}
+
+considering test_hypothesis;
+</code></pre>
+
+<h2 id="maxwells-demon-information-processing">Maxwell’s Demon Information Processing</h2>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">prelude</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">maxwell_demon_example</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">demon</span> <span class="o">=</span> <span class="nn">BiologicalMaxwellsDemon</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">MaxwellDemonConfig</span> <span class="p">{</span>
+        <span class="n">information_filter_threshold</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">catalytic_cycles</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">agency_recognition</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+        <span class="n">associative_memory_size</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="p">});</span>
+
+    <span class="k">let</span> <span class="n">input</span> <span class="o">=</span> <span class="nn">InformationSet</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nd">vec!</span><span class="p">[</span>
+        <span class="nn">BiologicalPattern</span><span class="p">::</span><span class="n">ATPOscillation</span> <span class="p">{</span> <span class="n">frequency</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">:</span> <span class="mf">0.8</span> <span class="p">},</span>
+        <span class="nn">BiologicalPattern</span><span class="p">::</span><span class="n">MembraneTransport</span> <span class="p">{</span> <span class="n">ion_flux</span><span class="p">:</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">selectivity</span><span class="p">:</span> <span class="mf">0.9</span> <span class="p">},</span>
+    <span class="p">]);</span>
+
+    <span class="k">let</span> <span class="n">result</span> <span class="o">=</span> <span class="n">demon</span><span class="nf">.process_information</span><span class="p">(</span><span class="o">&amp;</span><span class="n">input</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Information reduction: {:.2} bits"</span><span class="p">,</span> <span class="n">result</span><span class="py">.information_reduction</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Amplification: {:.1}x"</span><span class="p">,</span> <span class="n">result</span><span class="py">.amplification_factor</span><span class="p">);</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="circuit-network-analysis">Circuit Network Analysis</h2>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">circuits</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">circuit_example</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">grid</span> <span class="o">=</span> <span class="nn">CircuitGrid</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">);</span>
+
+    <span class="c1">// Add components</span>
+    <span class="n">grid</span><span class="nf">.add_enzyme_circuit</span><span class="p">(</span>
+        <span class="nn">EnzymeCircuit</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">EnzymeType</span><span class="p">::</span><span class="n">Hexokinase</span><span class="p">),</span> 
+        <span class="nn">Position</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="p">);</span>
+    
+    <span class="n">grid</span><span class="nf">.add_ion_channel</span><span class="p">(</span>
+        <span class="nn">IonChannelCircuit</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">IonType</span><span class="p">::</span><span class="n">Sodium</span><span class="p">),</span>
+        <span class="nn">Position</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+    <span class="p">);</span>
+
+    <span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">grid</span><span class="nf">.simulate_interactions</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Network efficiency: {:.2}%"</span><span class="p">,</span> <span class="n">results</span><span class="py">.efficiency</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Information flow: {:.2e} bits/s"</span><span class="p">,</span> <span class="n">results</span><span class="py">.information_flow_rate</span><span class="p">);</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="performance-benchmarking">Performance Benchmarking</h2>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">nebuchadnezzar</span><span class="p">::</span><span class="nn">benchmarks</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="nf">benchmark_example</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span> <span class="nn">std</span><span class="p">::</span><span class="nn">error</span><span class="p">::</span><span class="n">Error</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">grid_sizes</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)];</span>
+    <span class="k">let</span> <span class="n">cycles</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">];</span>
+    
+    <span class="k">for</span> <span class="n">grid_size</span> <span class="k">in</span> <span class="n">grid_sizes</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">cycle_count</span> <span class="k">in</span> <span class="o">&amp;</span><span class="n">cycles</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">start</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">time</span><span class="p">::</span><span class="nn">Instant</span><span class="p">::</span><span class="nf">now</span><span class="p">();</span>
+            
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">system</span> <span class="o">=</span> <span class="nf">create_system</span><span class="p">(</span><span class="n">grid_size</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+            <span class="k">let</span> <span class="n">results</span> <span class="o">=</span> <span class="n">system</span><span class="nf">.simulate_atp_cycles</span><span class="p">(</span><span class="o">*</span><span class="n">cycle_count</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+            
+            <span class="k">let</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">start</span><span class="nf">.elapsed</span><span class="p">();</span>
+            
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"Grid: {:?}, Cycles: {}, Time: {:.2}s"</span><span class="p">,</span> 
+                <span class="n">grid_size</span><span class="p">,</span> <span class="n">cycle_count</span><span class="p">,</span> <span class="n">elapsed</span><span class="nf">.as_secs_f64</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="nf">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><em>For complete examples, see the <code class="language-plaintext highlighter-rouge">examples/</code> directory in the repository.</em></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/nebuchadnezzar/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Nebuchadnezzar Framework</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Nebuchadnezzar Framework</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A hierarchical probabilistic electric circuit system for biological simulation</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
