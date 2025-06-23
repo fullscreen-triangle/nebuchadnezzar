@@ -16,6 +16,9 @@ pub mod error;
 pub mod hardware_integration;
 pub mod biological_maxwell_demons;
 
+// Turbulance language parser and compiler
+pub mod turbulance;
+
 // Re-export environmental noise biology types for easy access
 pub use hardware_integration::{
     EnvironmentalNoiseSystem, PixelPhotosynthenticAgent, ScreenRegion, ColorChangeEvent,
@@ -88,6 +91,13 @@ pub use systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
 pub use atp_oscillatory_membrane_simulator::*;
 pub use atp_oscillatory_membrane_solver::*;
 pub use biological_maxwell_demons::*;
+
+// Re-export Turbulance language system
+pub use turbulance::{
+    TurbulanceEngine, TurbulanceResult, TurbulanceValue, BiologicalDataValue,
+    PropositionResult, MotionResult, MotionStatus, GoalResult, GoalStatus,
+    EvidenceResult, ExecutionMetrics,
+};
 
 /// Prelude module for common imports
 pub mod prelude {
