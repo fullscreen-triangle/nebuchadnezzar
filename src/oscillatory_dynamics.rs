@@ -5,9 +5,9 @@
 //! bounded nonlinear system, providing the foundation for biological rhythms and dynamics.
 
 use crate::error::{NebuchadnezzarError, Result};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use num_complex::Complex;
+use serde::{Deserialize, Serialize};
 
 /// Universal oscillator implementing the Causal Selection theorem
 #[derive(Debug, Clone)]
@@ -22,7 +22,7 @@ pub struct UniversalOscillator {
 }
 
 /// Current state of an oscillator
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct OscillatorState {
     pub position: f64,
     pub velocity: f64,
@@ -35,7 +35,7 @@ pub struct OscillatorState {
 }
 
 /// Parameters defining oscillator behavior
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct OscillatorParameters {
     pub natural_frequency: f64,
     pub damping_coefficient: f64,

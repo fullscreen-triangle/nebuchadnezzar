@@ -20,7 +20,7 @@ pub struct EnaqtProcessor {
     pub environmental_correlations: Vec<Complex<f64>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct ThermalNoise {
     pub temperature: f64,
     pub spectral_density: Vec<f64>,
@@ -28,7 +28,7 @@ pub struct ThermalNoise {
     pub reorganization_energy: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct QuantumState {
     pub energy: f64,
     pub position: f64,

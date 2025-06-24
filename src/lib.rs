@@ -140,15 +140,29 @@ impl PathwayCircuitBuilder {
     pub fn build(&self) -> Result<HierarchicalCircuit, NebuchadnezzarError> {
         let mut circuit = HierarchicalCircuit::new();
         
-        for pathway in &self.pathways {
+        for (id, pathway) in self.pathways.iter().enumerate() {
             // Create probabilistic node for each pathway
             let prob_node = ProbabilisticNode {
-                name: pathway.name.clone(),
-                uncertainty: 0.1, // Default uncertainty
-                impact_factor: pathway.atp_cost / 100.0, // Scale ATP cost to impact
-                computational_cost: pathway.reactions.len() as f64,
-                distribution_type: circuits::hierarchical_framework::DistributionType::Gaussian,
-                parameters: vec![0.0, 1.0], // mean, std
+                node_id: format!("pathway_{}", id),
+                node_type: circuits::circuit_grid::NodeType::MetabolicPathway {
+                    pathway_name: pathway.name.clone(),
+                    flux_efficiency: 0.8,
+                    regulation_strength: 0.5,
+                },
+                probability: 0.8, // Default probability
+                atp_cost: pathway.atp_cost,
+                inputs: pathway.reactions.iter()
+                    .flat_map(|r| r.reactants.clone())
+                    .collect::<std::collections::HashSet<_>>()
+                    .into_iter()
+                    .collect(),
+                outputs: pathway.reactions.iter()
+                    .flat_map(|r| r.products.clone())
+                    .collect::<std::collections::HashSet<_>>()
+                    .into_iter()
+                    .collect(),
+                resolution_importance: pathway.reactions.len() as f64 / 10.0,
+                last_activity: 0.0,
             };
             
             circuit.add_probabilistic_node(prob_node)?;
