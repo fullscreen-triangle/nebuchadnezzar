@@ -591,7 +591,7 @@ impl HierarchicalCircuit {
         Self {
             nodes: Vec::new(),
             connections: Vec::new(),
-            atp_pool: AtpPool::new(5.0, 1.0, 0.5), // Default ATP pool
+            atp_pool: AtpPool::new_physiological(), // Default ATP pool
             expansion_criteria: ExpansionCriteria::default(),
             current_resolution_level: 0,
         }

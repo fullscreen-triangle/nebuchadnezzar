@@ -1,12 +1,41 @@
-//! # Nebuchadnezzar: Hierarchical Probabilistic Electric Circuit System for Biological Simulation
+//! # Nebuchadnezzar: Intracellular Dynamics Engine
 //! 
-//! A computational framework for modeling intracellular processes using ATP as the fundamental 
-//! rate unit instead of time. The system implements hierarchical probabilistic electrical circuits 
-//! with six theoretical frameworks addressing quantum coherence in biological membranes, 
-//! oscillatory dynamics in bounded systems, entropy manipulation through probabilistic point systems, 
-//! evolutionary adaptations to fire exposure, temporal coordinate optimization, and information 
-//! processing amplification through biological Maxwell's demons.
+//! A comprehensive framework for modeling intracellular processes using ATP as the fundamental 
+//! rate unit. Designed as the foundational intracellular dynamics package for constructing
+//! biologically authentic neurons in the Imhotep neural interface framework.
+//!
+//! ## Core Features
+//! 
+//! - **ATP-Constrained Dynamics**: Uses `dx/dATP` equations for metabolically realistic computation
+//! - **Biological Maxwell's Demons**: Information catalysts for selective processing
+//! - **Quantum Membrane Transport**: Environment-assisted quantum coherence at biological temperatures
+//! - **Oscillatory Hierarchies**: Multi-scale temporal dynamics from molecular to cellular
+//! - **Hardware Integration**: Direct coupling with system oscillations and environmental noise
+//!
+//! ## Integration Architecture
+//!
+//! Nebuchadnezzar serves as the **intracellular dynamics foundation** for:
+//! - **Autobahn**: RAG system integration for knowledge processing
+//! - **Bene Gesserit**: Membrane dynamics and quantum transport
+//! - **Imhotep**: Neural interface and consciousness emergence
+//!
+//! ## Quick Start
+//!
+//! ```rust
+//! use nebuchadnezzar::prelude::*;
+//!
+//! // Create intracellular environment for neuron construction
+//! let intracellular = IntracellularEnvironment::builder()
+//!     .with_atp_pool(AtpPool::new_physiological())
+//!     .with_oscillatory_dynamics(OscillatoryConfig::biological())
+//!     .with_membrane_quantum_transport(true)
+//!     .with_maxwell_demons(BMDConfig::neural_optimized())
+//!     .build()?;
+//!
+//! // Ready for integration with Autobahn, Bene Gesserit, and Imhotep
+//! ```
 
+// Core modules - organized for maximum portability
 pub mod biological_integration;
 pub mod biological_quantum_computer;
 pub mod biological_quantum_solver;
@@ -15,19 +44,6 @@ pub mod entropy_manipulation;
 pub mod error;
 pub mod hardware_integration;
 pub mod biological_maxwell_demons;
-
-// Turbulance language parser and compiler
-pub mod turbulance;
-
-// Re-export environmental noise biology types for easy access
-pub use hardware_integration::{
-    EnvironmentalNoiseSystem, PixelPhotosynthenticAgent, ScreenRegion, ColorChangeEvent,
-    BiologicalColorResponse, ChlorophyllAnalog, ChlorophyllType, LightHarvestingComplex,
-    GlobalBiomassRegulator, EnvironmentalNoiseGenerator, NoiseSource, ColorChannel,
-    BiologicalNoiseCoupling, NoiseCharacteristics, NoiseType, EnvironmentalNoiseBiologyResult,
-    NoiseDrivenSolution, CausalityBoundaryDetector, StochasticCouplingSystem,
-    NoiseDrivenConstraints, ThermodynamicConstraint, KineticConstraint,
-};
 pub mod oscillatory_dynamics;
 pub mod quantum_membranes;
 pub mod quantum_metabolism_analyzer;
@@ -35,11 +51,66 @@ pub mod solvers;
 pub mod systems_biology;
 pub mod utils;
 
-// New comprehensive ATP-oscillatory-membrane implementation
+// Advanced integrated systems
 pub mod atp_oscillatory_membrane_simulator;
 pub mod atp_oscillatory_membrane_solver;
 
-// Re-export main types for convenience
+// Turbulance language integration
+pub mod turbulance;
+
+// Integration-focused API
+pub mod integration;
+
+// Re-export error handling
+pub use error::{NebuchadnezzarError, Result};
+
+/// Prelude module for easy imports in integration packages
+pub mod prelude {
+    // Core intracellular environment
+    pub use crate::integration::{
+        IntracellularEnvironment, IntracellularBuilder, IntracellularConfig,
+        NeuronConstructionKit, NeuronComponents, IntracellularState,
+    };
+
+    // ATP and energy systems
+    pub use crate::systems_biology::atp_kinetics::{AtpPool, AtpKinetics, AtpRateConstant};
+    pub use crate::{AtpDifferentialSolver, PathwayCircuitBuilder, BiochemicalPathway};
+
+    // Biological Maxwell's Demons
+    pub use crate::biological_maxwell_demons::{
+        BiologicalMaxwellDemon, InformationCatalyst, BMDSystem, BMDConfig,
+        PatternSelector, TargetChannel, EnhancedBMDSystem,
+    };
+
+    // Quantum and membrane systems
+    pub use crate::quantum_membranes::{QuantumMembrane, EnvironmentalCoupling};
+    pub use crate::biological_quantum_computer::{
+        BiologicalQuantumState, AtpCoordinates, OscillatoryCoordinates,
+    };
+
+    // Oscillatory dynamics
+    pub use crate::oscillatory_dynamics::{
+        UniversalOscillator, OscillatorNetwork, OscillatoryConfig,
+        OscillationState, BiologicalOscillator,
+    };
+
+    // Circuit systems
+    pub use crate::circuits::{CircuitGrid, HierarchicalCircuit, ProbabilisticNode};
+
+    // Hardware integration
+    pub use crate::hardware_integration::{
+        HardwareOscillatorSystem, EnvironmentalNoiseSystem, 
+        AdvancedHardwareIntegration,
+    };
+
+    // Turbulance language
+    pub use crate::turbulance::{TurbulanceEngine, TurbulanceResult};
+
+    // Error handling
+    pub use crate::{NebuchadnezzarError, Result};
+}
+
+// Legacy re-exports for backward compatibility
 pub use biological_quantum_computer::{
     BiologicalQuantumState, AtpCoordinates, OscillatoryCoordinates, 
     MembraneQuantumCoordinates, OscillatoryEntropyCoordinates
@@ -50,68 +121,23 @@ pub use biological_quantum_solver::{
 };
 pub use circuits::{CircuitGrid, HierarchicalCircuit, ProbabilisticNode};
 pub use entropy_manipulation::{EntropyPoint, Resolution, EntropyManipulator};
-pub use error::{NebuchadnezzarError, Result};
 pub use hardware_integration::{
     HardwareOscillatorSystem, SystemClockSync, HardwareLightSource, HardwareLightSensor,
     HardwareBiologyMapping, LightReactionMapping, FireLightEnhancement,
-    // Advanced integration exports
-    AdvancedHardwareIntegration,
-    ElectromagneticFieldSystem, CPUFieldGenerator, GPUFieldGenerator, ParallelFieldChannel,
-    FieldPattern, BiologicalFieldCoupling, BiologicalEMField,
-    ThermalDynamicsSystem, HeatSource, HardwareComponent, TemperatureProfile, 
-    BiologicalHeatEffect, ThermalBiologyResult,
-    AcousticOscillationSystem, MechanicalOscillator, MechanicalSource, ResonanceMode, 
-    MechanobiologyTarget, AmplitudeControl, MechanobiologyResponse,
-    QuantumHardwareSystem, QuantumProcessor, QuantumAlgorithm, QuantumSensor,
-    QuantumSensorType, QuantumComputationResult,
-    NetworkCommunicationSystem, WirelessProtocol, ProtocolType, ModulationScheme,
-    BiologicalCommunicationAnalogy, BiologicalSignalingEvent,
-    PowerManagementSystem, PowerSource, PowerSourceType, VoltageProfile,
-    BiologicalEnergyAnalogy,
-    MemoryStateSystem, MemoryType, MemoryTechnology, BiologicalMemoryAnalogy,
-    RetentionCharacteristics,
-    SensorFusionSystem, MotionSensor, MotionSensorType, BiologicalMotionMapping,
-    AdvancedOpticsSystem, CameraSystem, CameraSensorType, BiologicalVisionMapping,
-    OpticalPatternGenerator, OpticalPatternType, BiologicalPatternEffect,
-    ChemicalSensorSystem, GasSensor, GasSensorTechnology, BiologicalGasEffect,
-    // Additional advanced types
-    RAMFieldOscillator, WirelessTransmitter, MagneticStorageField,
-    ThermalGradient, CoolingSystem, AcousticResonator, VibrationalTransducer,
-    QuantumCommunicationChannel, InformationEncoding, PowerCycle,
-    AccessPattern, InformationPattern, EnvironmentalSensor, BiometricSensor,
-    SensorFusionAlgorithm, DisplayMatrix, LaserSystem, HolographicProjector,
-    LiquidSensor, MolecularDetector,
+    AdvancedHardwareIntegration, EnvironmentalNoiseSystem, PixelPhotosynthenticAgent,
 };
 pub use oscillatory_dynamics::{OscillationState, BiologicalOscillator};
 pub use quantum_membranes::{QuantumMembrane, EnvironmentalCoupling};
 pub use solvers::{AtpBasedSolver, NativeSolver};
 pub use systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
-
-// Re-export the comprehensive ATP-oscillatory-membrane system
 pub use atp_oscillatory_membrane_simulator::*;
 pub use atp_oscillatory_membrane_solver::*;
 pub use biological_maxwell_demons::*;
-
-// Re-export Turbulance language system
 pub use turbulance::{
     TurbulanceEngine, TurbulanceResult, TurbulanceValue, BiologicalDataValue,
     PropositionResult, MotionResult, MotionStatus, GoalResult, GoalStatus,
     EvidenceResult, ExecutionMetrics,
 };
-
-/// Prelude module for common imports
-pub mod prelude {
-    pub use crate::{
-        BiologicalQuantumState, BiologicalQuantumComputerSolver, BiologicalQuantumResult,
-        AtpCoordinates, OscillatoryCoordinates, MembraneQuantumCoordinates,
-        CircuitGrid, HierarchicalCircuit, ProbabilisticNode,
-        EntropyPoint, Resolution, EntropyManipulator,
-        OscillationState, BiologicalOscillator,
-        QuantumMembrane, EnvironmentalCoupling,
-        AtpPool, AtpRateConstant, AtpBasedSolver,
-        NebuchadnezzarError, Result,
-    };
-}
 
 /// ATP-based differential equation framework
 pub struct PathwayCircuitBuilder {
@@ -141,31 +167,25 @@ impl PathwayCircuitBuilder {
         let mut circuit = HierarchicalCircuit::new();
         
         for (id, pathway) in self.pathways.iter().enumerate() {
-            // Create probabilistic node for each pathway
-            let prob_node = ProbabilisticNode {
-                node_id: format!("pathway_{}", id),
-                node_type: circuits::circuit_grid::NodeType::MetabolicPathway {
-                    pathway_name: pathway.name.clone(),
-                    flux_efficiency: 0.8,
-                    regulation_strength: 0.5,
-                },
-                probability: 0.8, // Default probability
-                atp_cost: pathway.atp_cost,
-                inputs: pathway.reactions.iter()
-                    .flat_map(|r| r.reactants.clone())
-                    .collect::<std::collections::HashSet<_>>()
-                    .into_iter()
-                    .collect(),
-                outputs: pathway.reactions.iter()
-                    .flat_map(|r| r.products.clone())
-                    .collect::<std::collections::HashSet<_>>()
-                    .into_iter()
-                    .collect(),
-                resolution_importance: pathway.reactions.len() as f64 / 10.0,
-                last_activity: 0.0,
+            // Create probabilistic node for each pathway using the correct structure
+            let prob_node = circuits::hierarchical_framework::ProbabilisticNode {
+                id,
+                name: pathway.name.clone(),
+                rate_distribution: circuits::hierarchical_framework::ProbabilityDistribution::normal(
+                    pathway.atp_cost, 
+                    pathway.atp_cost * 0.1
+                ),
+                atp_cost_distribution: circuits::hierarchical_framework::ProbabilityDistribution::normal(
+                    pathway.atp_cost, 
+                    pathway.atp_cost * 0.1
+                ),
+                feedback_probability: 0.1,
+                cross_reaction_strength: std::collections::HashMap::new(),
+                uncertainty_threshold: 0.3,
+                computational_importance: pathway.reactions.len() as f64 / 10.0,
             };
             
-            circuit.add_probabilistic_node(prob_node)?;
+            circuit.nodes.push(prob_node);
         }
         
         Ok(circuit)

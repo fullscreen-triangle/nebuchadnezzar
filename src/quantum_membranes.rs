@@ -341,3 +341,6 @@ impl QuantumMembrane {
         concentrations
     }
 }
+
+// Re-exports for backwards compatibility
+pub use EnvironmentalCoupling;

@@ -762,4 +762,8 @@ mod tests {
         assert!(network.synchronization_state.phase_coherence >= 0.0);
         assert!(network.emergent_properties.collective_frequency > 0.0);
     }
-} 
+}
+
+// Re-exports for backwards compatibility
+pub use OscillatorState as OscillationState;
+pub use UniversalOscillator as BiologicalOscillator; 

@@ -73,6 +73,10 @@ required-features = []
 name = "atp_oscillatory_membrane_complete_demo"
 required-features = []
 
+[[example]]
+name = "neuron_integration_demo"
+required-features = []
+
 [[bench]]
 name = "quantum_performance"
 harness = false
