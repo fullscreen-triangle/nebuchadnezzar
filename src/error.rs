@@ -329,6 +329,21 @@ impl NebuchadnezzarError {
             message: message.into(),
         }
     }
+
+    /// Create a parse error for invalid input
+    pub fn parse_error(message: impl Into<String>) -> Self {
+        Self::biological_error(BiologicalErrorType::ComponentMissing, message)
+    }
+
+    /// Create an execution error for runtime failures
+    pub fn execution_error(message: impl Into<String>) -> Self {
+        Self::biological_error(BiologicalErrorType::SystemIntegrationFailure, message)
+    }
+
+    /// Create an invalid input error
+    pub fn invalid_input(message: impl Into<String>) -> Self {
+        Self::biological_error(BiologicalErrorType::ComponentMissing, message)
+    }
 }
 
 #[cfg(test)]

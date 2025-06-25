@@ -9,8 +9,7 @@ use crate::circuits::enzyme_circuits::EnzymeProbCircuit;
 use crate::circuits::ion_channel::ProbabilisticIonChannel;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use crate::systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
-use crate::{BiochemicalPathway, BiochemicalReaction, ExpansionCriteria};
+use crate::systems_biology::atp_kinetics::AtpPool;
 
 /// Multi-level voltage hierarchy as specified
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -330,10 +329,11 @@ impl HierarchicalSystem {
             
             states.push(CellularState {
                 cell_id: cell.cell_id.clone(),
-                membrane_potential: cell.membrane_potential + membrane_current * 0.001, // Simple integration
-                atp_level: cell.global_atp_pool + atp_balance,
-                signaling_activity: self.calculate_signaling_activity(cell)?,
-                metabolic_state: cell.cellular_state.metabolic_activity,
+                cell_cycle_phase: cell.cellular_state.cell_cycle_phase.clone(),
+                stress_level: cell.cellular_state.stress_level,
+                metabolic_activity: cell.cellular_state.metabolic_activity,
+                growth_rate: cell.cellular_state.growth_rate,
+                differentiation_state: cell.cellular_state.differentiation_state,
             });
         }
 
@@ -484,15 +484,6 @@ pub struct OrganelleState {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CellularState {
-    pub cell_id: String,
-    pub membrane_potential: f64,
-    pub atp_level: f64,
-    pub signaling_activity: f64,
-    pub metabolic_state: f64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TissueState {
     pub tissue_id: String,
     pub collective_voltage: f64,
@@ -628,10 +619,10 @@ impl HierarchicalCircuit {
             for (j, reaction_j) in pathway.reactions.iter().enumerate() {
                 if i != j {
                     // Check if products of reaction_i are substrates of reaction_j
-                    for (product, _) in &reaction_i.products {
-                        for (substrate, _) in &reaction_j.substrates {
+                    for product in &reaction_i.products {
+                        for substrate in &reaction_j.reactants {
                             if product == substrate {
-                                self.connections.push(CircuitConnection {
+                                self.connections.push(ProbabilisticCircuitConnection {
                                     from_node: i,
                                     to_node: j,
                                     metabolite: product.clone(),
@@ -944,6 +935,16 @@ pub struct CircuitConnection {
     pub atp_dependence: f64,
 }
 
+/// Connection between probabilistic nodes in circuit
+#[derive(Debug, Clone)]
+pub struct ProbabilisticCircuitConnection {
+    pub from_node: usize,
+    pub to_node: usize,
+    pub metabolite: String,
+    pub conductance: f64,
+    pub atp_dependence: f64,
+}
+
 /// Detailed circuit representation for expanded nodes
 #[derive(Debug, Clone)]
 pub struct DetailedCircuit {
@@ -994,9 +995,12 @@ pub struct HierarchicalState {
 impl HierarchicalState {
     pub fn new() -> Self {
         Self {
-            node_states: HashMap::new(),
-            total_atp_consumed: 0.0,
-            resolution_level: 0,
+            molecular_states: Vec::new(),
+            organelle_states: Vec::new(),
+            cellular_states: Vec::new(),
+            tissue_states: Vec::new(),
+            voltage_hierarchy: VoltageHierarchy::default(),
+            timestamp: 0.0,
         }
     }
 }

@@ -972,6 +972,16 @@ impl EnhancedBMDSystem {
         let atp_synthesis = metabolic.atp_synthase.catalyze(&proton_gradients)?;
         Ok(atp_synthesis.len() as f64 * metabolic.atp_synthase.amplification_factor)
     }
+
+    /// Get the number of active demons
+    pub fn active_count(&self) -> usize {
+        self.base_system.demons.len()
+    }
+
+    /// Get total entropy reduction by all demons
+    pub fn total_entropy_reduction(&self) -> f64 {
+        self.base_system.entropy_manipulation.local_entropy_reduction
+    }
 }
 
 /// Result of BMD system simulation
@@ -983,3 +993,6 @@ pub struct BMDSimulationResult {
     pub metastability_status: bool,
     pub thermodynamic_consistent: bool,
 }
+
+/// Network of Maxwell demons for system integration
+pub type MaxwellDemonNetwork = EnhancedBMDSystem;

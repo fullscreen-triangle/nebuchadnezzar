@@ -123,7 +123,7 @@ impl MembraneModel {
 }
 
 /// Circuit network for connecting multiple circuits
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct CircuitNetwork {
     pub network_id: String,
     pub circuits: HashMap<String, Box<dyn Circuit>>,
@@ -280,18 +280,19 @@ impl CircuitFactory {
         // Add specialized mitochondrial channels
         membrane.add_ion_channel(ProbabilisticIonChannel::new(
             "mito_calcium".to_string(),
-            IonType::Calcium,
+            ion_channel::ChannelType::VoltageGated {
+                activation_threshold: -20.0,
+                inactivation_threshold: Some(10.0),
+            },
             1.0,
-            0.8,
-            ChannelKinetics::voltage_dependent(-20.0, 10.0),
-            0.05,
+            120.0,
         ));
 
         membrane
     }
 
     /// Create a glycolysis circuit grid
-    pub fn create_glycolysis_circuit() -> AdaptiveGrid {
+    pub fn create_glycolysis_circuit() -> Result<AdaptiveGrid> {
         let mut grid = AdaptiveGrid::new("glycolysis".to_string(), 10.0);
 
         // Add glycolysis enzyme nodes
@@ -314,10 +315,10 @@ impl CircuitFactory {
                 last_activity: 1.0,
             };
             
-            grid.base_grid.add_probabilistic_node(node);
+            grid.base_grid.add_probabilistic_node(node)?;
         }
 
-        grid
+        Ok(grid)
     }
 }
 

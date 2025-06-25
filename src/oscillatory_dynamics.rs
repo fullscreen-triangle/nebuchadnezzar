@@ -492,6 +492,30 @@ impl UniversalOscillator {
     fn calculate_information_content(&self, index: usize) -> Result<f64> {
         Ok(-((index + 1) as f64).ln() / 10.0)
     }
+
+    /// Get current frequency of the oscillator
+    pub fn frequency(&self) -> f64 {
+        self.state.frequency
+    }
+
+    /// Get current amplitude of the oscillator
+    pub fn amplitude(&self) -> f64 {
+        self.state.amplitude
+    }
+
+    /// Get current phase of the oscillator
+    pub fn phase(&self) -> f64 {
+        self.state.phase
+    }
+
+    /// Evolve the oscillator for a given duration
+    pub fn evolve(&mut self, duration: f64) -> Result<()> {
+        let dt = duration / 100.0; // Use small time steps
+        for _ in 0..100 {
+            self.evolve_causal_selection(dt)?;
+        }
+        Ok(())
+    }
 }
 
 impl CausalSelection {
@@ -696,6 +720,22 @@ impl EmergentProperties {
             information_flow: 0.0,
             complexity_measure: 0.0,
             resilience: 0.0,
+        }
+    }
+}
+
+impl OscillatorState {
+    /// Create a new oscillator state with default values
+    pub fn new() -> Self {
+        Self {
+            position: 0.0,
+            velocity: 0.0,
+            acceleration: 0.0,
+            phase: 0.0,
+            amplitude: 1.0,
+            frequency: 1.0,
+            energy: 0.5,
+            entropy: 0.0,
         }
     }
 }

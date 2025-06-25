@@ -53,19 +53,19 @@ impl TurbulanceEngine {
     pub fn execute(&mut self, source: &str) -> Result<TurbulanceResult> {
         // Tokenize
         let tokens = self.lexer.tokenize(source)
-            .map_err(|e| NebuchadnezzarError::ParseError(format!("Lexer error: {}", e)))?;
+            .map_err(|e| NebuchadnezzarError::parse_error(format!("Lexer error: {}", e)))?;
 
         // Parse to AST
         let ast = self.parser.parse(tokens)
-            .map_err(|e| NebuchadnezzarError::ParseError(format!("Parser error: {}", e)))?;
+            .map_err(|e| NebuchadnezzarError::parse_error(format!("Parser error: {}", e)))?;
 
         // Compile to bytecode/operations
         let program = self.compiler.compile(ast)
-            .map_err(|e| NebuchadnezzarError::ParseError(format!("Compiler error: {}", e)))?;
+            .map_err(|e| NebuchadnezzarError::parse_error(format!("Compiler error: {}", e)))?;
 
         // Execute
         let result = self.runtime.execute(program)
-            .map_err(|e| NebuchadnezzarError::ExecutionError(format!("Runtime error: {}", e)))?;
+            .map_err(|e| NebuchadnezzarError::execution_error(format!("Runtime error: {}", e)))?;
 
         Ok(result)
     }

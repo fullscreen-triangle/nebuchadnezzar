@@ -4,10 +4,23 @@
 //! switch between states based on voltage, ligand binding, and ATP availability.
 
 use crate::error::{NebuchadnezzarError, Result};
-use crate::circuits::{Voltage, Current, Conductance};
-use crate::utils::numerical::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+// Add missing types and traits
+pub type Voltage = f64;
+pub type Current = f64;
+pub type Conductance = f64;
+
+// Add utility functions that might be missing
+pub fn clamp(value: f64, min: f64, max: f64) -> f64 {
+    if value < min { min } else if value > max { max } else { value }
+}
+
+pub fn hill(concentration: f64, km: f64, n: f64) -> f64 {
+    let cn = concentration.powf(n);
+    cn / (km.powf(n) + cn)
+}
 
 /// Probabilistic ion channel - the fundamental circuit element
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -89,7 +102,7 @@ impl ProbabilisticIonChannel {
     }
 
     /// Create a voltage-gated sodium channel
-    pub fn sodium_channel() -> Self {
+    pub fn voltage_gated_sodium() -> Self {
         let mut channel = Self::new(
             "Nav1.1".to_string(),
             ChannelType::VoltageGated {
@@ -122,7 +135,7 @@ impl ProbabilisticIonChannel {
     }
 
     /// Create a voltage-gated potassium channel
-    pub fn potassium_channel() -> Self {
+    pub fn voltage_gated_potassium() -> Self {
         let mut channel = Self::new(
             "Kv1.1".to_string(),
             ChannelType::VoltageGated {
@@ -146,7 +159,7 @@ impl ProbabilisticIonChannel {
     }
 
     /// Create an ATP-sensitive potassium channel
-    pub fn katp_channel() -> Self {
+    pub fn atp_sensitive_potassium() -> Self {
         let mut channel = Self::new(
             "KATP".to_string(),
             ChannelType::AtpSensitive {
@@ -216,10 +229,19 @@ impl ProbabilisticIonChannel {
     }
 
     /// Calculate current through the channel
-    pub fn calculate_current(&self, voltage: f64) -> Current {
+    pub fn calculate_current(&self, voltage: f64) -> f64 {
         let driving_force = voltage - self.reversal_potential;
-        let current = self.current_state.conductance * driving_force;
-        Current(current)
+        self.current_state.conductance * driving_force
+    }
+
+    /// Compute current with ATP concentration (trait implementation)
+    pub fn compute_current(&self, voltage: f64, atp_concentration: f64) -> Result<f64> {
+        Ok(self.calculate_current(voltage))
+    }
+
+    /// Update gating variables (alternative interface)
+    pub fn update_gating_variables(&mut self, dt: f64, voltage: f64, atp_concentration: f64) -> Result<()> {
+        self.update_state(voltage, atp_concentration, dt)
     }
 
     /// Check if channel can fire (probabilistic switching)
@@ -331,15 +353,15 @@ pub struct IonChannelFactory;
 
 impl IonChannelFactory {
     pub fn create_voltage_gated_sodium() -> ProbabilisticIonChannel {
-        ProbabilisticIonChannel::sodium_channel()
+        ProbabilisticIonChannel::voltage_gated_sodium()
     }
 
     pub fn create_voltage_gated_potassium() -> ProbabilisticIonChannel {
-        ProbabilisticIonChannel::potassium_channel()
+        ProbabilisticIonChannel::voltage_gated_potassium()
     }
 
     pub fn create_atp_sensitive_potassium() -> ProbabilisticIonChannel {
-        ProbabilisticIonChannel::katp_channel()
+        ProbabilisticIonChannel::atp_sensitive_potassium()
     }
 
     pub fn create_calcium_channel() -> ProbabilisticIonChannel {
@@ -392,6 +414,6 @@ mod tests {
     fn test_current_calculation() {
         let channel = IonChannelFactory::create_voltage_gated_sodium();
         let current = channel.calculate_current(-70.0);
-        assert!(current.0.is_finite());
+        assert!(current.is_finite());
     }
 } 

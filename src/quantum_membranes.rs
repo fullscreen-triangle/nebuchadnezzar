@@ -340,6 +340,23 @@ impl QuantumMembrane {
         concentrations.insert("Cl-".to_string(), 10.0);
         concentrations
     }
+
+    /// Get membrane permeability
+    pub fn permeability(&self) -> f64 {
+        // Calculate permeability based on quantum transport efficiency
+        let base_permeability = 1e-6; // cm/s
+        base_permeability * self.enaqt_processor.transport_efficiency
+    }
+
+    /// Calculate transport rate through the membrane
+    pub fn calculate_transport_rate(&self) -> f64 {
+        // Transport rate based on quantum channels and membrane potential
+        let mut total_rate = 0.0;
+        for channel in &self.quantum_channels {
+            total_rate += channel.efficiency * channel.quantum_conductance;
+        }
+        total_rate * (self.membrane_potential / 100.0).abs() // Normalize by 100mV
+    }
 }
 
 // Re-exports for backwards compatibility

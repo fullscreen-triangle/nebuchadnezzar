@@ -264,6 +264,52 @@ impl CircuitGrid {
         
         Ok(state)
     }
+
+    /// Get the total number of nodes in the circuit grid
+    pub fn node_count(&self) -> usize {
+        self.probabilistic_nodes.len() + self.resolved_circuits.len()
+    }
+
+    /// Get the total number of active connections
+    pub fn connection_count(&self) -> usize {
+        let mut connections = 0;
+        for node in &self.probabilistic_nodes {
+            connections += node.inputs.len() + node.outputs.len();
+        }
+        for circuit in &self.resolved_circuits {
+            connections += circuit.detailed_model.state_variables.len();
+        }
+        connections
+    }
+
+    /// Optimize circuit for efficiency
+    pub fn optimize_for_efficiency(&mut self) -> Result<()> {
+        // Sort nodes by efficiency (ATP cost vs output)
+        self.probabilistic_nodes.sort_by(|a, b| {
+            let a_efficiency = a.probability / (a.atp_cost + 0.001);
+            let b_efficiency = b.probability / (b.atp_cost + 0.001);
+            b_efficiency.partial_cmp(&a_efficiency).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        Ok(())
+    }
+
+    /// Optimize circuit for speed
+    pub fn optimize_for_speed(&mut self) -> Result<()> {
+        // Sort nodes by activity level (most active first)
+        self.probabilistic_nodes.sort_by(|a, b| {
+            b.last_activity.partial_cmp(&a.last_activity).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        Ok(())
+    }
+
+    /// Optimize circuit for stability
+    pub fn optimize_for_stability(&mut self) -> Result<()> {
+        // Sort nodes by resolution importance (most stable first)
+        self.probabilistic_nodes.sort_by(|a, b| {
+            b.resolution_importance.partial_cmp(&a.resolution_importance).unwrap_or(std::cmp::Ordering::Equal)
+        });
+        Ok(())
+    }
 }
 
 /// Adaptive grid that dynamically resolves probabilistic nodes

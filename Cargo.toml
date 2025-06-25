@@ -78,11 +78,7 @@ name = "neuron_integration_demo"
 required-features = []
 
 [[bench]]
-name = "quantum_performance"
-harness = false
-
-[[bench]]
-name = "atp_solver_benchmark"
+name = "benchmarks"
 harness = false
 
 [profile.release]

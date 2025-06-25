@@ -898,4 +898,60 @@ impl Default for TripleCouplingFunction {
     fn default() -> Self {
         Self::new()
     }
+}
+
+impl BiologicalQuantumState {
+    /// Create a new biological quantum state with default values
+    pub fn new() -> Self {
+        Self {
+            atp_coords: AtpCoordinates::new(5.0, 0.5, 5.0),
+            oscillatory_coords: OscillatoryCoordinates::new(5),
+            membrane_coords: MembraneQuantumCoordinates::new(10),
+            entropy_coords: OscillatoryEntropyCoordinates::new(&vec![
+                "osc_0".to_string(),
+                "osc_1".to_string(),
+                "osc_2".to_string(),
+                "osc_3".to_string(),
+                "osc_4".to_string(),
+            ]),
+        }
+    }
+
+    /// Set ATP coordinates
+    pub fn set_atp_coordinates(&mut self, atp_coords: AtpCoordinates) {
+        self.atp_coords = atp_coords;
+    }
+
+    /// Set oscillatory coordinates
+    pub fn set_oscillatory_coordinates(&mut self, osc_coords: OscillatoryCoordinates) {
+        self.oscillatory_coords = osc_coords;
+    }
+
+    /// Set membrane coordinates
+    pub fn set_membrane_coordinates(&mut self, membrane_coords: MembraneQuantumCoordinates) {
+        self.membrane_coords = membrane_coords;
+    }
+
+    /// Calculate entropy of the quantum state
+    pub fn calculate_entropy(&self) -> f64 {
+        self.entropy_coords.current_entropy
+    }
+
+    /// Measure quantum coherence
+    pub fn measure_coherence(&self) -> f64 {
+        let mut total_coherence = 0.0;
+        let mut count = 0;
+        
+        for quantum_state in &self.membrane_coords.quantum_states {
+            let coherence = quantum_state.amplitude.norm();
+            total_coherence += coherence;
+            count += 1;
+        }
+        
+        if count > 0 {
+            total_coherence / count as f64
+        } else {
+            0.0
+        }
+    }
 } 

@@ -9,6 +9,8 @@ use crate::{
     OscillatoryCoordinates, MembraneQuantumCoordinates, HierarchicalCircuit,
     EntropyManipulator, BiologicalOscillator, BiologicalMaxwellDemons,
     MaxwellDemonNetwork, NebuchadnezzarError, Result,
+    oscillatory_dynamics::{UniversalOscillator, OscillatorParameters},
+    error::BiologicalErrorType,
 };
 use crate::turbulance::{TurbulanceValue, BiologicalDataValue, PatternData, PatternMatch};
 use std::collections::HashMap;
@@ -31,7 +33,7 @@ pub struct NebuIntegration {
     circuit_grid: CircuitGrid,
     
     /// Biological oscillator
-    oscillator: BiologicalOscillator,
+    oscillator: UniversalOscillator,
     
     /// Maxwell demons network
     maxwell_demons: MaxwellDemonNetwork,
@@ -49,13 +51,23 @@ pub struct NebuIntegration {
 impl NebuIntegration {
     /// Create a new integration instance
     pub fn new() -> Self {
+        let oscillator_params = OscillatorParameters {
+            natural_frequency: 1.0,
+            damping_coefficient: 0.1,
+            driving_amplitude: 0.5,
+            driving_frequency: 1.0,
+            nonlinearity_strength: 0.1,
+            mass: 1.0,
+            spring_constant: 1.0,
+        };
+
         Self {
             quantum_state: None,
             atp_pool: AtpPool::new(100.0), // Initial ATP
-            oscillation_state: OscillationState::new(),
-            quantum_membrane: QuantumMembrane::new(),
-            circuit_grid: CircuitGrid::new(10, 10), // 10x10 grid
-            oscillator: BiologicalOscillator::new(1.0, 0.0),
+            oscillation_state: OscillationState::new("main_osc", 1.0, 0.0, 1.0),
+            quantum_membrane: QuantumMembrane::new(310.0), // Body temperature
+            circuit_grid: CircuitGrid::new("main_grid".to_string(), 100.0),
+            oscillator: UniversalOscillator::new("main_oscillator".to_string(), oscillator_params),
             maxwell_demons: MaxwellDemonNetwork::new(),
             pattern_recognizer: PatternRecognizer::new(),
             experiments: HashMap::new(),
@@ -85,28 +97,17 @@ impl NebuIntegration {
         self.quantum_state = Some(BiologicalQuantumState::new());
         
         // Set up initial ATP coordinates
-        let atp_coords = AtpCoordinates {
-            concentration: self.atp_pool.available_atp(),
-            production_rate: 10.0,
-            consumption_rate: 8.0,
-            efficiency: 0.85,
-        };
+        let atp_coords = AtpCoordinates::new(
+            self.atp_pool.available_atp(),
+            self.atp_pool.available_atp() * 0.1,
+            5.0
+        );
         
         // Set up oscillatory coordinates
-        let osc_coords = OscillatoryCoordinates {
-            frequency: self.oscillator.frequency(),
-            amplitude: self.oscillator.amplitude(),
-            phase: self.oscillator.phase(),
-            damping: 0.1,
-        };
+        let osc_coords = OscillatoryCoordinates::new(5);
         
         // Set up membrane coordinates
-        let membrane_coords = MembraneQuantumCoordinates {
-            permeability: self.quantum_membrane.permeability(),
-            potential: self.quantum_membrane.membrane_potential(),
-            thickness: 5e-9, // 5 nanometers
-            composition: vec!["phospholipid".to_string(), "protein".to_string()],
-        };
+        let membrane_coords = MembraneQuantumCoordinates::new(10);
         
         // Update quantum state
         if let Some(ref mut state) = self.quantum_state {
@@ -186,14 +187,14 @@ impl NebuIntegration {
     }
 
     /// Collect evidence from biological data
-    pub fn collect_evidence(&mut self, source: &str, data_type: &str) -> Result<EvidenceResult> {
+    pub fn collect_evidence(&mut self, source: &str, _data_type: &str) -> Result<EvidenceResult> {
         let evidence = match source {
             "atp_pool" => self.collect_atp_evidence()?,
             "oscillation_state" => self.collect_oscillation_evidence()?,
             "quantum_membrane" => self.collect_membrane_evidence()?,
             "circuit_grid" => self.collect_circuit_evidence()?,
             "maxwell_demons" => self.collect_demon_evidence()?,
-            _ => return Err(NebuchadnezzarError::InvalidInput(format!("Unknown evidence source: {}", source))),
+            _ => return Err(NebuchadnezzarError::invalid_input(format!("Unknown evidence source: {}", source))),
         };
         
         Ok(evidence)
@@ -220,7 +221,7 @@ impl NebuIntegration {
             "optimize_circuit" => self.optimize_circuit(args),
             "measure_coherence" => self.measure_coherence(args),
             "track_pattern" => self.track_pattern(args),
-            _ => Err(NebuchadnezzarError::InvalidInput(format!("Unknown function: {}", function))),
+            _ => Err(NebuchadnezzarError::invalid_input(format!("Unknown function: {}", function))),
         }
     }
 
@@ -254,7 +255,7 @@ impl NebuIntegration {
         self.experiments.keys()
             .last()
             .cloned()
-            .ok_or_else(|| NebuchadnezzarError::InvalidInput("No active experiment".to_string()))
+            .ok_or_else(|| NebuchadnezzarError::invalid_input("No active experiment".to_string()))
     }
 
     fn calculate_confidence(&self, support_level: f64) -> f64 {
@@ -317,7 +318,7 @@ impl NebuIntegration {
 
     fn collect_membrane_evidence(&self) -> Result<EvidenceResult> {
         let patterns = vec![
-            format!("Membrane potential: {:.2} mV", self.quantum_membrane.membrane_potential()),
+            format!("Membrane potential: {:.2} mV", self.quantum_membrane.membrane_potential),
             format!("Permeability: {:.2e} cm/s", self.quantum_membrane.permeability()),
         ];
         
@@ -387,11 +388,11 @@ impl NebuIntegration {
     fn simulate_oscillation(&mut self, args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
         let duration = match args.get(0) {
             Some(TurbulanceValue::Float(d)) => *d,
-            _ => 10.0,
+            _ => 1.0, // Default 1 second
         };
         
-        // Update oscillator state
-        self.oscillator.evolve(duration);
+        // Evolve oscillator
+        self.oscillator.evolve(duration)?;
         
         Ok(TurbulanceValue::BiologicalData(
             BiologicalDataValue::OscillationState(self.oscillation_state.clone())
@@ -399,62 +400,55 @@ impl NebuIntegration {
     }
 
     fn quantum_membrane_transport(&mut self, args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
-        let _molecule_type = match args.get(0) {
-            Some(TurbulanceValue::String(s)) => s,
-            _ => "generic",
+        let _transport_amount = match args.get(0) {
+            Some(TurbulanceValue::Float(amount)) => *amount,
+            _ => 1.0, // Default transport amount
         };
         
-        // Simulate quantum transport through membrane
         let transport_rate = self.quantum_membrane.calculate_transport_rate();
         
         Ok(TurbulanceValue::Float(transport_rate))
     }
 
-    fn run_maxwell_demon(&mut self, args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
-        let energy_threshold = match args.get(0) {
-            Some(TurbulanceValue::Float(e)) => *e,
-            _ => 1.0,
-        };
-        
-        // Run Maxwell demon with energy threshold
-        let entropy_reduction = self.maxwell_demons.run_cycle(energy_threshold);
+    fn run_maxwell_demon(&mut self, _args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
+        // Simplified Maxwell demon operation
+        let entropy_reduction = self.maxwell_demons.total_entropy_reduction();
         
         Ok(TurbulanceValue::Float(entropy_reduction))
     }
 
     fn calculate_entropy(&mut self, _args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
-        // Calculate system entropy
-        let entropy = self.quantum_state
-            .as_ref()
-            .map(|state| state.calculate_entropy())
-            .unwrap_or(0.0);
+        let total_entropy = if let Some(state) = &self.quantum_state {
+            state.calculate_entropy()
+        } else {
+            0.0
+        };
         
-        Ok(TurbulanceValue::Float(entropy))
+        Ok(TurbulanceValue::Float(total_entropy))
     }
 
     fn optimize_circuit(&mut self, args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
-        let objective = match args.get(0) {
-            Some(TurbulanceValue::String(obj)) => obj.as_str(),
-            _ => "efficiency",
+        let optimization_type = match args.get(0) {
+            Some(TurbulanceValue::String(opt_type)) => opt_type.as_str(),
+            _ => "efficiency", // Default optimization
         };
         
-        // Optimize circuit based on objective
-        let optimization_result = match objective {
-            "efficiency" => self.circuit_grid.optimize_for_efficiency(),
-            "speed" => self.circuit_grid.optimize_for_speed(),
-            "stability" => self.circuit_grid.optimize_for_stability(),
-            _ => 0.5,
-        };
+        match optimization_type {
+            "efficiency" => self.circuit_grid.optimize_for_efficiency()?,
+            "speed" => self.circuit_grid.optimize_for_speed()?,
+            "stability" => self.circuit_grid.optimize_for_stability()?,
+            _ => return Err(NebuchadnezzarError::invalid_input("Unknown optimization type".to_string())),
+        }
         
-        Ok(TurbulanceValue::Float(optimization_result))
+        Ok(TurbulanceValue::String("Optimization complete".to_string()))
     }
 
     fn measure_coherence(&mut self, _args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
-        // Measure quantum coherence
-        let coherence = self.quantum_state
-            .as_ref()
-            .map(|state| state.measure_coherence())
-            .unwrap_or(0.0);
+        let coherence = if let Some(state) = &self.quantum_state {
+            state.measure_coherence()
+        } else {
+            0.0
+        };
         
         Ok(TurbulanceValue::Float(coherence))
     }
@@ -462,14 +456,13 @@ impl NebuIntegration {
     fn track_pattern(&mut self, args: &[TurbulanceValue]) -> Result<TurbulanceValue> {
         let pattern_name = match args.get(0) {
             Some(TurbulanceValue::String(name)) => name,
-            _ => return Err(NebuchadnezzarError::InvalidInput("Pattern name required".to_string())),
+            _ => return Err(NebuchadnezzarError::invalid_input("Pattern name required".to_string())),
         };
         
-        // Track pattern in biological data
         let pattern_data = self.pattern_recognizer.track_pattern(pattern_name)?;
         
         Ok(TurbulanceValue::BiologicalData(
-            BiologicalDataValue::Pattern(pattern_data)
+            BiologicalDataValue::PatternData(pattern_data)
         ))
     }
 }
@@ -544,7 +537,7 @@ impl PatternRecognizer {
     
     pub fn track_pattern(&self, pattern_name: &str) -> Result<PatternData> {
         let pattern_def = self.patterns.get(pattern_name)
-            .ok_or_else(|| NebuchadnezzarError::InvalidInput(format!("Unknown pattern: {}", pattern_name)))?;
+            .ok_or_else(|| NebuchadnezzarError::invalid_input(format!("Unknown pattern: {}", pattern_name)))?;
         
         Ok(PatternData {
             pattern_type: pattern_def.pattern_type.clone(),

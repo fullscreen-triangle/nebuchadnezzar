@@ -34,6 +34,32 @@ pub struct AtpPool {
 }
 
 impl AtpPool {
+    /// Create a new ATP pool with specified initial ATP concentration
+    pub fn new(initial_atp: f64) -> Self {
+        Self {
+            atp_concentration: initial_atp,
+            adp_concentration: initial_atp * 0.1, // 10% of ATP as ADP
+            pi_concentration: 5.0,
+            energy_charge: 0.85,
+            total_adenine_pool: initial_atp + initial_atp * 0.1 + 0.1,
+            atp_synthesis_rate: 0.0,
+            atp_hydrolysis_rate: 0.0,
+        }
+    }
+
+    /// Get available ATP concentration
+    pub fn available_atp(&self) -> f64 {
+        self.atp_concentration
+    }
+
+    /// Calculate current efficiency of ATP utilization
+    pub fn efficiency(&self) -> f64 {
+        // Efficiency based on energy charge and ATP/ADP ratio
+        let atp_adp_ratio = self.atp_concentration / (self.adp_concentration + 0.001);
+        let efficiency = self.energy_charge * (atp_adp_ratio / (1.0 + atp_adp_ratio));
+        efficiency.min(1.0).max(0.0)
+    }
+    
     /// Create a new ATP pool with physiological concentrations
     pub fn new_physiological() -> Self {
         Self {
