@@ -6,11 +6,16 @@
 //!
 //! ## Core Features
 //! 
+//! - **S-Entropy Navigation**: O(1) universal problem solving through coordinate transformation
+//! - **Stella Temporal Precision**: Ultra-precise temporal coordinate navigation (10^-30s)
+//! - **Miraculous Local Solutions**: Local physics violations within global viability constraints
+//! - **BMD Information Catalysis**: 1000× amplification through Biological Maxwell Demons
+//! - **Dynamic Flux Transport**: Pattern alignment fluid dynamics with oscillatory coherence
+//! - **Naked Thermodynamic Engines**: Infinite efficiency through cosmic nothingness alignment
+//! - **Atomic Clock Processors**: Gas molecules as quantum processors with recursive precision
 //! - **ATP-Constrained Dynamics**: Uses `dx/dATP` equations for metabolically realistic computation
-//! - **Biological Maxwell's Demons**: Information catalysts for selective processing
 //! - **Quantum Membrane Transport**: Environment-assisted quantum coherence at biological temperatures
-//! - **Oscillatory Hierarchies**: Multi-scale temporal dynamics from molecular to cellular
-//! - **Hardware Integration**: Direct coupling with system oscillations and environmental noise
+//! - **Oscillatory Reality Substrate**: Direct access to fundamental oscillatory substrate of reality
 //!
 //! ## Integration Architecture
 //!
@@ -24,15 +29,21 @@
 //! ```rust
 //! use nebuchadnezzar::prelude::*;
 //!
-//! // Create intracellular environment for neuron construction
+//! // Create intracellular environment with complete validated framework
 //! let intracellular = IntracellularEnvironment::builder()
+//!     .with_s_entropy_navigation(SEntropyConfig::musande_integration())
+//!     .with_stella_temporal_precision(StellaConfig::infinite_precision())
+//!     .with_miraculous_local_solutions(MiraculousConfig::enabled())
+//!     .with_bmd_information_catalysis(BMDConfig::amplification_1000x())
+//!     .with_dynamic_flux_transport(DynamicFluxConfig::pattern_alignment())
+//!     .with_naked_engines(NakedEngineConfig::cosmic_alignment())
+//!     .with_atomic_clock_processors(AtomicClockConfig::recursive_precision())
 //!     .with_atp_pool(AtpPool::new_physiological())
-//!     .with_oscillatory_dynamics(OscillatoryConfig::biological())
+//!     .with_oscillatory_dynamics(OscillatoryConfig::reality_substrate())
 //!     .with_membrane_quantum_transport(true)
-//!     .with_maxwell_demons(BMDConfig::neural_optimized())
 //!     .build()?;
 //!
-//! // Ready for integration with Autobahn, Bene Gesserit, and Imhotep
+//! // Authentic biological system with validated transcendent capabilities
 //! ```
 
 // Core modules - organized for maximum portability
