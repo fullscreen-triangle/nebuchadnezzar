@@ -6,16 +6,15 @@
 //!
 //! ## Core Features
 //! 
-//! - **S-Entropy Navigation**: O(1) universal problem solving through coordinate transformation
-//! - **Stella Temporal Precision**: Ultra-precise temporal coordinate navigation (10^-30s)
-//! - **Miraculous Local Solutions**: Local physics violations within global viability constraints
-//! - **BMD Information Catalysis**: 1000× amplification through Biological Maxwell Demons
-//! - **Dynamic Flux Transport**: Pattern alignment fluid dynamics with oscillatory coherence
-//! - **Naked Thermodynamic Engines**: Infinite efficiency through cosmic nothingness alignment
-//! - **Atomic Clock Processors**: Gas molecules as quantum processors with recursive precision
 //! - **ATP-Constrained Dynamics**: Uses `dx/dATP` equations for metabolically realistic computation
+//! - **Biological Maxwell's Demons**: Information catalysts for selective processing and amplification
 //! - **Quantum Membrane Transport**: Environment-assisted quantum coherence at biological temperatures
-//! - **Oscillatory Reality Substrate**: Direct access to fundamental oscillatory substrate of reality
+//! - **Virtual Circulatory Infrastructure**: Biologically-constrained noise distribution through concentration gradients
+//! - **Temporal Precision Enhancement**: High-frequency neural generation with statistical solution emergence
+//! - **Atmospheric Molecular Processing**: Entropy-oscillation reformulation for distributed computation
+//! - **Consciousness-Computation Integration**: Multi-modal environmental sensing and meta-language interfaces
+//! - **Hierarchical Circuit Architecture**: Multi-scale probabilistic electric circuit simulation
+//! - **Hardware Integration**: Direct coupling with system oscillations and environmental noise
 //!
 //! ## Integration Architecture
 //!
@@ -29,497 +28,217 @@
 //! ```rust
 //! use nebuchadnezzar::prelude::*;
 //!
-//! // Create intracellular environment with complete validated framework
+//! // Create intracellular environment for neuron construction
 //! let intracellular = IntracellularEnvironment::builder()
-//!     .with_s_entropy_navigation(SEntropyConfig::musande_integration())
-//!     .with_stella_temporal_precision(StellaConfig::infinite_precision())
-//!     .with_miraculous_local_solutions(MiraculousConfig::enabled())
-//!     .with_bmd_information_catalysis(BMDConfig::amplification_1000x())
-//!     .with_dynamic_flux_transport(DynamicFluxConfig::pattern_alignment())
-//!     .with_naked_engines(NakedEngineConfig::cosmic_alignment())
-//!     .with_atomic_clock_processors(AtomicClockConfig::recursive_precision())
 //!     .with_atp_pool(AtpPool::new_physiological())
-//!     .with_oscillatory_dynamics(OscillatoryConfig::reality_substrate())
+//!     .with_oscillatory_dynamics(OscillatoryConfig::biological())
 //!     .with_membrane_quantum_transport(true)
+//!     .with_maxwell_demons(BMDConfig::neural_optimized())
+//!     .with_virtual_circulation(CirculationConfig::gradient_optimized())
+//!     .with_temporal_precision(TemporalConfig::high_frequency())
 //!     .build()?;
 //!
-//! // Authentic biological system with validated transcendent capabilities
+//! // Ready for integration with Autobahn, Bene Gesserit, and Imhotep
 //! ```
 
 // Core modules - organized for maximum portability
-pub mod biological_integration;
-pub mod biological_quantum_computer;
-pub mod biological_quantum_solver;
-pub mod circuits;
-pub mod entropy_manipulation;
+pub mod prelude;
 pub mod error;
-pub mod hardware_integration;
-pub mod biological_maxwell_demons;
-pub mod oscillatory_dynamics;
+
+// Primary subsystems
+pub mod atp_system;
+pub mod bmd_system;
 pub mod quantum_membranes;
-pub mod quantum_metabolism_analyzer;
-pub mod solvers;
-pub mod systems_biology;
-pub mod utils;
+pub mod oscillatory_dynamics;
+pub mod virtual_circulation;
+pub mod circuits;
+pub mod temporal_processing;
+pub mod atmospheric_processing;
 
-// Advanced integrated systems
-pub mod atp_oscillatory_membrane_simulator;
-pub mod atp_oscillatory_membrane_solver;
-
-// Turbulance language integration
-pub mod turbulance;
-
-// Integration-focused API
+// Integration and hardware
 pub mod integration;
+pub mod hardware_integration;
+pub mod validation;
 
-// Re-export error handling
-pub use error::{NebuchadnezzarError, Result};
+use error::Result;
+use prelude::*;
 
-/// Prelude module for easy imports in integration packages
-pub mod prelude {
-    // Core intracellular environment
-    pub use crate::integration::{
-        IntracellularEnvironment, IntracellularBuilder, IntracellularConfig,
-        NeuronConstructionKit, NeuronComponents, IntracellularState,
-    };
-
-    // ATP and energy systems
-    pub use crate::systems_biology::atp_kinetics::{AtpPool, AtpKinetics, AtpRateConstant};
-    pub use crate::{AtpDifferentialSolver, PathwayCircuitBuilder, BiochemicalPathway};
-
-    // Biological Maxwell's Demons
-    pub use crate::biological_maxwell_demons::{
-        BiologicalMaxwellDemon, InformationCatalyst, BMDSystem, BMDConfig,
-        PatternSelector, TargetChannel, EnhancedBMDSystem,
-    };
-
-    // Quantum and membrane systems
-    pub use crate::quantum_membranes::{QuantumMembrane, EnvironmentalCoupling};
-    pub use crate::biological_quantum_computer::{
-        BiologicalQuantumState, AtpCoordinates, OscillatoryCoordinates,
-    };
-
-    // Oscillatory dynamics
-    pub use crate::oscillatory_dynamics::{
-        UniversalOscillator, OscillatorNetwork, OscillatoryConfig,
-        OscillationState, BiologicalOscillator,
-    };
-
-    // Circuit systems
-    pub use crate::circuits::{CircuitGrid, HierarchicalCircuit, ProbabilisticNode};
-
-    // Hardware integration
-    pub use crate::hardware_integration::{
-        HardwareOscillatorSystem, EnvironmentalNoiseSystem, 
-        AdvancedHardwareIntegration,
-    };
-
-    // Turbulance language
-    pub use crate::turbulance::{TurbulanceEngine, TurbulanceResult};
-
-    // Error handling
-    pub use crate::{NebuchadnezzarError, Result};
+/// Main intracellular environment containing all subsystems
+#[derive(Debug)]
+pub struct IntracellularEnvironment {
+    atp_system: atp_system::AtpSystem,
+    bmd_system: bmd_system::BmdSystem,
+    quantum_membranes: quantum_membranes::QuantumMembraneSystem,
+    oscillatory_dynamics: oscillatory_dynamics::OscillatorySystem,
+    virtual_circulation: virtual_circulation::VirtualCirculationSystem,
+    circuits: circuits::CircuitSystem,
+    temporal_processing: temporal_processing::TemporalProcessingSystem,
+    atmospheric_processing: atmospheric_processing::AtmosphericProcessingSystem,
+    hardware_integration: hardware_integration::HardwareSystem,
 }
 
-// Legacy re-exports for backward compatibility
-pub use biological_quantum_computer::{
-    BiologicalQuantumState, AtpCoordinates, OscillatoryCoordinates, 
-    MembraneQuantumCoordinates, OscillatoryEntropyCoordinates
-};
-pub use biological_quantum_solver::{
-    BiologicalQuantumComputerSolver, BiologicalQuantumResult, 
-    QuantumComputationTarget, SolverError
-};
-pub use circuits::{CircuitGrid, HierarchicalCircuit, ProbabilisticNode};
-pub use entropy_manipulation::{EntropyPoint, Resolution, EntropyManipulator};
-pub use hardware_integration::{
-    HardwareOscillatorSystem, SystemClockSync, HardwareLightSource, HardwareLightSensor,
-    HardwareBiologyMapping, LightReactionMapping, FireLightEnhancement,
-    AdvancedHardwareIntegration, EnvironmentalNoiseSystem, PixelPhotosynthenticAgent,
-};
-pub use oscillatory_dynamics::{OscillationState, BiologicalOscillator};
-pub use quantum_membranes::{QuantumMembrane, EnvironmentalCoupling};
-pub use solvers::{AtpBasedSolver, NativeSolver};
-pub use systems_biology::atp_kinetics::{AtpPool, AtpRateConstant};
-pub use atp_oscillatory_membrane_simulator::*;
-pub use atp_oscillatory_membrane_solver::*;
-pub use biological_maxwell_demons::*;
-pub use turbulance::{
-    TurbulanceEngine, TurbulanceResult, TurbulanceValue, BiologicalDataValue,
-    PropositionResult, MotionResult, MotionStatus, GoalResult, GoalStatus,
-    EvidenceResult, ExecutionMetrics,
-};
+impl IntracellularEnvironment {
+    /// Create a builder for configuring the intracellular environment
+    pub fn builder() -> IntracellularEnvironmentBuilder {
+        IntracellularEnvironmentBuilder::new()
+    }
 
-/// ATP-based differential equation framework
-pub struct PathwayCircuitBuilder {
-    pathways: Vec<BiochemicalPathway>,
-    expansion_criteria: ExpansionCriteria,
-}
-
-impl PathwayCircuitBuilder {
-    pub fn new() -> Self {
-        Self {
-            pathways: Vec::new(),
-            expansion_criteria: ExpansionCriteria::default(),
-        }
-    }
-    
-    pub fn add_pathway(&mut self, pathway: BiochemicalPathway) -> &mut Self {
-        self.pathways.push(pathway);
-        self
-    }
-    
-    pub fn with_expansion_criteria(&mut self, criteria: ExpansionCriteria) -> &mut Self {
-        self.expansion_criteria = criteria;
-        self
-    }
-    
-    pub fn build(&self) -> Result<HierarchicalCircuit, NebuchadnezzarError> {
-        let mut circuit = HierarchicalCircuit::new();
+    /// Perform a single simulation step
+    pub fn step(&mut self, dt: f64) -> Result<()> {
+        // Update ATP system first (fundamental rate parameter)
+        self.atp_system.step(dt)?;
         
-        for (id, pathway) in self.pathways.iter().enumerate() {
-            // Create probabilistic node for each pathway using the correct structure
-            let prob_node = circuits::hierarchical_framework::ProbabilisticNode {
-                id,
-                name: pathway.name.clone(),
-                rate_distribution: circuits::hierarchical_framework::ProbabilityDistribution::normal(
-                    pathway.atp_cost, 
-                    pathway.atp_cost * 0.1
-                ),
-                atp_cost_distribution: circuits::hierarchical_framework::ProbabilityDistribution::normal(
-                    pathway.atp_cost, 
-                    pathway.atp_cost * 0.1
-                ),
-                feedback_probability: 0.1,
-                cross_reaction_strength: std::collections::HashMap::new(),
-                uncertainty_threshold: 0.3,
-                computational_importance: pathway.reactions.len() as f64 / 10.0,
-            };
-            
-            circuit.nodes.push(prob_node);
-        }
+        // Get current ATP concentration for other systems
+        let atp_concentration = self.atp_system.current_concentration();
         
-        Ok(circuit)
+        // Update all other systems in parallel where possible
+        self.bmd_system.step(dt, atp_concentration)?;
+        self.quantum_membranes.step(dt, atp_concentration)?;
+        self.oscillatory_dynamics.step(dt)?;
+        self.virtual_circulation.step(dt)?;
+        self.circuits.step(dt, atp_concentration)?;
+        self.temporal_processing.step(dt)?;
+        self.atmospheric_processing.step(dt)?;
+        self.hardware_integration.step(dt)?;
+        
+        Ok(())
     }
-}
 
-impl Default for PathwayCircuitBuilder {
-    fn default() -> Self {
-        Self::new()
+    /// Check if system is ready for integration with external systems
+    pub fn integration_ready(&self) -> bool {
+        self.atp_system.is_stable() &&
+        self.bmd_system.is_operational() &&
+        self.quantum_membranes.is_coherent() &&
+        self.oscillatory_dynamics.is_synchronized()
     }
-}
 
-/// Biochemical pathway representation
-#[derive(Debug, Clone)]
-pub struct BiochemicalPathway {
-    pub name: String,
-    pub reactions: Vec<BiochemicalReaction>,
-    pub atp_cost: f64,
-    pub regulation: RegulationMechanism,
-}
-
-impl BiochemicalPathway {
-    pub fn new(name: &str) -> Self {
-        Self {
-            name: name.to_string(),
-            reactions: Vec::new(),
-            atp_cost: 0.0,
-            regulation: RegulationMechanism::Allosteric {
-                activators: Vec::new(),
-                inhibitors: Vec::new(),
-            },
+    /// Get current system state for external integration
+    pub fn current_state(&self) -> IntracellularState {
+        IntracellularState {
+            atp_concentration: self.atp_system.current_concentration(),
+            energy_charge: self.atp_system.energy_charge(),
+            bmd_activity: self.bmd_system.current_activity(),
+            quantum_coherence: self.quantum_membranes.coherence_level(),
+            oscillatory_phase: self.oscillatory_dynamics.current_phase(),
+            circulation_flow: self.virtual_circulation.current_flow(),
+            circuit_state: self.circuits.current_state(),
         }
     }
-
-    pub fn add_reaction(&mut self, name: &str, reaction: BiochemicalReaction) {
-        self.reactions.push(reaction);
-    }
 }
 
-/// Individual biochemical reaction
-#[derive(Debug, Clone)]
-pub struct BiochemicalReaction {
-    pub name: String,
-    pub reactants: Vec<String>,
-    pub products: Vec<String>,
-    pub enzyme: String,
-    pub km: f64,
-    pub vmax: f64,
-    pub delta_g: f64,
-    pub atp_coupling: f64,
+/// Builder for IntracellularEnvironment
+#[derive(Debug, Default)]
+pub struct IntracellularEnvironmentBuilder {
+    atp_config: Option<atp_system::AtpConfig>,
+    bmd_config: Option<bmd_system::BMDConfig>,
+    membrane_config: Option<quantum_membranes::MembraneConfig>,
+    oscillatory_config: Option<oscillatory_dynamics::OscillatoryConfig>,
+    circulation_config: Option<virtual_circulation::CirculationConfig>,
+    circuit_config: Option<circuits::CircuitConfig>,
+    temporal_config: Option<temporal_processing::TemporalConfig>,
+    atmospheric_config: Option<atmospheric_processing::AtmosphericConfig>,
+    hardware_config: Option<hardware_integration::HardwareConfig>,
 }
 
-impl BiochemicalReaction {
+impl IntracellularEnvironmentBuilder {
     pub fn new() -> Self {
-        Self {
-            name: String::new(),
-            reactants: Vec::new(),
-            products: Vec::new(),
-            enzyme: String::new(),
-            km: 0.0,
-            vmax: 0.0,
-            delta_g: 0.0,
-            atp_coupling: 0.0,
-        }
+        Self::default()
     }
 
-    pub fn substrate(mut self, name: &str, stoichiometry: f64) -> Self {
-        self.reactants.push(name.to_string());
+    pub fn with_atp_pool(mut self, config: atp_system::AtpConfig) -> Self {
+        self.atp_config = Some(config);
         self
     }
 
-    pub fn product(mut self, name: &str, stoichiometry: f64) -> Self {
-        self.products.push(name.to_string());
+    pub fn with_oscillatory_dynamics(mut self, config: oscillatory_dynamics::OscillatoryConfig) -> Self {
+        self.oscillatory_config = Some(config);
         self
     }
 
-    pub fn enzyme(mut self, enzyme: &str) -> Self {
-        self.enzyme = enzyme.to_string();
+    pub fn with_membrane_quantum_transport(mut self, enabled: bool) -> Self {
+        let config = if enabled {
+            quantum_membranes::MembraneConfig::quantum_enabled()
+        } else {
+            quantum_membranes::MembraneConfig::classical()
+        };
+        self.membrane_config = Some(config);
         self
     }
 
-    pub fn km(mut self, km: f64) -> Self {
-        self.km = km;
+    pub fn with_maxwell_demons(mut self, config: bmd_system::BMDConfig) -> Self {
+        self.bmd_config = Some(config);
         self
     }
 
-    pub fn vmax(mut self, vmax: f64) -> Self {
-        self.vmax = vmax;
+    pub fn with_virtual_circulation(mut self, config: virtual_circulation::CirculationConfig) -> Self {
+        self.circulation_config = Some(config);
         self
     }
 
-    pub fn delta_g(mut self, delta_g: f64) -> Self {
-        self.delta_g = delta_g;
+    pub fn with_temporal_precision(mut self, config: temporal_processing::TemporalConfig) -> Self {
+        self.temporal_config = Some(config);
         self
     }
 
-    pub fn atp_coupling(mut self, atp_coupling: f64) -> Self {
-        self.atp_coupling = atp_coupling;
-        self
-    }
-}
+    pub fn build(self) -> Result<IntracellularEnvironment> {
+        let atp_system = atp_system::AtpSystem::new(
+            self.atp_config.unwrap_or_default()
+        )?;
+        
+        let bmd_system = bmd_system::BmdSystem::new(
+            self.bmd_config.unwrap_or_default()
+        )?;
+        
+        let quantum_membranes = quantum_membranes::QuantumMembraneSystem::new(
+            self.membrane_config.unwrap_or_default()
+        )?;
+        
+        let oscillatory_dynamics = oscillatory_dynamics::OscillatorySystem::new(
+            self.oscillatory_config.unwrap_or_default()
+        )?;
+        
+        let virtual_circulation = virtual_circulation::VirtualCirculationSystem::new(
+            self.circulation_config.unwrap_or_default()
+        )?;
+        
+        let circuits = circuits::CircuitSystem::new(
+            self.circuit_config.unwrap_or_default()
+        )?;
+        
+        let temporal_processing = temporal_processing::TemporalProcessingSystem::new(
+            self.temporal_config.unwrap_or_default()
+        )?;
+        
+        let atmospheric_processing = atmospheric_processing::AtmosphericProcessingSystem::new(
+            self.atmospheric_config.unwrap_or_default()
+        )?;
+        
+        let hardware_integration = hardware_integration::HardwareSystem::new(
+            self.hardware_config.unwrap_or_default()
+        )?;
 
-/// Expansion criteria for probabilistic nodes
-#[derive(Debug, Clone)]
-pub struct ExpansionCriteria {
-    pub uncertainty_threshold: f64,
-    pub impact_threshold: f64,
-    pub budget_limit: f64,
-}
-
-impl Default for ExpansionCriteria {
-    fn default() -> Self {
-        Self {
-            uncertainty_threshold: 0.3,
-            impact_threshold: 0.1,
-            budget_limit: 1000.0,
-        }
-    }
-}
-
-/// Pathway optimization objectives
-#[derive(Debug, Clone)]
-pub enum PathwayObjective {
-    MaximizeAtpYield,
-    MinimizeAtpConsumption,
-    MaximizeFlux,
-    NavigateToPredeterminedOptimum,
-}
-
-/// Optimization constraints
-#[derive(Debug, Clone)]
-pub enum OptimizationConstraint {
-    AtpAvailability(f64),
-    FluxBounds(f64, f64),
-    ThermodynamicFeasibility,
-}
-
-/// Pathway optimizer
-pub struct PathwayOptimizer {
-    objective: PathwayObjective,
-    constraints: Vec<OptimizationConstraint>,
-}
-
-impl PathwayOptimizer {
-    pub fn new() -> Self {
-        Self {
-            objective: PathwayObjective::MaximizeAtpYield,
-            constraints: Vec::new(),
-        }
-    }
-
-    pub fn objective(mut self, objective: PathwayObjective) -> Self {
-        self.objective = objective;
-        self
-    }
-
-    pub fn constraint(mut self, constraint: OptimizationConstraint) -> Self {
-        self.constraints.push(constraint);
-        self
-    }
-
-    pub fn build(self) -> Self {
-        self
-    }
-
-    pub fn optimize(&self, circuit: &HierarchicalCircuit) -> Result<OptimizationResult> {
-        // Implementation of optimization algorithm
-        Ok(OptimizationResult {
-            atp_efficiency: 0.95,
-            flux_values: vec![1.0, 2.0, 3.0],
-            converged: true,
+        Ok(IntracellularEnvironment {
+            atp_system,
+            bmd_system,
+            quantum_membranes,
+            oscillatory_dynamics,
+            virtual_circulation,
+            circuits,
+            temporal_processing,
+            atmospheric_processing,
+            hardware_integration,
         })
     }
 }
 
-/// Optimization result
-#[derive(Debug)]
-pub struct OptimizationResult {
-    pub atp_efficiency: f64,
-    pub flux_values: Vec<f64>,
-    pub converged: bool,
-}
-
-/// Quantum coherence analyzer for biological systems
-pub struct QuantumCoherenceAnalyzer;
-
-impl QuantumCoherenceAnalyzer {
-    pub fn analyze_pathway_coherence(pathway: &BiochemicalPathway) -> f64 {
-        // Simplified coherence calculation based on pathway structure
-        let reaction_count = pathway.reactions.len() as f64;
-        let atp_coupling_strength = pathway.reactions.iter()
-            .map(|r| r.atp_coupling)
-            .sum::<f64>() / reaction_count;
-        
-        // Coherence scales with ATP coupling and decreases with complexity
-        atp_coupling_strength / (1.0 + 0.1 * reaction_count)
-    }
-    
-    pub fn calculate_decoherence_rate(pathway: &BiochemicalPathway, temperature: f64) -> f64 {
-        // Decoherence rate based on thermal fluctuations and pathway complexity
-        let kb = 1.381e-23; // Boltzmann constant
-        let thermal_energy = kb * temperature;
-        let pathway_energy = pathway.atp_cost * 1.602e-19; // Convert to Joules
-        
-        // Decoherence rate proportional to thermal energy / pathway energy
-        thermal_energy / pathway_energy * 1e12 // Convert to Hz
-    }
-}
-
-/// ATP-driven differential equation solver
-pub struct AtpDifferentialSolver {
-    pub atp_pool: f64,
-    pub time_step: f64,
-}
-
-impl AtpDifferentialSolver {
-    pub fn new(initial_atp: f64) -> Self {
-        Self {
-            atp_pool: initial_atp,
-            time_step: 0.001, // 1ms default
-        }
-    }
-    
-    /// Solve dx/dATP = f(x, ATP) using ATP as the independent variable
-    pub fn solve_atp_differential<F>(&mut self, mut state: f64, derivative_fn: F, atp_consumption: f64) -> f64 
-    where
-        F: Fn(f64, f64) -> f64,
-    {
-        let atp_step = atp_consumption.min(self.atp_pool);
-        
-        // Runge-Kutta 4th order integration with ATP as independent variable
-        let k1 = derivative_fn(state, self.atp_pool);
-        let k2 = derivative_fn(state + 0.5 * k1 * atp_step, self.atp_pool - 0.5 * atp_step);
-        let k3 = derivative_fn(state + 0.5 * k2 * atp_step, self.atp_pool - 0.5 * atp_step);
-        let k4 = derivative_fn(state + k3 * atp_step, self.atp_pool - atp_step);
-        
-        state += (k1 + 2.0 * k2 + 2.0 * k3 + k4) * atp_step / 6.0;
-        self.atp_pool -= atp_step;
-        
-        state
-    }
-}
-
+/// Current state of the intracellular environment
 #[derive(Debug, Clone)]
-pub enum RegulationMechanism {
-    Allosteric { activators: Vec<String>, inhibitors: Vec<String> },
-    Covalent { phosphorylation_sites: Vec<String> },
-    Transcriptional { transcription_factors: Vec<String> },
-    Metabolic { feedback_loops: Vec<String> },
+pub struct IntracellularState {
+    pub atp_concentration: f64,
+    pub energy_charge: f64,
+    pub bmd_activity: f64,
+    pub quantum_coherence: f64,
+    pub oscillatory_phase: f64,
+    pub circulation_flow: f64,
+    pub circuit_state: circuits::CircuitState,
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[test]
-    fn test_pathway_builder() {
-        let mut builder = PathwayCircuitBuilder::new();
-        
-        let glycolysis = BiochemicalPathway {
-            name: "Glycolysis".to_string(),
-            reactions: vec![
-                BiochemicalReaction {
-                    name: "Hexokinase".to_string(),
-                    reactants: vec!["Glucose".to_string(), "ATP".to_string()],
-                    products: vec!["Glucose-6-P".to_string(), "ADP".to_string()],
-                    enzyme: "Hexokinase".to_string(),
-                    km: 0.1,
-                    vmax: 100.0,
-                    delta_g: -16.7,
-                    atp_coupling: 1.0,
-                }
-            ],
-            atp_cost: 2.0,
-            regulation: RegulationMechanism::Allosteric {
-                activators: vec!["AMP".to_string()],
-                inhibitors: vec!["Glucose-6-P".to_string()],
-            },
-        };
-        
-        builder.add_pathway(glycolysis);
-        let circuit = builder.build().unwrap();
-        
-        assert_eq!(circuit.probabilistic_nodes().len(), 1);
-    }
-    
-    #[test]
-    fn test_atp_differential_solver() {
-        let mut solver = AtpDifferentialSolver::new(100.0);
-        
-        // Simple exponential decay: dx/dATP = -0.1 * x
-        let result = solver.solve_atp_differential(10.0, |x, _atp| -0.1 * x, 1.0);
-        
-        assert!(result < 10.0); // Should decay
-        assert!(solver.atp_pool < 100.0); // ATP should be consumed
-    }
-    
-    #[test]
-    fn test_quantum_coherence_analyzer() {
-        let pathway = BiochemicalPathway {
-            name: "Test".to_string(),
-            reactions: vec![
-                BiochemicalReaction {
-                    name: "Test Reaction".to_string(),
-                    reactants: vec!["A".to_string()],
-                    products: vec!["B".to_string()],
-                    enzyme: "TestEnzyme".to_string(),
-                    km: 1.0,
-                    vmax: 10.0,
-                    delta_g: -5.0,
-                    atp_coupling: 0.5,
-                }
-            ],
-            atp_cost: 1.0,
-            regulation: RegulationMechanism::Metabolic {
-                feedback_loops: vec!["B".to_string()],
-            },
-        };
-        
-        let coherence = QuantumCoherenceAnalyzer::analyze_pathway_coherence(&pathway);
-        assert!(coherence > 0.0);
-        
-        let decoherence_rate = QuantumCoherenceAnalyzer::calculate_decoherence_rate(&pathway, 310.0);
-        assert!(decoherence_rate > 0.0);
-    }
-} 

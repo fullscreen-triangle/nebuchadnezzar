@@ -1,382 +1,202 @@
-//! # Error Handling for Nebuchadnezzar
-//! 
-//! Comprehensive error types for quantum-enhanced biological circuit simulation.
+//! Error types and handling for Nebuchadnezzar
 
 use std::fmt;
 
-/// Main error type for the Nebuchadnezzar library
+/// Result type alias for Nebuchadnezzar operations
+pub type Result<T> = std::result::Result<T, Error>;
+
+/// Comprehensive error types for the Nebuchadnezzar system
 #[derive(Debug, Clone)]
-pub enum NebuchadnezzarError {
-    /// Quantum membrane computation errors
-    QuantumError {
-        error_type: QuantumErrorType,
-        message: String,
-    },
+pub enum Error {
+    /// ATP system errors
+    AtpDepletion,
+    AtpOverflow,
+    EnergyChargeOutOfRange { value: f64, min: f64, max: f64 },
+    
+    /// BMD system errors
+    BmdThermodynamicViolation { entropy_cost: f64 },
+    BmdPatternRecognitionFailure,
+    BmdAmplificationOverflow,
+    
+    /// Quantum membrane errors
+    QuantumDecoherence { coherence_time: f64 },
+    IonChannelFailure,
+    TunnelingCalculationError,
     
     /// Oscillatory dynamics errors
-    OscillatorError {
-        error_type: OscillatorErrorType,
-        message: String,
-    },
+    FrequencyMismatch { expected: f64, actual: f64 },
+    PhaseCouplingFailure,
+    HardwareHarvestingError,
     
-    /// Entropy manipulation errors
-    EntropyError {
-        error_type: EntropyErrorType,
-        message: String,
-    },
+    /// Virtual circulation errors
+    CirculationBackflow,
+    NoiseGradientViolation { position: f64, expected_concentration: f64, actual: f64 },
+    VesselNetworkError,
     
-    /// Biological integration errors
-    BiologicalError {
-        error_type: BiologicalErrorType,
-        message: String,
-    },
+    /// Circuit system errors
+    CircuitOverflow,
+    NodalAnalysisFailure,
+    ProbabilisticElementError,
     
-    /// Circuit simulation errors
-    CircuitError {
-        error_type: CircuitErrorType,
-        message: String,
-    },
+    /// Temporal processing errors
+    TemporalPrecisionLoss { precision: f64 },
+    NeuralGenerationFailure,
+    StatisticalEmergenceTimeout,
     
-    /// Solver and integration errors
-    SolverError {
-        error_type: SolverErrorType,
-        message: String,
-    },
+    /// Atmospheric processing errors
+    MolecularNetworkFailure,
+    EntropyOscillationError,
+    VirtualProcessorOverflow,
     
-    /// ATP-related errors
-    AtpError {
-        error_type: AtpErrorType,
-        message: String,
-    },
+    /// Integration errors
+    IntegrationFailure { system: String },
+    ConsciousnessIntegrationError,
     
-    /// Mathematical computation errors
-    MathError {
-        error_type: MathErrorType,
-        message: String,
-    },
+    /// Hardware integration errors
+    HardwareConnectionLost,
+    OscillationHarvestingFailure,
     
-    /// I/O and data errors
-    IoError {
-        message: String,
-        source: Option<std::io::Error>,
-    },
-    
-    /// Configuration and parameter errors
-    ConfigError {
-        parameter: String,
-        value: String,
-        message: String,
-    },
-    
-    /// Missing pathway error
-    MissingPathway,
-    
-    /// Missing ATP pool error
-    MissingAtpPool,
-    
-    /// Entropy violations
-    EntropyViolation(String),
-    
-    /// Invalid state errors
-    InvalidState(String),
-}
-
-/// Quantum membrane computation error types
-#[derive(Debug, Clone)]
-pub enum QuantumErrorType {
-    CoherenceLoss,
-    EnvironmentalDecoherence,
-    TunnelingFailure,
-    EnaqtProcessingError,
-    QuantumStateInvalid,
-    TemperatureOutOfRange,
-    NoiseExceedsThreshold,
-}
-
-/// Oscillatory dynamics error types
-#[derive(Debug, Clone)]
-pub enum OscillatorErrorType {
-    FrequencyOutOfRange,
-    AmplitudeTooLarge,
-    PhaseIncoherence,
-    CouplingInstability,
-    CausalSelectionFailure,
-    NetworkSynchronizationError,
-    ResonanceOverflow,
-}
-
-/// Entropy manipulation error types
-#[derive(Debug, Clone)]
-pub enum EntropyErrorType {
-    ProbabilityOutOfRange,
-    ConfidenceInvalid,
-    ResolutionThresholdError,
-    PerturbationFailed,
-    ValidationError,
-    ConvergenceFailure,
-    EntropyInconsistency,
-}
-
-/// Biological integration error types
-#[derive(Debug, Clone)]
-pub enum BiologicalErrorType {
-    ComponentMissing,
-    MetabolicNetworkInvalid,
-    SignalingPathwayError,
-    GeneRegulationFailure,
-    ProteinInteractionError,
-    TransportProcessError,
-    SystemIntegrationFailure,
-    BiochemicalReactionError,
-}
-
-/// Circuit simulation error types
-#[derive(Debug, Clone)]
-pub enum CircuitErrorType {
-    VoltageOutOfRange,
-    CurrentOverflow,
-    ResistanceInvalid,
-    CapacitanceNegative,
-    InductanceInvalid,
-    NodeNotFound,
-    CircuitNotConnected,
-    GridResolutionFailed,
-    HierarchicalInconsistency,
-    IonChannelError,
-    EnzymeCircuitError,
-}
-
-/// Solver and integration error types
-#[derive(Debug, Clone)]
-pub enum SolverErrorType {
-    StepSizeTooLarge,
-    StepSizeTooSmall,
-    MaxIterationsExceeded,
-    ConvergenceFailure,
+    /// Numerical errors
+    IntegrationFailure { step_size: f64 },
+    ConvergenceFailure { iterations: usize },
     NumericalInstability,
-    StateVectorInvalid,
-    IntegrationError,
-    AdaptiveStepFailed,
+    
+    /// Configuration errors
+    InvalidConfiguration { parameter: String, value: String },
+    MissingDependency { dependency: String },
+    
+    /// System errors
+    SystemNotInitialized,
+    ResourceExhaustion,
+    ConcurrencyError,
+    
+    /// I/O errors
+    SerializationError(String),
+    DeserializationError(String),
 }
 
-/// ATP-related error types
-#[derive(Debug, Clone)]
-pub enum AtpErrorType {
-    ConcentrationNegative,
-    ConcentrationTooHigh,
-    InsufficientAtp,
-    KineticsInvalid,
-    EnergyChargeOutOfRange,
-    ConsumptionRateInvalid,
-    ProductionRateInvalid,
-}
-
-/// Mathematical computation error types
-#[derive(Debug, Clone)]
-pub enum MathErrorType {
-    DivisionByZero,
-    SquareRootNegative,
-    LogarithmNonPositive,
-    MatrixSingular,
-    MatrixDimensionMismatch,
-    VectorLengthMismatch,
-    NumericalOverflow,
-    NumericalUnderflow,
-    InvalidFunction,
-}
-
-/// Result type for Nebuchadnezzar operations
-pub type Result<T> = std::result::Result<T, NebuchadnezzarError>;
-
-impl fmt::Display for NebuchadnezzarError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            NebuchadnezzarError::QuantumError { error_type, message } => {
-                write!(f, "Quantum Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::OscillatorError { error_type, message } => {
-                write!(f, "Oscillator Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::EntropyError { error_type, message } => {
-                write!(f, "Entropy Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::BiologicalError { error_type, message } => {
-                write!(f, "Biological Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::CircuitError { error_type, message } => {
-                write!(f, "Circuit Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::SolverError { error_type, message } => {
-                write!(f, "Solver Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::AtpError { error_type, message } => {
-                write!(f, "ATP Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::MathError { error_type, message } => {
-                write!(f, "Math Error ({:?}): {}", error_type, message)
-            }
-            NebuchadnezzarError::IoError { message, .. } => {
-                write!(f, "I/O Error: {}", message)
-            }
-            NebuchadnezzarError::ConfigError { parameter, value, message } => {
-                write!(f, "Config Error: Parameter '{}' with value '{}': {}", parameter, value, message)
-            }
-            NebuchadnezzarError::MissingPathway => {
-                write!(f, "Missing biochemical pathway")
-            }
-            NebuchadnezzarError::MissingAtpPool => {
-                write!(f, "Missing ATP pool")
-            }
-            NebuchadnezzarError::EntropyViolation(msg) => {
-                write!(f, "Entropy violation: {}", msg)
-            }
-            NebuchadnezzarError::InvalidState(msg) => {
-                write!(f, "Invalid state: {}", msg)
-            }
+            Error::AtpDepletion => write!(f, "ATP pool depleted below minimum threshold"),
+            Error::AtpOverflow => write!(f, "ATP concentration exceeded maximum physiological range"),
+            Error::EnergyChargeOutOfRange { value, min, max } => 
+                write!(f, "Energy charge {} outside range [{}, {}]", value, min, max),
+                
+            Error::BmdThermodynamicViolation { entropy_cost } => 
+                write!(f, "BMD operation violates thermodynamics with entropy cost {}", entropy_cost),
+            Error::BmdPatternRecognitionFailure => 
+                write!(f, "BMD pattern recognition failed to identify valid patterns"),
+            Error::BmdAmplificationOverflow => 
+                write!(f, "BMD amplification exceeded safe operating limits"),
+                
+            Error::QuantumDecoherence { coherence_time } => 
+                write!(f, "Quantum coherence lost after {} seconds", coherence_time),
+            Error::IonChannelFailure => 
+                write!(f, "Ion channel state transition failed"),
+            Error::TunnelingCalculationError => 
+                write!(f, "Quantum tunneling probability calculation failed"),
+                
+            Error::FrequencyMismatch { expected, actual } => 
+                write!(f, "Frequency mismatch: expected {} Hz, got {} Hz", expected, actual),
+            Error::PhaseCouplingFailure => 
+                write!(f, "Cross-frequency phase coupling failed"),
+            Error::HardwareHarvestingError => 
+                write!(f, "Hardware oscillation harvesting failed"),
+                
+            Error::CirculationBackflow => 
+                write!(f, "Virtual circulation backflow detected"),
+            Error::NoiseGradientViolation { position, expected_concentration, actual } => 
+                write!(f, "Noise gradient violation at position {}: expected {}, got {}", 
+                       position, expected_concentration, actual),
+            Error::VesselNetworkError => 
+                write!(f, "Virtual vessel network topology error"),
+                
+            Error::CircuitOverflow => 
+                write!(f, "Circuit analysis overflow"),
+            Error::NodalAnalysisFailure => 
+                write!(f, "Modified nodal analysis failed to converge"),
+            Error::ProbabilisticElementError => 
+                write!(f, "Probabilistic circuit element calculation failed"),
+                
+            Error::TemporalPrecisionLoss { precision } => 
+                write!(f, "Temporal precision degraded to {} seconds", precision),
+            Error::NeuralGenerationFailure => 
+                write!(f, "High-frequency neural generation failed"),
+            Error::StatisticalEmergenceTimeout => 
+                write!(f, "Statistical solution emergence timed out"),
+                
+            Error::MolecularNetworkFailure => 
+                write!(f, "Atmospheric molecular network failed"),
+            Error::EntropyOscillationError => 
+                write!(f, "Entropy-oscillation reformulation error"),
+            Error::VirtualProcessorOverflow => 
+                write!(f, "Virtual processor generation overflow"),
+                
+            Error::IntegrationFailure { system } => 
+                write!(f, "Integration with {} failed", system),
+            Error::ConsciousnessIntegrationError => 
+                write!(f, "Consciousness-computation integration failed"),
+                
+            Error::HardwareConnectionLost => 
+                write!(f, "Hardware connection lost"),
+            Error::OscillationHarvestingFailure => 
+                write!(f, "System oscillation harvesting failed"),
+                
+            Error::IntegrationFailure { step_size } => 
+                write!(f, "Numerical integration failed with step size {}", step_size),
+            Error::ConvergenceFailure { iterations } => 
+                write!(f, "Failed to converge after {} iterations", iterations),
+            Error::NumericalInstability => 
+                write!(f, "Numerical instability detected"),
+                
+            Error::InvalidConfiguration { parameter, value } => 
+                write!(f, "Invalid configuration: {}={}", parameter, value),
+            Error::MissingDependency { dependency } => 
+                write!(f, "Missing required dependency: {}", dependency),
+                
+            Error::SystemNotInitialized => 
+                write!(f, "System not properly initialized"),
+            Error::ResourceExhaustion => 
+                write!(f, "System resources exhausted"),
+            Error::ConcurrencyError => 
+                write!(f, "Concurrency error in parallel processing"),
+                
+            Error::SerializationError(msg) => 
+                write!(f, "Serialization error: {}", msg),
+            Error::DeserializationError(msg) => 
+                write!(f, "Deserialization error: {}", msg),
         }
     }
 }
 
-impl std::error::Error for NebuchadnezzarError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+impl std::error::Error for Error {}
+
+/// Recovery strategies for different error types
+impl Error {
+    pub fn recovery_strategy(&self) -> RecoveryAction {
         match self {
-            NebuchadnezzarError::IoError { source: Some(err), .. } => Some(err),
-            _ => None,
+            Error::AtpDepletion => RecoveryAction::EmergencyMetabolism,
+            Error::QuantumDecoherence { .. } => RecoveryAction::CoherenceRestore,
+            Error::CircuitOverflow => RecoveryAction::LoadBalance,
+            Error::IntegrationFailure { .. } => RecoveryAction::StepSizeReduction,
+            Error::NumericalInstability => RecoveryAction::PrecisionIncrease,
+            Error::HardwareConnectionLost => RecoveryAction::HardwareReconnect,
+            Error::StatisticalEmergenceTimeout => RecoveryAction::ParameterAdjustment,
+            _ => RecoveryAction::SystemReset,
         }
     }
 }
 
-impl From<std::io::Error> for NebuchadnezzarError {
-    fn from(err: std::io::Error) -> Self {
-        NebuchadnezzarError::IoError {
-            message: err.to_string(),
-            source: Some(err),
-        }
-    }
+/// Recovery actions for error handling
+#[derive(Debug, Clone)]
+pub enum RecoveryAction {
+    EmergencyMetabolism,
+    CoherenceRestore,
+    LoadBalance,
+    StepSizeReduction,
+    PrecisionIncrease,
+    HardwareReconnect,
+    ParameterAdjustment,
+    SystemReset,
 }
-
-// Convenience constructors for common error types
-impl NebuchadnezzarError {
-    /// Create a quantum error
-    pub fn quantum_error(error_type: QuantumErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::QuantumError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create an oscillator error
-    pub fn oscillator_error(error_type: OscillatorErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::OscillatorError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create an entropy error
-    pub fn entropy_error(error_type: EntropyErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::EntropyError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create a biological error
-    pub fn biological_error(error_type: BiologicalErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::BiologicalError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create a circuit error
-    pub fn circuit_error(error_type: CircuitErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::CircuitError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create a solver error
-    pub fn solver_error(error_type: SolverErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::SolverError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create an ATP error
-    pub fn atp_error(error_type: AtpErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::AtpError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create a math error
-    pub fn math_error(error_type: MathErrorType, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::MathError {
-            error_type,
-            message: message.into(),
-        }
-    }
-    
-    /// Create a config error
-    pub fn config_error(parameter: impl Into<String>, value: impl Into<String>, message: impl Into<String>) -> Self {
-        NebuchadnezzarError::ConfigError {
-            parameter: parameter.into(),
-            value: value.into(),
-            message: message.into(),
-        }
-    }
-
-    /// Create a parse error for invalid input
-    pub fn parse_error(message: impl Into<String>) -> Self {
-        Self::biological_error(BiologicalErrorType::ComponentMissing, message)
-    }
-
-    /// Create an execution error for runtime failures
-    pub fn execution_error(message: impl Into<String>) -> Self {
-        Self::biological_error(BiologicalErrorType::SystemIntegrationFailure, message)
-    }
-
-    /// Create an invalid input error
-    pub fn invalid_input(message: impl Into<String>) -> Self {
-        Self::biological_error(BiologicalErrorType::ComponentMissing, message)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_error_creation() {
-        let quantum_err = NebuchadnezzarError::quantum_error(
-            QuantumErrorType::CoherenceLoss,
-            "Quantum coherence lost due to environmental noise"
-        );
-        
-        assert!(matches!(quantum_err, NebuchadnezzarError::QuantumError { .. }));
-    }
-
-    #[test]
-    fn test_error_display() {
-        let circuit_err = NebuchadnezzarError::circuit_error(
-            CircuitErrorType::VoltageOutOfRange,
-            "Voltage exceeds membrane threshold"
-        );
-        
-        let display_str = format!("{}", circuit_err);
-        assert!(display_str.contains("Circuit Error"));
-        assert!(display_str.contains("VoltageOutOfRange"));
-    }
-
-    #[test]
-    fn test_io_error_conversion() {
-        let io_err = std::io::Error::new(std::io::ErrorKind::NotFound, "File not found");
-        let neb_err: NebuchadnezzarError = io_err.into();
-        
-        assert!(matches!(neb_err, NebuchadnezzarError::IoError { .. }));
-    }
-} 

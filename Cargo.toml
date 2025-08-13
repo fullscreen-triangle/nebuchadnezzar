@@ -2,97 +2,81 @@
 name = "nebuchadnezzar"
 version = "0.1.0"
 edition = "2021"
-authors = ["Kundai Farai Sachikonye <kundai.f.sachikonye@gmail.com>"]
-description = "A biological quantum computer framework using ATP as energy currency"
-license = "MIT"
-repository = "https://github.com/fullscreen-triangle/nebuchadnezzar"
-keywords = ["quantum", "biology", "atp", "simulation", "biophysics"]
+authors = ["Kundai Farai Sachikonye <kundai.sachikonye@wzw.tum.de>"]
+description = "Intracellular dynamics engine using ATP-constrained computation for biologically authentic neurons"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/your-username/nebuchadnezzar"
+keywords = ["biology", "simulation", "atp", "quantum", "neural"]
 categories = ["science", "simulation"]
 
 [dependencies]
-# Linear algebra and numerical computation
-ndarray = { version = "0.15", features = ["rayon"] }
+# Core computational dependencies
 nalgebra = "0.32"
-num-complex = "0.4"
-num-traits = "0.2"
-
-# Parallel computation
-rayon = "1.7"
-
-# Optimization and solving
-argmin = "0.8"
-argmin-math = "0.3"
-
-# Random number generation
-fastrand = "2.0"
-rand = "0.8"
-
-# Serialization and data handling
+rayon = "1.8"
+tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
 
 # Scientific computing
+ndarray = "0.15"
+rand = "0.8"
 approx = "0.5"
-statrs = "0.16"
 
-# Error handling and utilities
-thiserror = "1.0"
-anyhow = "1.0"
+# Mathematical operations
+num-traits = "0.2"
+num-complex = "0.4"
 
-# Logging and debugging
+# Async and futures
+futures = "0.3"
+
+# Logging and error handling
 log = "0.4"
-env_logger = "0.10"
+thiserror = "1.0"
 
-# Optional features for advanced functionality
-petgraph = { version = "0.6", optional = true }
-plotters = { version = "0.3", optional = true }
-
-[dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
-proptest = "1.0"
+# Optional features for specific integrations
+[dependencies.plotters]
+version = "0.3"
+optional = true
 
 [features]
-default = []
+default = ["visualization"]
 visualization = ["plotters"]
-graph_analysis = ["petgraph"]
-full = ["visualization", "graph_analysis"]
+hardware-integration = []
+quantum-membranes = []
+consciousness-integration = []
 
-[[example]]
-name = "glycolysis_circuit"
-required-features = []
-
-[[example]]
-name = "comprehensive_simulation"
-required-features = []
-
-[[example]]
-name = "quantum_biological_computer_demo"
-required-features = []
-
-[[example]]
-name = "atp_oscillatory_membrane_complete_demo"
-required-features = []
-
-[[example]]
-name = "neuron_integration_demo"
-required-features = []
+[dev-dependencies]
+tokio-test = "0.4"
+proptest = "1.0"
+criterion = "0.5"
 
 [[bench]]
-name = "benchmarks"
+name = "atp_system_bench"
 harness = false
 
-[profile.release]
-opt-level = 3
-debug = false
-lto = true
-codegen-units = 1
-panic = "abort"
+[[bench]]
+name = "bmd_processing_bench" 
+harness = false
 
-[profile.dev]
-opt-level = 0
-debug = true
-overflow-checks = true
+[lib]
+name = "nebuchadnezzar"
+path = "src/lib.rs"
 
-[profile.test]
-opt-level = 1
-debug = true
+[[example]]
+name = "basic_intracellular"
+path = "examples/basic_intracellular.rs"
+
+[[example]]
+name = "neural_construction"
+path = "examples/neural_construction.rs"
+
+[[example]]
+name = "bmd_processing"
+path = "examples/bmd_processing.rs"
+
+[[example]]
+name = "system_integration"
+path = "examples/system_integration.rs"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
