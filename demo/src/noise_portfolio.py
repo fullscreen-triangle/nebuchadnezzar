@@ -1,0 +1,1 @@
+# since this system uses noise to derive solutions, I want this to be stand alone script that visualises and stores data on the utility of noise 

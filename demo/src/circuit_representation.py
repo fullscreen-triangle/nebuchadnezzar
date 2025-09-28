@@ -1,0 +1,1 @@
+# i want this file to have a demonstration of the representation of reaction pathways as circuits, it should have its own main function and plotting functions. it should be stand alone. It should import reactions from online databases and then use any of the st-stellas molecular language and circuits to represent reactions

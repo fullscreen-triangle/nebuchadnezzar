@@ -1,0 +1,1 @@
+# this should be a standalone script that uses the heirarchical circuit systems to actually solve for reaction pathways in a cell, using standard metabolic databases like kegg, reactome, etc. It should also plot and save results as json.
