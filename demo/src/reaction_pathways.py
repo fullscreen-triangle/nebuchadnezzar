@@ -9,12 +9,15 @@ from KEGG, Reactome, and other standard databases.
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-import requests
+import tarfile
+import xml.etree.ElementTree as ET
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
 import networkx as nx
 from scipy.optimize import minimize
 import time
+import os
+import tempfile
 
 from s_entropy_solver import solve_problem, create_coordinate
 from oscillatory_mechanics import CircuitDynamics
@@ -33,28 +36,40 @@ class MetabolicReaction:
     pathway: str
 
 class PathwayDatabase:
-    """Interface to metabolic pathway databases."""
+    """Interface to local SBML metabolic pathway databases."""
     
-    def __init__(self):
-        self.kegg_base_url = "http://rest.kegg.jp"
+    def __init__(self, sbml_file_path: str = "demo/public/homo_sapiens.3.1.sbml.tgz"):
+        self.sbml_file_path = sbml_file_path
         self.reactions = []
         self.compounds = {}
+        self.sbml_reactions = None
         
-    def fetch_kegg_pathway(self, pathway_id: str) -> List[MetabolicReaction]:
-        """Fetch KEGG pathway data."""
+    def load_sbml_reactions(self) -> List[MetabolicReaction]:
+        """Load reactions from local SBML file."""
         try:
-            # Get pathway info
-            response = requests.get(f"{self.kegg_base_url}/get/{pathway_id}")
-            if response.status_code != 200:
-                print(f"Failed to fetch {pathway_id}, using synthetic data")
-                return self._get_synthetic_pathway(pathway_id)
-                
-            # Parse pathway (simplified)
-            return self._parse_kegg_pathway(response.text, pathway_id)
+            print(f"Loading reactions from SBML file: {self.sbml_file_path}")
             
+            # Extract and parse SBML file
+            with tarfile.open(self.sbml_file_path, 'r:gz') as tar:
+                # Find the SBML file in the tarball
+                sbml_file = None
+                for member in tar.getmembers():
+                    if member.name.endswith('.sbml') or member.name.endswith('.xml'):
+                        sbml_file = member
+                        break
+                
+                if sbml_file is None:
+                    print("No SBML file found in tarball, using synthetic data")
+                    return self._get_synthetic_pathway("human_metabolism")
+                
+                # Extract and parse SBML content
+                with tar.extractfile(sbml_file) as f:
+                    sbml_content = f.read().decode('utf-8')
+                    return self._parse_sbml_content(sbml_content)
+                    
         except Exception as e:
-            print(f"Error fetching KEGG data: {e}, using synthetic data")
-            return self._get_synthetic_pathway(pathway_id)
+            print(f"Error loading SBML data: {e}, using synthetic data")
+            return self._get_synthetic_pathway("human_metabolism")
     
     def _get_synthetic_pathway(self, pathway_id: str) -> List[MetabolicReaction]:
         """Generate synthetic pathway for demonstration."""
@@ -95,6 +110,111 @@ class PathwayDatabase:
         ]
         
         return [MetabolicReaction(**rxn) for rxn in synthetic_reactions]
+    
+    def _parse_sbml_content(self, sbml_content: str) -> List[MetabolicReaction]:
+        """Parse SBML XML content to extract reactions."""
+        try:
+            root = ET.fromstring(sbml_content)
+            
+            # Handle SBML namespaces
+            namespaces = {
+                'sbml': 'http://www.sbml.org/sbml/level3/version1/core',
+                'fbc': 'http://www.sbml.org/sbml/level3/version1/fbc/version2'
+            }
+            
+            # Try without namespace first, then with
+            reactions_elements = root.findall('.//reaction')
+            if not reactions_elements:
+                reactions_elements = root.findall('.//sbml:reaction', namespaces)
+            
+            reactions = []
+            
+            print(f"Found {len(reactions_elements)} reactions in SBML file")
+            
+            # Limit to first 50 reactions for performance
+            for i, reaction_elem in enumerate(reactions_elements[:50]):
+                try:
+                    reaction_id = reaction_elem.get('id', f'R_{i:05d}')
+                    reaction_name = reaction_elem.get('name', reaction_id)
+                    
+                    # Extract reactants and products
+                    reactants = []
+                    products = []
+                    
+                    # Find reactants
+                    reactant_elems = reaction_elem.findall('.//speciesReference[@stoichiometry<"0"] | .//speciesReference[not(@stoichiometry)] | .//speciesReference[@stoichiometry="-1"]')
+                    if not reactant_elems:
+                        reactant_elems = reaction_elem.findall('.//listOfReactants//speciesReference')
+                    
+                    for reactant in reactant_elems:
+                        species_id = reactant.get('species', 'unknown_species')
+                        reactants.append(species_id.replace('_', '-'))
+                    
+                    # Find products  
+                    product_elems = reaction_elem.findall('.//listOfProducts//speciesReference')
+                    if not product_elems:
+                        product_elems = reaction_elem.findall('.//speciesReference[@stoichiometry>"0"]')
+                    
+                    for product in product_elems:
+                        species_id = product.get('species', 'unknown_species')
+                        products.append(species_id.replace('_', '-'))
+                    
+                    # If no specific reactants/products found, extract all species references
+                    if not reactants and not products:
+                        all_species = reaction_elem.findall('.//speciesReference')
+                        if len(all_species) >= 2:
+                            reactants = [all_species[0].get('species', 'substrate')]
+                            products = [all_species[-1].get('species', 'product')]
+                    
+                    # Set defaults if empty
+                    if not reactants:
+                        reactants = ['substrate']
+                    if not products:
+                        products = ['product']
+                    
+                    # Generate realistic kinetic parameters
+                    k_forward = np.random.lognormal(np.log(1e4), 2)  # Log-normal distribution
+                    k_reverse = k_forward * np.random.uniform(0.001, 0.1)  # Reverse rate typically smaller
+                    
+                    # Estimate Gibbs energy (kJ/mol)
+                    delta_g = np.random.normal(-10, 15)  # Mean slightly favorable
+                    
+                    # Extract enzyme info if available
+                    enzymes = []
+                    gene_assoc = reaction_elem.find('.//gene_association')
+                    if gene_assoc is not None:
+                        enzymes = [gene_assoc.text or 'unknown_enzyme']
+                    else:
+                        enzymes = [f'enzyme_{reaction_id}']
+                    
+                    reaction = MetabolicReaction(
+                        id=reaction_id,
+                        name=reaction_name,
+                        reactants=reactants,
+                        products=products,
+                        enzymes=enzymes,
+                        k_forward=k_forward,
+                        k_reverse=k_reverse,
+                        delta_g=delta_g,
+                        pathway='human_metabolism'
+                    )
+                    
+                    reactions.append(reaction)
+                    
+                except Exception as e:
+                    print(f"Error parsing reaction {i}: {e}")
+                    continue
+            
+            if not reactions:
+                print("No valid reactions parsed from SBML, using synthetic data")
+                return self._get_synthetic_pathway("human_metabolism")
+            
+            print(f"Successfully parsed {len(reactions)} reactions from SBML")
+            return reactions
+            
+        except Exception as e:
+            print(f"Error parsing SBML content: {e}")
+            return self._get_synthetic_pathway("human_metabolism")
 
 class PathwayCircuitSolver:
     """Solves reaction pathways using hierarchical circuit dynamics."""
@@ -104,11 +224,11 @@ class PathwayCircuitSolver:
         self.reactions = []
         self.network = nx.DiGraph()
         
-    def load_pathway_data(self, pathway_id: str):
-        """Load metabolic pathway data."""
+    def load_pathway_data(self, pathway_id: str = "human_metabolism"):
+        """Load metabolic pathway data from local SBML file."""
         db = PathwayDatabase()
-        self.reactions = db.fetch_kegg_pathway(pathway_id)
-        print(f"Loaded {len(self.reactions)} reactions from {pathway_id}")
+        self.reactions = db.load_sbml_reactions()
+        print(f"Loaded {len(self.reactions)} reactions from local SBML file")
         
     def solve_pathway_dynamics(self) -> Dict:
         """Solve pathway using circuit dynamics."""
@@ -203,7 +323,7 @@ def main():
     print("=" * 35)
     
     solver = PathwayCircuitSolver()
-    solver.load_pathway_data("map00010")  # KEGG glycolysis pathway
+    solver.load_pathway_data("human_metabolism")  # Local SBML file
     
     # Solve dynamics
     dynamics_results = solver.solve_pathway_dynamics()

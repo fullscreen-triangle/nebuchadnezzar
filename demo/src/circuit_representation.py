@@ -10,8 +10,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 import json
+import tarfile
+import xml.etree.ElementTree as ET
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
+import os
 
 from s_entropy_solver import solve_problem, create_coordinate, SCoordinate
 
@@ -42,8 +45,117 @@ class PathwayCircuitBuilder:
         self.circuit_elements = []
         self.circuit_network = nx.Graph()
     
-    def load_reactions_from_database(self) -> List[BiologicalReaction]:
-        """Load reactions from online database (with fallback synthetic data)."""
+    def load_reactions_from_database(self, sbml_file_path: str = "demo/public/homo_sapiens.3.1.sbml.tgz") -> List[BiologicalReaction]:
+        """Load reactions from local SBML file (with fallback synthetic data)."""
+        try:
+            print(f"Loading reactions from SBML file: {sbml_file_path}")
+            
+            # Extract and parse SBML file
+            with tarfile.open(sbml_file_path, 'r:gz') as tar:
+                # Find the SBML file in the tarball
+                sbml_file = None
+                for member in tar.getmembers():
+                    if member.name.endswith('.sbml') or member.name.endswith('.xml'):
+                        sbml_file = member
+                        break
+                
+                if sbml_file is None:
+                    print("No SBML file found in tarball, using synthetic data")
+                    return self._load_synthetic_reactions()
+                
+                # Extract and parse SBML content
+                with tar.extractfile(sbml_file) as f:
+                    sbml_content = f.read().decode('utf-8')
+                    reactions = self._parse_sbml_reactions(sbml_content)
+                    
+                    if reactions:
+                        self.reactions = reactions
+                        return reactions
+                    else:
+                        print("No reactions parsed from SBML, using synthetic data")
+                        return self._load_synthetic_reactions()
+                    
+        except Exception as e:
+            print(f"Error loading SBML data: {e}, using synthetic data")
+            return self._load_synthetic_reactions()
+    
+    def _parse_sbml_reactions(self, sbml_content: str) -> List[BiologicalReaction]:
+        """Parse SBML XML content to extract reactions."""
+        try:
+            root = ET.fromstring(sbml_content)
+            
+            # Try to find reactions in the SBML structure
+            reactions_elements = root.findall('.//reaction')
+            if not reactions_elements:
+                # Try with namespaces
+                namespaces = {'sbml': 'http://www.sbml.org/sbml/level3/version1/core'}
+                reactions_elements = root.findall('.//sbml:reaction', namespaces)
+            
+            reactions = []
+            
+            print(f"Found {len(reactions_elements)} reactions in SBML file")
+            
+            # Limit to first 20 reactions for circuit representation
+            for i, reaction_elem in enumerate(reactions_elements[:20]):
+                try:
+                    reaction_id = reaction_elem.get('id', f'R_{i:05d}')
+                    reaction_name = reaction_elem.get('name', reaction_id)
+                    
+                    # Extract reactants
+                    reactants = []
+                    reactant_elems = reaction_elem.findall('.//listOfReactants//speciesReference')
+                    for reactant in reactant_elems:
+                        species_id = reactant.get('species', 'unknown_species')
+                        reactants.append(species_id.replace('_', '-'))
+                    
+                    # Extract products
+                    products = []
+                    product_elems = reaction_elem.findall('.//listOfProducts//speciesReference')
+                    for product in product_elems:
+                        species_id = product.get('species', 'unknown_species')
+                        products.append(species_id.replace('_', '-'))
+                    
+                    # Set defaults if empty
+                    if not reactants:
+                        reactants = ['substrate']
+                    if not products:
+                        products = ['product']
+                    
+                    # Generate realistic kinetic parameters
+                    rate_constant = np.random.lognormal(np.log(1e4), 1.5)
+                    gibbs_energy = np.random.normal(-10, 12)
+                    enzyme = f'enzyme_{reaction_id}'
+                    
+                    # Try to extract enzyme info from gene associations
+                    gene_assoc = reaction_elem.find('.//gene_association')
+                    if gene_assoc is not None and gene_assoc.text:
+                        enzyme = gene_assoc.text.strip()
+                    
+                    reaction = BiologicalReaction(
+                        id=reaction_id,
+                        name=reaction_name,
+                        reactants=reactants,
+                        products=products,
+                        rate_constant=rate_constant,
+                        gibbs_energy=gibbs_energy,
+                        enzyme=enzyme
+                    )
+                    
+                    reactions.append(reaction)
+                    
+                except Exception as e:
+                    print(f"Error parsing reaction {i}: {e}")
+                    continue
+            
+            print(f"Successfully parsed {len(reactions)} reactions from SBML")
+            return reactions
+            
+        except Exception as e:
+            print(f"Error parsing SBML content: {e}")
+            return []
+    
+    def _load_synthetic_reactions(self) -> List[BiologicalReaction]:
+        """Load synthetic reactions as fallback."""
         synthetic_reactions = [
             BiologicalReaction(
                 id='R00658',
