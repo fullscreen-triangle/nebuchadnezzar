@@ -264,6 +264,8 @@ class SEntropySolver:
         
         return result
 
+
+
 # Global solver instance for other modules to import
 SOLVER = SEntropySolver()
 

@@ -19,8 +19,9 @@ import time
 import os
 import tempfile
 
-from s_entropy_solver import solve_problem, create_coordinate
-from oscillatory_mechanics import CircuitDynamics
+from oscillatory_mechanics import OscillatoryCircuit
+from s_entropy_solver import create_coordinate, solve_problem
+
 
 @dataclass
 class MetabolicReaction:
@@ -220,7 +221,7 @@ class PathwayCircuitSolver:
     """Solves reaction pathways using hierarchical circuit dynamics."""
     
     def __init__(self):
-        self.circuit = CircuitDynamics()
+        self.circuit = OscillatoryCircuit()
         self.reactions = []
         self.network = nx.DiGraph()
         
