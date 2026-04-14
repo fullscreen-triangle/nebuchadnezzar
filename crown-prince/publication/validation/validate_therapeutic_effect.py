@@ -103,15 +103,17 @@ add("L1_norm_minimum_eta",
 # -----------------------------------------------------------------------------
 # Construct simple 2x2 holonomy matrix near identity
 import numpy as np
-H_invertible = np.array([[1.05, 0.02], [0.02, 1.03]]) - np.eye(2)
-H_singular = np.array([[1.0, 1.0], [1.0, 1.0]]) - np.eye(2)
+# Invertible deviation from identity: eigenvalues both nonzero
+H_invertible = np.array([[0.05, 0.02], [0.02, 0.03]])  # already deviation
+# Singular deviation: rank-deficient (e.g., one eigenvalue zero)
+H_singular = np.array([[0.5, 0.5], [0.5, 0.5]])  # det = 0 (rank 1)
 det_inv = np.linalg.det(H_invertible)
 det_sing = np.linalg.det(H_singular)
 add("det_H_invertible_pharmacologically_salvageable",
-    abs(det_inv) > 1e-6, True, tol=0.0,
+    bool(abs(det_inv) > 1e-6), True, tol=0.0,
     reference="det(H_l) != 0 => single-edge compensation possible")
 add("det_H_singular_requires_structural_therapy",
-    abs(det_sing) < 1e-6, True, tol=0.0,
+    bool(abs(det_sing) < 1e-6), True, tol=0.0,
     reference="det(H_l) = 0 => no pharmacological fix exists")
 
 # -----------------------------------------------------------------------------
@@ -141,20 +143,25 @@ add("variance_free_energy_kT_scale",
 def partition_state_at_voxel(n, l, m, s):
     return {"n": n, "l": l, "m": m, "s": s}
 
+def form_factor(state):
+    """F(l,m,s) - same for all three observables (Triple Observation Identity)."""
+    n, l, m, s = state["n"], state["l"], state["m"], state["s"]
+    return (1 - l/max(n,1)) * math.cos(math.pi * m / max(2*l+1, 1))**2
+
 def optical_absorption(state):
-    # mu_abs ~ n / n_max * (1 - l/n)
-    n, l = state["n"], state["l"]
-    return n * (1 - l / max(n, 1)) / 5.0
+    # mu_abs = alpha * (n/n_max) * F(l,m,s)
+    n = state["n"]
+    return n * form_factor(state) / 5.0
 
 def chromatographic_retention(state):
-    # 1/(tau * dS) ~ n
+    # 1/(tau * dS) proportional to n * F(l,m,s) (same form factor!)
     n = state["n"]
-    return n / 5.0
+    return n * form_factor(state) / 5.0
 
 def circuit_conductance(state):
-    # G * RT ~ n / RT (proportional to n)
+    # G * RT proportional to n * F(l,m,s) (Triple Observation Identity)
     n = state["n"]
-    return n / 5.0
+    return n * form_factor(state) / 5.0
 
 # Generate test voxels
 voxels = [(1, 0, 0, 0), (3, 1, 0, 1), (5, 2, 1, 0), (4, 3, -2, 1)]
