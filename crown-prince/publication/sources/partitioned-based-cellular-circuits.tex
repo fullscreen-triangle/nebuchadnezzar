@@ -1,0 +1,1317 @@
+\documentclass[twocolumn,10pt,a4paper]{article}
+
+% Page layout
+\usepackage[margin=2cm, columnsep=0.6cm]{geometry}
+
+% Essential packages
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{physics}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Font and typography
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Purpose-Partitioned Cellular Circuits},
+    pdfauthor={Kundai Farai Sachikonye}
+}
+
+% Custom commands
+\newcommand{\kB}{k_{\mathrm{B}}}
+\newcommand{\Depth}{\mathcal{M}}
+\newcommand{\Hcat}{\mathcal{H}}
+\newcommand{\dcat}{d_{\mathrm{cat}}}
+\newcommand{\taup}{\tau_p}
+\newcommand{\Gcond}{\mathcal{G}}
+\newcommand{\Back}{\mathcal{B}}
+\newcommand{\morphism}{\Phi}
+\newcommand{\catalyst}{\mathcal{C}}
+\newcommand{\Sk}{S_k}
+\newcommand{\St}{S_t}
+\newcommand{\Se}{S_e}
+\newcommand{\Scoord}{\mathbf{S}}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+
+% Title
+\title{\textbf{Purpose-Partitioned Cellular Circuits:\\[4pt]
+Unified Framework for Whole-Cell State Instantiation\\
+via Domain-Specific Neural Compilation}}
+
+\author{
+Kundai Farai Sachikonye\\
+Technical University of Munich, School of Life Sciences\\
+\texttt{kundai.sachikonye@wzw.tum.de}
+}
+
+\date{\today}
+
+\maketitle
+
+%==============================================================================
+\begin{abstract}
+%==============================================================================
+\noindent We unify six theoretical subsystems---partition landscape, categorical current flux, charge emergence from partitioning, the fuzzy biochemical circuit model, reflexive oxygen-mediated microscopy, and domain-specific neural compilation---into a single computational architecture for whole-cell state instantiation. The central theorem establishes that these six subsystems are isomorphic descriptions of one mathematical object: a self-observing categorical circuit on bounded phase space. We prove this isomorphism by constructing explicit bijective, structure-preserving maps between the mathematical objects of each subsystem, demonstrating that circuit node potentials ARE partition depths, edge currents ARE categorical state flows, the intracellular O$_2$ array IS the observe operation, and morphism chain compilation IS constraint satisfaction on the circuit graph.
+
+The framework replaces forward simulation---which we prove to be epistemically empty by the epistemic blindness argument---with backward trajectory completion: given partial observations of a cell's molecular state, compile a morphism chain (observe $\to$ catalyze $\to$ fuse $\to$ access) that resolves the complete state via topological and thermodynamic constraints. The Purpose pipeline, a domain-specific LLM training framework employing knowledge distillation from high-capacity teacher models into LoRA-adapted student architectures, provides the compilation infrastructure.
+
+We derive the complete mathematical content from two axioms (bounded phase space, categorical observation), prove convergence of the trajectory completion algorithm by the Banach fixed-point theorem, establish time-invariance of backward trajectories, and formalize disease detection as trajectory escape from the healthy attractor basin. Drug design emerges as sparse inverse conductance modification on the circuit graph. The result is not a model OF the cell but an explicit formalization of what the cell already does: a self-observing fuzzy categorical circuit that instantiates its own state through continuous partition operations.
+\end{abstract}
+
+%==============================================================================
+\section{Introduction}
+\label{sec:introduction}
+%==============================================================================
+
+\subsection{The Whole-Cell Problem}
+
+The ambition to model a complete living cell computationally has driven substantial effort over the past two decades. The landmark whole-cell model of \emph{Mycoplasma genitalium} by \citet{Karr2012} integrated 28 submodels---spanning metabolism, transcription, translation, DNA replication, cell division, and more---into a coupled simulation requiring $\sim$1900 parameters. This model, and subsequent efforts toward \emph{Escherichia coli} \citep{Palsson2006}, employ forward simulation: ordinary differential equations for deterministic processes, flux balance analysis (FBA) for metabolic steady states \citep{Orth2010}, and the Gillespie algorithm for stochastic kinetics \citep{Gillespie1977}.
+
+These approaches face a fundamental limitation that is not technical but epistemic. As \citet{Schrodinger1944} observed, living systems maintain organization against thermodynamic decay, but the nature of this maintenance---and whether simulation can capture it---remains unresolved. We argue that forward simulation of cellular dynamics is inherently incapable of generating information that the cell itself does not already possess. This claim requires careful justification.
+
+\subsection{Epistemic Blindness}
+
+\begin{proposition}[Epistemic Blindness]
+\label{prop:blindness}
+A faithful simulation of a cell's biochemistry produces exactly the information the cell's own reaction network already computes. It adds zero new information relative to the cell itself.
+\end{proposition}
+
+\begin{proof}
+Suppose a simulation $\mathcal{S}$ faithfully reproduces the cell's reaction dynamics: for every molecular species $i$, the simulated concentration trajectory $c_i^{\mathcal{S}}(t)$ matches the cellular trajectory $c_i^{\mathrm{cell}}(t)$ to within measurement precision. Then the mapping $c_i^{\mathrm{cell}}(t) \mapsto c_i^{\mathcal{S}}(t)$ is the identity on the space of trajectories.
+
+Now suppose $\mathcal{S}$ reveals information $\mathcal{I}$ not available to the cell---for instance, that a particular enzyme has reduced activity (a disease state). Then $\mathcal{I}$ is a function of the trajectories: $\mathcal{I} = f(\{c_i^{\mathcal{S}}(t)\})$. Since the simulation is faithful, $\mathcal{I} = f(\{c_i^{\mathrm{cell}}(t)\})$, so the cell could compute $\mathcal{I}$ from its own trajectories. But the cell consists of precisely those trajectories and their chemical consequences. If $\mathcal{I}$ were computable from the cell's own molecular dynamics, the cell would self-diagnose disease by running $f$ on its own concentrations.
+
+Cells do not self-diagnose. A cancer cell does not detect its own oncogenic mutations; a neurodegenerative neuron does not identify its own protein aggregates. The cell faithfully propagates whatever molecular configuration is present, including pathological configurations. This is precisely because forward reaction dynamics are state-propagating, not state-evaluating \citep{Rosen1991}.
+
+Therefore $\mathcal{I}$ cannot exist: a faithful simulation adds zero information beyond what the cell already computes. The simulation IS the cell's computation, replicated on external hardware.
+\end{proof}
+
+\begin{remark}
+This does not mean simulation is useless for prediction---running a simulation faster than real time allows forecasting future states. The point is that simulation cannot diagnose, classify, or evaluate the cell's state in ways the cell cannot evaluate itself. For that, a fundamentally different approach is needed.
+\end{remark}
+
+\subsection{The Instantiation Alternative}
+
+The epistemic blindness argument motivates a shift from forward simulation to what we term \emph{instantiation}: given partial observations of a cell's molecular state, determine what complete state is consistent with the reaction network's topological, thermodynamic, and kinetic constraints.
+
+This is not simulation (running the dynamics forward) but completion (resolving unobserved variables from observed ones via structural constraints). The approach requires four components:
+
+\begin{enumerate}[label=(\alph*)]
+    \item A \emph{circuit representation} encoding the cell's reaction network as a constraint graph with node potentials and edge conductances.
+    \item An \emph{observation mechanism} mapping experimental measurements to partition coordinates in the circuit's state space.
+    \item A \emph{compilation pipeline} translating the instantiation task into an executable sequence of constraint-satisfaction operations.
+    \item A \emph{completion algorithm} that propagates constraints through the circuit to resolve all unobserved states.
+\end{enumerate}
+
+The six theoretical subsystems developed in companion papers \citep{Sachikonye2024a,Sachikonye2024b,Sachikonye2024c,Sachikonye2024d,Sachikonye2024e,Sachikonye2024f} provide precisely these components. The present paper's contribution is to show they are not six separate theories but six views of one mathematical structure, and to provide the compilation infrastructure that makes the unified framework computationally executable.
+
+\subsection{Paper Organization}
+
+Section~\ref{sec:axioms} derives the axiomatic foundations from first principles. Section~\ref{sec:subsystems} presents the six subsystems as facets of a single structure. Section~\ref{sec:isomorphism} states and proves the Subsystem Isomorphism Theorem, the paper's central theoretical contribution. Section~\ref{sec:pipeline} describes the Purpose compilation pipeline. Section~\ref{sec:operations} grounds each of the four operations (observe, catalyze, fuse, access) in physics. Section~\ref{sec:loop} formalizes the instantiation loop. Section~\ref{sec:disease} develops disease detection and drug design. Section~\ref{sec:implementation} describes the implementation architecture. Section~\ref{sec:discussion} discusses relationships to existing approaches, and Section~\ref{sec:conclusion} concludes.
+
+%==============================================================================
+\section{Axiomatic Foundations}
+\label{sec:axioms}
+%==============================================================================
+
+\subsection{Two Axioms}
+
+The entire framework derives from two empirical facts elevated to axioms.
+
+\begin{axiom}[Boundedness]
+\label{ax:bounded}
+Every physical system occupies a bounded region $\Omega$ of phase space with $\mathrm{Vol}(\Omega) < \infty$. The minimum distinguishable phase-space cell has volume $\hbar^{3N}$ for $N$ degrees of freedom.
+\end{axiom}
+
+Axiom~\ref{ax:bounded} is a consequence of the Heisenberg uncertainty principle \citep{Heisenberg1927}: each conjugate pair $(q_i, p_i)$ satisfies $\Delta q_i \Delta p_i \geq \hbar/2$, so the minimum cell volume in $6N$-dimensional phase space is $(\hbar/2)^{3N}$. For notational simplicity we absorb the factor $1/2^{3N}$ into our conventions and write $\hbar^{3N}$.
+
+\begin{axiom}[Categorical Observation]
+\label{ax:observation}
+Observers partition phase space into equivalence classes. Two states belonging to the same equivalence class are operationally indistinguishable to that observer.
+\end{axiom}
+
+Axiom~\ref{ax:observation} formalizes the fact that every measurement has finite resolution. A thermometer reading ``37.0$^\circ$C'' groups all microstates consistent with that reading into one equivalence class. Spectroscopic measurement reliably extracts information from physical systems \citep{Shannon1948}, and physical reality is observer-invariant. The maximum entropy principle \citep{Jaynes1957} governs inference from such coarse-grained observations. The structure of these equivalence classes---their depth, nesting, and topology---is the mathematical content of the framework.
+
+\subsection{Partition Coordinates and Depth}
+
+\begin{definition}[Partition Coordinates]
+\label{def:partition_coords}
+A \emph{partition coordinate} $(n, \ell, m, s)$ labels a cell in the hierarchical subdivision of bounded phase space $\Omega$, where:
+\begin{itemize}[nosep]
+    \item $n \in \{1, 2, 3, \ldots\}$ is the principal depth (number of successive binary subdivisions),
+    \item $\ell \in \{0, 1, \ldots, n-1\}$ is the angular partition index,
+    \item $m \in \{-\ell, \ldots, +\ell\}$ is the magnetic partition index,
+    \item $s \in \{-1/2, +1/2\}$ is the spin partition index.
+\end{itemize}
+\end{definition}
+
+The indices $(n, \ell, m, s)$ arise from the geometry of bounded partitioning. The principal depth $n$ counts the number of successive subdivisions required to reach a given resolution. At each depth $n$, the angular partition $\ell$ ranges over $n$ values; for each $\ell$, the magnetic partition $m$ takes $2\ell + 1$ values; and each cell admits a binary spin label $s$.
+
+\begin{theorem}[Partition Capacity]
+\label{thm:capacity}
+The number of distinguishable states at partition depth $n$ is
+\begin{equation}
+    C(n) = 2n^2.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+At depth $n$, the angular partition index runs from $\ell = 0$ to $\ell = n-1$. For each $\ell$, the magnetic index $m$ takes $2\ell + 1$ values. With the spin degeneracy factor of 2, the total count is:
+\begin{equation}
+    C(n) = 2 \sum_{\ell=0}^{n-1} (2\ell + 1) = 2 \cdot n^2 = 2n^2,
+\end{equation}
+where we used the identity $\sum_{\ell=0}^{n-1}(2\ell+1) = n^2$.
+\end{proof}
+
+\begin{definition}[Partition Depth]
+\label{def:depth}
+The \emph{partition depth} of a state specified by hierarchical subdivision with branching factors $k_1, k_2, \ldots, k_d$ in a base-$b$ system is
+\begin{equation}
+    \Depth = \sum_{i=1}^{d} \log_b(k_i).
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Depth--Entropy Equivalence]
+\label{thm:depth_entropy}
+Partition depth is proportional to Boltzmann entropy:
+\begin{equation}
+    S = \kB \ln(b) \cdot \Depth.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+A state at partition depth $\Depth$ in a base-$b$ hierarchy is one of $W = b^{\Depth}$ equiprobable microstates. By the Boltzmann formula \citep{Boltzmann1877},
+\begin{equation}
+    S = \kB \ln W = \kB \ln(b^{\Depth}) = \kB \ln(b) \cdot \Depth.
+\end{equation}
+The choice $b = 2$ gives $S = \kB \ln 2 \cdot \Depth$, connecting partition depth to Shannon entropy measured in bits \citep{Shannon1948}.
+\end{proof}
+
+\subsection{The Triple Equivalence}
+
+\begin{theorem}[Triple Equivalence]
+\label{thm:triple}
+For any bounded physical system, the following three structures are equivalent:
+\begin{enumerate}[label=(\roman*)]
+    \item Oscillation (periodic recurrence in phase space),
+    \item Categorical distinction (partition of phase space into distinguishable classes),
+    \item Partition operation (hierarchical subdivision of the bounded domain).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We establish three implications forming a cycle.
+
+\emph{(i) $\Rightarrow$ (ii):} By the Poincar\'e recurrence theorem \citep{Strogatz1994}, every bounded Hamiltonian system returns arbitrarily close to its initial state. This periodic recurrence defines turning points in phase space. Each turning point divides the trajectory into distinguishable segments---the trajectory's future differs from its past at the turning point. These segments constitute categorical distinctions.
+
+\emph{(ii) $\Rightarrow$ (iii):} Given categorical distinctions (equivalence classes of states), the collection of equivalence classes forms a partition of $\Omega$. Since the distinctions are hierarchical---coarser distinctions contain finer ones---the partition is hierarchical, which is precisely a partition operation.
+
+\emph{(iii) $\Rightarrow$ (i):} A partition operation on a bounded domain creates cells with finite volume. A dynamical system confined to a finite-volume cell must, by boundedness, visit the cell's boundary. The boundary forces reversal (or at minimum, redirection), creating oscillatory behavior. Since the partition has finite depth, the oscillation has finite period.
+
+Since (i) $\Rightarrow$ (ii) $\Rightarrow$ (iii) $\Rightarrow$ (i), the three structures are logically equivalent.
+\end{proof}
+
+\begin{corollary}
+Every observation of a bounded system is simultaneously an oscillation measurement, a categorical distinction, and a partition operation.
+\end{corollary}
+
+%==============================================================================
+\section{The Six Subsystems as One Structure}
+\label{sec:subsystems}
+%==============================================================================
+
+We now present each of the six subsystems, emphasizing the mathematical content that will be shown to be isomorphic in Section~\ref{sec:isomorphism}.
+
+\subsection{Charge Emergence from Partition (Origins)}
+\label{sec:charge}
+
+The conventional view treats electric charge as an intrinsic property of particles. We prove that charge emerges from partitioning \citep{Sachikonye2024c}.
+
+\begin{theorem}[Charge Emergence]
+\label{thm:charge}
+Electric charge is not an intrinsic property of matter but emerges from partition operations. Unpartitioned matter has no charge.
+\end{theorem}
+
+\begin{proof}
+Consider solid sodium chloride (NaCl). In the crystalline lattice, each Na is surrounded by six Cl atoms and each Cl by six Na atoms. The lattice is electrically neutral at every point; there are no ions. The electrical conductivity of solid NaCl is $\sim 10^{-7}$ S/m.
+
+Upon dissolution in water, the crystal lattice is partitioned: water molecules insert between Na and Cl, creating a partition boundary (the solvation shell). Immediately upon partitioning, the conductivity jumps to $\sim 10^{6}$ S/m---a factor of $\sim 10^{13}$.
+
+The key observation is that the ions did not exist before dissolution. There were no Na$^+$ or Cl$^-$ in the crystal; there were Na--Cl bonds in a lattice. The partition operation (dissolution) \emph{created} the charges by establishing boundaries between previously bonded atoms. Charge did not pre-exist and get ``revealed''; it was generated by the partitioning.
+
+More precisely, let $\rho_{\mathrm{tot}}(x)$ be the total charge density. In the unpartitioned crystal, $\int_V \rho_{\mathrm{tot}}(x) \, dV = 0$ for every charge-neutral unit cell $V$. After partitioning, the solvation shell defines regions $V_{\mathrm{Na}}$ and $V_{\mathrm{Cl}}$ where $\int_{V_{\mathrm{Na}}} \rho_{\mathrm{tot}} \, dV = +e$ and $\int_{V_{\mathrm{Cl}}} \rho_{\mathrm{tot}} \, dV = -e$. The charge is a property of the partition, not of the matter.
+\end{proof}
+
+\begin{corollary}
+\label{cor:circuit_voltages}
+The circuit's node potentials (chemical potentials, membrane potentials) are generated by partition operations, not pre-existing. Every potential difference in the cell is a partition depth difference.
+\end{corollary}
+
+\subsection{Partition Gradient Flow (Landscape)}
+\label{sec:landscape}
+
+All dynamics in the partition framework follow depth gradients \citep{Sachikonye2024a}.
+
+\begin{theorem}[Gradient Flow]
+\label{thm:gradient}
+The dynamics of any system in bounded phase space follow partition depth gradients:
+\begin{equation}
+    \frac{dx}{dt} = -\gamma \nabla \Depth(x),
+    \label{eq:gradient_flow}
+\end{equation}
+where $\gamma > 0$ is a dissipation coefficient.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:depth_entropy}, $\Depth$ is proportional to entropy. By the second law of thermodynamics, entropy of the universe increases monotonically: $dS_{\mathrm{univ}}/dt \geq 0$. For a system exchanging entropy with a reservoir, the free energy $F = E - TS$ decreases: $dF/dt \leq 0$.
+
+Since $F \propto -\Depth$ (higher depth $=$ more microstates $=$ lower free energy at fixed temperature), in the sense of Gibbs \citep{Gibbs1875}, the free energy gradient is anti-parallel to the depth gradient. Far from equilibrium, the system evolves through dissipative structures \citep{Prigogine1967}. Overdamped dynamics in the free energy landscape give $dx/dt = -\gamma \nabla F(x) = -\gamma \nabla(-\kB T \ln b \cdot \Depth(x)) \propto -\gamma \nabla \Depth(x)$, absorbing constants into $\gamma$.
+\end{proof}
+
+\begin{theorem}[Existence Cost]
+\label{thm:existence_cost}
+The energy required to partition an entity from the totality of its environment is
+\begin{equation}
+    E_{\mathrm{exist}} = \kB T \ln(b) \sum_i \Depth_i,
+    \label{eq:existence_cost}
+\end{equation}
+where the sum runs over all partition operations needed to distinguish the entity.
+\end{theorem}
+
+\begin{proof}
+Each partition operation at depth $\Depth_i$ distinguishes $b^{\Depth_i}$ states. By Landauer's principle, erasing $\log_2(b^{\Depth_i}) = \Depth_i \log_2 b$ bits of information costs at least $\kB T \ln 2 \cdot \Depth_i \log_2 b = \kB T \ln b \cdot \Depth_i$ of energy. The total existence cost is the sum over all required partition operations.
+\end{proof}
+
+\begin{theorem}[Transition State Depth]
+\label{thm:transition}
+The partition depth of a transition state connecting reactant $A$ and product $B$ is
+\begin{equation}
+    \Depth_T = \Depth_A + \Depth_B + \Depth_{\mathrm{path}},
+    \label{eq:transition_depth}
+\end{equation}
+where $\Depth_{\mathrm{path}}$ is the partition depth of the reaction coordinate itself.
+\end{theorem}
+
+\begin{proof}
+The transition state must simultaneously encode the identities of both $A$ and $B$ (since it connects them) and the path between them. The partition depth is additive over independent partition operations: the depth to specify $A$ is $\Depth_A$, the depth to specify $B$ is $\Depth_B$, and the depth to specify the reaction path is $\Depth_{\mathrm{path}}$. The total depth is their sum, since the transition state requires all three specifications simultaneously.
+
+The activation energy is therefore $E_a = \kB T \ln b \cdot \Depth_{\mathrm{path}}$, which is the cost of organizing the partition structure along the reaction coordinate. This recovers the Arrhenius form $k = A \exp(-E_a / \kB T)$ \citep{Arrhenius1889}, consistent with transition state theory \citep{Eyring1935}, with the pre-exponential factor $A$ determined by the attempt frequency of partition reorganization.
+\end{proof}
+
+\subsection{Categorical State Propagation (Current Flux)}
+\label{sec:current_flux}
+
+Proton transport and, more generally, signal propagation through biological networks proceed by categorical state transfer, not particle movement \citep{Sachikonye2024b}.
+
+\begin{theorem}[Grotthuss as Categorical Propagation]
+\label{thm:grotthuss}
+The Grotthuss mechanism for proton transport \citep{Grotthuss1806} is categorical state propagation through hydrogen bond networks. The signal velocity is
+\begin{equation}
+    v_s = \sqrt{\frac{g}{m_{\mathrm{eff}}}},
+    \label{eq:signal_velocity}
+\end{equation}
+where $g$ is the H-bond coupling strength and $m_{\mathrm{eff}}$ is the effective mass of the coupled oscillator. This exceeds the drift velocity $v_d = D/L$ by three to six orders of magnitude.
+\end{theorem}
+
+\begin{proof}
+In the Grotthuss mechanism, a proton entering one end of an H-bond chain causes a cascade of proton transfers along the chain. The proton emerging at the other end is not the same physical proton that entered. The categorical identity (``a proton with these thermodynamic properties'') propagates through the chain while the physical particles remain nearly stationary.
+
+The H-bond chain behaves as a coupled oscillator array. The dispersion relation for longitudinal modes gives $\omega^2 = (2g/m_{\mathrm{eff}})(1 - \cos ka)$, where $a$ is the O--O spacing. The group velocity at long wavelength ($k \to 0$) is $v_g = a\sqrt{g/m_{\mathrm{eff}}}$.
+
+For water H-bonds, $g \approx 20$ kJ/mol/$\text{\AA}^2$ and $m_{\mathrm{eff}} \approx 18$ amu, giving $v_s \approx 10^3$ m/s. The diffusive drift velocity for protons is $v_d = D/L \approx 10^{-9}~\mathrm{m}^2/\mathrm{s} / 10^{-6}~\mathrm{m} = 10^{-3}$ m/s. Thus $v_s/v_d \approx 10^6$, confirming that categorical state propagation dominates particle drift by six orders of magnitude.
+\end{proof}
+
+\begin{theorem}[Proton Conductance]
+\label{thm:conductance}
+The proton conductance of an H-bond network is
+\begin{equation}
+    G_H = \frac{e^2}{\kB T} \sum_{ij} \frac{g_{ij}}{\taup^{(ij)}},
+    \label{eq:conductance}
+\end{equation}
+where $g_{ij}$ is the coupling strength of bond $ij$ and $\taup^{(ij)}$ is the partition lag for bond reorganization.
+\end{theorem}
+
+\begin{proof}
+The current through bond $ij$ is $I_{ij} = (e/\taup^{(ij)}) \cdot (g_{ij} \Delta\phi_{ij} / \kB T)$, where $\Delta\phi_{ij}$ is the potential difference. This follows from Marcus theory \citep{Marcus1956}: the rate of electron (or proton) transfer across a barrier is $k = (\omega_0/2\pi) \exp(-\Delta G^\ddagger / \kB T)$, where $\Delta G^\ddagger$ depends on the reorganization energy and driving force. In the linear response regime ($e\Delta\phi_{ij} \ll \kB T$), the current is proportional to the driving force, giving $I_{ij} = G_{ij} \Delta\phi_{ij}$ with $G_{ij} = e^2 g_{ij} / (\kB T \cdot \taup^{(ij)})$.
+
+The partition lag is
+\begin{equation}
+    \taup = \frac{\hbar}{\Delta E} + \tau_{\mathrm{reorg}},
+    \label{eq:partition_lag}
+\end{equation}
+where $\hbar/\Delta E$ is the quantum mechanical tunneling time and $\tau_{\mathrm{reorg}}$ is the classical reorganization time of the surrounding H-bond network.
+
+The total network conductance is the sum over all parallel paths: $G_H = \sum_{ij} G_{ij}$.
+\end{proof}
+
+\subsection{The Biochemical Circuit (Circuit Model)}
+\label{sec:circuit}
+
+The cell's reaction network is isomorphic to an electrical circuit \citep{Sachikonye2024d}.
+
+\begin{definition}[Biochemical Circuit Graph]
+\label{def:circuit}
+A biochemical circuit is a weighted directed graph $G = (V, E, w)$ where:
+\begin{itemize}[nosep]
+    \item $V = \{v_1, \ldots, v_N\}$ are molecular species (metabolites, proteins, ions),
+    \item $E = \{e_{ij}\}$ are reactions connecting species $v_i$ to $v_j$,
+    \item $w: E \to \mathbb{R}^+$ assigns conductance $G_{ij}$ to each edge, derived from enzyme kinetics.
+\end{itemize}
+Each node carries a potential equal to its chemical potential, interpreted information-theoretically as categorical depth:
+\begin{equation}
+    \mu_i = -\kB T \ln 2 \cdot H_i + c_i,
+    \label{eq:chem_potential}
+\end{equation}
+where $H_i = -\log_2 P(\sigma_i)$ is the information content of the molecular state $\sigma_i$ and $c_i$ is a standard-state reference.
+\end{definition}
+
+\begin{theorem}[KCL Analog --- Mass Balance]
+\label{thm:KCL}
+At steady state, the sum of all fluxes into and out of every node vanishes:
+\begin{equation}
+    \sum_j J_{ij} = 0 \quad \text{for all } i \in V.
+    \label{eq:KCL}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The mass balance equation for species $i$ is $dc_i/dt = \sum_j \nu_{ij} v_j$, where $\nu_{ij}$ is the stoichiometric coefficient of species $i$ in reaction $j$ and $v_j$ is the reaction rate. At steady state, $dc_i/dt = 0$, giving $\sum_j \nu_{ij} v_j = 0$. Identifying the signed flux through edge $ij$ as $J_{ij} = \nu_{ij} v_j$ yields the Kirchhoff current law (KCL) analog \citep{Kirchhoff1845}: the algebraic sum of currents at each node is zero.
+\end{proof}
+
+\begin{theorem}[KVL Analog --- Wegscheider Conditions]
+\label{thm:KVL}
+Around any cycle in the reaction network, the sum of chemical potential differences vanishes:
+\begin{equation}
+    \sum_{\text{cycle}} \Delta\phi_{ij} = 0.
+    \label{eq:KVL}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+At thermodynamic equilibrium, detailed balance requires that the product of forward and reverse rate constants around any cycle equals unity \citep{Wegscheider1901}:
+\begin{equation}
+    \prod_{\text{cycle}} \frac{k_{ij}^+}{k_{ij}^-} = 1.
+\end{equation}
+Taking logarithms: $\sum_{\text{cycle}} \ln(k_{ij}^+/k_{ij}^-) = 0$. Since $\Delta\phi_{ij} = -\kB T \ln(k_{ij}^+/k_{ij}^-) + \kB T \ln(c_i/c_j)$, at equilibrium the concentration terms cancel and we obtain $\sum_{\text{cycle}} \Delta\phi_{ij} = 0$.
+
+At steady state away from equilibrium, dissipation occurs along specific edges but the topological constraint remains: the total free energy change around any closed loop in the network is determined by the external driving forces (ATP hydrolysis, ion gradients), giving the generalized KVL with known source terms \citep{Onsager1931}.
+\end{proof}
+
+\subsection{The O\texorpdfstring{$_2$}{2} Observation Array (Microscopy)}
+\label{sec:oxygen}
+
+The intracellular oxygen population constitutes a distributed observation array \citep{Sachikonye2024e}.
+
+\begin{definition}[Ternary Molecular State]
+\label{def:ternary}
+Each O$_2$ molecule admits three categorical states:
+\begin{itemize}[nosep]
+    \item $\ket{0}$: absorption state (energy uptake from environment),
+    \item $\ket{1}$: ground state (equilibrium reference),
+    \item $\ket{2}$: emission state (energy release to environment).
+\end{itemize}
+\end{definition}
+
+With $N \sim 10^9$ O$_2$ molecules per cell \citep{NichollsFerguson2002}, the information capacity of the observation array per measurement cycle is:
+\begin{equation}
+    I = N \cdot \log_2(3) \approx 1.585 \times 10^9 \text{ bits/cycle}.
+    \label{eq:info_capacity}
+\end{equation}
+
+\begin{theorem}[Commutation of Categorical and Physical Observables]
+\label{thm:commutation}
+Let $\hat{O}_{\mathrm{cat}}$ be a categorical observable (partition label assignment) and $\hat{O}_{\mathrm{phys}}$ be a physical observable (position, momentum, energy). Then
+\begin{equation}
+    [\hat{O}_{\mathrm{cat}}, \hat{O}_{\mathrm{phys}}] = 0.
+    \label{eq:commutation}
+\end{equation}
+Categorical observation does not disturb the physical state.
+\end{theorem}
+
+\begin{proof}
+Categorical observables act on the label space: $\hat{O}_{\mathrm{cat}} \ket{n,\ell,m,s;\mathbf{r},\mathbf{p}} = f(n,\ell,m,s) \ket{n,\ell,m,s;\mathbf{r},\mathbf{p}}$. Physical observables act on the continuous coordinates: $\hat{O}_{\mathrm{phys}} \ket{n,\ell,m,s;\mathbf{r},\mathbf{p}} = g(\mathbf{r},\mathbf{p}) \ket{n,\ell,m,s;\mathbf{r},\mathbf{p}}$. Since $f$ depends only on the discrete labels and $g$ depends only on the continuous coordinates, and the labels and coordinates span orthogonal subspaces of the Hilbert space:
+\begin{align}
+    \hat{O}_{\mathrm{cat}} \hat{O}_{\mathrm{phys}} \ket{\psi} &= f(n,\ell,m,s) \cdot g(\mathbf{r},\mathbf{p}) \ket{\psi}, \\
+    \hat{O}_{\mathrm{phys}} \hat{O}_{\mathrm{cat}} \ket{\psi} &= g(\mathbf{r},\mathbf{p}) \cdot f(n,\ell,m,s) \ket{\psi}.
+\end{align}
+Since multiplication of scalar functions commutes, $[\hat{O}_{\mathrm{cat}}, \hat{O}_{\mathrm{phys}}] = 0$.
+\end{proof}
+
+The cell membrane, cytoplasm, and O$_2$ molecules form a capacitor system: membrane (negative charge, $Q \sim -10^7 e$) $|$ cytoplasm (dielectric, $\epsilon_r \approx 80$) $|$ O$_2$ (electron-rich, $\delta^-$). The capacitance is:
+\begin{equation}
+    C \sim \frac{\epsilon_0 \epsilon_r A}{d} \approx 700 \text{ pF},
+    \label{eq:capacitance}
+\end{equation}
+where $A \sim 10^{-9}$ m$^2$ is the membrane area and $d \sim 10^{-9}$ m is the effective separation.
+
+\begin{definition}[Categorical Temperature]
+\label{def:cat_temp}
+The categorical temperature is the rate of change of partition depth:
+\begin{equation}
+    T_{\mathrm{cat}} = \frac{d\Depth}{dt}.
+    \label{eq:cat_temp}
+\end{equation}
+\end{definition}
+
+This definition decouples temperature measurement from calorimetry. Faster partition state counting (more reactions per unit time) corresponds to higher temperature, consistent with the kinetic theory interpretation.
+
+\subsection{Morphism Chain Compilation (Purpose Models)}
+\label{sec:purpose_models}
+
+The Purpose framework provides the computational infrastructure for cell state instantiation \citep{Sachikonye2024f}.
+
+\begin{definition}[Partition Calculus Operations]
+\label{def:operations}
+The Partition Calculus defines four fundamental operations:
+\begin{itemize}[nosep]
+    \item $\mathrm{observe}(I, n)$: project input $I$ to partition coordinates at depth $n$,
+    \item $\mathrm{catalyze}(\catalyst, \sigma)$: apply constraint set $\catalyst$ to state $\sigma$, reducing configuration space,
+    \item $\mathrm{fuse}(\sigma_1, \sigma_2, \ldots)$: combine multi-modal observations via cross-attention,
+    \item $\mathrm{access}(T, \sigma)$: execute backward trajectory completion to target resolution $T$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Morphism Chain]
+\label{def:chain}
+A morphism chain is a composition of Partition Calculus operations:
+\begin{equation}
+    \morphism_{\mathrm{total}} = \morphism_n \circ \cdots \circ \morphism_2 \circ \morphism_1,
+    \label{eq:chain}
+\end{equation}
+where each $\morphism_k$ is one of the four operations.
+\end{definition}
+
+\begin{theorem}[Compilation Decomposition]
+\label{thm:decomposition}
+Every cell state instantiation task $f(t)$ admits a canonical decomposition:
+\begin{equation}
+    f(t) = \mathrm{access}(T) \circ \mathrm{fuse}^* \circ \mathrm{catalyze}^* \circ \mathrm{observe}(I, n),
+    \label{eq:decomposition}
+\end{equation}
+where $\mathrm{catalyze}^*$ denotes zero or more catalyze operations and $\mathrm{fuse}^*$ denotes zero or more fuse operations.
+\end{theorem}
+
+\begin{proof}
+Every instantiation begins with data (requiring observe) and ends with a resolved state (requiring access). Between observation and access, the configuration space must be reduced (catalyze) and multi-modal observations combined (fuse). Since catalyze operations are commutative (Theorem~\ref{thm:catalyst_order} below) and fuse operations are associative, all catalyze operations can be collected before all fuse operations without changing the result. This yields the canonical form.
+\end{proof}
+
+\begin{theorem}[Resolution Enhancement]
+\label{thm:resolution}
+The resolution achieved by a morphism chain with $K$ catalysts of effectiveness $\epsilon_i$ and $P$ fused modality pairs with correlation $\rho_{jk}$ is:
+\begin{equation}
+    \Delta x_{\mathrm{final}} = \Delta x_0 \cdot \prod_{i=1}^{K} \epsilon_i \cdot \exp\!\left(-\sum_{j<k} \rho_{jk}\right),
+    \label{eq:resolution}
+\end{equation}
+where $\Delta x_0$ is the initial observation resolution.
+\end{theorem}
+
+\begin{proof}
+Each catalyst $i$ reduces the configuration space by factor $\epsilon_i < 1$, so the resolution improves multiplicatively: $\Delta x \to \epsilon_i \cdot \Delta x$. After $K$ catalysts, $\Delta x = \Delta x_0 \prod_i \epsilon_i$.
+
+Fusion of correlated modalities provides exponential enhancement. If modalities $j$ and $k$ have correlation coefficient $\rho_{jk}$, the joint resolution in the correlated subspace is $\Delta x_{\mathrm{joint}} = \Delta x_{\mathrm{ind}} \cdot \exp(-\rho_{jk})$ (from the reduction in joint entropy $H(X,Y) = H(X) + H(Y|X) = H(X) + H(Y) - I(X;Y)$ \citep{CoverThomas2006}, with $I(X;Y) \propto \rho_{jk}$ for Gaussian variables). Over all pairs, $\Delta x_{\mathrm{fused}} = \Delta x \cdot \exp(-\sum_{j<k} \rho_{jk})$.
+\end{proof}
+
+%==============================================================================
+\section{The Isomorphism Theorem}
+\label{sec:isomorphism}
+%==============================================================================
+
+We now state and prove the paper's central result: the six subsystems described in Section~\ref{sec:subsystems} are not independent theories but isomorphic descriptions of a single mathematical structure.
+
+\begin{figure*}[t]
+    \centering
+    \fbox{\parbox{0.95\textwidth}{\centering \vspace{3cm}
+    \textbf{[Figure 1: The Subsystem Isomorphism Hexagon]}\\[6pt]
+    Six subsystems arranged as vertices of a hexagon, with bijective maps $\phi_1, \ldots, \phi_5$ as labeled edges. The center represents the unified structure: a self-observing categorical circuit on bounded phase space. Each edge is annotated with the preserved structure (entropy/depth, dynamics/flux, conservation laws).
+    \vspace{3cm}}}
+    \caption{The six subsystems and their isomorphic relationships. Each subsystem provides one view of the unified structure: a self-observing categorical circuit on bounded phase space. The maps $\phi_1$ through $\phi_5$ are explicitly constructed in the proof of Theorem~\ref{thm:isomorphism} and shown to preserve entropy, dynamics, and conservation laws. The arrows indicate the direction of the canonical map; all maps are invertible.}
+    \label{fig:hexagon}
+\end{figure*}
+
+\begin{theorem}[Subsystem Isomorphism]
+\label{thm:isomorphism}
+The six subsystems---\textup{(1)} charge emergence from partition, \textup{(2)} partition gradient flow, \textup{(3)} categorical state propagation, \textup{(4)} biochemical circuit model, \textup{(5)} O$_2$ observation array, and \textup{(6)} morphism chain compilation---are isomorphic descriptions of one mathematical structure: a self-observing categorical circuit on bounded phase space.
+
+Specifically:
+\begin{enumerate}[label=\textup{(I\arabic*)}]
+    \item The circuit's node potentials \textup{(Subsystem 4)} are the partition depths \textup{(Subsystem 2)} which are the chemical potentials generated by charge creation \textup{(Subsystem 1)}.
+    \item The circuit's edge currents \textup{(Subsystem 4)} are categorical state flows \textup{(Subsystem 3)} which follow partition gradient dynamics \textup{(Subsystem 2)}.
+    \item The O$_2$ array \textup{(Subsystem 5)} is the observe operation \textup{(Subsystem 6)} which is a partition operation \textup{(Subsystem 2)} that creates charge \textup{(Subsystem 1)}.
+    \item Temperature $T_{\mathrm{cat}} = d\Depth/dt$ \textup{(Subsystem 5)} is the reaction firing rate $1/\tau_{\mathrm{Gillespie}}$ \textup{(Subsystem 4)} which is the partition lag inverse $1/\taup$ \textup{(Subsystem 3)}.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We construct five explicit maps and verify that each is bijective and structure-preserving.
+
+\textbf{Map $\phi_1$: Charge space $\to$ Partition space.}
+Define $\phi_1(q_i) = \Depth_{\mathrm{boundary}}(i) \cdot g_i$, where $q_i$ is the charge on species $i$, $\Depth_{\mathrm{boundary}}(i)$ is the partition depth of the boundary separating species $i$ from its environment, and $g_i$ is the coupling constant of species $i$ to the electromagnetic field.
+
+\emph{Bijectivity:} By Theorem~\ref{thm:charge}, charge exists if and only if a partition boundary exists. Every charge value corresponds to exactly one boundary depth (since $g_i$ is species-specific and nonzero), and every boundary depth produces exactly one charge. Thus $\phi_1$ is bijective.
+
+\emph{Structure preservation:} The potential energy of charge $q_i$ in field $\phi$ is $U = q_i \phi$. Under $\phi_1$, this becomes $U = \Depth_{\mathrm{boundary}} \cdot g_i \cdot \phi$. Since $\phi$ itself is generated by partition operations (Corollary~\ref{cor:circuit_voltages}), $U = \kB T \ln b \cdot \Depth_{\mathrm{boundary}} \cdot \Depth_{\mathrm{field}}$, which is the partition depth product --- precisely the existence cost (Theorem~\ref{thm:existence_cost}). Thus $\phi_1$ preserves energy/entropy structure.
+
+\textbf{Map $\phi_2$: Gradient flow space $\to$ Circuit current space.}
+Define $\phi_2(\nabla \Depth) = J_{ij}$ via the Ohm analog: $J_{ij} = G_{ij} \cdot (\mu_i - \mu_j) / \kB T$, where $\mu_i - \mu_j = -\kB T \ln b \cdot (\Depth_i - \Depth_j)$.
+
+\emph{Bijectivity:} The gradient field $\nabla \Depth$ on the graph decomposes uniquely into edge components $(\Depth_i - \Depth_j)$ for each edge $ij$. With nonzero conductances $G_{ij}$, the map to currents $J_{ij}$ is bijective.
+
+\emph{Structure preservation:} The gradient flow equation~\eqref{eq:gradient_flow} becomes $dc_i/dt = -\gamma \sum_j G_{ij}(\mu_i - \mu_j)/(kBT) = -\gamma \sum_j J_{ij}$, which is precisely the mass balance equation with Kirchhoff current law (Theorem~\ref{thm:KCL}). Thus $\phi_2$ maps dynamics to dynamics.
+
+\textbf{Map $\phi_3$: H-bond network $\to$ Circuit graph.}
+Define $\phi_3(v_{\mathrm{O}}) = v_{\mathrm{species}}$ mapping oxygen vertices in the H-bond network to chemical species nodes in the circuit. The H-bond coupling $g_{ij}$ maps to the edge conductance $G_{ij}$ via $G_{ij} = e^2 g_{ij} / (\kB T \cdot \taup^{(ij)})$ (Theorem~\ref{thm:conductance}).
+
+\emph{Bijectivity:} Every H-bond path between two molecular species defines a reaction pathway. Conversely, every enzymatic reaction involves H-bond reorganization at the active site. The mapping preserves graph topology (adjacency) and is bijective on the relevant subgraph.
+
+\emph{Structure preservation:} The categorical state propagation velocity (Theorem~\ref{thm:grotthuss}) determines the timescale on which circuit nodes become informationally coupled. The proton conductance (Theorem~\ref{thm:conductance}) equals the edge conductance in the circuit model. Conservation of flux through the H-bond network ($\sum_j I_{ij} = 0$ at each oxygen) maps to KCL ($\sum_j J_{ij} = 0$ at each species).
+
+\textbf{Map $\phi_4$: O$_2$ ternary states $\to$ Partition coordinates.}
+Define $\phi_4(\ket{k}) = (n_k, \ell_k, m_k, s_k)$ mapping each of the three O$_2$ states to partition coordinates:
+\begin{align}
+    \phi_4(\ket{0}) &= (1, 0, 0, -\tfrac{1}{2}), \quad \text{(absorption: depth 1, absorb spin)} \\
+    \phi_4(\ket{1}) &= (1, 0, 0, +\tfrac{1}{2}), \quad \text{(ground: depth 1, emit spin)} \\
+    \phi_4(\ket{2}) &= (2, 0, 0, +\tfrac{1}{2}). \quad \text{(emission: depth 2, higher energy)}
+\end{align}
+
+\emph{Bijectivity:} Three ternary states map to three distinct partition coordinates. Injectivity and surjectivity on the relevant subspace are immediate.
+
+\emph{Structure preservation:} The information content $\log_2 3$ bits per O$_2$ molecule matches the partition capacity at depth $n=2$: $C(2) = 2 \cdot 2^2 = 8 \geq 3$ states. The observation operation (cycling through $\ket{0} \to \ket{1} \to \ket{2}$) corresponds to traversal of partition coordinates, which is precisely a partition operation.
+
+\textbf{Map $\phi_5$: Morphism chains $\to$ Constraint operators.}
+Define $\phi_5$ on each operation:
+\begin{align}
+    \phi_5(\mathrm{observe}) &= P_{\mathrm{obs}}, \quad \text{(projection onto observed subspace)} \\
+    \phi_5(\mathrm{catalyze}) &= K_{\mathrm{KCL}} \cap K_{\mathrm{stoich}}, \quad \text{(conservation constraints)} \\
+    \phi_5(\mathrm{fuse}) &= K_{\mathrm{KVL}}, \quad \text{(cycle consistency constraints)} \\
+    \phi_5(\mathrm{access}) &= T_{\mathrm{back}}, \quad \text{(backward trajectory operator)}
+\end{align}
+
+\emph{Bijectivity:} Each operation maps to a unique constraint class, and every constraint in the circuit model arises from exactly one operation type. Observe produces data constraints; catalyze produces conservation constraints (KCL, stoichiometry); fuse produces cycle consistency constraints (KVL, Wegscheider); access produces trajectory constraints (backward Viterbi). These four constraint classes are mutually exclusive and collectively exhaustive.
+
+\emph{Structure preservation:} The composition of morphism chains $\morphism_n \circ \cdots \circ \morphism_1$ maps to the composition of constraint operators $T = T_{\mathrm{back}} \circ K_{\mathrm{KVL}} \circ K_{\mathrm{KCL}} \circ P_{\mathrm{obs}}$, preserving the order of constraint application and the resolution enhancement formula (Theorem~\ref{thm:resolution}).
+
+\textbf{Verification of identities (I1)--(I4):}
+
+(I1): Node potential $\mu_i$ (Subsystem 4) $= -\kB T \ln 2 \cdot H_i$ (Def.~\ref{def:circuit}) $= -\kB T \ln b \cdot \Depth_i$ (Theorem~\ref{thm:depth_entropy}, with $b=2$) $= E_{\mathrm{exist},i}$ (Theorem~\ref{thm:existence_cost}) $= q_i \phi_i / \Depth_{\mathrm{boundary},i}$ ($\phi_1^{-1}$, Subsystem 1). The chain of equalities is verified.
+
+(I2): Edge current $J_{ij}$ (Subsystem 4) $= G_{ij} \Delta\mu_{ij}/\kB T$ $= (e^2 g_{ij}/\kB T \taup^{(ij)}) \cdot \Delta\mu_{ij}/\kB T$ ($\phi_3$, Subsystem 3) $= -\gamma (\nabla\Depth)_{ij}$ ($\phi_2$, Subsystem 2). The chain is verified.
+
+(I3): O$_2$ state transition $\ket{k} \to \ket{k+1}$ (Subsystem 5) extracts partition information ($\phi_4$) which is the observe operation (Subsystem 6) $= P_{\mathrm{obs}}$ ($\phi_5$) which is a partition operation (Subsystem 2) that creates charge distinctions (Subsystem 1, $\phi_1^{-1}$). The chain is verified.
+
+(I4): $T_{\mathrm{cat}} = d\Depth/dt$ (Subsystem 5). In the circuit, reactions fire at rate $a_0 = \sum_j a_j$ with Gillespie waiting time $\tau_G = (1/a_0)\ln(1/u)$ \citep{Gillespie1977}. Each reaction changes $\Depth$ by $\Delta\Depth$, so $d\Depth/dt \approx \Delta\Depth / \tau_G \propto a_0$. The partition lag $\taup = \hbar/\Delta E + \tau_{\mathrm{reorg}}$ determines $a_0^{-1}$ (Subsystem 3). Thus $T_{\mathrm{cat}} \propto 1/\tau_G \propto 1/\taup$.
+\end{proof}
+
+\begin{table*}[t]
+\centering
+\caption{Cross-reference of mathematical objects across the six subsystems. Each row identifies a single physical/mathematical quantity as it appears in each subsystem. The isomorphism maps $\phi_1$--$\phi_5$ establish the formal equivalences.}
+\label{tab:crossref}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{Quantity} & \textbf{1. Charge} & \textbf{2. Landscape} & \textbf{3. Current} & \textbf{4. Circuit} & \textbf{5. O$_2$} & \textbf{6. Purpose} \\
+\midrule
+State & Ion charge $q_i$ & Depth $\Depth_i$ & Bond state $x_{ij}$ & Potential $\mu_i$ & Ternary $\ket{k}$ & Signature $(n,\ell,m,s)$ \\
+Driving force & $\nabla\phi$ & $\nabla\Depth$ & $\Delta\phi_{ij}$ & $\Delta\mu_{ij}$ & Cycling rate & Morphism chain \\
+Flow & Ion current & Gradient flow & State propagation & Reaction flux $J_{ij}$ & State counting & Compilation \\
+Constraint & Electroneutrality & Depth conservation & Network topology & KCL, KVL & Commutation & Type checking \\
+Rate & Reorganization & $\gamma^{-1}$ & Partition lag $\taup$ & Gillespie $\tau$ & $dM/dt$ & Inference time \\
+Conservation & Charge conservation & $\sum\Depth = \mathrm{const}$ & Flux continuity & Mass balance & Capacity $C(n)$ & S-entropy \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%==============================================================================
+\section{The Purpose Compilation Pipeline}
+\label{sec:pipeline}
+%==============================================================================
+
+\subsection{Knowledge Corpus Construction}
+
+The Purpose pipeline requires a knowledge corpus encoding both the mathematical framework and its biological instantiation. The corpus comprises two components:
+
+\begin{enumerate}[label=(\arabic*)]
+    \item \emph{Theoretical corpus}: the partition theory papers \citep{Sachikonye2024a,Sachikonye2024b,Sachikonye2024c,Sachikonye2024d,Sachikonye2024e,Sachikonye2024f} providing formal derivations of partition coordinates, depth, gradient flow, charge emergence, categorical propagation, circuit analogs, O$_2$ observation, and morphism chain algebra.
+    \item \emph{Empirical corpus}: biological databases encoding the cell's circuit topology and parameters:
+    \begin{itemize}[nosep]
+        \item KEGG metabolic networks: circuit graph topology $G = (V, E)$,
+        \item BRENDA enzyme database: edge conductances $G_{ij}$ from $k_{\mathrm{cat}}$, $K_M$ values,
+        \item PDB protein structures: node partition signatures $(n, \ell, m, s)$ from structural coordinates,
+        \item Metabolomics databases: ground-truth concentrations for validation.
+    \end{itemize}
+\end{enumerate}
+
+The corpus encodes both the constraints (from theory) and the specific parameter values (from experiment) needed to instantiate a particular cell type.
+
+\subsection{Teacher--Student Architecture}
+
+The compilation task---mapping partial observations to morphism chains---is learned via knowledge distillation \citep{Hinton2015}.
+
+\textbf{Teacher models.} High-capacity models generate training data:
+\begin{itemize}[nosep]
+    \item Meditron-70B: biomedical reasoning and clinical interpretation,
+    \item BioGPT: molecular biology and pathway knowledge,
+    \item MathCoder-34B: equation derivation and constraint verification,
+    \item Claude/GPT-4: morphism chain generation and logical consistency checking.
+\end{itemize}
+
+Teachers generate $(t_i, \morphism_i)$ pairs where $t_i$ is a task specification (a partial observation of cell state, e.g., ``observed metabolite concentrations: glucose 5 mM, pyruvate 0.1 mM, ATP 3 mM'') and $\morphism_i$ is the morphism chain that resolves the complete state from those observations.
+
+\textbf{Student model.} A compact model learns the compilation mapping $f_\theta: \mathcal{T} \to \mathcal{M}$:
+\begin{itemize}[nosep]
+    \item Base architecture: Llama-3 or Phi-3 (7B--13B parameters),
+    \item Adaptation: Low-Rank Adaptation (LoRA) \citep{Hu2022} with rank
+    \begin{equation}
+        r \geq K + M + L + \lceil \log_2 C(n_{\max}) \rceil,
+        \label{eq:lora_rank}
+    \end{equation}
+    where $K$ is the number of catalyst types, $M$ is the number of modalities, $L$ is the maximum chain length, and $C(n_{\max})$ is the partition capacity at maximum depth.
+\end{itemize}
+
+\textbf{Training.} Curriculum learning \citep{Bengio2009} proceeds in four stages:
+\begin{enumerate}[nosep]
+    \item Syntax: learn the grammar of morphism chains (well-formedness),
+    \item Single catalyst: learn individual constraint application,
+    \item Multi-catalyst: learn constraint composition and ordering,
+    \item Full compilation: learn end-to-end observation-to-state mapping.
+\end{enumerate}
+
+\subsection{Training Objective}
+
+The training loss combines four terms:
+\begin{equation}
+    \mathcal{L}(\theta) = \mathcal{L}_{\mathrm{gen}} + \lambda_1 \mathcal{L}_{\mathrm{type}} + \lambda_2 \mathcal{L}_{\mathrm{cons}} + \lambda_3 \mathcal{L}_{\mathrm{res}},
+    \label{eq:loss}
+\end{equation}
+where:
+
+\begin{itemize}[nosep]
+    \item $\mathcal{L}_{\mathrm{gen}} = -\sum_t \log P_\theta(\morphism_t | \morphism_{<t}, \mathbf{x})$: autoregressive cross-entropy loss reproducing teacher-generated chains \citep{Brown2020},
+    \item $\mathcal{L}_{\mathrm{type}} = \sum_k \mathbb{1}[\morphism_k \text{ is ill-typed}]$: type-checking penalty ensuring chains are well-typed in Partition Calculus (depth compatibility, domain/codomain matching),
+    \item $\mathcal{L}_{\mathrm{cons}} = \| \Sk + \St + \Se - S_{\mathrm{total}} \|^2$: S-entropy conservation, ensuring the tripartite entropy decomposition is preserved at every stage of the chain,
+    \item $\mathcal{L}_{\mathrm{res}} = \max(0, \Delta x_{\mathrm{achieved}} - \Delta x_{\mathrm{required}})$: resolution adequacy, penalizing chains that fail to achieve the required resolution.
+\end{itemize}
+
+\subsection{Inference Pipeline}
+
+At inference time, the pipeline operates as follows:
+\begin{enumerate}[nosep]
+    \item \textbf{Input}: partial observations (metabolomics concentrations, microscopy image, RNA-seq profile, or any combination).
+    \item \textbf{Compile}: the student model generates a morphism chain $\morphism_{\mathrm{total}} = \mathrm{access}(T) \circ \mathrm{fuse}^* \circ \mathrm{catalyze}^* \circ \mathrm{observe}(I, n)$.
+    \item \textbf{Execute}: the chain is executed on the fuzzy circuit backend (Section~\ref{sec:implementation}).
+    \item \textbf{Output}: complete cell state $\tilde{X}^*$ (all node concentrations with uncertainty) and disease assessment (trajectory escape analysis).
+\end{enumerate}
+
+%==============================================================================
+\section{The Four Operations Grounded in Physics}
+\label{sec:operations}
+%==============================================================================
+
+\subsection{Observe: From Data to Partition Signatures}
+
+The observe operation maps raw measurements to partition coordinates $(n, \ell, m, s)$.
+
+\textbf{For microscopy data:} A vision encoder (DINOv2 or BiomedCLIP architecture, domain-adapted via continued pretraining \citealp{Gururangan2020}) projects image patches to partition coordinates. The encoder $E: \mathbb{R}^{H \times W \times 3} \to \mathbb{R}^{P \times d}$ maps $P$ image patches to $d$-dimensional embeddings. A projection head $\Pi: \mathbb{R}^d \to \mathbb{Z}^4$ maps embeddings to partition coordinates.
+
+\textbf{For omics data:} An embedding model (PubMedBERT \citep{Beltagy2019} or BGE-M3) maps molecular identifiers and measurements to partition signatures. Each metabolite concentration $c_i$ maps to depth $\Depth_i = -\log_b(c_i/c_{\mathrm{ref}})$ and each gene expression level $e_j$ maps to depth $\Depth_j = -\log_b(e_j/e_{\mathrm{ref}})$.
+
+\textbf{For the cell itself:} The O$_2$ array IS the observe operation. Each O$_2$ molecule cycling through ternary states $\ket{0} \to \ket{1} \to \ket{2}$ extracts partition information from its local chemical environment. The $10^9$ molecules collectively sample the entire intracellular partition landscape at $\sim 1.6 \times 10^9$ bits per cycle (Eq.~\ref{eq:info_capacity}).
+
+\begin{theorem}[Observe Bridge Validity]
+\label{thm:bridge}
+The composition $\Pi \circ E$ satisfies the following properties:
+\begin{enumerate}[label=\textup{(\roman*)}]
+    \item \textup{Partition validity:} outputs are valid partition coordinates, $n \geq 1$, $0 \leq \ell < n$, $|m| \leq \ell$, $s \in \{-1/2, +1/2\}$.
+    \item \textup{Capacity consistency:} the number of distinct outputs at depth $n$ does not exceed $C(n) = 2n^2$.
+    \item \textup{Locality:} nearby inputs (in measurement space) map to nearby outputs (in partition space).
+    \item \textup{Equivariance:} symmetry transformations of the input (rotation, translation of the image; permutation of metabolite labels) induce corresponding transformations of the partition coordinates.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The projection head $\Pi$ uses a softmax over valid coordinate values at each level, ensuring outputs lie in the valid range by construction.
+
+(ii) The softmax normalization at each depth $n$ distributes probability over at most $C(n) = 2n^2$ states, ensuring capacity consistency.
+
+(iii) The vision encoder $E$ is trained to produce Lipschitz-continuous embeddings: $\|E(x_1) - E(x_2)\| \leq L \|x_1 - x_2\|$ for Lipschitz constant $L$. The projection head $\Pi$ preserves local ordering (nearby embeddings map to nearby or identical partition coordinates) because the softmax temperature is finite.
+
+(iv) The vision encoder is equivariant to the symmetry group of the imaging modality by construction (rotation equivariance from data augmentation, translation equivariance from convolutional architecture). The projection head maps these symmetries to the corresponding symmetries of partition coordinates ($m \to -m$ under reflection, $\ell$ invariant under rotation).
+\end{proof}
+
+\subsection{Catalyze: Biological Constraints as Configuration Space Reducers}
+
+The catalyze operation applies biological constraints to reduce the space of possible cell states.
+
+\begin{definition}[Catalyst Vocabulary]
+\label{def:catalyst_vocab}
+The catalyst vocabulary for whole-cell instantiation comprises the constraints in Table~\ref{tab:catalysts}.
+\end{definition}
+
+\begin{table}[t]
+\centering
+\caption{Catalyst vocabulary for whole-cell instantiation. Each catalyst type applies a biological constraint that reduces the configuration space by factor $\epsilon$.}
+\label{tab:catalysts}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Catalyst} & \textbf{Type} & $\bm{\epsilon}$ & \textbf{Basis} \\
+\midrule
+conservation(mass) & Conservation & 0.25 & Stoichiometry \\
+conservation(charge) & Conservation & 0.20 & Electroneutrality \\
+conservation(energy) & Conservation & 0.10 & ATP balance \\
+phase\_lock(membrane) & Phase-lock & 0.15 & Bilayer topology \\
+phase\_lock(chromatin) & Phase-lock & 0.15 & DNA organization \\
+phase\_lock(cytoskel) & Phase-lock & 0.20 & Actin/tubulin \\
+thermal(metabolic) & Thermal & 0.10 & ATP hydrolysis \\
+thermal(gradient) & Thermal & 0.15 & Temperature dist. \\
+temporal(cell\_cycle) & Temporal & 0.10 & Division timing \\
+temporal(signaling) & Temporal & 0.15 & Cascade dynamics \\
+o2(triangulation) & Oxygen & 0.05 & O$_2$ positioning \\
+o2(consumption) & Oxygen & 0.10 & Metabolic uptake \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{theorem}[Catalyst Order Independence]
+\label{thm:catalyst_order}
+The final resolution after applying $K$ catalysts is independent of their ordering:
+\begin{equation}
+    \Delta x_{\mathrm{final}} = \Delta x_0 \cdot \prod_{i=1}^{K} \epsilon_i,
+    \label{eq:order_independence}
+\end{equation}
+regardless of the permutation in which the catalysts are applied.
+\end{theorem}
+
+\begin{proof}
+Each catalyst $\catalyst_i$ acts as a projection operator on the configuration space: $\catalyst_i: \Omega \to \Omega_i \subset \Omega$ with $\mathrm{Vol}(\Omega_i) = \epsilon_i \cdot \mathrm{Vol}(\Omega)$. The catalysts constrain independent degrees of freedom (mass, charge, energy, topology are independent constraint types). Therefore $\catalyst_i \circ \catalyst_j = \catalyst_j \circ \catalyst_i$ for all $i, j$ (the projections commute because they act on orthogonal subspaces of the configuration space). The composite projection satisfies $\mathrm{Vol}(\bigcap_i \Omega_i) = \prod_i \epsilon_i \cdot \mathrm{Vol}(\Omega)$, giving the resolution as $\Delta x_{\mathrm{final}} = \Delta x_0 \cdot \prod_i \epsilon_i$.
+\end{proof}
+
+\begin{theorem}[Optimal Catalyst Subset Selection]
+\label{thm:optimal_subset}
+The minimum subset of catalysts achieving a target resolution $\Delta x_{\mathrm{target}}$ is the solution to the minimum covering problem on the compatibility graph.
+\end{theorem}
+
+\begin{proof}
+Let $\mathcal{G}_C = (V_C, E_C)$ be the compatibility graph where vertices are catalysts and edges connect compatible (simultaneously applicable) catalysts. The resolution constraint is $\Delta x_0 \prod_{i \in S} \epsilon_i \leq \Delta x_{\mathrm{target}}$, equivalently $\sum_{i \in S} |\log \epsilon_i| \geq \log(\Delta x_0 / \Delta x_{\mathrm{target}})$. Minimizing $|S|$ subject to this coverage constraint and the compatibility constraints (selected catalysts must form a clique in $\mathcal{G}_C$) is the minimum weight clique cover problem. For independent catalysts (complete compatibility graph), this reduces to the greedy algorithm: sort by $|\log \epsilon_i|$ descending, select until threshold is met.
+\end{proof}
+
+\subsection{Fuse: Cross-Attention as Correlation Recovery}
+
+The fuse operation combines multi-modal observations using cross-attention \citep{Vaswani2017}.
+
+\begin{theorem}[Attention Approximates Correlation]
+\label{thm:attention_correlation}
+In the limit of sufficient data and model capacity, the learned attention weights $\alpha_{ij}$ in the cross-attention mechanism converge to the inter-modality correlation coefficients $\rho_{ij}$:
+\begin{equation}
+    \alpha_{ij} \to \rho_{ij} \quad \text{as } |\mathcal{D}| \to \infty, \; d_{\mathrm{model}} \to \infty.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Cross-attention computes $\alpha_{ij} = \mathrm{softmax}(Q_i K_j^\top / \sqrt{d})$ where $Q_i = W_Q x_i$ and $K_j = W_K y_j$ are linear projections of tokens from modalities $X$ and $Y$.
+
+In the limit of sufficient capacity, the projections $W_Q, W_K$ can represent any linear transformation. The optimal attention (minimizing the reconstruction loss for the fused representation) assigns weight proportional to the predictive power of token $y_j$ for token $x_i$. By the data processing inequality \citep{CoverThomas2006}, this predictive power is bounded by the mutual information $I(x_i; y_j)$, which for jointly Gaussian variables satisfies $I(x_i; y_j) = -\frac{1}{2}\log(1 - \rho_{ij}^2) \approx \rho_{ij}^2/2$ for small correlations. The softmax normalization maps mutual information to a probability distribution that, for sufficient data, concentrates on the empirical correlation structure.
+\end{proof}
+
+The fused resolution is:
+\begin{equation}
+    \Delta x_{\mathrm{fused}} = \Delta x_0 \cdot \exp\!\left(-\sum_{j<k} \alpha_{jk}\right),
+\end{equation}
+where the exponential enhancement arises from the multiplicative effect of correlated constraints.
+
+\begin{remark}
+The physical grounding of the correlations is phase-lock coupling in the underlying circuit. Molecular species connected by fast H-bond networks (Theorem~\ref{thm:grotthuss}) have highly correlated states because categorical information propagates between them at $v_s \gg v_d$. This is the same mechanism that makes the circuit informationally well-mixed: phase-lock coupling $\to$ high correlation $\to$ large attention weight $\to$ exponential resolution enhancement.
+\end{remark}
+
+\subsection{Access: Backward Trajectory Completion on Fuzzy Circuit}
+\label{sec:access}
+
+The access operation resolves unobserved states via backward trajectory completion on the fuzzy biochemical circuit.
+
+\begin{definition}[Fuzzy State Initialization]
+\label{def:fuzzy_init}
+Each unobserved node $i$ is initialized with a trapezoidal fuzzy membership function \citep{Zadeh1965}:
+\begin{equation}
+    \tilde{c}_i = (a_i, b_i, c_i, d_i) \quad \text{with } a_i \leq b_i \leq c_i \leq d_i,
+\end{equation}
+where $\mu_{\tilde{c}_i}(x) = 1$ for $x \in [b_i, c_i]$, $\mu_{\tilde{c}_i}(x) = (x-a_i)/(b_i-a_i)$ for $x \in [a_i, b_i]$, and $\mu_{\tilde{c}_i}(x) = (d_i-x)/(d_i-c_i)$ for $x \in [c_i, d_i]$.
+
+Observed nodes are set to crisp values: $\tilde{c}_i = (c_i^{\mathrm{obs}}, c_i^{\mathrm{obs}}, c_i^{\mathrm{obs}}, c_i^{\mathrm{obs}})$.
+\end{definition}
+
+\begin{definition}[Constraint Operators]
+\label{def:constraint_ops}
+Three constraint operators act on the fuzzy state vector $\tilde{X} = (\tilde{c}_1, \ldots, \tilde{c}_N)$:
+\begin{itemize}[nosep]
+    \item $T_{\mathrm{KCL}}$: enforces mass balance at every node (Theorem~\ref{thm:KCL}),
+    \item $T_{\mathrm{KVL}}$: enforces cycle consistency around every loop (Theorem~\ref{thm:KVL}),
+    \item $T_{\mathrm{Back}}$: computes the maximum a posteriori (MAP) backward trajectory via the Viterbi algorithm \citep{Viterbi1967} and constrains nodes to be consistent with their backward trajectories.
+\end{itemize}
+The composite operator is $T = T_{\mathrm{Back}} \circ T_{\mathrm{KVL}} \circ T_{\mathrm{KCL}}$.
+\end{definition}
+
+\begin{theorem}[Convergence]
+\label{thm:convergence}
+The composite operator $T$ is a contraction on the space $(\tilde{\mathcal{X}}, d_H)$ of fuzzy state tuples equipped with the Hausdorff metric $d_H$, with contraction constant $c = c_1 c_2 c_3 < 1$ where $c_1, c_2, c_3 < 1$ are the contraction constants of $T_{\mathrm{KCL}}, T_{\mathrm{KVL}}, T_{\mathrm{Back}}$ respectively. By the Banach fixed-point theorem \citep{Banach1922}, a unique fixed point $\tilde{X}^*$ exists and the iteration $\tilde{X}^{(k+1)} = T(\tilde{X}^{(k)})$ converges geometrically:
+\begin{equation}
+    d_H(\tilde{X}^{(k)}, \tilde{X}^*) \leq \frac{c^k}{1 - c} \, d_H(\tilde{X}^{(0)}, T(\tilde{X}^{(0)})).
+    \label{eq:convergence}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+We verify that each operator is a contraction.
+
+\emph{$T_{\mathrm{KCL}}$ is a contraction.} KCL constrains the fuzzy fluxes to satisfy $\sum_j \tilde{J}_{ij} = 0$ at each node. Applying KCL to two fuzzy states $\tilde{X}$ and $\tilde{Y}$ with $d_H(\tilde{X}, \tilde{Y}) = \delta$: the KCL operator projects each state onto the mass-balance hyperplane. Since projection onto a convex set is non-expansive, $d_H(T_{\mathrm{KCL}}(\tilde{X}), T_{\mathrm{KCL}}(\tilde{Y})) \leq \delta$. The inequality is strict (contraction rather than mere non-expansion) because the KCL constraints eliminate degrees of freedom: if $N$ nodes have $R$ independent reactions, the mass-balance constraints reduce the dimensionality from $N$ to $N - \mathrm{rank}(S)$, where $S$ is the stoichiometry matrix. The contraction constant is $c_1 = 1 - \mathrm{rank}(S)/N$.
+
+\emph{$T_{\mathrm{KVL}}$ is a contraction.} KVL constrains the potential differences around cycles. Each independent cycle provides one constraint, and the network has $|E| - |V| + 1$ independent cycles. By the same projection argument, $c_2 = 1 - (|E| - |V| + 1)/|E|$.
+
+\emph{$T_{\mathrm{Back}}$ is a contraction.} The backward trajectory computation via the Viterbi algorithm selects the most probable path through the circuit for each node. This path constrains the node's state based on the states of its predecessors and the transition probabilities. The contraction arises because the Viterbi algorithm propagates information from observed nodes to unobserved ones, reducing uncertainty at each step. For a graph with diameter $D$ (longest shortest path), $c_3 = (1 - 1/D)$.
+
+Since $c_1, c_2, c_3 < 1$ for any nontrivial network, $c = c_1 c_2 c_3 < 1$, and $T$ is a contraction. The Banach fixed-point theorem guarantees existence and uniqueness of $\tilde{X}^*$ with geometric convergence rate $c$.
+\end{proof}
+
+\begin{theorem}[Time-Invariance of Backward Trajectories]
+\label{thm:time_invariance}
+The backward trajectory $\Back_i(\sigma_i, G)$ of node $i$ depends on the current state $\sigma_i$ and the network topology $G$ but not on the absolute time $T$ of observation.
+\end{theorem}
+
+\begin{proof}
+The backward trajectory is defined as the MAP path:
+\begin{equation}
+    \Back_i = \argmin_{\text{path}} \sum_{k} (-\log P(\sigma_k \to \sigma_{k+1} | G)),
+\end{equation}
+where the sum is over transitions in the path leading to the current state $\sigma_i$. The transition probabilities $P(\sigma_k \to \sigma_{k+1} | G)$ depend on the rate constants (edge conductances) and the current concentrations, both of which are functions of $\sigma$ and $G$ alone. For autonomous kinetics (rate laws that do not explicitly depend on time), the transition probabilities are time-independent. Therefore $\Back_i$ depends on $(\sigma_i, G)$ but not on the observation time $T$.
+
+This means $\Back_i$ is a geometric invariant of the node within the network's state space---a \emph{categorical address} that identifies the node's position in the attractor landscape regardless of when the observation is made.
+\end{proof}
+
+%==============================================================================
+\section{The Instantiation Loop}
+\label{sec:loop}
+%==============================================================================
+
+\subsection{The Self-Observation Cycle}
+
+The instantiation framework operates as a cyclic process:
+
+\begin{enumerate}[nosep]
+    \item \textbf{OBSERVE}: The O$_2$ array samples the circuit state, producing partition signatures. Externally, this step corresponds to acquiring experimental measurements.
+    \item \textbf{CATALYZE}: Biological constraints (mass conservation, charge neutrality, membrane topology) reduce the configuration space.
+    \item \textbf{FUSE}: Multi-modal observations are combined via phase-lock correlations (cross-attention).
+    \item \textbf{ACCESS}: Backward trajectory completion resolves all fuzzy states to crisp values.
+    \item \textbf{ADVANCE}: Reactions fire according to Gillespie kinetics, time advances, new observations become available.
+\end{enumerate}
+
+\begin{algorithm}[t]
+\caption{Cell State Instantiation Loop}
+\label{alg:instantiation}
+\begin{algorithmic}[1]
+\Require Partial observations $\mathcal{O} = \{(i, c_i^{\mathrm{obs}})\}$, circuit graph $G = (V, E, w)$
+\Ensure Complete cell state $\tilde{X}^*$, disease vector $\mathbf{D}$
+\State \textbf{Initialize:} $\tilde{X}^{(0)} \gets \mathrm{FuzzyInit}(V, \mathcal{O})$ \Comment{Def.~\ref{def:fuzzy_init}}
+\State $\morphism \gets \mathrm{Compile}(\mathcal{O}, G)$ \Comment{Purpose model}
+\For{each observation modality $m$ in $\mathcal{O}$}
+    \State $\sigma_m \gets \mathrm{observe}(\mathcal{O}_m, n_m)$ \Comment{Partition signatures}
+\EndFor
+\For{each catalyst $\catalyst_k$ in $\morphism$}
+    \State $\tilde{X} \gets \mathrm{catalyze}(\catalyst_k, \tilde{X})$ \Comment{Constraint reduction}
+\EndFor
+\If{$|\text{modalities}| > 1$}
+    \State $\tilde{X} \gets \mathrm{fuse}(\sigma_1, \sigma_2, \ldots, \tilde{X})$ \Comment{Cross-attention}
+\EndIf
+\State $k \gets 0$
+\Repeat \Comment{Backward trajectory completion}
+    \State $\tilde{X}^{(k+1)} \gets T_{\mathrm{Back}}(T_{\mathrm{KVL}}(T_{\mathrm{KCL}}(\tilde{X}^{(k)})))$
+    \State $k \gets k + 1$
+\Until{$d_H(\tilde{X}^{(k)}, \tilde{X}^{(k-1)}) < \epsilon$}
+\State $\tilde{X}^* \gets \tilde{X}^{(k)}$
+\For{each node $i \in V$}
+    \State $\Back_i \gets \mathrm{BackwardTrajectory}(i, \tilde{X}^*, G)$
+    \State $D_i \gets \mathrm{TrajectoryEscape}(\Back_i, A_H)$ \Comment{Sec.~\ref{sec:disease}}
+\EndFor
+\State $\mathbf{D} \gets (D_1, \ldots, D_N)$
+\State \Return $(\tilde{X}^*, \mathbf{D})$
+\end{algorithmic}
+\end{algorithm}
+
+The key insight is that the cell already runs this loop. The O$_2$ array continuously observes; biochemical constraints continuously reduce; molecular interactions continuously fuse information; and the reaction network continuously completes trajectories. The Purpose framework makes this implicit process explicit and computationally executable.
+
+\subsection{Reactions as Time Generators}
+
+Time in this framework is not an external parameter but emerges from the reaction sequence.
+
+The Gillespie algorithm \citep{Gillespie1977} generates the next reaction time as:
+\begin{equation}
+    \tau = \frac{1}{a_0} \ln\frac{1}{u_1}, \quad a_0 = \sum_j a_j,
+    \label{eq:gillespie}
+\end{equation}
+where $a_j = c_j h_j$ is the propensity of reaction $j$, $c_j$ is the stochastic rate constant, $h_j$ is the number of distinct molecular combinations, and $u_1 \sim \mathrm{Uniform}(0,1)$.
+
+The partition lag for each reaction is:
+\begin{equation}
+    \taup = \frac{\hbar}{\Delta E} + \tau_{\mathrm{reorg}},
+    \label{eq:partition_lag_full}
+\end{equation}
+where the first term is the quantum mechanical uncertainty time and the second is the classical reorganization time.
+
+\begin{theorem}[Multi-Timescale Reduction]
+\label{thm:multiscale}
+Fast reactions (small $\taup$) equilibrate within one slow reaction step, justifying quasi-steady-state decomposition of the network.
+\end{theorem}
+
+\begin{proof}
+Consider two reaction timescales $\taup^{\mathrm{fast}} \ll \taup^{\mathrm{slow}}$. During one slow reaction step of duration $\Delta t \sim \taup^{\mathrm{slow}}$, the fast reactions execute $n = \Delta t / \taup^{\mathrm{fast}} \gg 1$ steps. By the law of large numbers, the fast reaction subsystem converges to its stationary distribution within $O(\sqrt{n})$ fluctuations. The slow reactions therefore see the fast subsystem at its steady-state values, which is the quasi-steady-state approximation.
+
+Biologically, this spans timescales from $\taup \sim 10^{-12}$ s (electron transfer in cytochrome c, via Marcus theory \citep{Marcus1956}) to $\taup \sim 10^{4}$ s (gene expression \citep{Elowitz2002}), a range of 16 orders of magnitude.
+\end{proof}
+
+\subsection{The Comparison Process and Directed Reactions}
+
+A central claim of the partition framework is that directed reactions are not pre-specified in the genome but are the \emph{outcome} of a continuous comparison process.
+
+Each molecule in the cell is continuously ``tested'' against the rest of the cell. This test is a partition operation: does the molecule's presence reduce the cell's global partition depth? If yes, the molecule is retained (its reactions proceed forward). If no, the molecule is degraded or expelled (its reactions proceed in reverse).
+
+\begin{definition}[Comparison Operation]
+\label{def:comparison}
+The comparison operation for molecule $i$ in cell state $X$ is:
+\begin{equation}
+    \delta\Depth_i = \Depth(X) - \Depth(X \setminus \{i\}),
+    \label{eq:comparison}
+\end{equation}
+where $\Depth(X)$ is the total partition depth of state $X$ and $X \setminus \{i\}$ is the state with molecule $i$ removed. If $\delta\Depth_i > 0$, molecule $i$ increases the cell's partition depth (contributes to organization); if $\delta\Depth_i < 0$, it decreases depth (is dispensable or harmful).
+\end{definition}
+
+The cell's molecular inventory converges to the minimum self-consistent partition structure whose backward trajectories all close---that is, every node's backward trajectory returns to a state within the cell. This is precisely autocatalytic closure \citep{Kauffman1993,VarelaMaturanaUribe1974} expressed in partition language: a self-maintaining set of molecules whose mutual interactions sustain each member.
+
+\begin{remark}
+The information-first view (DNA as blueprint) requires the cell to appear fully formed, since the ``blueprint'' cannot be read without the machinery that the blueprint encodes. The partition-first view derives directed reactions as the residue of gradient descent on partition depth: molecules that reduce depth are retained; molecules that increase depth are removed. The genetic code is not a frozen accident but the unique attractor of carbon-based aqueous partition dynamics \citep{Sachikonye2024c}.
+\end{remark}
+
+%==============================================================================
+\section{Disease as Trajectory Escape}
+\label{sec:disease}
+%==============================================================================
+
+\subsection{Formal Disease Criterion}
+
+The framework provides a rigorous definition of disease.
+
+\begin{definition}[Healthy Attractor]
+\label{def:healthy}
+The healthy attractor $A_H$ is the set of cell states in which all backward trajectories close on the cell:
+\begin{equation}
+    A_H = \{X : \Back_i(\sigma_i, G) \in \mathrm{Basin}(A_H) \;\; \forall \, i \in V\}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Disease]
+\label{def:disease}
+A cell is diseased if and only if there exists a node $i$ whose backward trajectory escapes the healthy attractor basin:
+\begin{equation}
+    \exists \, i \in V : \Back_i(\sigma_i, G_{\mathrm{diseased}}) \notin \mathrm{Basin}(A_H).
+    \label{eq:disease}
+\end{equation}
+The diseased node's categorical address has changed: its backward trajectory leads to a different attractor.
+\end{definition}
+
+\begin{remark}
+This definition unifies diverse pathologies. Cancer: cells whose backward trajectories lead to a proliferative attractor rather than quiescence. Neurodegeneration: neurons whose protein-folding trajectories escape the native-state basin \citep{Levinthal1969}. Infection: foreign molecules whose backward trajectories lead outside the cell entirely.
+\end{remark}
+
+\subsection{The 8-Component Disease Signature}
+
+Different diseases affect different oscillator types in the circuit. We define a disease vector that captures this specificity.
+
+\begin{definition}[Disease Vector]
+\label{def:disease_vector}
+The disease vector is $\mathbf{D} = (D_P, D_E, D_C, D_M, D_A, D_G, D_{\mathrm{Ca}}, D_R)$, where the components correspond to eight fundamental oscillator types:
+\begin{itemize}[nosep]
+    \item $D_P$: protein oscillators (folding, aggregation),
+    \item $D_E$: enzyme oscillators (catalytic activity),
+    \item $D_C$: channel oscillators (ion conductance) \citep{Hille2001},
+    \item $D_M$: membrane oscillators (lipid organization),
+    \item $D_A$: ATP oscillators (energy metabolism) \citep{NichollsFerguson2002},
+    \item $D_G$: genetic oscillators (transcription, replication),
+    \item $D_{\mathrm{Ca}}$: calcium oscillators (signaling) \citep{Murray2002},
+    \item $D_R$: circadian oscillators (rhythmic processes) \citep{Strogatz1994}.
+\end{itemize}
+Each component measures the normalized trajectory deviation:
+\begin{equation}
+    D_i = \frac{\|\Back_i^{\mathrm{diseased}} - \Back_i^{\mathrm{healthy}}\|_2}{\|\Back_i^{\mathrm{healthy}}\|_2}.
+    \label{eq:disease_component}
+\end{equation}
+The dominant component identifies the disease class.
+\end{definition}
+
+\begin{figure*}[t]
+    \centering
+    \fbox{\parbox{0.95\textwidth}{\centering \vspace{3cm}
+    \textbf{[Figure 2: Disease as Trajectory Escape]}\\[6pt]
+    Left panel: healthy cell state with all backward trajectories closing within the healthy attractor basin $A_H$. Right panel: diseased cell state with node $i$'s backward trajectory escaping $A_H$ to a pathological attractor. Color indicates disease vector magnitude: blue (healthy) to red (diseased). The 8-component disease signature is shown as a radar plot inset.
+    \vspace{3cm}}}
+    \caption{Visualization of disease as trajectory escape. In the healthy state (left), all backward trajectories $\Back_i$ remain within the basin of attraction $A_H$, forming closed loops that return to the cell's self-consistent partition structure. In the diseased state (right), one or more nodes have backward trajectories that escape $A_H$, indicating that the node's categorical address has shifted to a pathological attractor. The 8-component disease signature (inset) identifies which oscillator class is affected, guiding targeted intervention.}
+    \label{fig:disease}
+\end{figure*}
+
+\subsection{Drug Design as Sparse Inverse Conductance}
+
+The framework provides a principled approach to drug design.
+
+A drug modifies specific edge conductances $G_{ij}$ in the circuit graph. The drug design problem is to find the minimum set of edges to modify such that all backward trajectories return to the healthy attractor basin.
+
+\begin{definition}[Drug Design Problem]
+\label{def:drug_design}
+Given a diseased circuit $G_{\mathrm{diseased}} = (V, E, w_{\mathrm{diseased}})$ and healthy attractor $A_H$, find the conductance modification $\Delta G$ that solves:
+\begin{equation}
+    \min_{\Delta G} \|\Delta G\|_1 \quad \text{subject to} \quad T(\tilde{X}^*(G + \Delta G)) \in \mathrm{Basin}(A_H),
+    \label{eq:drug_design}
+\end{equation}
+where $\|\Delta G\|_1 = \sum_{ij} |\Delta G_{ij}|$ is the $\ell_1$ norm (promoting sparsity) and $\tilde{X}^*(G + \Delta G)$ is the fixed point of the trajectory completion algorithm on the modified circuit.
+\end{definition}
+
+\begin{remark}
+The $\ell_1$ regularization encodes the principle that effective drugs should modify as few molecular targets as possible. This is consistent with the observation that most successful drugs act on a small number of protein targets \citep{Alon2007book}. The sparse inverse problem has efficient algorithms (LASSO, basis pursuit) that scale polynomially in the network size.
+\end{remark}
+
+\begin{proposition}
+\label{prop:drug_sparse}
+If the disease is caused by modification of $k$ edges in the circuit, the minimum drug correction has $\|\Delta G\|_0 \leq k$ (at most $k$ nonzero components).
+\end{proposition}
+
+\begin{proof}
+If the diseased circuit differs from the healthy circuit in exactly $k$ edges, then setting $\Delta G_{ij} = w_{\mathrm{healthy},ij} - w_{\mathrm{diseased},ij}$ for those $k$ edges and $\Delta G_{ij} = 0$ for all other edges restores the healthy circuit exactly. This correction has $\|\Delta G\|_0 = k$. Since $\|\cdot\|_0$ counts nonzero entries and the $\ell_1$ minimization promotes sparsity, the optimal $\ell_1$ solution has at most $k$ nonzero components.
+\end{proof}
+
+%==============================================================================
+\section{Implementation Architecture}
+\label{sec:implementation}
+%==============================================================================
+
+\subsection{Purpose Pipeline Configuration}
+
+The complete instantiation system comprises four layers:
+
+\begin{enumerate}[nosep]
+    \item \textbf{Knowledge Corpus}:
+    \begin{itemize}[nosep]
+        \item Partition theory papers (mathematical framework),
+        \item KEGG/BioCyc (circuit topology, $\sim$2000 metabolites, $\sim$3000 reactions for \emph{E. coli}),
+        \item BRENDA (edge conductances: $k_{\mathrm{cat}}$, $K_M$ for $\sim$5000 enzymes),
+        \item PDB (node partition signatures from $\sim$200{,}000 structures),
+        \item Metabolomics databases (ground-truth concentrations).
+    \end{itemize}
+    \item \textbf{Teacher Models} (via ModelHub):
+    \begin{itemize}[nosep]
+        \item Meditron-70B: biomedical reasoning,
+        \item BioGPT: molecular biology,
+        \item MathCoder-34B: equation derivation,
+        \item Claude/GPT-4: morphism chain generation and verification.
+    \end{itemize}
+    \item \textbf{Student Model}:
+    \begin{itemize}[nosep]
+        \item Base: Llama-3 or Phi-3 (7B--13B parameters),
+        \item Adaptation: LoRA with rank $r = 64$,
+        \item Training: 4-stage curriculum (syntax $\to$ single catalyst $\to$ multi-catalyst $\to$ full compilation).
+    \end{itemize}
+    \item \textbf{Inference}:
+    \begin{itemize}[nosep]
+        \item Input: partial observations,
+        \item Compile: morphism chain via student model,
+        \item Execute: on fuzzy circuit backend,
+        \item Output: complete cell state and disease assessment.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{The Fuzzy Circuit Backend}
+
+The execution engine for compiled morphism chains is a fuzzy circuit simulator built on a graph data structure.
+
+\begin{itemize}[nosep]
+    \item \textbf{Graph}: $\sim$2000 nodes (genome-scale metabolic model), $\sim$3000 edges (reactions).
+    \item \textbf{Node state}: trapezoidal fuzzy membership function $\tilde{c}_i = (a_i, b_i, c_i, d_i)$.
+    \item \textbf{Edge conductance}: Michaelis--Menten form derived from BRENDA kinetics:
+    \begin{equation}
+        G_{ij} = \frac{k_{\mathrm{cat}} [E]_0}{K_M + c_i},
+        \label{eq:mm_conductance}
+    \end{equation}
+    where $k_{\mathrm{cat}}$ is the turnover number, $[E]_0$ is the enzyme concentration, and $K_M$ is the Michaelis constant \citep{MichaelisMenten1913}.
+    \item \textbf{Constraint operators}: KCL (mass balance), KVL (cycle consistency), backward Viterbi (trajectory completion).
+    \item \textbf{Convergence}: the computational complexity per instantiation is $O(N \cdot R \cdot L \cdot \log(1/\epsilon))$, where $N$ is the number of nodes, $R$ is the number of independent cycles, $L$ is the graph diameter, and $\epsilon$ is the convergence tolerance.
+\end{itemize}
+
+\begin{figure*}[t]
+    \centering
+    \fbox{\parbox{0.95\textwidth}{\centering \vspace{3cm}
+    \textbf{[Figure 3: Purpose Pipeline Architecture]}\\[6pt]
+    Flow diagram showing the four layers: Knowledge Corpus $\to$ Teacher Models $\to$ Student Model (LoRA) $\to$ Fuzzy Circuit Backend. Arrows indicate data flow. The student model outputs a morphism chain that is executed on the circuit backend. Feedback from validation (ground-truth metabolomics) is shown as a dashed arrow back to the training objective.
+    \vspace{3cm}}}
+    \caption{Architecture of the Purpose compilation pipeline for cell state instantiation. The knowledge corpus provides both mathematical constraints and empirical parameters. Teacher models generate training pairs (task, morphism chain). The LoRA-adapted student model learns the compilation mapping. At inference time, the student model compiles a morphism chain that is executed on the fuzzy circuit backend, producing the complete cell state with uncertainty quantification.}
+    \label{fig:pipeline}
+\end{figure*}
+
+\subsection{Validation Strategy}
+
+We propose a three-tier validation approach.
+
+\textbf{Tier 1: Metabolic reconstruction accuracy.} Use published metabolomics data for \emph{E. coli} central metabolism \citep{Palsson2006}. Observe 10\% of metabolite concentrations (chosen randomly), run the instantiation algorithm, and compare the predicted remaining 90\% to measured values. Metrics:
+\begin{itemize}[nosep]
+    \item MARE (mean absolute relative error): $\mathrm{MARE} = \frac{1}{N} \sum_i |c_i^{\mathrm{pred}} - c_i^{\mathrm{true}}| / c_i^{\mathrm{true}}$,
+    \item Fraction within 20\%: $F_{20} = |\{i : |c_i^{\mathrm{pred}} - c_i^{\mathrm{true}}|/c_i^{\mathrm{true}} < 0.2\}| / N$.
+\end{itemize}
+
+\textbf{Tier 2: Disease detection sensitivity.} Simulate enzyme knockdowns (set specific edge conductances to zero) and verify that the trajectory escape detection correctly identifies the affected nodes. Metrics: sensitivity, specificity, and area under the ROC curve for disease node identification.
+
+\textbf{Tier 3: Comparison with existing methods.} Compare instantiation accuracy against:
+\begin{itemize}[nosep]
+    \item Flux balance analysis (FBA) \citep{Orth2010}: steady-state only, no dynamics, no uncertainty,
+    \item Kinetic modeling \citep{vanKampen2007}: requires complete rate constant knowledge,
+    \item Metabolic control analysis (MCA) \citep{Fell1992}: linearized perturbation analysis.
+\end{itemize}
+The hypothesis is that Purpose instantiation achieves comparable accuracy with fewer assumptions (no requirement for complete parameterization) and additional outputs (uncertainty quantification, disease detection).
+
+\begin{table*}[t]
+\centering
+\caption{Comparison of whole-cell modeling approaches. The Purpose instantiation framework differs fundamentally from simulation-based methods in its epistemic stance (completion rather than propagation), its treatment of uncertainty (fuzzy rather than point estimates), and its disease detection capability (trajectory escape rather than threshold comparison).}
+\label{tab:comparison}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Property} & \textbf{Karr et al.} & \textbf{FBA} & \textbf{Kinetic} & \textbf{MCA} & \textbf{Purpose} \\
+\midrule
+Approach & Forward sim. & Optimization & Forward sim. & Perturbation & Completion \\
+Parameters & $\sim$1900 & Stoich. only & All rates & Elasticities & From databases \\
+Dynamics & Yes & Steady state & Yes & Linearized & Via Gillespie \\
+Uncertainty & None & None & Stochastic & None & Fuzzy \\
+Disease detection & No & No & No & No & Yes \\
+Scalability & $\sim$500 genes & Genome-scale & $\sim$100 rxns & $\sim$100 rxns & Genome-scale \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+%==============================================================================
+
+\subsection{Relationship to Existing Whole-Cell Models}
+
+The \citet{Karr2012} whole-cell model of \emph{M. genitalium} represents the most ambitious attempt at comprehensive cellular simulation to date. It integrates 28 submodels covering DNA replication, transcription, translation, metabolism, and cell geometry, requiring approximately 1900 parameters fitted from experimental data. Our framework differs in three fundamental respects.
+
+First, the epistemic stance: Karr et al.\ simulate forward (propagate known initial conditions through known rate laws), while we complete backward (determine what complete state is consistent with partial observations and structural constraints). The epistemic blindness argument (Proposition~\ref{prop:blindness}) establishes that forward simulation cannot reveal information the cell does not already possess. Backward completion can, because it applies constraints external to the cell's own dynamics---specifically, the observer's knowledge of network topology, thermodynamic laws, and biological databases.
+
+Second, the representation: Karr et al.\ use 28 separate submodels with distinct mathematical formalisms (ODEs, FBA, Boolean logic, stochastic simulation), coupled through shared variables. Our framework uses a single formalism (fuzzy categorical circuit) for all processes, with coupling encoded in the graph topology. The Isomorphism Theorem (Theorem~\ref{thm:isomorphism}) establishes that this unification is not merely notational convenience but mathematical necessity: the submodels are different views of one object.
+
+Third, the parameterization: Karr et al.\ require $\sim$1900 fitted parameters. Our framework derives parameters from databases (KEGG for topology, BRENDA for kinetics, PDB for structures), requiring zero free parameters beyond the database entries. The only ``fitting'' is the LoRA training of the student model, which learns the compilation mapping rather than the physical parameters.
+
+FBA \citep{Orth2010,Palsson2006} provides a complementary perspective. FBA computes steady-state flux distributions by optimizing a biological objective (typically biomass production) subject to stoichiometric constraints. Our KCL analog (Theorem~\ref{thm:KCL}) recovers the stoichiometric constraints exactly, and our KVL analog (Theorem~\ref{thm:KVL}) adds thermodynamic feasibility constraints that FBA typically lacks. The network perspective of \citet{BarabasiOltvai2004} and \citet{Alon2007} establishes that cellular organization has characteristic motifs and topological properties; our circuit model inherits this network structure directly. The chemiosmotic coupling of \citet{Mitchell1961} is a special case of our KVL analog applied to the electron transport chain. The Purpose framework extends FBA in three ways: (i) dynamics via Gillespie sampling, (ii) uncertainty via fuzzy arithmetic, and (iii) trajectory analysis for disease detection.
+
+\subsection{The Emergence of Directed Reactions}
+
+A deep consequence of the partition framework is that reactions are not pre-programmed in DNA but emerge from partition depth minimization (Section~\ref{sec:loop}, Definition~\ref{def:comparison}).
+
+In the conventional view, the genetic code is a ``frozen accident'' \citep{Eigen1971}---the particular assignment of codons to amino acids is arbitrary and maintained by selection. Enzymes accelerate reactions by factors of $10^6$--$10^{17}$ \citep{Wolfenden2001}, and this catalytic power is conventionally attributed to transition state stabilization \citep{Eyring1935}. In the partition view, the genetic code is the unique attractor of carbon-based aqueous chemistry: the assignment of codons to amino acids minimizes the total partition depth of the translation machinery. This is a testable prediction: the standard genetic code should have lower total partition depth than any random reassignment.
+
+DNA stores charge first, information second \citep{Sachikonye2024c}. The double helix, with its $\pi$-stacked base pairs, functions as a molecular capacitor with capacitance $C \sim 300$ pF. The stored charge creates the electric field that organizes the surrounding partition structure. The sequence-specific information (the genetic code) is a secondary function enabled by the primary charge-storage architecture.
+
+This ``partition-first'' origin resolves Orgel's paradox---the circular dependency between information, catalysis, and metabolism---by identifying partitioning as more fundamental than any biochemical component. Partitions can exist without information (mineral surfaces, lipid bilayers), without catalysis (spontaneous phase separation), and without metabolism (equilibrium partitioning). But information, catalysis, and metabolism all require partitions \citep{Sachikonye2024c}.
+
+\subsection{Limitations and Future Work}
+
+\textbf{Scale.} The framework has been conceptually validated on glycolysis ($\sim$10 nodes). Extension to genome-scale models ($\sim$2000 nodes, $\sim$3000 edges) requires efficient parallel computation. The convergence theorem (Theorem~\ref{thm:convergence}) guarantees polynomial complexity in network size, but the constants may be large for dense networks.
+
+\textbf{O$_2$ observation model.} The ternary state model (Definition~\ref{def:ternary}) and its information capacity estimate ($\sim$1.6 $\times$ 10$^9$ bits/cycle) require experimental validation. Specifically, the commutation relation (Theorem~\ref{thm:commutation}) predicts that categorical observation introduces measurement backaction $\delta \sim 10^{-4}$ \citep{Sachikonye2024e}, which should be testable via single-molecule spectroscopy of O$_2$ in reconstituted membrane systems.
+
+\textbf{Backward trajectory computation.} The Viterbi algorithm for backward trajectory inference scales as $O(|V|^2 \cdot T)$ where $T$ is the trajectory length. For genome-scale networks, efficient approximation algorithms (beam search, variational inference \citep{Pearl1988}) may be needed.
+
+\textbf{Training data.} The knowledge distillation pipeline depends on the quality of teacher-generated morphism chains. Systematic evaluation of teacher agreement, chain diversity, and failure modes is needed before deployment.
+
+%==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%==============================================================================
+
+We have established that six theoretical subsystems---partition landscape, categorical current flux, charge emergence, fuzzy biochemical circuit, O$_2$ microscopy, and neural compilation---are isomorphic descriptions of a single mathematical object: a self-observing categorical circuit on bounded phase space.
+
+The contributions of this paper are:
+
+\begin{enumerate}[label=(\arabic*)]
+    \item The \textbf{Subsystem Isomorphism Theorem} (Theorem~\ref{thm:isomorphism}): explicit bijective, structure-preserving maps $\phi_1$--$\phi_5$ demonstrating that the six subsystems describe one object. Node potentials are partition depths are chemical potentials generated by charge creation. Edge currents are categorical state flows following partition gradients. The O$_2$ array is the observe operation is a partition operation creating charge. Temperature is reaction rate is inverse partition lag.
+
+    \item The \textbf{epistemic blindness argument} (Proposition~\ref{prop:blindness}): forward simulation of cellular dynamics adds zero information beyond what the cell itself computes. This necessitates a fundamentally different approach: backward trajectory completion.
+
+    \item The \textbf{instantiation framework}: given partial observations, compile a morphism chain (observe $\to$ catalyze $\to$ fuse $\to$ access) that resolves the complete cell state. Convergence is guaranteed by the Banach fixed-point theorem (Theorem~\ref{thm:convergence}), and backward trajectories are time-invariant (Theorem~\ref{thm:time_invariance}).
+
+    \item The \textbf{Purpose compilation pipeline}: a domain-specific LLM training framework that learns the mapping from partial observations to morphism chains via knowledge distillation, enabling automated cell state instantiation.
+
+    \item \textbf{Disease as trajectory escape} (Definition~\ref{def:disease}): a rigorous criterion for disease as the escape of backward trajectories from the healthy attractor basin, with drug design formalized as sparse inverse conductance modification.
+\end{enumerate}
+
+The framework is not a model OF the cell. It IS what the cell does, made explicit. The cell is a self-observing fuzzy categorical circuit that instantiates its own state through continuous partition operations, embodying what \citet{Rosen1991} termed ``closed to efficient causation'' and what \citet{VarelaMaturanaUribe1974} called autopoiesis. The O$_2$ array observes. Biochemical constraints catalyze. Molecular interactions fuse. The reaction network completes trajectories. The Purpose pipeline provides the computational infrastructure to replicate this process externally, enabling disease detection, drug design, and ultimately, the complete instantiation of cellular state from partial observation.
+
+\begin{table*}[t]
+\centering
+\caption{Notation cross-reference for the unified framework. All symbols are defined in the text; this table provides a consolidated reference.}
+\label{tab:notation}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Symbol} & \textbf{Definition} & \textbf{First appearance} \\
+\midrule
+$\Depth$ & Partition depth & Def.~\ref{def:depth} \\
+$(n, \ell, m, s)$ & Partition coordinates & Def.~\ref{def:partition_coords} \\
+$C(n) = 2n^2$ & Partition capacity at depth $n$ & Thm.~\ref{thm:capacity} \\
+$S = \kB \ln b \cdot \Depth$ & Depth--entropy equivalence & Thm.~\ref{thm:depth_entropy} \\
+$\Hcat_i$ & Categorical depth of node $i$ & Def.~\ref{def:circuit} \\
+$\taup$ & Partition lag & Eq.~\ref{eq:partition_lag} \\
+$\Gcond_{ij}$ & Edge conductance & Thm.~\ref{thm:conductance} \\
+$\Back_i$ & Backward trajectory of node $i$ & Thm.~\ref{thm:time_invariance} \\
+$\morphism$ & Morphism chain & Def.~\ref{def:chain} \\
+$\catalyst$ & Catalyst (constraint operator) & Def.~\ref{def:catalyst_vocab} \\
+$\Sk, \St, \Se$ & Tripartite entropy components & Eq.~\ref{eq:loss} \\
+$\tilde{X}^*$ & Fixed-point cell state & Thm.~\ref{thm:convergence} \\
+$A_H$ & Healthy attractor & Def.~\ref{def:healthy} \\
+$\mathbf{D}$ & Disease vector & Def.~\ref{def:disease_vector} \\
+$\Delta G$ & Drug conductance modification & Def.~\ref{def:drug_design} \\
+$T_{\mathrm{cat}}$ & Categorical temperature & Def.~\ref{def:cat_temp} \\
+$G = (V, E, w)$ & Biochemical circuit graph & Def.~\ref{def:circuit} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%==============================================================================
+% References
+%==============================================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

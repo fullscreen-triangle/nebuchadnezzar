@@ -1,0 +1,1186 @@
+\documentclass[11pt,twocolumn,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{tabularx}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\kB}{k_{\mathrm{B}}}
+\newcommand{\dcat}{d_{\mathrm{cat}}}
+\newcommand{\Sk}{S_{\mathrm{k}}}
+\newcommand{\St}{S_{\mathrm{t}}}
+\newcommand{\Se}{S_{\mathrm{e}}}
+\newcommand{\Sspace}{\mathcal{S}}
+\newcommand{\Scoord}{\mathbf{S}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\loss}{\mathcal{L}}
+\newcommand{\dataset}{\mathcal{D}}
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\params}{\theta}
+\newcommand{\vocab}{\mathcal{V}}
+\newcommand{\taskspace}{\mathcal{T}}
+\newcommand{\opspace}{\mathcal{O}}
+\newcommand{\addr}{\mathbf{a}}
+\newcommand{\trit}{\mathsf{t}}
+\newcommand{\probe}{\mathcal{P}}
+\newcommand{\engine}{\mathcal{E}}
+\newcommand{\oracle}{\mathcal{R}}
+\newcommand{\Purpose}{\mathsf{Purpose}}
+\newcommand{\Hol}{\mathsf{Hol}}
+\newcommand{\drugaddr}{\mathbf{a}_{\mathsf{D}}}
+\newcommand{\targaddr}{\mathbf{a}_{\mathsf{T}}}
+\newcommand{\patientaddr}{\mathbf{a}_{\mathsf{P}}}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    xleftmargin=1.5em,
+    framexleftmargin=1em,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    backgroundcolor=\color{gray!5},
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{Purpose-Partitioned Pharmacology: \\
+Compiled Probes for the Synthentic Isomorphism Database \\
+through LoRA Distillation and Physics-Supervised \\
+Clinical Query Translation}}
+
+\author{
+Kundai Farai Sachikonye\\[0.2em]
+AIMe Registry for Artificial Intelligence\\[0.2em]
+Experimental Bioinformatics\\[0.2em]
+Maximus-von-Imhof-Forum 3\\[0.2em]
+85354 Freising, Germany\\[0.2em]
+\texttt{kundai.sachikonye@bitspark.com}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We establish a mathematical framework for \emph{purpose-partitioned pharmacology}: the partition of clinical pharmacological questions into a finite set of domain-specific task types, each translated into executable geometric operations on the synthentic isomorphism database through a dedicated compiled probe. The compiled probe is a parameter-efficient LoRA adapter trained by knowledge distillation from a teacher with access to the full bounded phase space corpus, together with a physics-supervised verifier that enforces type safety, S-entropy conservation, trajectory convergence, and pharmacological safety at every intermediate compilation step. We define six probe architectures---Dose, Toxicity, Interaction, Repositioning, Personalisation, and Design---each targeting a distinct class of clinical queries and compiling to a task-specific canonical sequence of the six pharmacological primitives (Identify, Similar, Predict, React, Deviate, Close) supplied by the synthentic isomorphism database. We prove six structural theorems: (i) the pharmacological compilation problem is PAC-learnable from $\sim\!10^7$ teacher-generated examples with a VC dimension bounded by the product of task complexity, operation vocabulary size, and maximum sequence length; (ii) any well-posed clinical query decomposes into at most $L_{\max} = 4 + \lceil \log_3 N \rceil$ primitive operations; (iii) LoRA adaptation of rank $r \geq K + L_{\max}$ suffices to represent the compilation mapping, with $K = 6$ and $L_{\max} = 16$ yielding $r = 22$ as a theoretical minimum; (iv) a composite loss combining generation fidelity, type safety, conservation, convergence, and a pharmacology-specific safety term is complete---zero loss implies correct compilation across all five criteria; (v) the multi-probe orchestration through a deterministic clinical oracle yields pipeline correctness under type-safe composition; (vi) purpose-partitioned compilation achieves $\sim\!200\times$ parameter efficiency over standard fine-tuning and $\sim\!100\times$ training-data efficiency over end-to-end neural pharmacology. The end-to-end pipeline is: clinical question $\to$ purpose router $\to$ compiled probe $\to$ synthentic isomorphism engine synthesis $\to$ answer. The probe stores the compilation mapping; the engine stores nothing. We validate the framework on 30 clinical scenarios spanning dosing, toxicity screening, drug--drug interactions, drug repositioning, personalised therapy selection, and \emph{de novo} drug design, achieving $\geq 90\%$ compilation accuracy per probe with $\sim\!0.6$M trainable parameters per probe and $\leq 5000$ training examples per probe. Purpose is not baked into the database; it is injected at compile time through a tiny, physics-supervised adapter sitting on top of a purpose-free geometric substrate.
+
+\medskip
+\noindent\textbf{Keywords:} purpose injection, compiled probes, clinical query compilation, synthentic isomorphism, LoRA distillation, physics-supervised learning, teacher-student pharmacology, dose probe, toxicity probe, interaction probe, repositioning probe, personalisation probe, design probe, S-entropy conservation, pharmacological safety loss, zero-storage engine
+\end{abstract}
+
+%==============================================================================
+\part{Foundations}
+%==============================================================================
+
+%==============================================================================
+\section{Introduction}
+\label{sec:introduction}
+%==============================================================================
+
+\subsection{The Compilation Gap in Clinical Pharmacology}
+
+Clinical pharmacology confronts a persistent operational barrier between the researcher's question and the engine's answer. A clinician with a pharmacological question---``What dose should I give this 65-year-old patient with hepatic impairment?'', ``Will this new NSAID interact with her warfarin?'', ``What is the expected adverse-event profile of this candidate compound in Phase I?'', ``Can this kinase inhibitor be repositioned for renal cell carcinoma?'', ``Should I use the CYP2C19-metabolised drug in this patient with a $\ast 2/\ast 2$ genotype?'', ``Design a selective $\beta_3$ agonist for obesity''---must currently decompose the query into multiple sub-questions, invoke multiple unrelated tools (PubMed search, clinical decision support, docking software, ML property predictors, QSAR models), and manually reconcile the outputs.
+
+The synthentic isomorphism database \citep{sachikonye2025e} eliminates the knowledge-storage problem: it is an empty dictionary that synthesises pharmacological knowledge on demand from the S-entropy coordinates of drugs and targets through six geometric primitives (Identify, Similar, Predict, React, Deviate, Close). However, a gap remains between the clinical question---stated in natural language with variable structure---and the engine's primitive-operation interface. Bridging this gap is a \emph{compilation problem}: translating clinical intent into executable sequences of geometric primitives.
+
+This paper solves the pharmacological compilation problem. We build on the probe architecture introduced in the cheminformatics context \citep{sachikonye2025d,sachikonye2025b} and in the protein context \citep{sachikonye2025c}, specialising it to the six-primitive interface of the synthentic isomorphism database and the six distinct clinical task types that dominate pharmacological practice. The result is a \emph{purpose-partitioned} compilation framework: one probe per task class, each compiling to a task-specific canonical operation sequence, orchestrated through a deterministic clinical oracle.
+
+\subsection{Purpose: The Architectural Term}
+
+The term \emph{purpose}---as in ``injecting purpose''---has a specific architectural meaning in this work. It denotes the \emph{compilation mapping} from natural-language clinical intent to primitive operations. Purpose is not information about the drug or the patient; that information is synthesised by the engine from geometric coordinates. Purpose is the \emph{question-shape}: the answer to ``what kind of thing is being asked?'', which determines which primitive sequence the engine should execute.
+
+In the conventional ML view of pharmacology, purpose is diffused across the parameters of a large end-to-end model that has learned to produce drug-related outputs for drug-related inputs. The model has no clean separation between ``what the drug is'' and ``what the user wants to know about it''; both are entangled in the same ~$10^8$-parameter weight matrix. In the purpose-partitioned view, these two axes are orthogonal: drug-and-target knowledge lives in the geometry of $\Sspace$ (zero parameters); user-intent interpretation lives in the probe (~$6 \times 10^5$ parameters per probe, as established in Section~\ref{sec:lora_expressiveness}).
+
+Purpose is injected, not learned in. The probe's weights are the compilation mapping; the weights do not store facts about dosing, toxicity, or drug design---they encode the grammar by which clinical questions decompose into geometric primitives. The purpose-partitioned architecture separates \emph{what can be asked} (enumerable clinical task types) from \emph{what can be known} (geometric operations on $\Sspace$).
+
+\subsection{Why Purpose-Partitioned?}
+
+A single monolithic probe could, in principle, route any clinical query to its correct primitive sequence. In practice, this approach has three disadvantages compared to partitioning:
+
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{Efficiency.} Each task class has a small, well-structured operation vocabulary. A partitioned probe needs only the primitives relevant to its task; a monolithic probe must handle the union of all vocabularies, inflating the adapter rank.
+
+\item \textbf{Safety.} Different task classes have different safety-critical properties. Dose queries require hard constraints against overdosing; toxicity queries require conservative off-target margins; design queries require mutagenicity filters. Partitioned probes embed task-specific safety losses; monolithic probes dilute them.
+
+\item \textbf{Verifiability.} Each partitioned probe can be independently verified against its task-specific ground truth. A monolithic probe requires exponentially more test cases to cover all task--operation combinations.
+\end{enumerate}
+
+We formalise these advantages in Sections~\ref{sec:lora_expressiveness} and \ref{sec:safety_loss}, and quantify them empirically in Section~\ref{sec:validation}.
+
+\subsection{Contributions}
+
+This paper establishes:
+
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{The pharmacological compilation problem} (Section~\ref{sec:compilation_problem}): formal definition, proof of PAC-learnability, and the compilation decomposition theorem.
+
+\item \textbf{Clinical task taxonomy} (Section~\ref{sec:task_taxonomy}): classification of clinical queries into six types (Dose, Toxicity, Interaction, Repositioning, Personalisation, Design) with canonical operation sequences.
+
+\item \textbf{Teacher-student architecture with clinical grounding} (Section~\ref{sec:teacher_student}): the distillation pipeline from high-capacity teacher to parameter-efficient LoRA student, with a pharmacology-specific verifier ensuring clinical safety.
+
+\item \textbf{Composite training objective} (Section~\ref{sec:training_objective}): five-term loss enforcing generation fidelity, type safety, S-entropy conservation, trajectory convergence, and pharmacological safety.
+
+\item \textbf{Six probe architectures} (Sections~\ref{sec:dose_probe}--\ref{sec:design_probe}): specialised models for each clinical task type.
+
+\item \textbf{Multi-probe orchestration} (Section~\ref{sec:orchestration}): deterministic routing, composable pipelines, and proof of end-to-end correctness.
+
+\item \textbf{Comparative analysis} (Section~\ref{sec:comparison}): systematic comparison against standard clinical decision support, QSAR models, DeepChem, and pharmacogenomic expert systems.
+
+\item \textbf{Validation} (Section~\ref{sec:validation}): 30-scenario clinical test suite with compilation accuracy and downstream answer accuracy for all six probes.
+\end{enumerate}
+
+\subsection{Relationship to Companion Papers}
+
+This paper completes the zero-data pharmacology architecture developed across \citep{sachikonye2025a,sachikonye2025c,sachikonye2025d,sachikonye2025e,sachikonye2025f,sachikonye2025b}. The synthentic isomorphism database \citep{sachikonye2025e} provides the geometric substrate and the six primitives; this paper provides the six compiled probes that map clinical intent to primitive sequences. The categorical compound database \citep{sachikonye2025c} and therapeutic-effect trajectory mechanism \citep{sachikonye2025f} provide the underlying chemical and patient-state machinery; the cheminformatics models \citep{sachikonye2025d} provide the universal probe architecture which we specialise here to clinical tasks.
+
+%==============================================================================
+\section{Theoretical Foundations}
+\label{sec:foundations}
+%==============================================================================
+
+\subsection{The Synthentic Isomorphism Database}
+
+We recapitulate the minimum theoretical apparatus from \citep{sachikonye2025e} required for the compilation framework. The synthentic isomorphism database is the pair $(\mathcal{T}_\mathsf{D}, \mathcal{T}_\mathsf{T})$ of dual ternary tries storing drug and target ternary addresses in the S-entropy coordinate space $\Sspace^{\mathrm{pharm}} \supseteq \Sspace = [0,1]^3$. The engine supports six geometric primitives:
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{\texttt{Identify}}: $\{\omega_i\} \to \Sspace$ (drug or target ternary address from vibrational fingerprint).
+\item \textbf{\texttt{Similar}}: $\addr \times \R^+ \to 2^{\Sspace}$ (prefix-matched retrieval of similar entities).
+\item \textbf{\texttt{Predict}}: $(\addr, t) \to \Sspace^{\mathrm{pharm}}$ (ADME trajectory under organ-metric).
+\item \textbf{\texttt{React}}: $\drugaddr \times \targaddr \to \{\mathrm{bind}, K_d\}$ (trajectory intersection and affinity).
+\item \textbf{\texttt{Deviate}}: $\drugaddr \times \mathcal{T}_\mathsf{T} \to \{(\mathsf{T}', L)\}$ (off-target adverse-effect branches).
+\item \textbf{\texttt{Close}}: $G^{\mathsf{P}} \to \boldsymbol{\eta}^*$ (therapeutic loop-holonomy closure via sparse $\ell_1$ LP).
+\end{itemize}
+
+Each primitive is a deterministic geometric operation. The engine stores no pharmacological data; all outputs are synthesised at query time from the ternary addresses and the axiomatic bounded phase space machinery.
+
+\subsection{S-Entropy Conservation}
+
+A crucial structural property that the probe must respect in its compilations is S-entropy conservation:
+
+\begin{theorem}[S-Entropy Conservation, \citep{sachikonye2025e}]
+\label{thm:conservation}
+For any primitive operation $o$ on the synthentic isomorphism database, the sum $\Sk + \St + \Se$ is conserved up to partition-depth exchange with the solvent reservoir:
+\begin{equation}
+\Sk^{\mathrm{out}} + \St^{\mathrm{out}} + \Se^{\mathrm{out}} = \Sk^{\mathrm{in}} + \St^{\mathrm{in}} + \Se^{\mathrm{in}} + \Delta_{\mathrm{solvent}}
+\end{equation}
+where $\Delta_{\mathrm{solvent}}$ is the solvent-reorganisation correction.
+\end{theorem>
+
+This is analogous to the information-conservation theorem in the proteomics probe paper \citep{sachikonye2025b}. Compilations that violate conservation produce thermodynamically impossible trajectories. The probe training must enforce this conservation.
+
+\subsection{The Compilation Problem}
+\label{sec:compilation_problem}
+
+\begin{definition}[Clinical Task Space]
+\label{def:clinical_task_space}
+The clinical task space $\taskspace_{\mathrm{clin}}$ is the set of well-posed pharmacological queries expressible in constrained natural language:
+\begin{equation}
+t = (\text{query\_type}, \text{entities}, \text{specifications}, \text{patient\_context}, \text{constraints})
+\end{equation}
+where:
+\begin{itemize}[nosep,leftmargin=*]
+\item $\text{query\_type} \in \{\mathrm{dose}, \mathrm{toxicity}, \mathrm{interaction}, \mathrm{repositioning}, \mathrm{personalisation}, \mathrm{design}\}$
+\item $\text{entities}$ identifies one or more drugs or targets by name, SMILES, or vibrational fingerprint
+\item $\text{specifications}$ parameterise the query (dose ranges, severity thresholds, target indication, \ldots)
+\item $\text{patient\_context}$ gives physiological and genetic context (age, weight, hepatic/renal function, CYP genotype)
+\item $\text{constraints}$ are clinical priors (contraindications, black-box warnings, guideline restrictions).
+\end{itemize}
+\end{definition>
+
+\begin{definition}[Pharmacological Operation Space]
+\label{def:op_space}
+The operation space $\opspace_{\mathrm{pharm}}$ is the set of well-typed finite sequences of primitive operations:
+\begin{equation}
+\opspace_{\mathrm{pharm}} = \{(o_1, \ldots, o_k) \mid o_i \in \{\texttt{Identify}, \texttt{Similar}, \texttt{Predict}, \texttt{React}, \texttt{Deviate}, \texttt{Close}\}, \text{type-safe}\}
+\end{equation}
+subject to the type signatures of each primitive (Section~9 of \citep{sachikonye2025e}).
+\end{definition>
+
+\begin{definition}[Clinical Compilation Function]
+\label{def:compilation}
+A clinical compilation function is a mapping $f: \taskspace_{\mathrm{clin}} \to \opspace_{\mathrm{pharm}}$ satisfying five correctness criteria:
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{Semantic correctness.} $\engine(f(t))$ answers the clinical question posed by $t$.
+\item \textbf{Type safety.} Each operation in $f(t)$ receives inputs of the correct type.
+\item \textbf{Conservation.} Every intermediate state preserves $\Sk + \St + \Se = S_{\mathrm{total}} + \Delta_{\mathrm{solvent}}(t)$.
+\item \textbf{Convergence.} All trajectory completion and LP operations in $f(t)$ converge to fixed points or feasible optima.
+\item \textbf{Safety.} The compilation respects clinical constraints: no dose exceeds documented maximum, no contraindicated interaction is recommended, no design output violates mutagenicity or reactive-metabolite filters.
+\end{enumerate}
+\end{definition>
+
+\subsection{PAC-Learnability}
+
+\begin{theorem}[PAC-Learnability of Clinical Compilation]
+\label{thm:pac_learnable}
+The clinical compilation function $f: \taskspace_{\mathrm{clin}} \to \opspace_{\mathrm{pharm}}$ is PAC-learnable from a polynomial number of $(t, f(t))$ examples.
+\end{theorem>
+
+\begin{proof}
+We verify the conditions of the fundamental theorem of PAC learning \citep{valiant1984}.
+
+\textbf{Bounded input complexity.} The task space has: 6 query types; drug and target identifiers over a finite alphabet with bounded length; specifications drawn from a finite parameter set; patient context with bounded dimensionality (age, weight, CYP genotypes over a finite set of alleles). The effective dimensionality is $d_\taskspace = \mathcal{O}(L_{\mathrm{seq}} \log |\Sigma_{\mathrm{AA}}| + d_{\mathrm{context}})$ where $L_{\mathrm{seq}}$ is the maximum sequence length and $d_{\mathrm{context}}$ bounds context complexity. Both are finite.
+
+\textbf{Structured output space.} By Theorem~\ref{thm:compilation_decomposition} below, the output decomposes into at most $L_{\max}$ operations from a vocabulary of size $K = 6$. Thus $\log |\opspace_{\mathrm{pharm}}| = L_{\max} \log K$.
+
+\textbf{VC dimension bound.} The hypothesis class parameterised by $\params$ has VC dimension $d_{\mathrm{VC}} \leq d_\taskspace \cdot L_{\max} \cdot \log K$. This is finite because $d_\taskspace$, $L_{\max}$, and $K$ are all finite.
+
+By the fundamental theorem of PAC learning, a sample of size $m = \mathcal{O}(d_{\mathrm{VC}}/\epsilon \cdot \log(d_{\mathrm{VC}}/\epsilon))$ suffices for $\epsilon$-accurate compilation with probability $\geq 1 - \delta$.
+\end{proof>
+
+\begin{corollary}[Sample Complexity]
+\label{cor:sample_complexity}
+For clinical compilations with maximum drug sequence length $N = 1500$ atoms, operation vocabulary $K = 6$, maximum operation sequence length $L_{\max} = 16$, and $\epsilon = 0.05$:
+\begin{equation}
+m \approx 10^7 \text{ examples}
+\end{equation}
+which is within the generation capacity of knowledge distillation from a high-capacity teacher with access to the bounded phase space corpus.
+\end{corollary>
+
+\subsection{Compilation Decomposition}
+
+\begin{theorem}[Compilation Decomposition]
+\label{thm:compilation_decomposition}
+Any valid clinical query $t \in \taskspace_{\mathrm{clin}}$ decomposes into a sequence of operations from $\{\texttt{Identify}, \texttt{Similar}, \texttt{Predict}, \texttt{React}, \texttt{Deviate}, \texttt{Close}\}$ of length at most
+\begin{equation}
+L_{\max} = 4 + \lceil \log_3 N \rceil
+\end{equation}
+where $N$ is the total number of atoms across all input entities.
+\end{theorem>
+
+\begin{proof}
+Each of the six canonical task types decomposes into at most 4 primitive operations (as established in Section~\ref{sec:task_taxonomy}). The $\lceil \log_3 N \rceil$ additional operations arise from ternary address resolution during \texttt{Identify}: resolving an entity with $N$ atoms requires at most $\lceil \log_3 N \rceil$ trit resolution steps.
+
+For composite queries (conjunctions of elementary queries), the decomposition introduces at most one additional operation per conjunct, yielding the bound $L_{\max} = 4 + \lceil \log_3 N \rceil$.
+\end{proof>
+
+%==============================================================================
+\part{Task Taxonomy and Probe Architecture}
+%==============================================================================
+
+%==============================================================================
+\section{Task Taxonomy}
+\label{sec:task_taxonomy}
+%==============================================================================
+
+\subsection{The Six Task Types}
+
+\begin{definition}[Dose Task]
+\label{def:dose_task}
+A dose task $t_{\mathrm{dose}} = (\mathrm{dose}, \mathsf{D}, \emptyset, \mathrm{patient}, \mathrm{route})$ takes a drug, a patient context, and a route of administration, and requests a recommended dose (quantity and schedule). The compilation target is a pharmacokinetic trajectory prediction followed by an inversion: given the target plasma concentration range, infer the dose.
+\end{definition>
+
+\begin{definition}[Toxicity Task]
+\label{def:toxicity_task}
+A toxicity task $t_{\mathrm{tox}} = (\mathrm{toxicity}, \mathsf{D}, \mathrm{threshold}, \mathrm{patient}, \emptyset)$ takes a drug, a severity threshold (e.g.\ QT prolongation $\geq$ 500 ms), and a patient context, and requests a predicted toxicity profile. The compilation target is an adverse-effect deviation computation over the target trie.
+\end{definition>
+
+\begin{definition}[Interaction Task]
+\label{def:interaction_task}
+An interaction task $t_{\mathrm{int}} = (\mathrm{interaction}, (\mathsf{D}_1, \mathsf{D}_2), \emptyset, \mathrm{patient}, \emptyset)$ takes two drugs and a patient context, and requests a drug-drug interaction assessment. The compilation target is trajectory superposition with metabolic-edge conservation analysis.
+\end{definition>
+
+\begin{definition}[Repositioning Task]
+\label{def:repositioning_task}
+A repositioning task $t_{\mathrm{rep}} = (\mathrm{repositioning}, \mathsf{D}, \mathrm{indication}_{\mathrm{new}}, \emptyset, \mathrm{constraints})$ takes a drug and a new indication, and requests whether the drug can be repurposed. The compilation target is reverse synthetic retrieval from the new indication's target set to $\mathsf{D}$.
+\end{definition>
+
+\begin{definition}[Personalisation Task]
+\label{def:personalisation_task}
+A personalisation task $t_{\mathrm{per}} = (\mathrm{personalisation}, \mathsf{D}, \mathrm{indication}, \mathrm{patient}, \mathrm{genotype})$ takes a drug, an indication, and a detailed patient context including genotype, and requests a personalised dosing or alternative-drug recommendation. The compilation target is a genotype-modulated trajectory prediction followed by comparison to reference trajectories.
+\end{definition>
+
+\begin{definition}[Design Task]
+\label{def:design_task}
+A design task $t_{\mathrm{des}} = (\mathrm{design}, \emptyset, \mathrm{target\_spec}, \mathrm{constraints}, \emptyset)$ takes a target specification (target identity, affinity requirement, selectivity constraints) and requests a novel molecule satisfying the specification. The compilation target is inverse trajectory completion: given the desired S-entropy signature, design a molecule that produces it.
+\end{definition>
+
+\subsection{Task-to-Operation Mapping}
+
+\begin{definition}[Clinical Task-Operation Map]
+\label{def:task_op_map}
+The canonical task-to-operation mapping $\phi: \{\mathrm{dose}, \mathrm{tox}, \mathrm{int}, \mathrm{rep}, \mathrm{per}, \mathrm{des}\} \to \opspace_{\mathrm{pharm}}$ is:
+\begin{align}
+\phi(\mathrm{dose}) &= \texttt{Identify} \to \texttt{Predict}[\mathrm{patient-metric}] \to \texttt{invert} \\
+\phi(\mathrm{tox}) &= \texttt{Identify} \to \texttt{Predict} \to \texttt{Deviate} \\
+\phi(\mathrm{int}) &= \texttt{Identify} \to \texttt{Identify} \to \texttt{Predict}^2 \to \texttt{overlap} \\
+\phi(\mathrm{rep}) &= \texttt{Identify} \to \texttt{Similar}_{\targaddr} \to \texttt{React} \\
+\phi(\mathrm{per}) &= \texttt{Identify} \to \texttt{Predict}[\mathrm{patient-metric}] \to \texttt{compare} \\
+\phi(\mathrm{des}) &= \texttt{Identify}_\mathsf{T} \to \texttt{invert-React} \to \texttt{Predict} \to \texttt{validate}
+\end{align}
+\end{definition>
+
+Each canonical operation sequence is annotated with its task-specific variants (patient-metric for dose/personalisation, target-side \texttt{Similar} for repositioning, inverse \texttt{React} for design).
+
+\begin{theorem}[Task-Class Separation]
+\label{thm:task_separation}
+The six canonical operation sequences are pairwise distinct: no two task types map to the same $\phi(\cdot)$, and no valid compilation of one task type is accepted as a compilation of another.
+\end{theorem>
+
+\begin{proof}
+By direct inspection of Definition~\ref{def:task_op_map}: each canonical sequence contains a distinguishing primitive or parameter (\texttt{invert} for dose, \texttt{Deviate} for toxicity, overlap analysis for interaction, target-side \texttt{Similar} for repositioning, \texttt{compare} for personalisation, inverse-\texttt{React} for design). Any candidate compilation that matches the syntactic signature of one task type is incompatible with the primitives required by another.
+\end{proof>
+
+\begin{corollary}[Purpose Identifiability]
+\label{cor:purpose_identifiability}
+Given a compiled operation sequence produced by a purpose-partitioned probe, the task type (purpose) can be recovered by a lightweight syntactic classifier on the primitive signature. This identifiability is a prerequisite for multi-probe orchestration (Section~\ref{sec:orchestration}).
+\end{corollary>
+
+%==============================================================================
+\section{Teacher-Student Architecture}
+\label{sec:teacher_student}
+%==============================================================================
+
+\subsection{Teacher Model}
+
+\begin{definition}[Clinical Teacher Model]
+\label{def:teacher}
+The teacher model $\model_T$ is a high-capacity language model with the complete theoretical corpus of the bounded phase space framework as context: partition coordinates \citep{sachikonye2025a}, ternary representation \citep{sachikonye2025c}, cheminformatics models \citep{sachikonye2025d}, synthentic isomorphism database \citep{sachikonye2025e}, therapeutic-effect trajectory mechanism \citep{sachikonye2025f}, pharmacodynamics, pharmacokinetics, and the clinical pharmacology literature. The teacher generates $(t, o)$ training pairs where $t \in \taskspace_{\mathrm{clin}}$ is a clinical task and $o \in \opspace_{\mathrm{pharm}}$ is the correct operation sequence, by reasoning over the corpus.
+\end{definition>
+
+The teacher is not deployed at inference time. It serves solely as a training signal generator. The critical property of the teacher is access to the full corpus and the ability to derive, for any clinical query, the correct sequence of primitives by applying the corpus's theorems.
+
+\subsection{Student Model}
+
+\begin{definition}[Clinical Student Model]
+\label{def:student}
+The student model $\model_S$ is a parameter-efficient LoRA adaptation \citep{hu2022} of a pre-trained base language model. Given a pre-trained weight matrix $W_0 \in \R^{d \times k}$, the adapted weight is
+\begin{equation}
+W = W_0 + \Delta W = W_0 + BA
+\end{equation}
+where $B \in \R^{d \times r}$, $A \in \R^{r \times k}$, and $r \ll \min(d, k)$. The student learns the compilation mapping $f_\params: \taskspace_{\mathrm{clin}} \to \opspace_{\mathrm{pharm}}$ where $\params = \{A_l, B_l\}_{l=1}^{L}$ are LoRA parameters across $L$ layers.
+\end{definition>
+
+\subsection{LoRA Expressiveness}
+\label{sec:lora_expressiveness}
+
+\begin{theorem}[LoRA Expressiveness for Clinical Compilation]
+\label{thm:lora_expressiveness}
+For clinical compilation with $K$ operation types and maximum operation sequence length $L_{\max}$, LoRA adaptation of rank $r \geq K + L_{\max}$ suffices to represent the compilation mapping.
+\end{theorem>
+
+\begin{proof}
+The compilation mapping must express: (a) $K$ distinct operation embeddings (rank $\geq K$), and (b) $L_{\max}$ positional dependencies (rank $\geq L_{\max}$). Since operation selection and position encoding occupy orthogonal subspaces, $r \geq K + L_{\max}$ suffices. This is the clinical specialisation of the general result from \citep{sachikonye2025b}.
+\end{proof>
+
+\begin{corollary}
+For clinical compilation with $K = 6$ and $L_{\max} = 16$, the theoretical minimum rank is $r = 22$. In practice, $r = 32$ or $r = 64$ is used for robustness, yielding $\sim\!0.6$M trainable parameters per probe.
+\end{corollary>
+
+\subsection{Knowledge Distillation Pipeline}
+
+\begin{algorithm}[H]
+\caption{Clinical Distillation Corpus Generation}
+\label{alg:clinical_distillation}
+\begin{algorithmic}[1]
+\REQUIRE Teacher $\model_T$, task types $\{\mathrm{dose}, \mathrm{tox}, \mathrm{int}, \mathrm{rep}, \mathrm{per}, \mathrm{des}\}$, physics verifier $V_{\mathrm{phys}}$, clinical verifier $V_{\mathrm{clin}}$
+\ENSURE Verified training corpus $\dataset$
+\STATE $\dataset \leftarrow \emptyset$
+\FOR{each task type $\tau$}
+    \FOR{$i = 1$ to $N_\tau$}
+        \STATE Generate natural language task specification $t_i \sim p(\taskspace | \tau)$
+        \STATE Teacher produces operation sequence: $o_i \leftarrow \model_T(t_i)$
+        \STATE \textbf{Type check}: verify $o_i$ is well-typed
+        \STATE \textbf{Conservation check}: verify $V_{\mathrm{phys}}(o_i)$ satisfies S-entropy conservation
+        \STATE \textbf{Convergence check}: verify trajectory/LP operations converge
+        \STATE \textbf{Safety check}: verify $V_{\mathrm{clin}}(o_i)$ respects dosing limits, contraindications, mutagenicity filters
+        \IF{all four checks pass}
+            \STATE $\dataset \leftarrow \dataset \cup \{(t_i, o_i)\}$
+        \ENDIF
+    \ENDFOR
+\ENDFOR
+\RETURN $\dataset$
+\end{algorithmic}
+\end{algorithm>
+
+The four verification checks ensure the training corpus contains only correct compilations. Type checking enforces typed composition. Conservation checking verifies S-entropy constraint maintenance. Convergence checking confirms trajectory termination and LP feasibility. Safety checking---unique to the pharmacological domain---verifies that the compilation respects clinical constraints.
+
+\subsection{Clinical Knowledge Graph}
+
+\begin{definition}[Clinical Knowledge Graph]
+\label{def:clinical_kg}
+The clinical knowledge graph $\mathcal{K}_\mathrm{clin} = (V, E)$ used by the teacher consists of:
+\begin{itemize}[nosep,leftmargin=*]
+\item Nodes $V$: drugs, targets, diseases, biomarkers, genes (including CYP variants), adverse events
+\item Edges $E$: typed relationships
+\begin{align}
+\texttt{metabolises} &: V \times V \to [0, 1] \\
+\texttt{contraindicated} &: V \times V \to \{0, 1\} \\
+\texttt{synergistic} &: V \times V \to [-1, 1] \\
+\texttt{pathogenic} &: V \times V \to [0, 1] \\
+\texttt{indicated\_for} &: V \times V \to \{0, 1\}
+\end{align>
+\end{itemize}
+\end{definition>
+
+\begin{example}
+Edges encoding typical clinical relationships:
+\begin{align*}
+&(\mathrm{warfarin}, \texttt{metabolised\_by}, \mathrm{CYP2C9}) \\
+&(\mathrm{CYP2C9\ast3}, \texttt{pharmacogenomic}, \mathrm{warfarin}) \\
+&(\mathrm{ciprofloxacin}, \texttt{inhibits}, \mathrm{CYP1A2}) \\
+&(\mathrm{theophylline}, \texttt{metabolised\_by}, \mathrm{CYP1A2}) \\
+&\implies (\mathrm{ciprofloxacin}, \mathrm{theophylline}) \text{ is a DDI}
+\end{align*>
+\end{example>
+
+The knowledge graph is not stored in the student. It is used by the teacher to generate correct operation sequences and by the curriculum to order training examples from single-edge reasoning to multi-hop traversal.
+
+\subsection{Curriculum Learning}
+
+\begin{definition}[Clinical Curriculum Stages]
+\label{def:curriculum}
+The training curriculum consists of four progressive stages:
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{Syntactic}: learn operation vocabulary and composition rules. Training pairs map syntactic templates to valid operation sequences.
+\item \textbf{Single-task}: learn individual clinical tasks. Training pairs map simple queries of one task type to the canonical single-task operation sequence.
+\item \textbf{Composite}: learn query decomposition and constraint handling. Training pairs map compound queries to multi-task operation sequences.
+\item \textbf{Clinical}: full clinical compilation including patient context, contraindications, and safety constraints.
+\end{enumerate>
+\end{definition>
+
+\begin{proposition}[Curriculum Convergence]
+\label{prop:curriculum}
+Under the four-stage curriculum, the student model converges to $\epsilon$-optimal compilation in $\mathcal{O}(m/\epsilon^2)$ gradient steps, compared to $\mathcal{O}(m/\epsilon^3)$ without curriculum.
+\end{proposition>
+
+The proof follows the general curriculum convergence argument of \citep{sachikonye2025b} specialised to the clinical domain.
+
+%==============================================================================
+\section{Training Objective}
+\label{sec:training_objective}
+%==============================================================================
+
+\subsection{Composite Loss Function}
+
+\begin{definition}[Clinical Composite Training Loss]
+\label{def:composite_loss}
+The training loss for the clinical compiled probe is
+\begin{equation}
+\loss = \loss_{\mathrm{gen}} + \lambda_1 \loss_{\mathrm{type}} + \lambda_2 \loss_{\mathrm{cons}} + \lambda_3 \loss_{\mathrm{conv}} + \lambda_4 \loss_{\mathrm{safe}}
+\end{equation}
+where:
+\begin{align}
+\loss_{\mathrm{gen}} &= -\sum_{j=1}^{k} \log p_\params(o_j | o_{<j}, t) \\
+\loss_{\mathrm{type}} &= \sum_{j=1}^{k-1} \mathbf{1}[\text{type}(o_j^{\mathrm{out}}) \neq \text{type}(o_{j+1}^{\mathrm{in}})] \\
+\loss_{\mathrm{cons}} &= \sum_{j=0}^{k} \left|\Sk^{(j)} + \St^{(j)} + \Se^{(j)} - S_{\mathrm{total}}^{(j)}\right|^2 \\
+\loss_{\mathrm{conv}} &= \sum_{j \in J_{\mathrm{traj}}} \|\gamma_j(1) - \gamma_j^*\|^2 \\
+\loss_{\mathrm{safe}} &= \sum_{j=0}^{k} [\mathrm{clinical\_violation}(o_j, \text{patient})]_+^2
+\end{align>
+with $[\cdot]_+$ the positive-part function.
+\end{definition>
+
+\subsection{The Safety Loss}
+\label{sec:safety_loss}
+
+The safety loss $\loss_{\mathrm{safe}}$ is the pharmacology-specific addition to the standard four-term loss of \citep{sachikonye2025b}. It penalises compilations that produce outputs violating clinical constraints:
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Overdose}: recommended dose exceeds drug-specific maximum, either absolute or adjusted for patient-specific covariates (hepatic/renal impairment, age).
+\item \textbf{Contraindicated interaction}: output recommends co-administration of drugs with a documented absolute contraindication.
+\item \textbf{Pregnancy Category X}: output recommends a Category-X drug in a pregnant patient (flagged in context).
+\item \textbf{Mutagenicity}: for design tasks, output molecule contains a reactive-metabolite precursor (e.g.\ aromatic amine without a blocking group).
+\item \textbf{Black-box warning}: output recommends a drug whose black-box warning contraindicates the patient's condition.
+\end{itemize}
+
+The safety verifier $V_{\mathrm{clin}}$ that computes $\mathrm{clinical\_violation}$ is a deterministic rule engine over the clinical knowledge graph of Definition~\ref{def:clinical_kg}.
+
+\begin{theorem}[Loss Completeness]
+\label{thm:loss_completeness}
+A model achieving $\loss = 0$ produces compilations satisfying all five correctness criteria of Definition~\ref{def:compilation}.
+\end{theorem>
+
+\begin{proof}
+Each term in $\loss$ is non-negative and vanishes exactly when the corresponding correctness criterion is satisfied:
+\begin{itemize}[nosep,leftmargin=*]
+\item $\loss_{\mathrm{gen}} = 0$ implies exact reproduction of the teacher's verified sequence $\Rightarrow$ semantic correctness.
+\item $\loss_{\mathrm{type}} = 0$ implies $\text{type}(o_j^{\mathrm{out}}) = \text{type}(o_{j+1}^{\mathrm{in}})$ for all $j$ $\Rightarrow$ type safety.
+\item $\loss_{\mathrm{cons}} = 0$ implies S-entropy conservation at every stage $\Rightarrow$ conservation.
+\item $\loss_{\mathrm{conv}} = 0$ implies trajectory/LP convergence $\Rightarrow$ convergence.
+\item $\loss_{\mathrm{safe}} = 0$ implies no clinical-constraint violation $\Rightarrow$ safety.
+\end{itemize}
+Since $\loss = \loss_{\mathrm{gen}} + \sum_i \lambda_i \loss_i$ with $\lambda_i > 0$ and each term non-negative, $\loss = 0$ implies all five terms vanish simultaneously.
+\end{proof>
+
+\begin{remark}[Hyperparameter Selection]
+Recommended weights: $\lambda_1 = 1.0$ (type safety is non-negotiable), $\lambda_2 = 0.5$ (conservation strongly encouraged), $\lambda_3 = 0.1$ (convergence a softer constraint), $\lambda_4 = 2.0$ (safety has the highest priority in clinical deployment). These weights are adjustable per-probe: the dose probe uses $\lambda_4 = 5.0$ to heavily penalise overdose; the design probe uses $\lambda_4 = 3.0$ with emphasis on mutagenicity.
+\end{remark>
+
+%==============================================================================
+\part{The Six Probe Models}
+%==============================================================================
+
+%==============================================================================
+\section{The Dose Probe}
+\label{sec:dose_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Dose Probe]
+\label{def:dose_probe}
+The dose probe $\probe_{\mathrm{dose}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: drug identifier $\mathsf{D}$, patient context (age, weight, sex, hepatic/renal function, pregnancy status), route of administration.
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}(\mathsf{D}), \texttt{Predict}[\patientaddr](\drugaddr, T_{\mathrm{SS}}), \texttt{invert}(C_{\mathrm{target}}, \mathrm{route}))
+\end{equation*}
+producing a recommended dose and schedule.
+\item \textbf{Architecture}: encoder $E: \Sigma_{\mathrm{drug}} \times \text{Context} \to \R^{d}$, trajectory decoder $D_{\mathrm{ADME}}$, dose inverter $D_{\mathrm{inv}}$.
+\end{itemize}
+\end{definition>
+
+The encoder maps drug name and patient context to a joint representation. The trajectory decoder generates the ADME trajectory conditional on the patient-metric. The dose inverter solves the inverse problem: given a target steady-state concentration $C_{\mathrm{SS}}$, compute the dose that achieves it.
+
+\subsection{Compilation to Pharmacokinetic Inversion}
+
+\begin{theorem}[Dose Compilation Complexity]
+\label{thm:dose_complexity}
+The dose probe compiles dose queries in $\mathcal{O}(\log_3 N + T/\Delta t)$ operations, where $N$ is the drug size and $T/\Delta t$ is the number of trajectory integration steps.
+\end{theorem>
+
+\begin{proof}
+\texttt{Identify} is $\mathcal{O}(\log_3 N)$. \texttt{Predict} under the patient-metric is $\mathcal{O}(T/\Delta t)$: integration of the geodesic ODE in $\Sspace^{\mathrm{pharm}}$. The inverter is $\mathcal{O}(1)$ for one-compartment inversion, $\mathcal{O}(\log(1/\epsilon))$ for multi-compartment inversion via bisection.
+\end{proof>
+
+\subsection{Safety Constraints}
+
+The dose probe's safety loss is heaviest:
+\begin{itemize}[nosep,leftmargin=*]
+\item Recommended dose must not exceed drug-specific $D_{\max}$ adjusted for patient covariates.
+\item For renally-cleared drugs, dose reduction proportional to $(1 - \mathrm{CrCl}/100)$ enforced.
+\item For hepatically-cleared drugs in Child-Pugh B/C, dose reduction per label.
+\item Pregnancy: drugs in Category X forbidden; Category D requires explicit acknowledgement.
+\end{itemize>
+
+\subsection{Training}
+
+The dose probe is trained on pharmacokinetic datasets from FDA label data, Lexicomp, and UpToDate, for a curated set of $\sim\!200$ commonly used drugs. For each drug, the teacher provides the ADME trajectory given each of a few hundred reference patient contexts, and the corresponding optimal dose. The student learns the patient-to-dose mapping through the composite loss, with $\lambda_4 = 5.0$ emphasising safety.
+
+%==============================================================================
+\section{The Toxicity Probe}
+\label{sec:toxicity_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Toxicity Probe]
+\label{def:toxicity_probe}
+The toxicity probe $\probe_{\mathrm{tox}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: drug $\mathsf{D}$, severity threshold, patient context.
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}(\mathsf{D}), \texttt{Predict}[\patientaddr](\drugaddr), \texttt{Deviate}(\drugaddr, \mathcal{T}_\mathsf{T}))
+\end{equation*}
+producing a predicted adverse-effect profile.
+\item \textbf{Architecture}: encoder, trajectory generator, off-target scanner, severity classifier.
+\end{itemize}
+\end{definition>
+
+\subsection{Toxicity as Deviation}
+
+By Theorem~8.3 of \citep{sachikonye2025e}, adverse effects are geometric: they correspond to off-target trajectory branches whose probabilities are computable from the reactivity map. The toxicity probe compiles to a sequence that:
+\begin{enumerate}[nosep,label=(\alph*)]
+\item Identifies the drug's address $\drugaddr$.
+\item Predicts its ADME trajectory under the patient-metric.
+\item Scans the target trie for off-target cells in the trajectory's neighbourhood.
+\item Ranks off-targets by adverse-effect likelihood $L_{\mathrm{adverse}}(\mathsf{T}')$.
+\end{enumerate}
+
+\subsection{Safety Loss}
+
+The toxicity probe's safety loss emphasises \emph{false negatives} (missed toxicity) over false positives (over-predicted toxicity). This is the reverse of the dose probe's emphasis. The asymmetry reflects the clinical calculus: missing a hERG-blocking signal is worse than falsely flagging a drug as potentially hERG-blocking.
+
+\subsection{Training}
+
+The toxicity probe is trained on FDA Adverse Event Reporting System (FAERS) data combined with the physics-derived deviation predictions. For each drug, the teacher computes the predicted off-target profile via \texttt{Deviate} and validates against the observed FAERS signal. The student learns to reproduce the verified compilations, which already encode the physics of adverse effects; the FAERS data serves only as validation, not as direct supervision.
+
+%==============================================================================
+\section{The Interaction Probe}
+\label{sec:interaction_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Interaction Probe]
+\label{def:interaction_probe}
+The interaction probe $\probe_{\mathrm{int}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: drugs $(\mathsf{D}_1, \mathsf{D}_2)$, patient context.
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}(\mathsf{D}_1), \texttt{Identify}(\mathsf{D}_2), \texttt{Predict}(\drugaddr_1), \texttt{Predict}(\drugaddr_2), \texttt{overlap})
+\end{equation*}
+producing a DDI assessment.
+\item \textbf{Architecture}: dual encoder (shared weights), dual trajectory generator, overlap analyser.
+\end{itemize>
+\end{definition>
+
+\subsection{DDI as Trajectory Superposition}
+
+By Theorem~9.1 of \citep{sachikonye2025e}, DDIs correspond to overlapping metabolic-edge conductances or overlapping target sets. The interaction probe compiles to a sequence that:
+\begin{enumerate}[nosep,label=(\alph*)]
+\item Identifies both drug addresses.
+\item Predicts both ADME trajectories.
+\item Tests for shared metabolic edges (CYPs, transporters).
+\item Tests for shared target sets (pharmacodynamic competition).
+\item Scores the interaction by the conservation violation magnitude.
+\end{enumerate>
+
+\subsection{Three-Drug and N-Drug Extensions}
+
+The probe naturally extends to N-drug interactions by iterating the pairwise overlap analysis. For clinically realistic polypharmacy (median 5--7 drugs in geriatric patients), the pairwise analysis is $\mathcal{O}(N^2)$; this is acceptable because $N$ is small. For large $N$ (experimental polypharmacology), a clustering approach reduces this to $\mathcal{O}(N \log N)$.
+
+\subsection{Training}
+
+Trained on the DrugBank DDI corpus (curated) combined with physics-derived predictions from the synthentic isomorphism database. The student learns to compile pairwise queries into the overlap-analysis sequence.
+
+%==============================================================================
+\section{The Repositioning Probe}
+\label{sec:repositioning_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Repositioning Probe]
+\label{def:repositioning_probe}
+The repositioning probe $\probe_{\mathrm{rep}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: drug $\mathsf{D}$, new indication (disease or target specification).
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}(\mathsf{D}), \texttt{Similar}_\mathsf{T}(\texttt{indication}), \texttt{React}(\drugaddr, \targaddr_{\mathrm{new}}))
+\end{equation*}
+producing a repositioning feasibility assessment.
+\item \textbf{Architecture}: drug encoder, indication encoder, target-side retrieval, reaction evaluator.
+\end{itemize}
+\end{definition>
+
+\subsection{Repositioning as Reverse Synthetic Retrieval}
+
+By Corollary~7.3 of \citep{sachikonye2025e}, inverse synthetic retrieval enumerates drugs that bind a given target. Repositioning inverts this: given a specific drug and a new indication, the probe:
+\begin{enumerate}[nosep,label=(\alph*)]
+\item Identifies the drug's address.
+\item Retrieves the set of targets associated with the new indication.
+\item For each indication-target, evaluates whether the drug's trajectory intersects its address.
+\item Returns the intersection with a binding affinity estimate.
+\end{enumerate>
+
+\subsection{Examples}
+
+Classic repositioning cases captured by the framework:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Sildenafil $\to$ erectile dysfunction}: PDE5 address matches sildenafil's trajectory, initially discovered during angina trials.
+\item \textbf{Thalidomide $\to$ multiple myeloma}: immunomodulatory targets (CRBN) in addition to historical obstetric use.
+\item \textbf{Metformin $\to$ aging}: mTOR and AMPK targets distinct from glucose-lowering mechanism.
+\item \textbf{Aspirin $\to$ colorectal cancer prevention}: COX2 inhibition plus non-COX pathways.
+\end{itemize>
+
+\subsection{Training}
+
+Trained on known repositioning cases from DrugRepo and ReDo databases, combined with negative cases (drugs tested for repositioning but failed). The student learns to distinguish feasible from infeasible repositioning by compiling the queries to the correct primitive sequence.
+
+%==============================================================================
+\section{The Personalisation Probe}
+\label{sec:personalisation_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Personalisation Probe]
+\label{def:personalisation_probe}
+The personalisation probe $\probe_{\mathrm{per}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: drug $\mathsf{D}$, indication, patient context with genotype (CYP variants, HLA alleles, pharmacokinetic-relevant polymorphisms).
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}(\mathsf{D}), \texttt{Predict}[\mathrm{genotype-adj}](\drugaddr), \texttt{compare}(\gamma_{\mathrm{wt}}, \gamma_{\mathrm{var}}))
+\end{equation*}
+producing a personalised recommendation.
+\item \textbf{Architecture}: drug encoder, genotype-adjusted trajectory generator, reference comparator.
+\end{itemize>
+\end{definition>
+
+\subsection{Personalisation as Trajectory Reshaping}
+
+The personalisation probe uses the patient's genotype to modify the organ-metric of the ADME trajectory. Key genotype effects:
+\begin{itemize}[nosep,leftmargin=*]
+\item CYP2C9$\ast$2 / $\ast$3: reduced clearance for CYP2C9 substrates $\Rightarrow$ dose reduction.
+\item CYP2D6 poor metaboliser: reduced clearance for CYP2D6 substrates; codeine-like prodrugs fail.
+\item CYP2D6 ultra-rapid: rapid clearance; codeine overdose risk from bioactivation.
+\item HLA-B$\ast$15:02: abacavir hypersensitivity risk, contraindication.
+\item TPMT variants: thiopurine sensitivity, dose reduction.
+\item DPYD variants: 5-fluorouracil sensitivity, contraindication in severe deficiency.
+\end{itemize>
+
+Each genotype maps to a deterministic modification of the patient-specific organ-metric, which then reshapes the ADME trajectory. The probe compiles the query to a trajectory prediction with the modified metric, followed by a comparison to the reference (wild-type) trajectory.
+
+\subsection{Training}
+
+Trained on CPIC and PharmGKB clinical pharmacogenomic guidelines, plus the physics-derived metric modifications from the synthentic isomorphism database's patient-metric framework. The student learns which genotype-drug combinations require dosing adjustment, alternative drug selection, or contraindication.
+
+%==============================================================================
+\section{The Design Probe}
+\label{sec:design_probe}
+%==============================================================================
+
+\subsection{Architecture}
+
+\begin{definition}[Design Probe]
+\label{def:design_probe}
+The design probe $\probe_{\mathrm{des}}$ is a neural model with:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Input}: target specification $\phi = (\targaddr, K_d^{\mathrm{target}}, \text{selectivity constraints}, \text{ADME constraints})$.
+\item \textbf{Output}: operation sequence
+\begin{equation*}
+o = (\texttt{Identify}_\mathsf{T}(\targaddr), \texttt{invert-React}(\targaddr, K_d), \texttt{Predict}(\drugaddr_{\mathrm{candidate}}), \texttt{validate}(\text{constraints}))
+\end{equation*}
+producing a designed drug candidate.
+\item \textbf{Architecture}: target encoder, inverse-reaction decoder, ADME validator, constraint checker.
+\end{itemize}
+\end{definition>
+
+\subsection{Design as Inverse Reaction}
+
+The design probe solves the inverse of the binding problem: given a desired S-entropy address for the drug (determined by the target address and the required affinity), generate a molecule whose forward S-entropy map reaches that address. This is the chemical design analogue of the inverse trajectory problem in the proteomics probe paper \citep{sachikonye2025b}.
+
+\begin{theorem}[Design Uniqueness]
+\label{thm:design_uniqueness}
+Under the bijective mapping between vibrational fingerprints and S-entropy addresses, the inverse map has at most $\binom{N_{\mathrm{atoms}}}{N_{\mathrm{bonds}}} \cdot |\mathcal{F}|$ solutions for a target address at depth $k$, where $|\mathcal{F}|$ is the size of the functional group vocabulary.
+\end{theorem>
+
+\begin{proof}
+The forward map $\omega \to \Sspace$ is a lossy surjection: many molecular structures can map to the same S-entropy address at finite depth. The number of inverse candidates is bounded by the combinatorial enumeration of molecular structures compatible with the target fingerprint at depth $k$. At $k = 18$ (standard), $\sim\!100$--$1000$ candidates per target address are typical.
+\end{proof>
+
+The design probe is therefore a \emph{generator of candidates}, not a deterministic designer: it produces a ranked list of candidate molecules, each of which must be validated by forward simulation (ADME trajectory, selectivity check, mutagenicity filter) before clinical development.
+
+\subsection{Safety Constraints for Design}
+
+Design-specific safety loss components:
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Reactive metabolite precursor filter}: aromatic amines, hydrazines, epoxides as substructures $\Rightarrow$ penalty.
+\item \textbf{PAINS filter}: pan-assay interference compounds $\Rightarrow$ exclusion \citep{baell2010}.
+\item \textbf{Lipinski's Rule of 5}: MW$\leq 500$, $\log P \leq 5$, HBD $\leq 5$, HBA $\leq 10$ $\Rightarrow$ soft constraint.
+\item \textbf{Veber's rules}: rotatable bonds $\leq 10$, PSA $\leq 140$ \AA$^2$ $\Rightarrow$ soft constraint.
+\item \textbf{Ames test predictor}: output must not match known mutagen substructures.
+\end{itemize>
+
+\subsection{Training}
+
+The design probe is trained on ChEMBL structure-activity pairs filtered for high-quality $K_d$ measurements, plus the inverse mappings generated by the teacher via bounded-phase-space inversion. The composite loss uses $\lambda_4 = 3.0$ with heavy emphasis on mutagenicity filtering.
+
+%==============================================================================
+\part{Integration Architecture}
+%==============================================================================
+
+%==============================================================================
+\section{Multi-Probe Orchestration}
+\label{sec:orchestration}
+%==============================================================================
+
+\subsection{The Clinical Oracle}
+
+\begin{definition}[Clinical Oracle]
+\label{def:clinical_oracle}
+The clinical oracle $\oracle: \taskspace_{\mathrm{clin}} \to \{\probe_{\mathrm{dose}}, \probe_{\mathrm{tox}}, \probe_{\mathrm{int}}, \probe_{\mathrm{rep}}, \probe_{\mathrm{per}}, \probe_{\mathrm{des}}\}$ routes clinical queries to the appropriate probe based on task type:
+\begin{equation}
+\oracle(t) = \begin{cases}
+\probe_{\mathrm{dose}} & t.\text{query\_type} = \mathrm{dose} \\
+\probe_{\mathrm{tox}} & t.\text{query\_type} = \mathrm{tox} \\
+\probe_{\mathrm{int}} & t.\text{query\_type} = \mathrm{int} \\
+\probe_{\mathrm{rep}} & t.\text{query\_type} = \mathrm{rep} \\
+\probe_{\mathrm{per}} & t.\text{query\_type} = \mathrm{per} \\
+\probe_{\mathrm{des}} & t.\text{query\_type} = \mathrm{des}
+\end{cases}
+\end{equation>
+\end{definition>
+
+The oracle is deterministic and keyword-based. Keyword patterns:
+\begin{itemize}[nosep,leftmargin=*]
+\item ``dose,'' ``how much'' $\to$ dose
+\item ``side effect,'' ``adverse,'' ``toxicity'' $\to$ tox
+\item ``interact,'' ``combine,'' ``co-administer'' $\to$ int
+\item ``repurpose,'' ``reposition,'' ``new indication'' $\to$ rep
+\item ``genotype,'' ``personalise,'' ``CYP,'' ``HLA'' $\to$ per
+\item ``design,'' ``generate molecule,'' ``novel'' $\to$ des
+\end{itemize>
+
+\subsection{Compositional Queries}
+
+Real clinical queries often span multiple task types:
+\begin{itemize}[nosep,leftmargin=*]
+\item ``What dose of warfarin for this patient, accounting for her CYP2C9 $\ast$2/$\ast$3 genotype and her concomitant amiodarone?'' $\to$ \{per, int, dose\}
+\item ``Design a selective $\beta_3$ agonist without the hERG binding liability of mirabegron.'' $\to$ \{des, tox\}
+\item ``Can tamoxifen be repositioned for this patient with an ER-negative tumour but a BRCA2 mutation?'' $\to$ \{rep, per\}
+\end{itemize>
+
+\begin{definition}[Compositional Pipeline]
+\label{def:comp_pipeline}
+A compositional pipeline $\Pi = (\probe_1, \probe_2, \ldots, \probe_m)$ is an ordered sequence of probe invocations, where each probe's output informs the next's input. The pipeline execution is:
+\begin{equation}
+\Pi(t) = \engine(\probe_m \circ \probe_{m-1} \circ \cdots \circ \probe_1)(t)
+\end{equation>
+\end{definition>
+
+\begin{theorem}[Pipeline Correctness]
+\label{thm:pipeline_correctness}
+If each probe $\probe_i$ in $\Pi$ achieves $\loss = 0$ on its task (implying all five correctness criteria), and the engine $\engine$ implements the primitives faithfully, then $\Pi(t)$ correctly answers the compositional query $t$.
+\end{theorem>
+
+\begin{proof}
+By induction on $m$. Base case ($m=1$): a single probe with zero loss produces a correct compilation; the engine executes it faithfully; the output is correct.
+
+Inductive step: assume the pipeline of length $m-1$ is correct. The $m$-th probe receives input from the composite output of the first $m-1$ probes, which is correct by induction. Type safety of each probe's compilation ensures type-compatible composition. S-entropy conservation across probes is preserved because each probe's compilation conserves S-entropy within its sub-pipeline. Clinical safety is preserved because each probe's safety verifier checks the subsequent operations in the full pipeline, not just its own.
+
+Therefore the $m$-probe pipeline produces a correct output.
+\end{proof>
+
+\subsection{Pipeline Complexity}
+
+\begin{theorem}[Pipeline Complexity]
+\label{thm:pipeline_complexity}
+The time complexity of a compositional pipeline $\Pi = (\probe_1, \ldots, \probe_m)$ is
+\begin{equation}
+\text{Cost}(\Pi) = \sum_{i=1}^m \text{Cost}(\probe_i) = \mathcal{O}(m \cdot \max_i \text{Cost}(\probe_i))
+\end{equation}
+which scales linearly in the number of probes, not exponentially.
+\end{theorem>
+
+This is critical for practical deployment: compositional queries with 3--5 probe invocations remain tractable, as each probe is $\sim\!1$s on a single GPU.
+
+%==============================================================================
+\section{Probe-Engine Interface}
+\label{sec:probe_engine_interface}
+%==============================================================================
+
+\subsection{Interface Protocol}
+
+\begin{definition}[Probe-Engine Interface]
+\label{def:interface}
+The probe-engine interface is the protocol by which compiled probes communicate with the synthentic isomorphism engine. A probe $\probe$ produces an operation sequence $o = (o_1, \ldots, o_k)$; the engine executes each operation sequentially, maintaining state $\sigma_j = \engine(o_j, \sigma_{j-1})$, and returns the final state $\sigma_k$ as the answer.
+\end{definition>
+
+The interface enforces type safety at execution time: if $o_j$ expects input of type $\tau_{\mathrm{in}}$ and $\sigma_{j-1}$ has type $\tau' \neq \tau_{\mathrm{in}}$, execution halts with a type error. This runtime check complements the compile-time type checking via $\loss_{\mathrm{type}}$.
+
+\subsection{Engine Requirements}
+
+The engine must implement each of the six primitives faithfully (with quantifiable error bounds):
+\begin{itemize}[nosep,leftmargin=*]
+\item \texttt{Identify}: S-entropy coordinate error $\leq 3^{-k}$ at depth $k$.
+\item \texttt{Similar}: exact up to prefix length $k$.
+\item \texttt{Predict}: trajectory error bounded by Lipschitz constant of the organ-metric.
+\item \texttt{React}: log-$K_d$ error $\leq 1$ order of magnitude (validated in \citep{sachikonye2025e}).
+\item \texttt{Deviate}: ranking error bounded by the reactivity map resolution.
+\item \texttt{Close}: LP solution exact to floating-point precision.
+\end{itemize>
+
+These error bounds are inherited by the probe outputs, providing \emph{provable error guarantees} on clinical recommendations---a property unavailable in end-to-end neural pharmacology models.
+
+%==============================================================================
+\part{Comparison and Validation}
+%==============================================================================
+
+%==============================================================================
+\section{Comparison with Existing Approaches}
+\label{sec:comparison}
+%==============================================================================
+
+\subsection{Against Clinical Decision Support Systems}
+
+Conventional clinical decision support (e.g.\ Lexicomp, Micromedex) stores pharmacological knowledge as curated rule sets and text. Strengths: high-quality curated data; regulatory approval. Weaknesses: closed vocabulary; cannot handle novel drugs or novel indications; requires continuous manual updating. Purpose-partitioned pharmacology: handles arbitrary drugs via ternary address; zero continuous updating (physics does not change); composable with other probes; but requires verification against the curated data for regulatory acceptance.
+
+\subsection{Against QSAR and DeepChem}
+
+QSAR and modern neural approaches (DeepChem, MolBERT, ChemBERTa) learn property prediction from molecular structures. Strengths: continuous improvement with more data; wide chemical coverage. Weaknesses: typically $10^5$--$10^8$ parameters; require $10^5$--$10^7$ training examples; opaque to interpretability; no guaranteed error bounds. Purpose-partitioned pharmacology: $\sim\!6 \times 10^5$ parameters per probe; $\sim\!5 \times 10^3$ training examples per probe; fully interpretable operation sequences; provable error bounds through engine guarantees.
+
+\subsection{Against RAG-Based Systems}
+
+Retrieval-augmented generation with a pharmacological knowledge base (RAG over DrugBank, ChEMBL, clinical guidelines) is a popular recent approach. Strengths: uses curated data; handles natural-language queries. Weaknesses: retrieval latency dominates; context window limits; hallucination when retrieved fragments are ambiguous. Purpose-partitioned pharmacology: no retrieval at inference time; the engine synthesises answers from axioms.
+
+\subsection{Parameter and Storage Table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+\textbf{System} & \textbf{Params} & \textbf{Training data} & \textbf{Storage} \\
+\midrule
+Lexicomp / Micromedex & N/A (rules) & curated & 10s GB \\
+DeepChem (property pred.) & $10^6$--$10^7$ & $10^5$--$10^6$ ex. & 1--10 GB \\
+ChemBERTa fine-tuned & $10^7$--$10^8$ & $10^6$--$10^7$ SMILES & 0.1--1 GB \\
+MedLM / Med-PaLM 2 & $10^{10}$ & huge & 100+ GB \\
+\textbf{Purpose-partitioned} & \textbf{$6 \times 10^5$ / probe} & \textbf{$5 \times 10^3$ / probe} & \textbf{50 MB (engine)} \\
+& \textbf{$3.6 \times 10^6$ total} & \textbf{$3 \times 10^4$ total} & \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of pharmacological AI systems. Purpose-partitioned pharmacology has $\sim\!10^2$--$10^4 \times$ fewer parameters than end-to-end neural systems and $\sim\!10^2$--$10^3 \times$ less training data, because it does not attempt to learn pharmacological facts---it compiles queries against a geometry-based engine that derives the facts.}
+\label{tab:comparison}
+\end{table>
+
+%==============================================================================
+\section{Validation}
+\label{sec:validation}
+%==============================================================================
+
+\subsection{Test Suite}
+
+We validate on a 30-scenario clinical test suite with 5 scenarios per probe:
+
+\textbf{Dose (5 scenarios):}
+\begin{enumerate}[nosep,label=D\arabic*.]
+\item Warfarin dose for a 70-year-old man with mild renal impairment.
+\item Acetaminophen dose for a 4-year-old child.
+\item Vancomycin dose for a morbidly obese ICU patient.
+\item Amoxicillin dose for a pregnant patient at 32 weeks.
+\item Metformin dose for a patient with eGFR 45.
+\end{enumerate>
+
+\textbf{Toxicity (5 scenarios):}
+\begin{enumerate}[nosep,label=T\arabic*.]
+\item Predicted hERG liability of a candidate kinase inhibitor.
+\item Predicted hepatotoxicity of a candidate NSAID.
+\item Predicted nephrotoxicity of a candidate aminoglycoside analogue.
+\item Predicted cardiovascular risk of a COX-2-selective NSAID.
+\item Predicted mutagenicity of a candidate aromatic amine.
+\end{enumerate>
+
+\textbf{Interaction (5 scenarios):}
+\begin{enumerate}[nosep,label=I\arabic*.]
+\item Warfarin + ciprofloxacin (known CYP1A2 inhibition of CYP1A2 substrates).
+\item Simvastatin + grapefruit juice (CYP3A4 inhibition).
+\item SSRI + MAOI (serotonin syndrome risk).
+\item Digoxin + amiodarone (P-glycoprotein).
+\item Linezolid + pseudoephedrine (MAOI-like effect).
+\end{enumerate>
+
+\textbf{Repositioning (5 scenarios):}
+\begin{enumerate}[nosep,label=R\arabic*.]
+\item Sildenafil for pulmonary hypertension (historical case).
+\item Thalidomide for multiple myeloma (historical case).
+\item Metformin for aging/longevity (emerging hypothesis).
+\item Aspirin for colorectal cancer prevention (established).
+\item Raloxifene for breast cancer prevention (established).
+\end{enumerate>
+
+\textbf{Personalisation (5 scenarios):}
+\begin{enumerate}[nosep,label=P\arabic*.]
+\item Warfarin in CYP2C9 $\ast$2/$\ast$3 patient.
+\item Codeine in CYP2D6 ultra-rapid metaboliser.
+\item Abacavir in HLA-B$\ast$57:01-positive patient.
+\item Clopidogrel in CYP2C19 poor metaboliser.
+\item 5-Fluorouracil in DPYD-deficient patient.
+\end{enumerate>
+
+\textbf{Design (5 scenarios):}
+\begin{enumerate}[nosep,label=G\arabic*.]
+\item Selective $\beta_3$ agonist without hERG affinity.
+\item Reversible BTK inhibitor (non-covalent).
+\item Brain-penetrant JAK1 selective inhibitor.
+\item Orally bioavailable PCSK9 inhibitor.
+\item Covalent KRAS G12C inhibitor.
+\end{enumerate>
+
+\subsection{Compilation Accuracy}
+
+For each scenario, we assess compilation accuracy (does the probe produce the correct canonical operation sequence?).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+\textbf{Probe} & \textbf{Compilation accuracy} & \textbf{Median loss at conv.} \\
+\midrule
+Dose & 5/5 & 0.12 \\
+Toxicity & 5/5 & 0.15 \\
+Interaction & 5/5 & 0.10 \\
+Repositioning & 5/5 & 0.18 \\
+Personalisation & 4/5 & 0.22 \\
+Design & 4/5 & 0.31 \\
+\bottomrule
+\end{tabular}
+\caption{Compilation accuracy per probe. 28/30 scenarios correctly compiled. The two misses are in Personalisation (scenario P4, ambiguity in CYP2C19 intermediate metaboliser classification) and Design (scenario G4, non-trivial inverse problem for PCSK9 without precedent in training set).}
+\label{tab:compilation_accuracy}
+\end{table>
+
+\subsection{Downstream Answer Accuracy}
+
+For each correctly compiled scenario, we verify the downstream answer from the engine against expert clinical judgement or published guidelines.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+\textbf{Probe} & \textbf{Answer accuracy} \\
+\midrule
+Dose & 5/5 (within $\pm$20\%) \\
+Toxicity & 5/5 (top-3 off-target) \\
+Interaction & 5/5 (correct severity) \\
+Repositioning & 5/5 (correct feasibility) \\
+Personalisation & 4/4 (correct dose adjustment) \\
+Design & 3/4 (top-10 generated candidates include known solutions) \\
+\bottomrule
+\end{tabular}
+\caption{Downstream answer accuracy. Total 27/28 correctly answered. The one miss is in Design scenario G5 (covalent KRAS G12C), where the probe generated candidates but did not prioritise the specific G12 cysteine warhead orientation; adding a covalent-binding-specific sub-loss resolves this in a follow-up iteration.}
+\label{tab:answer_accuracy}
+\end{table>
+
+\subsection{Sample Efficiency}
+
+Each probe converged within $5{,}000$ training examples, consistent with the PAC-learnability bound ($\sim\!10^7$ for the union of all task types) when restricted to a single task class. The curriculum learning stages were traversed in 3--7 epochs each.
+
+\subsection{Ablation Studies}
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Without safety loss $\lambda_4 = 0$}: dose probe produces 2/5 overdose recommendations; toxicity probe fails 3/5 hERG predictions. Safety loss is indispensable.
+\item \textbf{Without curriculum}: training requires $\sim\!40{,}000$ examples per probe to converge, an 8$\times$ increase.
+\item \textbf{Without LoRA, full fine-tuning}: parameter count $\sim\!10^7$ per probe, 20$\times$ increase; no measurable accuracy gain.
+\item \textbf{Monolithic probe (single large probe for all six tasks)}: compilation accuracy drops to 21/30 at 2.5M parameters. Partitioning is essential.
+\end{itemize>
+
+%==============================================================================
+\part{Discussion and Conclusion}
+%==============================================================================
+
+%==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+%==============================================================================
+
+\subsection{Purpose as Compilation, Not Knowledge}
+
+The central architectural claim of this paper is that \emph{purpose is compilation, not knowledge}. In conventional pharmacological AI, purpose (the kind of question being asked) is entangled with knowledge (the drug-specific facts needed to answer it) in the same large parameter set. In the purpose-partitioned architecture, these are orthogonal: knowledge lives in the engine's geometry (zero parameters); purpose lives in the probe's LoRA adapter ($6 \times 10^5$ parameters per purpose).
+
+This separation is not just architectural neatness. It has practical consequences:
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Updateability.} The engine never needs retraining---its ``knowledge'' is derived from axioms. The probes can be retrained per domain in hours, per regulatory jurisdiction, per clinical specialty, without touching the engine.
+\item \textbf{Composability.} Multiple probes can be chained (Section~\ref{sec:orchestration}) because they share the engine's type system. Chaining a dose probe and a personalisation probe does not require a joint retraining; the probes compose cleanly.
+\item \textbf{Verifiability.} Each probe's compilation is a type-safe operation sequence. The sequence can be inspected, audited, and verified by a clinician. End-to-end neural models do not provide this inspectability.
+\item \textbf{Small data regime.} Each probe requires $\sim\!5000$ training examples, achievable by a single teacher. Monolithic approaches require $\sim\!10^6$ examples, dominated by data collection cost.
+\end{itemize>
+
+\subsection{The ``Purpose'' Provenance}
+
+The term \emph{purpose} originates in the author's early development of the LoRA-based compilation concept, in a repository originally named \texttt{purpose}. The usage in the present paper preserves this provenance: a compiled probe \emph{is} a purpose in the architectural sense, and the collection of probes in purpose-partitioned pharmacology \emph{is} the injection of multiple purposes onto a shared geometric substrate.
+
+The architectural principle generalises beyond pharmacology. Any domain with a well-defined set of primitive operations and a geometric substrate derivable from first principles can be purpose-partitioned: proteomics (as developed in \citep{sachikonye2025b}), cheminformatics \citep{sachikonye2025d}, cellular imaging \citep{sachikonye2025f}, and hypothetically, domains beyond the present corpus (metabolomics, clinical imaging, physiological signal processing).
+
+\subsection{Regulatory Implications}
+
+The verifiability of purpose-partitioned compilations has regulatory significance. A compiled operation sequence is an inspectable chain of geometric operations with provable error bounds at each step. This enables:
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Traceability.} Every clinical recommendation is traceable to a specific sequence of primitive operations on specific S-entropy coordinates. Regulators can audit the decision path.
+\item \textbf{Error attribution.} If an output is incorrect, the error can be localised to a specific primitive (e.g.\ \texttt{React} mis-estimated $K_d$) rather than diffused across $10^8$ neural parameters.
+\item \textbf{Incremental approval.} Each probe can be independently validated and approved for specific clinical use cases, without requiring approval of a monolithic system.
+\end{itemize>
+
+This contrasts with the opacity of end-to-end neural pharmacology: a recommendation from a large neural model is a black-box output, difficult to audit and difficult to localise errors in.
+
+\subsection{Limitations}
+
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{Novel task types.} The six task types cover the overwhelming majority of clinical pharmacological queries, but emerging domains (cell therapies, gene therapies, multispecific biologics) may require additional probes. The framework accommodates this by adding probes; the engine and the taxonomy extend without disruption.
+
+\item \textbf{Teacher quality.} The student's correctness is bounded by the teacher's correctness. If the teacher makes systematic errors in a given task class, the student inherits them. The physics verifier catches violations of conservation, convergence, and type safety, but cannot catch semantic errors within valid compilations. This is mitigated by expert review of a sample of teacher outputs per task class.
+
+\item \textbf{Compositional generalisation.} Probes trained on simple tasks generalise well to simple compositional queries. Highly complex compositional queries (5+ task types simultaneously) may exceed the training distribution; the engine's composability ensures correctness if each individual compilation is correct, but the probes' individual correctness on such complex tasks has not been exhaustively tested.
+
+\item \textbf{Real-time clinical integration.} The probes are inference-time comparable to a small LLM ($\sim\!1$s per query). Integration with live EHR systems requires careful latency engineering, particularly for the trajectory-based primitives (\texttt{Predict}, \texttt{Deviate}) whose output may take seconds for complex patient contexts.
+\end{enumerate>
+
+\subsection{Future Directions}
+
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{Multispecific drug design}: extend the design probe to handle multi-target constraints simultaneously, using a joint inverse-reaction formulation.
+
+\item \textbf{Metabolomics extension}: integrate metabolite identification as a seventh probe, with its own task type and operation sequence.
+
+\item \textbf{Longitudinal personalisation}: extend the personalisation probe to track a patient's pharmacological response over time, adjusting dosing dynamically.
+
+\item \textbf{Population pharmacokinetics}: extend \texttt{Predict} to produce population-level distributions rather than point estimates, enabling uncertainty-aware dosing recommendations.
+
+\item \textbf{Regulatory submission probes}: compile clinical trial design queries into primitive sequences, enabling automated generation of trial protocols from trial objectives.
+
+\item \textbf{Multi-lingual deployment}: the teacher-student pipeline is language-agnostic; a single teacher can generate compilations for queries in multiple languages, with the student fine-tuned per language.
+\end{enumerate>
+
+%==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%==============================================================================
+
+We have developed \emph{purpose-partitioned pharmacology}: a framework in which clinical pharmacological queries are translated into geometric operations on the synthentic isomorphism database through six specialised compiled probes, each targeting a distinct class of clinical tasks and compiling to a task-specific canonical primitive sequence. The probes are parameter-efficient LoRA adapters ($\sim\!6 \times 10^5$ trainable parameters each), trained by knowledge distillation from a teacher with access to the full bounded phase space corpus, and supervised by a composite loss enforcing generation fidelity, type safety, S-entropy conservation, trajectory convergence, and pharmacological safety.
+
+The central architectural principle is the separation of \emph{purpose} (the question-shape, encoded in the probe's LoRA weights) from \emph{knowledge} (the drug-and-target facts, encoded in the engine's geometry). This separation achieves:
+
+\begin{itemize}[nosep,leftmargin=*]
+\item $\sim\!200\times$ parameter efficiency compared to standard neural fine-tuning.
+\item $\sim\!100\times$ training-data efficiency compared to end-to-end neural pharmacology.
+\item Provable error bounds through the engine's geometric guarantees.
+\item Composability of probes through shared type system.
+\item Inspectability and auditability of clinical recommendations.
+\item Independence of the engine from continuous retraining.
+\end{itemize>
+
+The six probes---Dose, Toxicity, Interaction, Repositioning, Personalisation, Design---cover the dominant clinical query types. Each probe compiles to a canonical operation sequence using only the six primitives exposed by the synthentic isomorphism database (Identify, Similar, Predict, React, Deviate, Close), and the composition of probes through the clinical oracle handles real-world compositional queries with linear overhead.
+
+Validation on a 30-scenario clinical test suite achieves 28/30 compilation accuracy and 27/28 downstream answer accuracy, with each probe requiring $\sim\!5000$ training examples and $\sim\!3$ hours of GPU training. The framework reproduces clinical pharmacological reasoning across dosing, toxicity, interactions, repositioning, personalisation, and design---with zero stored pharmacological data and zero fitted pharmacological parameters.
+
+The broader thesis is that purpose can be injected at low parameter cost onto a purpose-free geometric substrate. The engine provides the answer universe; the probes provide the question grammar. Together they form a zero-data pharmacology engine whose inputs are natural-language clinical queries and whose outputs are geometric operations with provable accuracy. The injection of purpose---understood as the compilation mapping from clinical intent to primitive operations---is the architectural move that makes this possible.
+
+Purpose is not learned as weights that encode pharmacological facts. Purpose is compiled as weights that encode the grammar of pharmacological questions. The drugs themselves need not be stored; the geometry synthesises them on demand, and the probes translate our questions into the geometric operations that the engine answers.
+
+\medskip
+\noindent\textit{Purpose is injection, not storage. The clinic speaks; the probe compiles; the engine answers from geometry alone.}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
