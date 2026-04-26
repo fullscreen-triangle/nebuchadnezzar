@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background-color: #1b1b1b;
+  color: #f5f5f5;
+}
+
+::selection {
+  background: #58E6D9;
+  color: #1b1b1b;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-md border border-light/10 bg-light/[0.02] p-4;
+  }
+  .panel-title {
+    @apply mb-3 text-[11px] uppercase tracking-[0.2em] text-light/50;
+  }
+  .mono {
+    font-family: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+  }
+  .accent {
+    color: #58E6D9;
+  }
+  .btn {
+    @apply rounded border border-primaryDark/40 bg-primaryDark/10 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-primaryDark transition hover:bg-primaryDark/20;
+  }
+  .input-base {
+    @apply w-full rounded border border-light/10 bg-dark/60 p-2 font-mono text-sm text-light placeholder:text-light/30 focus:border-primaryDark/60 focus:outline-none;
+  }
+}

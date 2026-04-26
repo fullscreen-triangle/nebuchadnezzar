@@ -1,33 +1,34 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
-import { AnimatePresence } from "framer-motion";
-// pages/_app.js
-import { Montserrat } from "next/font/google";
+import "katex/dist/katex.min.css";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Shell from "@/components/Shell";
 
-// If loading a variable font, you don't need to specify the font weight
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-mont" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter();
-
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="description"
+          content="Geometric pharmacology and chemistry tools, in the browser."
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main
-        className={`${montserrat.variable} font-mont  bg-light dark:bg-dark w-full min-h-screen h-full`}
+      <div
+        className={`${inter.variable} ${jetbrains.variable} font-sans min-h-screen bg-dark text-light`}
+        style={{ fontFamily: "var(--font-sans)" }}
       >
-        <Navbar />
-        <AnimatePresence initial={false} mode="wait">
-          <Component key={router.asPath} {...pageProps} />
-        </AnimatePresence>
-        <Footer />
-      </main>
+        <Shell>
+          <Component {...pageProps} />
+        </Shell>
+      </div>
     </>
   );
 }

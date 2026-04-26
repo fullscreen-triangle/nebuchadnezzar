@@ -1,90 +1,97 @@
-import AnimatedText from "@/components/AnimatedText";
-import { HireMe } from "@/components/HireMe";
-import { LinkArrow } from "@/components/Icons";
-import Layout from "@/components/Layout";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import lightBulb from "../../public/images/svgs/miscellaneous_icons_1.svg";
-import profilePic from "../../public/images/profile/developer-pic-1.png";
-import TransitionEffect from "@/components/TransitionEffect";
 
+const TOOLS = [
+  {
+    href: "/tools/spectrum",
+    name: "Spectrum Inspector",
+    sub: "vibrational frequencies → S-entropy address",
+    op: "Identify",
+  },
+  {
+    href: "/tools/observe",
+    name: "Partition Observation",
+    sub: "fragment shader as categorical instrument",
+    op: "Predict",
+  },
+  {
+    href: "/tools/interfere",
+    name: "Interference Similarity",
+    sub: "two textures → visibility scalar",
+    op: "Similar",
+  },
+];
 
 export default function Home() {
-  
   return (
     <>
       <Head>
-        <title>Awesome Portfolio Built with Nextjs</title>
-        <meta
-          name="description"
-          content="Explore CodeBucks's Next.js developer portfolio and 
-        discover the latest webapp projects and software engineering articles. 
-        Showcase your skills as a full-stack developer and software engineer."
-        />
+        <title>Crown Prince — Geometric pharmacology in the browser</title>
       </Head>
-
-      <TransitionEffect />
-      <article
-        className={`flex min-h-screen items-center text-dark dark:text-light sm:items-start`}
-      >
-        <Layout className="!pt-0 md:!pt-16 sm:!pt-16">
-          <div className="flex w-full items-start justify-between md:flex-col">
-            <div className="w-1/2 lg:hidden md:inline-block md:w-full">
-              <Image
-                src={profilePic}
-                alt="CodeBucks"
-                className="h-auto w-full"
-                sizes="100vw"
-                priority
-              />
-            </div>
-            <div className="flex w-1/2 flex-col items-center self-center lg:w-full lg:text-center">
-              <AnimatedText
-                text="Turning vision into reality with code and design."
-                className="!text-left !text-6xl xl:!text-5xl lg:!text-center lg:!text-6xl md:!text-5xl sm:!text-3xl"
-              />
-              <p className="my-4 text-base font-medium md:text-sm sm:!text-xs">
-              As a skilled full-stack developer, I am dedicated to turning ideas into innovative web applications. Explore my latest projects and articles, showcasing my expertise in React.js and web development.
-              </p>
-              <div className="mt-2 flex items-center self-start lg:self-center">
-                <Link
-                  // whileHover={{
-                  //   cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100' style='font-size:24px;'><text y='50%'>👆</text></svg>"), auto`,
-                  // }}
-                  href="/dummy.pdf"
-                  target={"_blank"}
-                  className={`flex items-center rounded-lg border-2 border-solid bg-dark p-2.5 px-6 text-lg font-semibold
-            capitalize text-light hover:border-dark hover:bg-transparent hover:text-dark 
-            dark:bg-light dark:text-dark dark:hover:border-light dark:hover:bg-dark dark:hover:text-light
-            md:p-2 md:px-4 md:text-base
-             `}
-                  download
-                >
-                  Resume <LinkArrow className="ml-1 !w-6 md:!w-4" />
-                </Link>
-
-                <Link
-                  href="mailto:codebucks27@gmail.com"
-                  className="ml-4 text-lg font-medium capitalize text-dark underline 
-                  dark:text-light md:text-base"
-                >
-                  Contact
-                </Link>
-              </div>
-            </div>
-          </div>
-        </Layout>
-
-        <HireMe />
-        <div className="absolute right-8 bottom-8 inline-block w-24 md:hidden">
-          <Image
-            className="relative h-auto w-full"
-            src={lightBulb}
-            alt="Codebucks"
-          />
+      <section className="mx-auto max-w-5xl px-6 pt-16 pb-10 md:px-10">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-primaryDark">
+          Bounded Phase Space Law
+        </p>
+        <h1 className="mt-4 text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+          Drugs and targets addressed in three coordinates.
+          <br />
+          <span className="text-light/60">No database required.</span>
+        </h1>
+        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-light/70">
+          Every stable molecule is a bounded oscillatory system whose identity is
+          determined by three S-entropy coordinates{" "}
+          <span className="mono accent">(S_k, S_t, S_e)</span>. This site implements the
+          framework as a set of in-browser shader tools: the GPU is the
+          categorical observation apparatus, not a graphics accelerator.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/tools" className="btn">
+            Open the tools
+          </Link>
+          <Link href="/framework" className="btn !border-light/20 !bg-transparent !text-light/70 hover:!text-light">
+            Read the framework
+          </Link>
         </div>
-      </article>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 py-12 md:px-10">
+        <p className="panel-title">Available tools</p>
+        <div className="grid gap-4 md:grid-cols-3">
+          {TOOLS.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="panel group transition hover:border-primaryDark/40"
+            >
+              <p className="text-[10px] uppercase tracking-[0.25em] text-primaryDark/80">
+                Primitive · {t.op}
+              </p>
+              <h3 className="mt-2 text-lg font-medium text-light group-hover:text-primaryDark">
+                {t.name}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-light/60">{t.sub}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 pb-20 md:px-10">
+        <div className="grid gap-4 md:grid-cols-3">
+          <Stat label="Storage" value="50 MB" sub="vs 12 GB DrugBank" />
+          <Stat label="Query cost" value="O(k)" sub="independent of N" />
+          <Stat label="Probe size" value="0.6 M params" sub="LoRA adapter" />
+        </div>
+      </section>
     </>
+  );
+}
+
+function Stat({ label, value, sub }) {
+  return (
+    <div className="panel">
+      <p className="panel-title">{label}</p>
+      <p className="font-mono text-2xl text-primaryDark">{value}</p>
+      <p className="mt-1 text-xs text-light/50">{sub}</p>
+    </div>
   );
 }
