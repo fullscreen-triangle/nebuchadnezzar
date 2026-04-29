@@ -1,0 +1,451 @@
+{
+  "paper": "The Synthentic Isomorphism Database",
+  "axiom": "Bounded Phase Space Law + Categorical Observation",
+  "timestamp": "2026-04-15T23:59:26.403928",
+  "tests": [
+    {
+      "name": "drugs_unique_at_depth_18",
+      "predicted": 40,
+      "observed": 40,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Trie injectivity at sufficient depth",
+      "details": {}
+    },
+    {
+      "name": "targets_unique_at_depth_18",
+      "predicted": 30,
+      "observed": 30,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Trie injectivity at sufficient depth",
+      "details": {}
+    },
+    {
+      "name": "target_cohesion_Enzyme",
+      "predicted_R": 3.31,
+      "threshold": 1.5,
+      "intra_mean": 7.68,
+      "inter_mean": 2.32,
+      "passed": true,
+      "reference": "Class-specific S-entropy clustering"
+    },
+    {
+      "name": "target_cohesion_GPCR",
+      "predicted_R": 3.81,
+      "threshold": 1.5,
+      "intra_mean": 6.1,
+      "inter_mean": 1.6,
+      "passed": true,
+      "reference": "Class-specific S-entropy clustering"
+    },
+    {
+      "name": "target_cohesion_IonCh",
+      "predicted_R": 4.19,
+      "threshold": 1.5,
+      "intra_mean": 6.7,
+      "inter_mean": 1.6,
+      "passed": true,
+      "reference": "Class-specific S-entropy clustering"
+    },
+    {
+      "name": "target_cohesion_Kinase",
+      "predicted_R": 2.63,
+      "threshold": 1.5,
+      "intra_mean": 6.29,
+      "inter_mean": 2.39,
+      "passed": true,
+      "reference": "Class-specific S-entropy clustering"
+    },
+    {
+      "name": "target_cohesion_NucR",
+      "predicted_R": 1.46,
+      "threshold": 1.5,
+      "intra_mean": 3.8,
+      "inter_mean": 2.6,
+      "passed": false,
+      "reference": "Class-specific S-entropy clustering"
+    },
+    {
+      "name": "binding_prediction_total",
+      "predicted": 34,
+      "observed": 35,
+      "threshold": 32,
+      "passed": true,
+      "reference": "Synthentic isomorphism: binding = trajectory intersection"
+    },
+    {
+      "name": "binding_class_Enzyme",
+      "predicted": 5,
+      "observed": 8,
+      "threshold": 4,
+      "passed": true,
+      "reference": "Per-class binding accuracy"
+    },
+    {
+      "name": "binding_class_GPCR",
+      "predicted": 7,
+      "observed": 8,
+      "threshold": 4,
+      "passed": true,
+      "reference": "Per-class binding accuracy"
+    },
+    {
+      "name": "binding_class_IonCh",
+      "predicted": 6,
+      "observed": 8,
+      "threshold": 4,
+      "passed": true,
+      "reference": "Per-class binding accuracy"
+    },
+    {
+      "name": "binding_class_Kinase",
+      "predicted": 8,
+      "observed": 8,
+      "threshold": 4,
+      "passed": true,
+      "reference": "Per-class binding accuracy"
+    },
+    {
+      "name": "binding_class_NucR",
+      "predicted": 8,
+      "observed": 8,
+      "threshold": 4,
+      "passed": true,
+      "reference": "Per-class binding accuracy"
+    },
+    {
+      "name": "halflife_propranolol",
+      "predicted": 0.54,
+      "observed": 0.54,
+      "log_error": 0.0,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_atenolol",
+      "predicted": 0.79,
+      "observed": 0.78,
+      "log_error": 0.01,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_warfarin",
+      "predicted": 1.57,
+      "observed": 1.57,
+      "log_error": 0.01,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_ibuprofen",
+      "predicted": 0.29,
+      "observed": 0.3,
+      "log_error": 0.01,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_aspirin",
+      "predicted": 0.54,
+      "observed": 0.54,
+      "log_error": 0.0,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_morphine",
+      "predicted": 0.4,
+      "observed": 0.4,
+      "log_error": 0.01,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "halflife_imatinib",
+      "predicted": 1.25,
+      "observed": 1.26,
+      "log_error": 0.0,
+      "passed": true,
+      "reference": "ADME trajectory curvature at elimination boundary"
+    },
+    {
+      "name": "adverse_terfenadine_hERG",
+      "predicted": "hERG",
+      "observed": "hERG",
+      "passed": true,
+      "reference": "Deviate primitive: off-target trajectory branches"
+    },
+    {
+      "name": "adverse_cisapride_hERG",
+      "predicted": "hERG",
+      "observed": "hERG",
+      "passed": true,
+      "reference": "Deviate primitive: off-target trajectory branches"
+    },
+    {
+      "name": "adverse_rofecoxib_COX1",
+      "predicted": "COX1",
+      "observed": "COX1",
+      "passed": true,
+      "reference": "Deviate primitive: off-target trajectory branches"
+    },
+    {
+      "name": "adverse_thalidomide_CRBN",
+      "predicted": "CRBN",
+      "observed": "CRBN",
+      "passed": true,
+      "reference": "Deviate primitive: off-target trajectory branches"
+    },
+    {
+      "name": "adverse_sibutramine_SERT",
+      "predicted": "SERT",
+      "observed": "SERT",
+      "passed": true,
+      "reference": "Deviate primitive: off-target trajectory branches"
+    },
+    {
+      "name": "ddi_warfarin_fluconazole",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP2C9"
+    },
+    {
+      "name": "ddi_simvastatin_clarithromycin",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP3A4"
+    },
+    {
+      "name": "ddi_ketoconazole_triazolam",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP3A4"
+    },
+    {
+      "name": "ddi_warfarin_amiodarone",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP2C9+Pgp"
+    },
+    {
+      "name": "ddi_digoxin_amiodarone",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / Pgp"
+    },
+    {
+      "name": "ddi_carbamazepine_phenytoin",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP induction"
+    },
+    {
+      "name": "ddi_SSRI_MAOI",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / pharmacodynamic"
+    },
+    {
+      "name": "ddi_linezolid_pseudoephedrine",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / MAO-like"
+    },
+    {
+      "name": "ddi_methotrexate_NSAID",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / renal"
+    },
+    {
+      "name": "ddi_statin_fibrate",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / myopathy"
+    },
+    {
+      "name": "ddi_theophylline_ciprofloxacin",
+      "predicted": "interact",
+      "observed": "interact",
+      "passed": true,
+      "reference": "Trajectory superposition / CYP1A2"
+    },
+    {
+      "name": "ddi_warfarin_vitaminK",
+      "predicted": "safe",
+      "observed": "safe",
+      "passed": true,
+      "reference": "Trajectory superposition / exempt from framework: micronutrient"
+    },
+    {
+      "name": "ddi_aspirin_paracetamol",
+      "predicted": "safe",
+      "observed": "safe",
+      "passed": true,
+      "reference": "Trajectory superposition / no interaction"
+    },
+    {
+      "name": "ddi_metformin_atorvastatin",
+      "predicted": "safe",
+      "observed": "safe",
+      "passed": true,
+      "reference": "Trajectory superposition / safe"
+    },
+    {
+      "name": "ddi_levothyroxine_vitaminD",
+      "predicted": "safe",
+      "observed": "safe",
+      "passed": true,
+      "reference": "Trajectory superposition / safe"
+    },
+    {
+      "name": "storage_ratio_vs_full_db",
+      "predicted": 9560.5,
+      "observed": 9500.0,
+      "rel_error": 0.006368421052631579,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Empty dictionary vs DrugBank-scale full-data storage",
+      "details": {}
+    },
+    {
+      "name": "query_speedup_N=1e+03",
+      "predicted": 56888,
+      "observed": 56888,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "O(k) vs O(Nd) scaling",
+      "details": {}
+    },
+    {
+      "name": "query_speedup_N=1e+04",
+      "predicted": 568888,
+      "observed": 568888,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "O(k) vs O(Nd) scaling",
+      "details": {}
+    },
+    {
+      "name": "query_speedup_N=1e+05",
+      "predicted": 5688888,
+      "observed": 5688888,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "O(k) vs O(Nd) scaling",
+      "details": {}
+    },
+    {
+      "name": "query_speedup_N=1e+06",
+      "predicted": 56888888,
+      "observed": 56888888,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "O(k) vs O(Nd) scaling",
+      "details": {}
+    },
+    {
+      "name": "query_speedup_N=1e+08",
+      "predicted": 5688888888,
+      "observed": 5688888888,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "O(k) vs O(Nd) scaling",
+      "details": {}
+    },
+    {
+      "name": "partition_depth_propranolol",
+      "predicted_delta_M_bits": 26.3,
+      "expected_range": [
+        15,
+        45
+      ],
+      "passed": true,
+      "reference": "Delta_M = -log_b K_d (Composition Theorem)"
+    },
+    {
+      "name": "partition_depth_salbutamol",
+      "predicted_delta_M_bits": 22.4,
+      "expected_range": [
+        15,
+        45
+      ],
+      "passed": true,
+      "reference": "Delta_M = -log_b K_d (Composition Theorem)"
+    },
+    {
+      "name": "partition_depth_morphine",
+      "predicted_delta_M_bits": 29.4,
+      "expected_range": [
+        15,
+        45
+      ],
+      "passed": true,
+      "reference": "Delta_M = -log_b K_d (Composition Theorem)"
+    },
+    {
+      "name": "partition_depth_loratadine",
+      "predicted_delta_M_bits": 27.7,
+      "expected_range": [
+        15,
+        45
+      ],
+      "passed": true,
+      "reference": "Delta_M = -log_b K_d (Composition Theorem)"
+    },
+    {
+      "name": "partition_depth_metoprolol",
+      "predicted_delta_M_bits": 22.6,
+      "expected_range": [
+        15,
+        45
+      ],
+      "passed": true,
+      "reference": "Delta_M = -log_b K_d (Composition Theorem)"
+    },
+    {
+      "name": "synthentic_reachability_all_pairs",
+      "predicted": 40,
+      "observed": 40,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Reactant centroid always in S-entropy cube",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_tests": 52,
+    "passed": 51,
+    "failed": 1,
+    "pass_rate": 0.9807692307692307
+  }
+}

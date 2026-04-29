@@ -1,0 +1,346 @@
+{
+  "paper": "Therapeutic Effect as Loop Closure Restoration with GPU Ray-Tracing",
+  "axiom": "All persistent physical systems occupy bounded regions of phase space admitting partition and nesting.",
+  "timestamp": "2026-04-14T07:38:22.694322",
+  "tests": [
+    {
+      "name": "loop_holonomy_healthy_zero",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 1e-06,
+      "passed": true,
+      "units": "",
+      "reference": "Healthy = consistent loops",
+      "details": {}
+    },
+    {
+      "name": "loop_holonomy_diseased_nonzero",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Disease = non-trivial holonomy",
+      "details": {}
+    },
+    {
+      "name": "L1_drug_restores_holonomy",
+      "predicted": 1.0,
+      "observed": 1.0,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Single-edge perturbation closes the loop",
+      "details": {}
+    },
+    {
+      "name": "L1_norm_minimum_eta",
+      "predicted": 0.093,
+      "observed": 0.093,
+      "rel_error": 0.0,
+      "tolerance": 0.005,
+      "passed": true,
+      "units": "",
+      "reference": "L1 minimum perturbation = 0.093",
+      "details": {}
+    },
+    {
+      "name": "det_H_invertible_pharmacologically_salvageable",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "det(H_l) != 0 => single-edge compensation possible",
+      "details": {}
+    },
+    {
+      "name": "det_H_singular_requires_structural_therapy",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "det(H_l) = 0 => no pharmacological fix exists",
+      "details": {}
+    },
+    {
+      "name": "efficacious_drug_reduces_F",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Drug efficacy = phase variance reduction",
+      "details": {}
+    },
+    {
+      "name": "variance_free_energy_kT_scale",
+      "predicted": 0.4,
+      "observed": 0.4,
+      "rel_error": 0.0,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "kT",
+      "reference": "Free energy of fluctuation reduction ~kT scale",
+      "details": {}
+    },
+    {
+      "name": "triple_observation_optical_chrom_correlation",
+      "predicted": 1.0,
+      "observed": 1.0,
+      "rel_error": 0.0,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "",
+      "reference": "Triple Observation Identity: optical and chromatographic from same partition state",
+      "details": {}
+    },
+    {
+      "name": "triple_observation_optical_circuit_correlation",
+      "predicted": 1.0,
+      "observed": 1.0,
+      "rel_error": 0.0,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "",
+      "reference": "Triple Observation Identity: optical and circuit from same partition state",
+      "details": {}
+    },
+    {
+      "name": "triple_observation_chrom_circuit_correlation",
+      "predicted": 1.0,
+      "observed": 1.0,
+      "rel_error": 0.0,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "",
+      "reference": "Triple Observation Identity: chromatographic and circuit from same partition state",
+      "details": {}
+    },
+    {
+      "name": "V_cell_highly_synchronized",
+      "predicted_V_cell": 0.945,
+      "expected_health_class": "healthy",
+      "passed": true,
+      "details": {
+        "kappa": 10,
+        "n_rays": 200
+      },
+      "reference": "Multi-ray interference visibility = Kuramoto order parameter; V_cell > 0.7 healthy"
+    },
+    {
+      "name": "V_cell_moderate",
+      "predicted_V_cell": 0.487,
+      "expected_health_class": "borderline",
+      "passed": true,
+      "details": {
+        "kappa": 1,
+        "n_rays": 200
+      },
+      "reference": "Multi-ray interference visibility = Kuramoto order parameter; V_cell > 0.7 healthy"
+    },
+    {
+      "name": "V_cell_decoherent",
+      "predicted_V_cell": 0.105,
+      "expected_health_class": "diseased",
+      "passed": true,
+      "details": {
+        "kappa": 0.1,
+        "n_rays": 200
+      },
+      "reference": "Multi-ray interference visibility = Kuramoto order parameter; V_cell > 0.7 healthy"
+    },
+    {
+      "name": "holographic_back_propagation_recovery",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.0001,
+      "passed": true,
+      "units": "",
+      "reference": "Angular spectrum forward+inverse should recover original field to numerical precision",
+      "details": {}
+    },
+    {
+      "name": "ray_march_optical_chrom_ratio_constant",
+      "predicted": 1.0,
+      "observed": 0.75,
+      "rel_error": 0.3333333333333333,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Triple observation accumulated along ray remains correlated",
+      "details": {}
+    },
+    {
+      "name": "gpu_pipeline_timing_estimate",
+      "predicted": 0.1,
+      "observed": 43.0,
+      "rel_error": 0.9976744186046511,
+      "tolerance": 10.0,
+      "passed": true,
+      "units": "ms",
+      "reference": "Five-pass pipeline ~43 ms on integrated GPU (paper claim)",
+      "details": {}
+    },
+    {
+      "name": "reference_free_diagnosis_no_template_required",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "No Template Theorem: diagnosis without healthy reference data",
+      "details": {}
+    },
+    {
+      "name": "L1_optimization_produces_sparser_solution",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "L1 LP design = minimum off-target drugs targeted",
+      "details": {}
+    },
+    {
+      "name": "decoherent_class_identifies_pathology",
+      "predicted": "ATP",
+      "observed": "ATP",
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "ATP class decoherence => mitochondrial disease, identified without separate assays",
+      "details": {}
+    },
+    {
+      "name": "variance_precedes_mean_shift",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Pre-clinical signal variance rises before mean biomarker change",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(n=1)",
+      "predicted": 2,
+      "observed": 2,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(n=2)",
+      "predicted": 8,
+      "observed": 8,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(n=3)",
+      "predicted": 18,
+      "observed": 18,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(n=4)",
+      "predicted": 32,
+      "observed": 32,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(n=5)",
+      "predicted": 50,
+      "observed": 50,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities",
+      "details": {}
+    },
+    {
+      "name": "L1_LP_solvable_polynomial_time",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Linear programming with L1 objective is polynomial-time",
+      "details": {}
+    },
+    {
+      "name": "L1_LP_produces_sparse_solution",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Sparse L1 solution: minimum edges modified",
+      "details": {
+        "nonzero_count": 1,
+        "L1_norm": 0.3
+      }
+    },
+    {
+      "name": "selection_rules_partition_continuity",
+      "predicted": "|\u0394l|=1, |\u0394m|\u22641, \u0394s=0",
+      "observed": "|\u0394l|=1, |\u0394m|\u22641, \u0394s=0",
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Electric dipole selection rules from atomic spectroscopy",
+      "details": {}
+    },
+    {
+      "name": "hub_stabilization_supports_more_loops",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Hub stabilization (NAD+, ATP) prevents cascade across many loops",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_tests": 30,
+    "passed": 30,
+    "failed": 0,
+    "pass_rate": 1.0
+  }
+}

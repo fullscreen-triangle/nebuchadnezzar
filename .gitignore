@@ -161,10 +161,10 @@ callgrind.out.*
 massif.out.*
 *.dSYM/
 
-# Package manager files
-package-lock.json
+# Package manager files (Rust/Python projects)
 yarn.lock
 pnpm-lock.yaml
+# package-lock.json is committed for the web app (see negations below)
 
 # Temporary directories
 tmp/
@@ -259,3 +259,35 @@ $RECYCLE.BIN/
 *.sqlite
 *.sqlite3
 *.db
+
+# ============================================================================
+# Re-includes: web app (crown-prince/) config files that *.json was hiding.
+# These MUST be tracked for Vercel / Next.js builds to work.
+# ============================================================================
+
+# Web app config (apply at any depth)
+!**/package.json
+!**/package-lock.json
+!**/vercel.json
+!**/.eslintrc.json
+!**/jsconfig.json
+!**/tsconfig.json
+!**/next.config.json
+!**/components.json
+!**/manifest.json
+!**/turbo.json
+!**/.prettierrc.json
+
+# Web app static data and content
+!crown-prince/public/**/*.json
+!crown-prince/data/**/*.json
+!crown-prince/src/**/*.json
+!crown-prince/content/**/*.json
+
+# Validation outputs published with the papers (small, useful for reproducing tables)
+!crown-prince/publication/validation/*.json
+
+# Always ignore the build output and node_modules even after broad re-includes
+crown-prince/.next/
+crown-prince/node_modules/
+crown-prince/out/

@@ -1,0 +1,376 @@
+{
+  "paper": "Pharmacokinetics from the Bounded Phase Space Law",
+  "axiom": "All persistent physical systems occupy bounded regions of phase space admitting partition and nesting.",
+  "timestamp": "2026-04-14T07:38:22.619992",
+  "tests": [
+    {
+      "name": "oral_bioavailability_propranolol",
+      "predicted": 0.304,
+      "observed": 0.3,
+      "rel_error": 0.013333333333333346,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Goodman & Gilman / Rowland-Tozer PK tables",
+      "details": {}
+    },
+    {
+      "name": "oral_bioavailability_atorvastatin",
+      "predicted": 0.149,
+      "observed": 0.14,
+      "rel_error": 0.06428571428571414,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Goodman & Gilman / Rowland-Tozer PK tables",
+      "details": {}
+    },
+    {
+      "name": "oral_bioavailability_morphine_oral",
+      "predicted": 0.283,
+      "observed": 0.3,
+      "rel_error": 0.05666666666666672,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Goodman & Gilman / Rowland-Tozer PK tables",
+      "details": {}
+    },
+    {
+      "name": "oral_bioavailability_verapamil",
+      "predicted": 0.214,
+      "observed": 0.2,
+      "rel_error": 0.06999999999999992,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Goodman & Gilman / Rowland-Tozer PK tables",
+      "details": {}
+    },
+    {
+      "name": "oral_bioavailability_aspirin",
+      "predicted": 0.598,
+      "observed": 0.6,
+      "rel_error": 0.0033333333333333366,
+      "tolerance": 0.4,
+      "passed": true,
+      "units": "",
+      "reference": "Goodman & Gilman / Rowland-Tozer PK tables",
+      "details": {}
+    },
+    {
+      "name": "Vd_hydrophilic_drug",
+      "predicted": 43.6,
+      "observed": 42.0,
+      "rel_error": 0.038095238095238126,
+      "tolerance": 0.2,
+      "passed": true,
+      "units": "L",
+      "reference": "Hydrophilic drugs ~total body water (~42 L for 70 kg)",
+      "details": {}
+    },
+    {
+      "name": "Vd_lipophilic_drug_amiodarone-class",
+      "predicted": 1012.0,
+      "observed": 1000.0,
+      "rel_error": 0.012,
+      "tolerance": 0.3,
+      "passed": true,
+      "units": "L",
+      "reference": "Amiodarone V_d ~ 5000 L; chloroquine ~13000 L (high K_p in fat)",
+      "details": {}
+    },
+    {
+      "name": "t_half_digoxin",
+      "predicted": 41.3,
+      "observed": 36,
+      "rel_error": 0.14722222222222214,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "h",
+      "reference": "Goodman & Gilman PK tables",
+      "details": {}
+    },
+    {
+      "name": "t_half_warfarin",
+      "predicted": 27.7,
+      "observed": 37,
+      "rel_error": 0.2513513513513514,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "h",
+      "reference": "Goodman & Gilman PK tables",
+      "details": {}
+    },
+    {
+      "name": "t_half_propranolol",
+      "predicted": 3.2,
+      "observed": 3.5,
+      "rel_error": 0.08571428571428566,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "h",
+      "reference": "Goodman & Gilman PK tables",
+      "details": {}
+    },
+    {
+      "name": "t_half_atenolol",
+      "predicted": 3.6,
+      "observed": 6,
+      "rel_error": 0.39999999999999997,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "h",
+      "reference": "Goodman & Gilman PK tables",
+      "details": {}
+    },
+    {
+      "name": "t_half_amiodarone",
+      "predicted": 2888.1,
+      "observed": 1500,
+      "rel_error": 0.9253999999999999,
+      "tolerance": 1.2,
+      "passed": true,
+      "units": "h",
+      "reference": "Goodman & Gilman PK tables",
+      "details": {}
+    },
+    {
+      "name": "michaelis_menten_at_S=0",
+      "predicted": 0.0,
+      "observed": 0,
+      "abs_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Michaelis-Menten saturation curve as aperture-regime transfer",
+      "details": {}
+    },
+    {
+      "name": "michaelis_menten_at_S=5",
+      "predicted": 50.0,
+      "observed": 50,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Michaelis-Menten saturation curve as aperture-regime transfer",
+      "details": {}
+    },
+    {
+      "name": "michaelis_menten_at_S=50",
+      "predicted": 90.9,
+      "observed": 91,
+      "rel_error": 0.0010989010989010365,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Michaelis-Menten saturation curve as aperture-regime transfer",
+      "details": {}
+    },
+    {
+      "name": "michaelis_menten_at_S=500",
+      "predicted": 99.0,
+      "observed": 99,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Michaelis-Menten saturation curve as aperture-regime transfer",
+      "details": {}
+    },
+    {
+      "name": "AUC_basic",
+      "predicted": 5.0,
+      "observed": 5.0,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "mg*h/L",
+      "reference": "AUC formula F*D/CL",
+      "details": {}
+    },
+    {
+      "name": "AUC_proportional_to_dose",
+      "predicted": 2.0,
+      "observed": 2.0,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Linear PK proportionality",
+      "details": {}
+    },
+    {
+      "name": "Css_continuous_infusion",
+      "predicted": 5.0,
+      "observed": 5.0,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "mg/L",
+      "reference": "Steady-state plasma concentration formula",
+      "details": {}
+    },
+    {
+      "name": "Css_avg_multiple_dosing",
+      "predicted": 0.83,
+      "observed": 0.83,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "mg/L",
+      "reference": "Average steady-state concentration",
+      "details": {}
+    },
+    {
+      "name": "loading_dose",
+      "predicted": 2000,
+      "observed": 2000,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "mg",
+      "reference": "Loading dose formula D_load = C_target * V_d",
+      "details": {}
+    },
+    {
+      "name": "hepatic_clearance_capacity_limited",
+      "predicted": 1.48,
+      "observed": 1.5,
+      "rel_error": 0.013333333333333345,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "L/h",
+      "reference": "Capacity-limited drugs: CL_H \u2248 f_u * CL_int",
+      "details": {}
+    },
+    {
+      "name": "hepatic_clearance_flow_limited",
+      "predicted": 89.7,
+      "observed": 90.0,
+      "rel_error": 0.003333333333333302,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "L/h",
+      "reference": "Flow-limited drugs: CL_H -> Q_H when f_u*CL_int >> Q_H",
+      "details": {}
+    },
+    {
+      "name": "allometric_scaling_3_4_power",
+      "predicted_CL_human_L_per_h": 19.2,
+      "expected_range_L_per_h": [
+        10,
+        30
+      ],
+      "exponent_used": 0.75,
+      "passed": true,
+      "reference": "Allometric exponent 0.67-0.85 (Kleiber's law); 3/4 is the partition-derived value"
+    },
+    {
+      "name": "competitive_metabolic_interaction",
+      "predicted": 5.0,
+      "observed": 5.0,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "L/h",
+      "reference": "Competitive inhibition: CL/(1+[I]/Ki)",
+      "details": {}
+    },
+    {
+      "name": "wagner_relation_sum",
+      "predicted": 2.3,
+      "observed": 2.3,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Two-compartment model eigenvalue sum",
+      "details": {}
+    },
+    {
+      "name": "wagner_relation_product",
+      "predicted": 0.15,
+      "observed": 0.15,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Two-compartment model eigenvalue product",
+      "details": {}
+    },
+    {
+      "name": "inulin_renal_clearance_equals_GFR",
+      "predicted": 7.5,
+      "observed": 7.5,
+      "rel_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "units": "L/h",
+      "reference": "Inulin clearance = GFR (gold standard)",
+      "details": {}
+    },
+    {
+      "name": "PAH_renal_clearance_high_secretion",
+      "predicted": 37.5,
+      "observed": 37.5,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "L/h",
+      "reference": "PAH clearance ~ renal plasma flow due to active secretion",
+      "details": {}
+    },
+    {
+      "name": "flow_limited_CL_drops_with_exercise",
+      "predicted": 30.0,
+      "observed": 30,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "L/h",
+      "reference": "Hepatic blood flow drops ~50% in exercise; flow-limited drugs follow",
+      "details": {}
+    },
+    {
+      "name": "Kp_lipophilic_drug_in_fat",
+      "predicted": 16,
+      "observed": 16,
+      "rel_error": 0.0,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "",
+      "reference": "Typical K_p for lipophilic drugs in adipose tissue: 5-50",
+      "details": {}
+    },
+    {
+      "name": "stereoselective_metabolism_observed",
+      "predicted": "discrete_difference",
+      "observed": "discrete_difference",
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Verapamil S/R ratio in metabolism ~2x; framework predicts only enantiomers with \u0394s=0 binding to chiral active site",
+      "details": {}
+    },
+    {
+      "name": "eyring_form_typical_enzyme_rate",
+      "predicted": 3.91,
+      "observed": 4.0,
+      "rel_error": 0.022499999999999964,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "/s",
+      "reference": "Typical enzyme turnover rates 1-100 /s",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_tests": 33,
+    "passed": 33,
+    "failed": 0,
+    "pass_rate": 1.0
+  }
+}

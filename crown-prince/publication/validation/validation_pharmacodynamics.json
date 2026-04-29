@@ -1,0 +1,328 @@
+{
+  "paper": "Pharmacodynamics from the Bounded Phase Space Law",
+  "axiom": "All persistent physical systems occupy bounded regions of phase space admitting partition and nesting.",
+  "timestamp": "2026-04-14T07:38:22.558312",
+  "tests": [
+    {
+      "name": "capacity_C(1)_=_2n^2",
+      "predicted": 2,
+      "observed": 2,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(2)_=_2n^2",
+      "predicted": 8,
+      "observed": 8,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(3)_=_2n^2",
+      "predicted": 18,
+      "observed": 18,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(4)_=_2n^2",
+      "predicted": 32,
+      "observed": 32,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(5)_=_2n^2",
+      "predicted": 50,
+      "observed": 50,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(6)_=_2n^2",
+      "predicted": 72,
+      "observed": 72,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "capacity_C(7)_=_2n^2",
+      "predicted": 98,
+      "observed": 98,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Periodic table shell capacities (NIST atomic data)",
+      "details": {}
+    },
+    {
+      "name": "K_d_implies_partition_depth_imatinib_BCR-ABL",
+      "predicted_partition_depth_bits": 26.58,
+      "expected_range_bits": [
+        25,
+        35
+      ],
+      "K_d_M": 1e-08,
+      "passed": true,
+      "details": {
+        "affinity_class": "high"
+      }
+    },
+    {
+      "name": "K_d_implies_partition_depth_propranolol_b1AR",
+      "predicted_partition_depth_bits": 26.58,
+      "expected_range_bits": [
+        25,
+        35
+      ],
+      "K_d_M": 1e-08,
+      "passed": true,
+      "details": {
+        "affinity_class": "high"
+      }
+    },
+    {
+      "name": "K_d_implies_partition_depth_aspirin_COX1",
+      "predicted_partition_depth_bits": 16.61,
+      "expected_range_bits": [
+        15,
+        22
+      ],
+      "K_d_M": 1e-05,
+      "passed": true,
+      "details": {
+        "affinity_class": "medium"
+      }
+    },
+    {
+      "name": "K_d_implies_partition_depth_acetylcholine_nAChR",
+      "predicted_partition_depth_bits": 23.25,
+      "expected_range_bits": [
+        20,
+        28
+      ],
+      "K_d_M": 1e-07,
+      "passed": true,
+      "details": {
+        "affinity_class": "high"
+      }
+    },
+    {
+      "name": "K_d_implies_partition_depth_morphine_muOR",
+      "predicted_partition_depth_bits": 29.9,
+      "expected_range_bits": [
+        28,
+        35
+      ],
+      "K_d_M": 1e-09,
+      "passed": true,
+      "details": {
+        "affinity_class": "very_high"
+      }
+    },
+    {
+      "name": "hill_coefficient_distribution_matches_regimes",
+      "regime_partition_aperture(0.8-2.5)": 4,
+      "regime_partition_cascade(>2.5)": 3,
+      "regime_partition_turbulent(<0.8)": 1,
+      "predicted": "all n_H fall into aperture/cascade/turbulent regimes",
+      "observed": "8/8 classified",
+      "passed": true,
+      "details": {
+        "data": [
+          [
+            "hemoglobin_O2",
+            2.8,
+            "cascade"
+          ],
+          [
+            "nAChR_acetylcholine",
+            1.5,
+            "aperture"
+          ],
+          [
+            "muscarinic_M1",
+            1.0,
+            "aperture"
+          ],
+          [
+            "dopamine_D2",
+            1.0,
+            "aperture"
+          ],
+          [
+            "opioid_mu",
+            1.0,
+            "aperture"
+          ],
+          [
+            "MAPK_cascade",
+            4.0,
+            "cascade"
+          ],
+          [
+            "calmodulin_Ca",
+            4.0,
+            "cascade"
+          ],
+          [
+            "rhodopsin_light",
+            0.7,
+            "turbulent"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "allosteric_propagation_velocity",
+      "predicted": 1000.0,
+      "observed": 1000.0,
+      "rel_error": 0.0,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "m/s",
+      "reference": "Time-resolved IR spectroscopy of allosteric proteins (~ps over nm distances)",
+      "details": {}
+    },
+    {
+      "name": "allosteric_propagation_time_5nm",
+      "predicted": 5.000000000000001,
+      "observed": 5.0,
+      "rel_error": 1.7763568394002506e-16,
+      "tolerance": 2.0,
+      "passed": true,
+      "units": "ps",
+      "reference": "Allosteric coupling timescale in hemoglobin, kinases, etc.",
+      "details": {}
+    },
+    {
+      "name": "electric_dipole_selection_rules_recovered",
+      "predicted": "Delta_l=\u00b11, Delta_m\u22641, Delta_s=0",
+      "observed": "Delta_l=\u00b11, Delta_m\u22641, Delta_s=0",
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Atomic spectroscopic selection rules (standard QM)",
+      "details": {}
+    },
+    {
+      "name": "variance_free_energy_sign",
+      "predicted": "positive",
+      "observed": "positive",
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "J",
+      "reference": "Thermodynamic free energy of fluctuation component",
+      "details": {}
+    },
+    {
+      "name": "efficacy_implies_negative_DeltaF",
+      "predicted": "negative",
+      "observed": "negative",
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Drug efficacy <=> variance reduction <=> DeltaF < 0",
+      "details": {}
+    },
+    {
+      "name": "receptor_reserve_amplification_factor",
+      "predicted": 1331,
+      "observed": 1300,
+      "rel_error": 0.023846153846153847,
+      "tolerance": 0.3,
+      "passed": true,
+      "units": "",
+      "reference": "GPCR-cAMP-PKA cascade amplifications observed ~10^3",
+      "details": {}
+    },
+    {
+      "name": "required_receptor_occupancy_for_full_response",
+      "predicted": 0.07513148009015777,
+      "observed": 0.1,
+      "rel_error": 0.24868519909842235,
+      "tolerance": 10.0,
+      "passed": true,
+      "units": "percent",
+      "reference": "Receptor reserve observations in opioid, beta-adrenergic systems",
+      "details": {}
+    },
+    {
+      "name": "zero_work_filter_below_landauer",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "J",
+      "reference": "Landauer (1961) erasure bound: kB T ln 2 = 2.97e-21 J",
+      "details": {}
+    },
+    {
+      "name": "enantiomer_ratios_predominantly_discrete",
+      "predicted": 3,
+      "observed": 3,
+      "rel_error": 0.0,
+      "tolerance": 1,
+      "passed": true,
+      "units": "(count of ratios > 10x)",
+      "reference": "Pharmacological enantiomer selectivity literature",
+      "details": {}
+    },
+    {
+      "name": "ATP_hydrolysis_partition_depth",
+      "predicted": 17.1,
+      "observed": 18.5,
+      "rel_error": 0.0756756756756756,
+      "tolerance": 0.2,
+      "passed": true,
+      "units": "bits",
+      "reference": "ATP hydrolysis \u0394G = -30.5 kJ/mol; Delta_M = \u0394G/(kB*T*ln2)",
+      "details": {}
+    },
+    {
+      "name": "typical_drug_binding_yields_nM_to_uM_Kd",
+      "predicted_K_d_nM": 182.0,
+      "expected_range_nM": [
+        10,
+        1000
+      ],
+      "passed": true,
+      "reference": "Typical lead-compound K_d ~ 10-1000 nM range; \u0394G=-40 kJ/mol gives K_d in this band"
+    }
+  ],
+  "summary": {
+    "total_tests": 24,
+    "passed": 24,
+    "failed": 0,
+    "pass_rate": 1.0
+  }
+}

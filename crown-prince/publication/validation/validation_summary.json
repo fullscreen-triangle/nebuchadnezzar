@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-04-14T07:38:24.822595",
+  "axiom": "All persistent physical systems occupy bounded regions of phase space admitting partition and nesting.",
+  "papers": [
+    {
+      "paper": "Pharmacodynamics from the Bounded Phase Space Law",
+      "total_tests": 24,
+      "passed": 24,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "results_file": "validation_pharmacodynamics.json"
+    },
+    {
+      "paper": "Pharmacokinetics from the Bounded Phase Space Law",
+      "total_tests": 33,
+      "passed": 33,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "results_file": "validation_pharmacokinetics.json"
+    },
+    {
+      "paper": "Therapeutic Effect as Loop Closure Restoration with GPU Ray-Tracing",
+      "total_tests": 30,
+      "passed": 30,
+      "failed": 0,
+      "pass_rate": 1.0,
+      "results_file": "validation_therapeutic_effect.json"
+    }
+  ],
+  "aggregate": {
+    "total_tests": 87,
+    "passed": 87,
+    "failed": 0,
+    "pass_rate": 1.0
+  }
+}

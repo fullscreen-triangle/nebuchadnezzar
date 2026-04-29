@@ -1,0 +1,424 @@
+{
+  "name": "Disease",
+  "passed": 20,
+  "failed": 0,
+  "total": 20,
+  "pass_rate": 1.0,
+  "timestamp": "2026-03-22T19:22:27.795381",
+  "results": [
+    {
+      "name": "disease_vector_protein_class",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.25,
+      "actual": 0.25,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "oscillator": "P",
+        "coherence": 0.75
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "disease_vector_enzyme_class",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.5,
+      "actual": 0.5,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "oscillator": "E",
+        "coherence": 0.5
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "disease_vector_weighted_aggregation",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.33333333333333337,
+      "actual": 0.33333333333333337,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "weights": [
+          2.0,
+          1.0
+        ],
+        "coherences": [
+          0.6,
+          0.8
+        ],
+        "interpretation": "Weighted average of coherences"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_P",
+      "category": "disease",
+      "passed": true,
+      "expected": "P",
+      "actual": "P",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Misfolding"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_E",
+      "category": "disease",
+      "passed": true,
+      "expected": "E",
+      "actual": "E",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Metabolic"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_C",
+      "category": "disease",
+      "passed": true,
+      "expected": "C",
+      "actual": "C",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Channelopathy"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_M",
+      "category": "disease",
+      "passed": true,
+      "expected": "M",
+      "actual": "M",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Excitability"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_A",
+      "category": "disease",
+      "passed": true,
+      "expected": "A",
+      "actual": "A",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Mitochondrial"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_G",
+      "category": "disease",
+      "passed": true,
+      "expected": "G",
+      "actual": "G",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Expression"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_Ca",
+      "category": "disease",
+      "passed": true,
+      "expected": "Ca",
+      "actual": "Ca",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Signaling"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "classification_dominant_R",
+      "category": "disease",
+      "passed": true,
+      "expected": "R",
+      "actual": "R",
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "dominant_value": 0.9,
+        "background_value": 0.1,
+        "class_name": "Rhythm"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "severity_uniform",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.5,
+      "actual": 0.5,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "All classes at 50% disease index"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "severity_weighted",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.5333333333333333,
+      "actual": 0.5333333333333333,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "weights": [
+          8.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "severity_healthy_zero",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.0,
+      "actual": 0.0,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "Healthy state has zero severity"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "healthy_vector_all_zeros",
+      "category": "disease",
+      "passed": true,
+      "expected": "All disease indices = 0",
+      "actual": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "Healthy = full coherence = zero disease"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "disease_vector_bounds",
+      "category": "disease",
+      "passed": true,
+      "expected": "D_i in [0, 1] for all i",
+      "actual": [
+        [
+          0.0,
+          "valid",
+          true
+        ],
+        [
+          0.5,
+          "valid",
+          true
+        ],
+        [
+          1.0,
+          "valid",
+          true
+        ],
+        [
+          -0.1,
+          "correctly_rejected",
+          true
+        ],
+        [
+          1.1,
+          "correctly_rejected",
+          true
+        ]
+      ],
+      "error": 0.0,
+      "tolerance": 0.0,
+      "details": {
+        "test_cases": [
+          [
+            0.0,
+            "valid",
+            true
+          ],
+          [
+            0.5,
+            "valid",
+            true
+          ],
+          [
+            1.0,
+            "valid",
+            true
+          ],
+          [
+            -0.1,
+            "correctly_rejected",
+            true
+          ],
+          [
+            1.1,
+            "correctly_rejected",
+            true
+          ]
+        ]
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "signature_distance_self_zero",
+      "category": "disease",
+      "passed": true,
+      "expected": 0.0,
+      "actual": 0.0,
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "Distance to self is zero"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "signature_distance_symmetry",
+      "category": "disease",
+      "passed": true,
+      "expected": "d(D1, D2) = d(D2, D1)",
+      "actual": {
+        "d12": 0.8544003745317532,
+        "d21": 0.8544003745317532
+      },
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "Distance is symmetric"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "signature_distance_triangle",
+      "category": "disease",
+      "passed": true,
+      "expected": "d(D1, D3) <= d(D1, D2) + d(D2, D3)",
+      "actual": {
+        "d13": 0.7810249675906654,
+        "d12": 0.8544003745317532,
+        "d23": 0.4472135954999578,
+        "sum": 1.301613970031711
+      },
+      "error": 0,
+      "tolerance": 1e-10,
+      "details": {
+        "interpretation": "Triangle inequality holds"
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    },
+    {
+      "name": "disease_profile_generation",
+      "category": "disease",
+      "passed": true,
+      "expected": "Generated profiles classify to intended dominant class",
+      "actual": [
+        {
+          "class": "P",
+          "dominant_value": 0.8,
+          "classified_as": "P",
+          "match": true
+        },
+        {
+          "class": "E",
+          "dominant_value": 0.8,
+          "classified_as": "E",
+          "match": true
+        },
+        {
+          "class": "C",
+          "dominant_value": 0.8,
+          "classified_as": "C",
+          "match": true
+        },
+        {
+          "class": "M",
+          "dominant_value": 0.8,
+          "classified_as": "M",
+          "match": true
+        },
+        {
+          "class": "A",
+          "dominant_value": 0.8,
+          "classified_as": "A",
+          "match": true
+        },
+        {
+          "class": "G",
+          "dominant_value": 0.8,
+          "classified_as": "G",
+          "match": true
+        },
+        {
+          "class": "Ca",
+          "dominant_value": 0.8,
+          "classified_as": "Ca",
+          "match": true
+        },
+        {
+          "class": "R",
+          "dominant_value": 0.8,
+          "classified_as": "R",
+          "match": true
+        }
+      ],
+      "error": 0.0,
+      "tolerance": 1e-10,
+      "details": {
+        "severity": 0.8,
+        "spread": 0.1
+      },
+      "timestamp": "2026-03-22T19:22:27.795403"
+    }
+  ]
+}

@@ -1,0 +1,1018 @@
+{
+  "paper": "Purpose-Partitioned Pharmacology",
+  "axiom": "Bounded Phase Space Law + Categorical Observation + Purpose Compilation",
+  "timestamp": "2026-04-15T23:59:26.513215",
+  "tests": [
+    {
+      "name": "task_class_pairwise_distinct",
+      "predicted": true,
+      "observed": true,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 5.2: Task-Class Separation",
+      "details": {}
+    },
+    {
+      "name": "compilation_decomposition_L_max",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 2.4: at most L_max = 4 + ceil(log_3 N) ops",
+      "details": {}
+    },
+    {
+      "name": "lora_rank_exceeds_theoretical_minimum",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 6.3: r >= K + L_max",
+      "details": {}
+    },
+    {
+      "name": "pac_sample_complexity_feasible",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 2.3: PAC-learnable from polynomial samples",
+      "details": {}
+    },
+    {
+      "name": "routing_D1",
+      "predicted": "dose",
+      "observed": "dose",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_D1",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_D2",
+      "predicted": "dose",
+      "observed": "dose",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_D2",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_D3",
+      "predicted": "dose",
+      "observed": "dose",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_D3",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_D4",
+      "predicted": "dose",
+      "observed": "dose",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_D4",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_D5",
+      "predicted": "dose",
+      "observed": "dose",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_D5",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "invert"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_T1",
+      "predicted": "tox",
+      "observed": "tox",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_T1",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_T2",
+      "predicted": "tox",
+      "observed": "tox",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_T2",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_T3",
+      "predicted": "tox",
+      "observed": "tox",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_T3",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_T4",
+      "predicted": "des",
+      "observed": "tox",
+      "passed": false,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "routing_T5",
+      "predicted": "tox",
+      "observed": "tox",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_T5",
+      "predicted": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "observed": [
+        "Identify",
+        "Predict",
+        "Deviate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_I1",
+      "predicted": "int",
+      "observed": "int",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_I1",
+      "predicted": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "observed": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_I2",
+      "predicted": "int",
+      "observed": "int",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_I2",
+      "predicted": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "observed": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_I3",
+      "predicted": "int",
+      "observed": "int",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_I3",
+      "predicted": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "observed": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_I4",
+      "predicted": "int",
+      "observed": "int",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_I4",
+      "predicted": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "observed": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_I5",
+      "predicted": "int",
+      "observed": "int",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_I5",
+      "predicted": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "observed": [
+        "Identify",
+        "Identify",
+        "Predict",
+        "Predict",
+        "overlap"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_R1",
+      "predicted": "rep",
+      "observed": "rep",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_R1",
+      "predicted": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "observed": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_R2",
+      "predicted": "rep",
+      "observed": "rep",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_R2",
+      "predicted": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "observed": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_R3",
+      "predicted": "rep",
+      "observed": "rep",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_R3",
+      "predicted": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "observed": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_R4",
+      "predicted": "rep",
+      "observed": "rep",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_R4",
+      "predicted": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "observed": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_R5",
+      "predicted": "rep",
+      "observed": "rep",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_R5",
+      "predicted": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "observed": [
+        "Identify",
+        "Similar_T",
+        "React"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_P1",
+      "predicted": "per",
+      "observed": "per",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_P1",
+      "predicted": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "observed": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_P2",
+      "predicted": "per",
+      "observed": "per",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_P2",
+      "predicted": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "observed": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_P3",
+      "predicted": "per",
+      "observed": "per",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_P3",
+      "predicted": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "observed": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_P4",
+      "predicted": "per",
+      "observed": "per",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_P4",
+      "predicted": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "observed": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_P5",
+      "predicted": "per",
+      "observed": "per",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_P5",
+      "predicted": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "observed": [
+        "Identify",
+        "Predict_patient",
+        "compare"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_G1",
+      "predicted": "des",
+      "observed": "des",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_G1",
+      "predicted": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "observed": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_G2",
+      "predicted": "des",
+      "observed": "des",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_G2",
+      "predicted": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "observed": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_G3",
+      "predicted": "des",
+      "observed": "des",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_G3",
+      "predicted": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "observed": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_G4",
+      "predicted": "des",
+      "observed": "des",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_G4",
+      "predicted": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "observed": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_G5",
+      "predicted": "des",
+      "observed": "des",
+      "passed": true,
+      "reference": "Clinical oracle keyword routing"
+    },
+    {
+      "name": "compilation_G5",
+      "predicted": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "observed": [
+        "Identify_T",
+        "invert_React",
+        "Predict",
+        "validate"
+      ],
+      "passed": true,
+      "reference": "Task-specific canonical sequence"
+    },
+    {
+      "name": "routing_accuracy_dose",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_dose",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "routing_accuracy_tox",
+      "predicted": 4,
+      "observed": 5,
+      "rel_error": 0.2,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_tox",
+      "predicted": 4,
+      "observed": 4,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "routing_accuracy_int",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_int",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "routing_accuracy_rep",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_rep",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "routing_accuracy_per",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_per",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "routing_accuracy_des",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Oracle routing per task class",
+      "details": {}
+    },
+    {
+      "name": "compilation_accuracy_des",
+      "predicted": 5,
+      "observed": 5,
+      "rel_error": 0.0,
+      "tolerance": 0.25,
+      "passed": true,
+      "units": "",
+      "reference": "Task-specific canonical compilation",
+      "details": {}
+    },
+    {
+      "name": "loss_gen_on_correct_compilation",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 7.2: zero loss iff correct compilation",
+      "details": {}
+    },
+    {
+      "name": "loss_type_on_correct_compilation",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 7.2: zero loss iff correct compilation",
+      "details": {}
+    },
+    {
+      "name": "loss_cons_on_correct_compilation",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 7.2: zero loss iff correct compilation",
+      "details": {}
+    },
+    {
+      "name": "loss_conv_on_correct_compilation",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 7.2: zero loss iff correct compilation",
+      "details": {}
+    },
+    {
+      "name": "loss_safe_on_correct_compilation",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "abs_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 7.2: zero loss iff correct compilation",
+      "details": {}
+    },
+    {
+      "name": "curriculum_monotonic_progression",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Proposition 7.3: curriculum convergence",
+      "details": {}
+    },
+    {
+      "name": "pipeline_composition_type_safe",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Theorem 11.2: pipeline correctness under type-safe composition",
+      "details": {}
+    },
+    {
+      "name": "composition_latency_linear",
+      "predicted": 2000,
+      "observed": 2000,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "ms",
+      "reference": "Theorem 11.3: O(m * max cost per probe)",
+      "details": {}
+    },
+    {
+      "name": "partitioned_parameter_efficiency",
+      "predicted": 2.8,
+      "observed": 2.78,
+      "rel_error": 0.007194244604316554,
+      "tolerance": 0.5,
+      "passed": true,
+      "units": "",
+      "reference": "Ablation: 6 probes at 0.6M each vs monolithic 10M",
+      "details": {}
+    },
+    {
+      "name": "safety_loss_detects_overdose",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Safety loss term with lambda_4 = 5.0 for dose probe",
+      "details": {}
+    },
+    {
+      "name": "partitioned_beats_monolithic",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.0,
+      "passed": true,
+      "units": "",
+      "reference": "Ablation study in Section 15.5",
+      "details": {}
+    },
+    {
+      "name": "total_routing_correct",
+      "predicted": 29,
+      "observed": 28,
+      "rel_error": 0.03571428571428571,
+      "tolerance": 0.15,
+      "passed": true,
+      "units": "",
+      "reference": "End-to-end routing accuracy on 30-scenario suite",
+      "details": {}
+    },
+    {
+      "name": "total_compilation_correct",
+      "predicted": 29,
+      "observed": 27,
+      "rel_error": 0.07407407407407407,
+      "tolerance": 0.2,
+      "passed": true,
+      "units": "",
+      "reference": "End-to-end compilation accuracy",
+      "details": {}
+    },
+    {
+      "name": "downstream_answer_rate",
+      "predicted": 0.93,
+      "observed": 0.96,
+      "rel_error": 0.031249999999999913,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "",
+      "reference": "Engine faithful execution of correctly compiled sequences",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_tests": 89,
+    "passed": 88,
+    "failed": 1,
+    "pass_rate": 0.9887640449438202
+  }
+}
