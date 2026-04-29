@@ -1,6 +1,9 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
+import { detectWebGL } from "@/lib/webgl";
+import WebGLBoundary from "./WebGLBoundary";
+import PartitionCanvas2D from "./PartitionCanvas2D";
 
 // Fragment shader: the partition observation function from Model V
 // (cheminformatics-model.tex Definition 6.2).
@@ -121,15 +124,32 @@ function ObservationPlane({ omega, coords, omegaRef = 4401 }) {
 }
 
 export default function PartitionShader({ omega, coords }) {
+  const [gl, setGl] = useState({ supported: true, version: 2 });
+  useEffect(() => setGl(detectWebGL()), []);
+
+  const fallback = <PartitionCanvas2D omega={omega} coords={coords} />;
+
+  if (!gl.supported) return fallback;
+
   return (
-    <div className="aspect-[2/1] w-full overflow-hidden rounded-md border border-light/10 bg-dark/40">
-      <Canvas
-        orthographic
-        camera={{ zoom: 100, position: [0, 0, 1] }}
-        dpr={[1, 2]}
-      >
-        <ObservationPlane omega={omega} coords={coords} />
-      </Canvas>
-    </div>
+    <WebGLBoundary fallback={fallback}>
+      <div className="aspect-[2/1] w-full overflow-hidden rounded-md border border-light/10 bg-dark/40">
+        <Canvas
+          orthographic
+          camera={{ zoom: 100, position: [0, 0, 1] }}
+          dpr={[1, 2]}
+          gl={{
+            antialias: false,
+            alpha: false,
+            powerPreference: "default",
+            failIfMajorPerformanceCaveat: false,
+            preserveDrawingBuffer: false,
+          }}
+          onCreated={({ gl }) => gl.setClearColor("#1b1b1b")}
+        >
+          <ObservationPlane omega={omega} coords={coords} />
+        </Canvas>
+      </div>
+    </WebGLBoundary>
   );
 }

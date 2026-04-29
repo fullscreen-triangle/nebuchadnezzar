@@ -4,9 +4,9 @@ import Link from "next/link";
 const TOOLS = [
   {
     href: "/tools/spectrum",
-    name: "Spectrum Inspector",
-    sub: "vibrational frequencies → S-entropy address",
-    op: "Identify",
+    name: "Cell Spectral Hologram",
+    sub: "three-state superposition · cell partition state · holonomy diagnostic · sparse η*",
+    op: "Identify · Predict · Close",
   },
   {
     href: "/tools/observe",

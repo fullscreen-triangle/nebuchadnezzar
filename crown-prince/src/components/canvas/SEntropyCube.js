@@ -1,8 +1,11 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { COMPOUNDS, TYPE_COLOR } from "@/lib/compounds";
 import { sEntropy } from "@/lib/sentropy";
+import { detectWebGL } from "@/lib/webgl";
+import WebGLBoundary from "./WebGLBoundary";
+import SEntropySVG from "./SEntropySVG";
 
 // Pre-compute reference cloud once.
 const REFERENCE_POINTS = COMPOUNDS.map((c) => {
@@ -85,28 +88,45 @@ function AxisLabel({ position, text, color = "#888" }) {
 }
 
 export default function SEntropyCube({ query }) {
+  const [gl, setGl] = useState({ supported: true, version: 2 });
+  useEffect(() => setGl(detectWebGL()), []);
+
+  if (!gl.supported) {
+    return <SEntropySVG query={query} />;
+  }
+
   return (
-    <div className="aspect-square w-full overflow-hidden rounded-md border border-light/10 bg-dark/40">
-      <Canvas
-        camera={{ position: [1.6, 1.4, 1.8], fov: 45 }}
-        dpr={[1, 2]}
-      >
-        <group position={[-0.5, -0.5, -0.5]}>
-          <CubeFrame />
-          <ReferenceCloud />
-          <QueryPoint coords={query} />
-          <AxisLabel position={[1, 0, 0]} color="#EE6677" />
-          <AxisLabel position={[0, 1, 0]} color="#228833" />
-          <AxisLabel position={[0, 0, 1]} color="#4477AA" />
-        </group>
-        <OrbitControls
-          enablePan={false}
-          minDistance={1.4}
-          maxDistance={4}
-          autoRotate
-          autoRotateSpeed={0.6}
-        />
-      </Canvas>
-    </div>
+    <WebGLBoundary fallback={<SEntropySVG query={query} />}>
+      <div className="aspect-square w-full overflow-hidden rounded-md border border-light/10 bg-dark/40">
+        <Canvas
+          camera={{ position: [1.6, 1.4, 1.8], fov: 45 }}
+          dpr={[1, 2]}
+          gl={{
+            antialias: true,
+            alpha: false,
+            powerPreference: "default",
+            failIfMajorPerformanceCaveat: false,
+            preserveDrawingBuffer: false,
+          }}
+          onCreated={({ gl }) => gl.setClearColor("#1b1b1b")}
+        >
+          <group position={[-0.5, -0.5, -0.5]}>
+            <CubeFrame />
+            <ReferenceCloud />
+            <QueryPoint coords={query} />
+            <AxisLabel position={[1, 0, 0]} color="#EE6677" />
+            <AxisLabel position={[0, 1, 0]} color="#228833" />
+            <AxisLabel position={[0, 0, 1]} color="#4477AA" />
+          </group>
+          <OrbitControls
+            enablePan={false}
+            minDistance={1.4}
+            maxDistance={4}
+            autoRotate
+            autoRotateSpeed={0.6}
+          />
+        </Canvas>
+      </div>
+    </WebGLBoundary>
   );
 }
