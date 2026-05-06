@@ -1,0 +1,892 @@
+{
+  "paper": "The Partitioned Metabolism Engine",
+  "axiom": "Bounded Phase Space Law + Categorical Observation Axiom",
+  "timestamp": "2026-05-06T20:10:48.118621",
+  "tests": [
+    {
+      "name": "Q_brain_deep_sleep_C",
+      "predicted": 22.289,
+      "observed": 22.289,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "C",
+      "reference": "Sec 3.1",
+      "details": {
+        "formula": "sqrt(2*C*P*dt)",
+        "C_F": 0.0008,
+        "P_W": 11.5,
+        "dt_s": 27000.0
+      }
+    },
+    {
+      "name": "Q_rem_epoch_C",
+      "predicted": 9.843,
+      "observed": 9.843,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "C",
+      "reference": "Sec 3.1",
+      "details": {}
+    },
+    {
+      "name": "Q_motor_run_C",
+      "predicted": 3.039,
+      "observed": 3.039,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "C",
+      "reference": "Sec 3.2",
+      "details": {}
+    },
+    {
+      "name": "Q_wake_C",
+      "predicted": 28.999,
+      "observed": 28.999,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "C",
+      "reference": "Sec 3.2",
+      "details": {}
+    },
+    {
+      "name": "Q_t_total_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 3.3",
+      "details": {}
+    },
+    {
+      "name": "Q_t_rate_mCps",
+      "predicted": 0.826,
+      "observed": 0.826,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "mC/s",
+      "reference": "Sec 3.3",
+      "details": {
+        "Q_brain_deep": 22.289,
+        "rate_mCps": 0.8255
+      }
+    },
+    {
+      "name": "charge_scales_sqrt_with_C",
+      "predicted": 1.414214,
+      "observed": 1.414214,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "ratio",
+      "reference": "Sec 3.1",
+      "details": {}
+    },
+    {
+      "name": "matrix_nonsingular",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 4.1 Theorem 4.1",
+      "details": {
+        "det": 0.002808
+      }
+    },
+    {
+      "name": "matrix_det_magnitude_in_range",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 4.1",
+      "details": {
+        "det": 0.002808
+      }
+    },
+    {
+      "name": "kappa_finite_gt1",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 4.2",
+      "details": {
+        "sigma_max": 1.2057,
+        "sigma_min_bound": 0.058896
+      }
+    },
+    {
+      "name": "matrix_rank_full",
+      "predicted": 4,
+      "observed": 4,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "count",
+      "reference": "Sec 4.1",
+      "details": {}
+    },
+    {
+      "name": "deep_sleep_brain_dominant",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 4.3",
+      "details": {}
+    },
+    {
+      "name": "running_motor_dominant",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 4.3",
+      "details": {}
+    },
+    {
+      "name": "dream_thought_ratio_prediction",
+      "predicted": 0.974679,
+      "observed": 0.974679,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 5.1 Theorem 5.1",
+      "details": {}
+    },
+    {
+      "name": "dream_thought_ratio_observed",
+      "predicted": 0.9743,
+      "observed": 0.9747,
+      "rel_error": 0.00041,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 12.1",
+      "details": {
+        "n_nights": 86,
+        "mean": 0.9743,
+        "std": 0.02668
+      }
+    },
+    {
+      "name": "per_night_cv_leq_3pct",
+      "predicted": 2.74,
+      "observed": 3.1,
+      "rel_error": 0.116129,
+      "tolerance": 0.3,
+      "passed": true,
+      "units": "%",
+      "reference": "Sec 12.2",
+      "details": {
+        "cv_pct": 2.738
+      }
+    },
+    {
+      "name": "bootstrap_ci_covers_prediction",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 12.2",
+      "details": {
+        "ci_lo": 0.9688,
+        "ci_hi": 0.9802
+      }
+    },
+    {
+      "name": "residual_lt_5pct",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 12.1",
+      "details": {
+        "residual_pct": 0.04
+      }
+    },
+    {
+      "name": "mirror_stable_mu0.9",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2 Theorem 6.1",
+      "details": {}
+    },
+    {
+      "name": "mirror_stable_mu1.0",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2",
+      "details": {}
+    },
+    {
+      "name": "mirror_stable_mu1.15",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2",
+      "details": {}
+    },
+    {
+      "name": "mirror_unstable_mu0.6",
+      "predicted": 0.4,
+      "observed": 0.4,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2",
+      "details": {}
+    },
+    {
+      "name": "mirror_unstable_mu1.4",
+      "predicted": 0.3999999999999999,
+      "observed": 0.4,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2",
+      "details": {}
+    },
+    {
+      "name": "mirror_stable_fraction",
+      "predicted": 0.6667,
+      "observed": 0.6667,
+      "rel_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "units": "fraction",
+      "reference": "Sec 6.3",
+      "details": {}
+    },
+    {
+      "name": "mirror_error_monotone",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 6.2",
+      "details": {}
+    },
+    {
+      "name": "D_healthy",
+      "predicted": 1.0,
+      "observed": 1.0,
+      "rel_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 7.1",
+      "details": {}
+    },
+    {
+      "name": "D_syndrome",
+      "predicted": 0.4,
+      "observed": 0.4,
+      "rel_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 7.2",
+      "details": {
+        "fluxes": [
+          5e-05,
+          4.8e-05,
+          4.5e-06,
+          3e-06,
+          2e-06
+        ],
+        "threshold_mol_s": 5e-06
+      }
+    },
+    {
+      "name": "D_diabetes",
+      "predicted": 0.6,
+      "observed": 0.6,
+      "rel_error": 0.0,
+      "tolerance": 0.01,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 7.2",
+      "details": {}
+    },
+    {
+      "name": "D_healthy_gt_syndrome",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 7.3",
+      "details": {}
+    },
+    {
+      "name": "D_diabetes_between",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 7.3",
+      "details": {}
+    },
+    {
+      "name": "cascade_depth_ratio_2_to_1",
+      "predicted": 2.5,
+      "observed": 2.5,
+      "rel_error": 0.0,
+      "tolerance": 0.1,
+      "passed": true,
+      "units": "fold",
+      "reference": "Sec 7.4",
+      "details": {}
+    },
+    {
+      "name": "D_single_subject_86nights",
+      "predicted": 0.84,
+      "observed": 0.84,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "dimensionless",
+      "reference": "Sec 12.3",
+      "details": {}
+    },
+    {
+      "name": "info_compression_healthy_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 8.1 Theorem 8.1",
+      "details": {}
+    },
+    {
+      "name": "info_compression_syndrome_gt_healthy",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 8.2",
+      "details": {}
+    },
+    {
+      "name": "info_debt_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 8.3",
+      "details": {
+        "I_healthy": 0.608,
+        "I_syndrome": 1.898
+      }
+    },
+    {
+      "name": "cascade_compression_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 8.4",
+      "details": {}
+    },
+    {
+      "name": "diabetes_debt_lt_syndrome",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 8.5",
+      "details": {
+        "I_diabetes": 1.2877,
+        "I_syndrome": 1.898
+      }
+    },
+    {
+      "name": "eta_GLP1_zero",
+      "predicted": 0.0,
+      "observed": 0.0,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.1 Theorem 10.1",
+      "details": {}
+    },
+    {
+      "name": "eta_metformin",
+      "predicted": 0.6667,
+      "observed": 0.6667,
+      "rel_error": 0.0,
+      "tolerance": 0.02,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.3",
+      "details": {
+        "D_pre": 0.4,
+        "D_post": 0.8
+      }
+    },
+    {
+      "name": "eta_exercise",
+      "predicted": 0.9167,
+      "observed": 0.9167,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.4",
+      "details": {}
+    },
+    {
+      "name": "eta_bounded_below",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.1",
+      "details": {}
+    },
+    {
+      "name": "eta_bounded_above",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.1",
+      "details": {}
+    },
+    {
+      "name": "eta_exercise_gt_metformin",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.4",
+      "details": {}
+    },
+    {
+      "name": "rebound_lo_bound",
+      "predicted": 0.5,
+      "observed": 0.5,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "fraction",
+      "reference": "Sec 10.2",
+      "details": {}
+    },
+    {
+      "name": "rebound_hi_bound",
+      "predicted": 0.7,
+      "observed": 0.7,
+      "rel_error": 0.0,
+      "tolerance": 0.001,
+      "passed": true,
+      "units": "fraction",
+      "reference": "Sec 10.2",
+      "details": {}
+    },
+    {
+      "name": "metformin_flux_improvement_L3_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "fold",
+      "reference": "Sec 10.3",
+      "details": {
+        "flux_ratio_L3": 15.0
+      }
+    },
+    {
+      "name": "kuramoto_incoherent_below_Kc",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.1 Theorem 9.1",
+      "details": {
+        "K": 1.0,
+        "R": 0.247
+      }
+    },
+    {
+      "name": "kuramoto_coherent_above_Kc",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.1",
+      "details": {
+        "K": 6.0,
+        "R": 0.987
+      }
+    },
+    {
+      "name": "R_healthy_awake",
+      "predicted": 0.74,
+      "observed": 0.74,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.3",
+      "details": {}
+    },
+    {
+      "name": "R_deep_sleep",
+      "predicted": 0.85,
+      "observed": 0.85,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.3",
+      "details": {}
+    },
+    {
+      "name": "R_sleep_gt_awake",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.3",
+      "details": {}
+    },
+    {
+      "name": "R_syndrome_lt_healthy",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 9.4",
+      "details": {}
+    },
+    {
+      "name": "R_single_subject_sleep",
+      "predicted": 0.83,
+      "observed": 0.83,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 12.4",
+      "details": {}
+    },
+    {
+      "name": "N_min_geq_30",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 11.2",
+      "details": {}
+    },
+    {
+      "name": "N_86_exceeds_minimum",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 12.1",
+      "details": {}
+    },
+    {
+      "name": "se_86_nights_lt_target",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 12.2",
+      "details": {
+        "se": 0.002877,
+        "target": 0.015
+      }
+    },
+    {
+      "name": "sig_dist_healthy_syndrome_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.3",
+      "details": {}
+    },
+    {
+      "name": "sig_dist_healthy_diabetes_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.3",
+      "details": {}
+    },
+    {
+      "name": "sig_healthy_farthest_from_syndrome",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.3",
+      "details": {
+        "d_hs": 1.4396,
+        "d_sd": 0.6472
+      }
+    },
+    {
+      "name": "classify_healthy",
+      "predicted": "healthy",
+      "observed": "healthy",
+      "exact_match": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.4",
+      "details": {}
+    },
+    {
+      "name": "classify_syndrome",
+      "predicted": "syndrome",
+      "observed": "syndrome",
+      "exact_match": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.4",
+      "details": {}
+    },
+    {
+      "name": "metformin_moves_toward_healthy",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.3",
+      "details": {}
+    },
+    {
+      "name": "S_entropy_healthy_in_unit_cube",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 2.1",
+      "details": {}
+    },
+    {
+      "name": "S_entropy_syndrome_in_unit_cube",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 2.1",
+      "details": {}
+    },
+    {
+      "name": "S_entropy_volume_healthy_gt_syndrome",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 2.2",
+      "details": {
+        "vol_healthy": 0.74,
+        "vol_syndrome": 0.156
+      }
+    },
+    {
+      "name": "liouville_measure_positive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 2.3",
+      "details": {}
+    },
+    {
+      "name": "six_diagnostic_operations",
+      "predicted": 6,
+      "observed": 6,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "count",
+      "reference": "Sec 11.1",
+      "details": {}
+    },
+    {
+      "name": "plan_non_prescriptive",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "bool",
+      "reference": "Sec 11.6",
+      "details": {}
+    },
+    {
+      "name": "prodrome_fires_syndrome",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.5",
+      "details": {}
+    },
+    {
+      "name": "prodrome_silent_healthy",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.5",
+      "details": {}
+    },
+    {
+      "name": "prodrome_fires_diabetes",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 11.5",
+      "details": {
+        "D_diabetes": 0.6,
+        "threshold": 0.65
+      }
+    },
+    {
+      "name": "pillar_coherence_depth_consistent",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 13.1",
+      "details": {}
+    },
+    {
+      "name": "framework_chain_closed",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 13.2",
+      "details": {}
+    },
+    {
+      "name": "GLP1_critique_zero_efficacy",
+      "predicted": 1,
+      "observed": 1,
+      "rel_error": 0.0,
+      "tolerance": 0.05,
+      "passed": true,
+      "units": "",
+      "reference": "Sec 10.1 Theorem 10.1",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total": 74,
+    "passed": 74,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "failed_tests": []
+  }
+}

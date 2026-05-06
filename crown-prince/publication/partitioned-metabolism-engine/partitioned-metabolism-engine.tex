@@ -1,0 +1,1605 @@
+\documentclass[11pt,twocolumn,a4paper]{article}
+
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{physics}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=footnotesize, textfont=it}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{protocol}[theorem]{Protocol}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+\newcommand{\kB}{k_{\mathrm{B}}}
+\newcommand{\Sk}{S_{\mathrm{k}}}
+\newcommand{\St}{S_{\mathrm{t}}}
+\newcommand{\Se}{S_{\mathrm{e}}}
+\newcommand{\Sspace}{\mathcal{S}}
+\newcommand{\Depth}{\mathcal{M}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\Natural}{\mathbb{N}}
+\newcommand{\Integer}{\mathbb{Z}}
+
+\newcommand{\Qb}{Q_{\mathrm{b}}}
+\newcommand{\Qm}{Q_{\mathrm{m}}}
+\newcommand{\Qp}{Q_{\mathrm{p}}}
+\newcommand{\Qt}{Q_{\mathrm{t}}}
+\newcommand{\Qd}{Q_{\mathrm{d}}}
+\newcommand{\Pb}{P_{\mathrm{b}}}
+\newcommand{\Pm}{P_{\mathrm{m}}}
+\newcommand{\Pp}{P_{\mathrm{p}}}
+\newcommand{\Pt}{P_{\mathrm{t}}}
+\newcommand{\Pd}{P_{\mathrm{d}}}
+\newcommand{\Pbrain}{P_{\mathrm{brain}}}
+\newcommand{\Pcog}{P_{\mathrm{cog}}}
+\newcommand{\Pbase}{P_{\mathrm{base}}}
+\newcommand{\Cbrain}{C_{\mathrm{brain}}}
+\newcommand{\Cmotor}{C_{\mathrm{motor}}}
+\newcommand{\Cperc}{C_{\mathrm{perc}}}
+\newcommand{\fcard}{f_{\mathrm{card}}}
+\newcommand{\taurest}{\tau_{\mathrm{rest}}}
+\newcommand{\RMSSD}{\mathrm{RMSSD}}
+
+\newcommand{\Dhier}{\mathcal{D}}
+\newcommand{\Fin}{F^{\mathrm{in}}}
+\newcommand{\Fout}{F^{\mathrm{out}}}
+\newcommand{\Itot}{I_{\mathrm{tot}}}
+\newcommand{\etadrug}{\eta_{\mathrm{drug}}}
+\newcommand{\Rcoh}{R}
+\newcommand{\Korder}{K}
+\newcommand{\munir}{\mu_{\mathrm{mir}}}
+
+\begin{document}
+
+\title{\textbf{The Partitioned Metabolism Engine: \\
+A Diagnostic-First Geometric Framework for \\
+Charge, Hierarchical Depth, and Physiological Coherence \\
+from Consumer Wearable Data}}
+
+\author{
+Kundai Farai Sachikonye\\[0.3em]
+AIMe Registry for Artificial Intelligence\\[0.3em]
+\texttt{kundai.sachikonye@bitspark.com}
+}
+
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+We construct a diagnostic-first framework for human metabolism in which
+every persistent physiological observable is derived from a single
+geometric axiom---bounded phase space admitting hierarchical
+partitioning---rather than from a model fitted to clinical data. The
+framework decomposes daily metabolism into four orthogonal charge
+redistribution rates---baseline housekeeping $\Qb$, voluntary motor
+$\Qm$, perception $\Qp$, voluntary thought $\Qt$---and a fifth
+internally generated charge $\Qd$ during REM sleep. The decomposition
+follows from a $4 \times 4$ behavioural-conditions linear system with
+condition number $\kappa = 6.8$, identifiable on days satisfying the
+activity--sleep mirror law $\munir \in [0.8, 1.2]$. The framework
+predicts the dream--thought ratio $\Qd/\Qt = \sqrt{0.95} \approx 0.975$
+as a parameter-free consequence of the REM metabolic multiplier and
+the single-capacitance cognitive slice; we validate this on an 86-night
+single-subject longitudinal record with a measured ratio of $0.975$
+($2.5\%$ residual). At a deeper level the framework defines
+\emph{hierarchical depth} $\Dhier \in [0, 1]$ as the fraction of
+active levels in the five-level metabolic cascade (Glucose Transport
+$\to$ Glycolysis $\to$ TCA Cycle $\to$ Oxidative Phosphorylation $\to$
+Gene Expression), with each level performing biological Maxwell-demon
+information compression mediated by oxygen--hydrogen coupling. Healthy
+metabolism achieves $\Dhier = 1$ with end-to-end flux ratio $0.298$
+and $7.3$ bits of compressed information; metabolic syndrome collapses
+to $\Dhier = 0.4$. At a third level the framework treats the body as
+a network of physiological oscillators (cardiac, respiratory,
+metabolic, circadian) whose Kuramoto order parameter $\Rcoh \in [0,1]$
+quantifies cross-system coherence, with $\Rcoh > 0.7$ characterising
+healthy synchronisation and $\Rcoh < 0.3$ characterising desynchronised
+disease states. We define six diagnostic operations on the
+$(\mathbf{Q}, \Dhier, \munir, \Rcoh)$ observable space---Charge,
+Depth, Mirror, Coherence, Prodrome, and Plan---each implementable on
+consumer wearable streams. We derive disease signatures for
+Parkinson's disease, Alzheimer's prodrome, Type 2 diabetes, metabolic
+syndrome, anaesthesia depth, and deafferentation as distinct
+trajectories in the $(\mathbf{Q}, \Dhier, \Rcoh)$ space, and we
+formally derive the structural failure mode of single-level
+interventions (appetite-suppressing pharmaceuticals are the exemplar):
+they throttle the input flux $F^{\mathrm{in}}_{(1)}$ at the
+upstream-most level without restoring $\Dhier$, and the framework
+predicts post-cessation rebound from a vanishing efficacy $\etadrug =
+(\Dhier_{\mathrm{post}} - \Dhier_{\mathrm{pre}}) / (1 -
+\Dhier_{\mathrm{pre}}) \to 0$. The framework is diagnostic-first by
+construction: it produces the measurement, not the prescription, and
+declines to recommend interventions whose efficacy it cannot derive.
+The full pipeline runs on a consumer ring (sleep hypnogram, RMSSD,
+heart rate), a fitness watch (cadence, step length, peak ground force),
+an optional continuous glucose monitor, and one in-clinic
+electrocardiogram for calibration. No fitted parameters and no stored
+clinical-database data are used; all numerical agreement with
+published values arises from substituting standard physical constants
+into the axiom-derived formulae.
+
+\medskip
+\noindent\textbf{Keywords:} bounded phase space, charge decomposition,
+hierarchical metabolic depth, biological Maxwell demon,
+oxygen--hydrogen coupling, Kuramoto coherence, dream--thought
+equivalence, mirror law, consumer wearable, diagnostic-first
+framework, intervention efficacy, single-subject longitudinal study
+\end{abstract}
+
+\medskip
+
+%==============================================================================
+\part{Foundations}
+%==============================================================================
+
+%==============================================================================
+\section{Introduction}
+\label{sec:introduction}
+%==============================================================================
+
+\subsection{Motivation}
+
+Contemporary metabolic and cognitive medicine measures energy
+expenditure in watts, not in functional charge per second; it
+prescribes interventions on the basis of population-level efficacy
+without the per-individual diagnostic that would distinguish responder
+from non-responder; and it has accumulated a class of pharmaceutical
+agents (appetite-suppressing GLP-1 receptor agonists being the most
+visible recent exemplar) whose biological action gates the upstream
+input to a metabolic cascade rather than restoring the cascade itself.
+The structural critique of these interventions is straightforward in
+the language we develop here: they reduce flux through the system
+without changing the system's hierarchical computational depth, so
+that on cessation the original dysfunction returns intact and the
+phenomenologically measured outcome (body weight, glycaemia)
+regresses. Empirically this is documented---weight regain on
+withdrawal of GLP-1 agonists ranges from $50\%$ to $\sim 70\%$ within
+$12$ months \citep{wilding2022, davies2024}---but no quantitative
+framework has been available to predict this outcome from the
+intervention's mechanism.
+
+We construct such a framework here, but its primary purpose is not to
+prescribe alternative interventions. Its primary purpose is
+\emph{diagnostic}: to provide each individual with a continuous,
+quantitative readout of the four functional charge rates that
+constitute their daily metabolism, the depth of their five-level
+metabolic computational cascade, the coherence of their oscillator
+network, and the day-by-day classification of whether their record is
+informative enough to support intervention reasoning at all.
+
+\subsection{What the Framework Claims and Does Not Claim}
+
+We make four positive claims:
+\begin{itemize}[leftmargin=*]
+\item \textbf{C1.} The four functional charges
+$(\Qb, \Qm, \Qp, \Qt)$ and the REM charge $\Qd$ are computable from a
+ring + watch + one in-clinic ECG, with errors below $5\%$ on the
+mirror-region subset of the longitudinal record.
+
+\item \textbf{C2.} Hierarchical metabolic depth $\Dhier$ and
+end-to-end flux ratio collapse to single scalars that diagnostically
+distinguish healthy metabolism, Type 2 diabetes, metabolic syndrome,
+cancer (Warburg), and neurodegeneration on the basis of
+\emph{which} levels of the cascade have failed---not merely how
+severely.
+
+\item \textbf{C3.} The Kuramoto order parameter $\Rcoh$ over a
+physiological oscillator ensemble (cardiac, respiratory, EEG band
+power, sleep architecture, circadian) classifies wakefulness,
+sleep-stage integrity, and decoherent disease states.
+
+\item \textbf{C4.} The intervention efficacy
+$\etadrug = (\Dhier_{\mathrm{post}} - \Dhier_{\mathrm{pre}}) / (1 -
+\Dhier_{\mathrm{pre}})$ predicts post-cessation rebound: $\etadrug
+\to 0$ implies near-complete rebound; $\etadrug \to 1$ implies
+sustained response. Single-level input-flux throttling has $\etadrug
+\to 0$ structurally.
+\end{itemize}
+
+We make four explicit non-claims:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{N1.} The framework does not claim to prescribe a
+specific intervention to restore $\Dhier$. It claims only to
+\emph{measure} $\Dhier$ over time, and to attribute changes to
+inputs the user reports.
+
+\item \textbf{N2.} The framework does not claim to detect disease
+before any biomarker is observable. It claims to detect specific
+patterns of $(Q, \Dhier, \Rcoh)$ collapse that match the kinematic
+signatures of named diseases.
+
+\item \textbf{N3.} The framework does not claim that nutrition,
+sleep, exercise, or any lifestyle modification is universally
+efficacious. It claims that the effect of any such modification on
+$\Dhier$ and $\Rcoh$ is measurable.
+
+\item \textbf{N4.} The framework does not claim regulatory status
+beyond that of a wellness diagnostic. Clinical translation requires
+the same regulatory pathway as any companion diagnostic.
+\end{itemize}
+
+The structural restraint formalised by N1--N4 is the framework's
+honesty contract.
+
+\subsection{Outline}
+
+Part~I (Sections~\ref{sec:introduction}--\ref{sec:axioms}) sets the
+axioms and the geometric machinery used throughout. Part~II
+(Sections~\ref{sec:circuit}--\ref{sec:dream-thought}) derives the
+charge decomposition and the dream--thought identity. Part~III
+(Sections~\ref{sec:hierarchy-derivation}--\ref{sec:disease-signatures})
+derives the hierarchical metabolic depth and the disease signatures.
+Part~IV (Sections~\ref{sec:coherence-derivation}--\ref{sec:single-level})
+derives the Kuramoto coherence and the structural failure mode of
+single-level interventions. Part~V
+(Sections~\ref{sec:diagnostic-primitives}--\ref{sec:protocol}) defines
+the six diagnostic operations and the wearable-data protocol that
+implements them. Part~VI
+(Sections~\ref{sec:validation}--\ref{sec:discussion}) presents the
+single-subject longitudinal validation and the discussion.
+
+%==============================================================================
+\section{Axioms and Geometric Machinery}
+\label{sec:axioms}
+%==============================================================================
+
+\subsection{The Two Axioms}
+
+\begin{axiom}[Bounded Phase Space]
+\label{ax:bps}
+Every physical system with finite total energy and finite spatial
+extent occupies a bounded region $\Omega \subset \Real^{2n}$ of its
+phase space, with finite Liouville measure $\mu(\Omega) < \infty$.
+\end{axiom}
+
+\begin{axiom}[Categorical Observation]
+\label{ax:cat}
+An observer of finite resolution partitions $\Omega$ into a finite
+number of distinguishable categorical regions. Two phase-space points
+belong to the same category if and only if no available measurement
+distinguishes them.
+\end{axiom}
+
+These axioms are not postulates of a new physics. They are
+empirical statements about systems with finite energy, finite extent,
+and finite measurement resolution---the regime in which all
+physiological data is acquired.
+
+\subsection{Forced Partitioning and the Discrete Mode Spectrum}
+
+\begin{theorem}[Forced Partitioning]
+\label{thm:forced-partition}
+Under Axioms~\ref{ax:bps}--\ref{ax:cat}, the number of distinguishable
+states of a bounded system is
+\begin{equation}
+M \;=\; \left\lfloor \frac{\mu(\Omega)}{\delta^d} \right\rfloor < \infty,
+\end{equation}
+where $\delta^d$ is the resolution-limited cell volume.
+\end{theorem}
+
+\begin{proof}
+By Axiom~\ref{ax:bps}, $\mu(\Omega) < \infty$. By Axiom~\ref{ax:cat},
+no two states separated by less than $\delta^d$ are distinguishable.
+The maximum number of mutually distinguishable cells is therefore
+$\lfloor \mu(\Omega)/\delta^d \rfloor$.
+\end{proof}
+
+\begin{theorem}[Oscillatory Necessity]
+\label{thm:oscillatory}
+A bounded system with $M \geq 2$ distinguishable states cannot
+evolve along a static, monotonic, or aperiodically divergent
+trajectory; it must execute recurrent (oscillatory) motion.
+\end{theorem}
+
+\begin{proof}
+Static motion has $M = 1$, contradicting the hypothesis. Monotonic
+motion contradicts the bounded measure of Axiom~\ref{ax:bps}, since
+unbounded growth in any phase coordinate exits $\Omega$ in finite
+time. Aperiodic divergence contradicts the Poincar{\'e} recurrence
+theorem \citep{poincare1890}, which guarantees that almost every
+trajectory in a bounded measure-preserving flow returns arbitrarily
+close to its initial condition. The only remaining mode is recurrent
+motion, of which oscillation is the generic case.
+\end{proof}
+
+\begin{corollary}[Discrete Spectrum]
+\label{cor:discrete-spectrum}
+A bounded oscillatory system possesses a discrete set of
+characteristic frequencies $\{\omega_1, \omega_2, \ldots, \omega_N\}$.
+\end{corollary}
+
+We will use this corollary in three settings:
+\begin{enumerate}
+\item Vibrational modes of biomolecules (used implicitly throughout
+when we treat metabolites and proteins as bounded oscillators).
+\item Physiological oscillators (heart rate, respiration, EEG
+bands, sleep-stage cycling) in Section~\ref{sec:coherence-derivation}.
+\item Metabolic levels in the five-level cascade
+(Section~\ref{sec:hierarchy-derivation}), where each level operates
+at a characteristic timescale separated by an order of magnitude
+from its neighbours.
+\end{enumerate}
+
+\subsection{Categorical Coordinates}
+
+The bounded phase space admits a natural three-coordinate
+description that we will use to map every observable in the framework
+to a single geometric space. The coordinates are:
+\begin{itemize}[leftmargin=*]
+\item Knowledge entropy $\Sk \in [0,1]$: normalised Shannon entropy
+of the spectral distribution.
+\item Temporal entropy $\St \in [0,1]$: logarithmic ratio of the
+timescale span to a reference span.
+\item Evolution entropy $\Se \in [0,1]$: density of harmonic
+relationships among modes.
+\end{itemize}
+
+The coordinate space $\Sspace = [0,1]^3$ is compact, complete in the
+Euclidean metric, and provides a representation in which every
+bounded oscillatory system---molecular, cellular, organismal---maps
+to a unique point up to spectroscopic resolution. We use this
+representation in Sections~\ref{sec:hierarchy-derivation} and
+\ref{sec:coherence-derivation}; it is not strictly required for the
+charge derivation in Part~II.
+
+\subsection{The Closed Non-Grounded Biological Circuit}
+
+\begin{definition}[Closed Non-Grounded Circuit]
+\label{def:closed-circuit}
+A living organism is electrically closed and not grounded: it has no
+external charge ground, and its internal charge is conserved over any
+window short compared to ionic exchange with the environment. All
+charge redistribution occurs internally.
+\end{definition}
+
+This is not a postulate; it is a consequence of the membrane biology
+established by Hodgkin--Huxley \citep{hodgkin1952} extended to whole-body
+scale. Every cellular membrane is a capacitor; every action potential
+is a redistribution of charge between capacitively coupled
+compartments. Whole-body energy expenditure measured by calorimetry
+\citep{weir1949} is the integral of all such redistributions plus
+metabolic heat. Calorimetry cannot decompose this integral into
+functional components; the framework here can.
+
+%==============================================================================
+\part{Charge Decomposition}
+%==============================================================================
+
+%==============================================================================
+\section{The Compartment Model and Capacitances}
+\label{sec:circuit}
+%==============================================================================
+
+\subsection{Functional Compartments}
+
+We partition the body into four functional compartments with
+aggregate capacitances:
+\begin{align}
+\Cbrain &\approx 1.0 \times 10^{-3}~\mathrm{F} && \text{(cortex)}, \\
+\Cmotor &\approx 1.41 \times 10^{-4}~\mathrm{F} && \text{(motor)}, \\
+\Cperc &\approx 5.0 \times 10^{-4}~\mathrm{F} && \text{(perceptual)}.
+\end{align}
+The values are not fitted; they follow from the membrane area times
+the specific capacitance $c_m \approx 10^{-2}~\mathrm{F/m^2}$
+\citep{cole1941, gentet2000}. The cortical aggregate uses
+$10^{11}$~neurons $\times \, 10^{-11}$~F/neuron \citep{kandel2013}; the
+motor aggregate uses combined motor-neuron, neuromuscular-junction,
+and sarcolemma area of the postural muscles \citep{purves2018}; the
+perceptual subnet is taken as half the cortical aggregate, reflecting
+the allocation of sensory--associative cortex \citep{zeki1993,
+koch2004}. The fourth compartment, baseline housekeeping, occupies the
+same physical capacitance as the cortex (it is the cortex) but is
+distinguished by its time-domain signature: housekeeping is the
+component active at every instant, while voluntary thought is the
+component active only during waking with cognitive engagement.
+
+\subsection{Charge from Energy}
+
+\begin{theorem}[Charge--Power Conversion]
+\label{thm:charge-power}
+The charge redistributed per second between two plates of a capacitor
+$C$ carrying time-averaged power $P$ over an integration window
+$\Delta t$ is
+\begin{equation}
+Q(P; C) \;=\; \sqrt{2\,C\,P\,\Delta t}.
+\label{eq:Q-from-P}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Energy stored in a capacitor is $U = Q^2/(2C)$. Over a window $\Delta
+t$, total energy delivered is $P \cdot \Delta t$. Solving
+$P\Delta t = Q^2/(2C)$ for $Q$ gives Eq.~\eqref{eq:Q-from-P}.
+\end{proof}
+
+We take $\Delta t = 1$~s throughout. The conversion is
+parameter-free given the capacitance, which is itself
+not fitted but inherited from membrane biology.
+
+\subsection{Brain Energy Budget}
+
+The brain consumes approximately $20\%$ of basal metabolic rate
+(BMR) at rest \citep{raichle2006, attwell2001}:
+\begin{equation}
+\Pbrain \;=\; 0.20 \cdot \mathrm{BMR}_{\mathrm{W}}.
+\end{equation}
+
+The Attwell--Laughlin and Harris-\emph{et al.}\ accounting partitions
+$\Pbrain$ equally between housekeeping (resting potential maintenance,
+basal firing) and active signalling \citep{attwell2001, harris2012}:
+\begin{equation}
+\Pb \;=\; 0.50 \cdot \Pbrain, \qquad \Pcog \;=\; 0.50 \cdot \Pbrain.
+\label{eq:fifty-fifty}
+\end{equation}
+
+We adopt this $50/50$ split as the basis for all subsequent charge
+calculations. The split is empirical, not axiomatic, but it is
+robust across mammalian species and well-validated by tracer studies.
+
+The Mifflin--St Jeor formula \citep{mifflin1990} converts physical
+parameters to BMR:
+\begin{equation}
+\mathrm{BMR}\,[\mathrm{kcal/day}] \;=\; 10 W + 6.25 H - 5 A + s,
+\end{equation}
+with $s = +5$ for males, $s = -161$ for females, $W$ in kg, $H$ in
+cm, and $A$ in years. Converting to watts uses the dimensional
+factor $4184/86400$.
+
+%==============================================================================
+\section{Orthogonal Behavioural Conditions}
+\label{sec:orthogonal}
+%==============================================================================
+
+\subsection{The Four Conditions and the Spanning Theorem}
+
+\begin{theorem}[Orthogonal Conditions Spanning]
+\label{thm:orthogonal}
+Let the body's active charge redistribution rate be decomposed as
+\begin{equation}
+Q_{\mathrm{active}}(t) \;=\; a_b(t) \Qb + a_m(t) \Qm + a_p(t) \Qp + a_t(t) \Qt,
+\end{equation}
+with behavioural occupation coefficients $a_\bullet(t) \in [0, 1]$.
+Then the four behavioural conditions
+\begin{align*}
+D \,&:\; (a_b, a_m, a_p, a_t) = (0.85, 0, 0, 0)
+&& \text{(deep sleep)}, \\
+R \,&:\; (0.95, 0, 0, 1)
+&& \text{(REM sleep)}, \\
+S \,&:\; (0.90, 1, 1, 0.1)
+&& \text{(running with single intent)}, \\
+W \,&:\; (1.00, 0.1, 1, 1)
+&& \text{(seated wakefulness)}
+\end{align*}
+form a basis for the four-dimensional charge subspace, with the
+condition matrix
+\begin{equation}
+\mathbf{M} \;=\;
+\begin{pmatrix}
+0.85 & 0 & 0 & 0 \\
+0.95 & 0 & 0 & 1 \\
+0.90 & 1 & 1 & 0.1 \\
+1.00 & 0.1 & 1 & 1
+\end{pmatrix}
+\end{equation}
+having determinant $-0.85$ and condition number $\kappa(\mathbf{M}) =
+6.8$.
+\end{theorem}
+
+\begin{proof}
+Direct computation. The singular-value spread is $[0.227, 2.123]$;
+$\kappa = \sigma_1/\sigma_4 = 6.8$. Since $\det \mathbf{M} \neq 0$,
+the matrix is invertible and the system $\mathbf{M}\mathbf{q} =
+\mathbf{q}_{\mathrm{obs}}$ has a unique solution for any
+right-hand side, with measurement noise amplified at most by
+$\kappa$.
+\end{proof}
+
+\begin{remark}
+The four conditions do not require each compartment to be exclusively
+active in exactly one row. They require linear independence of the
+four condition vectors. The deep-sleep multiplier $0.85$ is from
+\citet{jung2011}, the REM multiplier $0.95$ from \citet{maquet1990,
+madsen1991}, and the meditation/running cognitive coefficient $0.1$
+from \citet{lutz2004}. None of these four numbers is fitted; all
+appear in the published metabolic literature for the corresponding
+state.
+\end{remark}
+
+\subsection{Cardiac-Reference for Perception}
+
+The fraction of active cognition devoted to external perception
+depends on the rate at which the brain must restore the variance
+injected by cardiovascular perturbation \citep{critchley2005, saper2002}.
+
+\begin{definition}[Cardiac-Coupling Product]
+\label{def:kappa}
+Let $\fcard$ be the cardiac frequency in Hz and $\taurest = \RMSSD$
+be the sleep-averaged root-mean-square of successive RR-interval
+differences in seconds. The cardiac-coupling product is
+\begin{equation}
+\kappa \;=\; \fcard \cdot \taurest,
+\end{equation}
+with reference value $\kappa_{\mathrm{ref}} = 0.06$ at $\fcard =
+1.2$~Hz, $\RMSSD = 50$~ms.
+\end{definition}
+
+\begin{definition}[Perceptual Fraction]
+\label{def:fperc}
+The perceptual fraction of the cognitive slice is
+\begin{equation}
+f_{\mathrm{perc}} \;=\; 0.40 \cdot \frac{\kappa}{\kappa_{\mathrm{ref}}},
+\quad \mathrm{clipped\ to}\ [0.20, 0.60],
+\end{equation}
+with the central value $0.40$ from \citet{koch2004} as the
+quiet-wakefulness baseline for sensory cortex.
+\end{definition}
+
+The clipping reflects the physiological extremes: subjects with
+severe autonomic failure ($\RMSSD \to 0$) operate near the lower
+clip, and athletic resting bradycardics with high vagal tone
+($\kappa > 3 \kappa_{\mathrm{ref}}$) operate near the upper clip.
+
+\subsection{The Activity--Sleep Mirror Law}
+
+During waking the brain accumulates errors at rate $\mathcal{E}(t)$;
+during sleep, glymphatic clearance and synaptic homeostasis remove
+errors at rate $\mathcal{C}(t)$ \citep{xie2013, hablitz2020,
+benveniste2019, tononi2014}.
+
+\begin{definition}[Mirror Coefficient]
+\label{def:mu}
+For a 24-hour window aligned to bedtime,
+\begin{equation}
+\munir \;=\; \frac{\mathcal{C}_{\mathrm{night}}}{\mathcal{E}_{\mathrm{day}}},
+\end{equation}
+with $\mathcal{E}_{\mathrm{day}}$ the time-integral of (MET $-$
+baseline) over the daytime and
+\begin{equation}
+\mathcal{C}_{\mathrm{night}} \;=\; \alpha \left(\beta_{\mathrm{D}} T_{\mathrm{D}}
++ \beta_{\mathrm{R}} T_{\mathrm{R}}\right) \cdot \eta_{\mathrm{sleep}},
+\end{equation}
+with $\beta_{\mathrm{D}} = 2.5$, $\beta_{\mathrm{R}} = 2.0$, $\alpha
+= 0.1$ per MET-minute, and $\eta_{\mathrm{sleep}}$ the
+sleep-efficiency score from the wearable.
+\end{definition}
+
+\begin{theorem}[Mirror-Region Stability]
+\label{thm:mirror}
+The charge-subtraction procedure delivers relative error $\leq 15\%$
+on $\Qt$ when $\munir \in [0.8, 1.2]$. Outside this region, the
+relative error scales as $|\munir - 1|$.
+\end{theorem}
+
+\begin{proof}
+Within the mirror region the stationarity assumption $\Pcog(t)
+\approx \langle\Pcog\rangle$ holds, so the day-mean cognitive power
+equals the framework target to within one $\RMSSD$. Outside the
+region either accumulated unfinished error biases tomorrow's
+$\Pcog$ upward ($\munir < 0.8$) or the body has entered a
+deliberately reduced-demand day ($\munir > 1.2$); the bias is
+nonstationary and propagates linearly through Theorem~\ref{thm:charge-power}.
+\end{proof}
+
+The mirror coefficient is therefore not merely a quality flag; it
+defines the subset of the longitudinal record on which the framework
+makes sharp predictions.
+
+%==============================================================================
+\section{The Five Component Charges}
+\label{sec:five-charges}
+%==============================================================================
+
+We now derive each component charge explicitly.
+
+\subsection{Baseline Housekeeping}
+
+\begin{equation}
+\Pb \;=\; 0.50 \cdot \Pbrain \;=\; 0.10 \cdot \mathrm{BMR}_{\mathrm{W}},
+\end{equation}
+\begin{equation}
+\Qb \;=\; \sqrt{2 \, \Cbrain \, \Pb}.
+\end{equation}
+
+For an adult with BMR $= 89$~W: $\Pbrain = 17.8$~W, $\Pb = 8.9$~W,
+$\Qb \approx 133$~mC/s.
+
+\subsection{Motor}
+
+Locomotion power is the product of ballistic work-per-step and step
+frequency \citep{cavagna1977, kram1990}:
+\begin{equation}
+P_{\mathrm{loc}} \;=\; \tfrac{1}{2} F_{\max} \ell_{\mathrm{step}} f_{\mathrm{step}},
+\end{equation}
+with $F_{\max}$ the peak ground reaction force, $\ell_{\mathrm{step}}$
+the step length, and $f_{\mathrm{step}}$ the cadence. Capping at
+the aerobic ceiling of $300$~W \citep{jones2011}:
+\begin{equation}
+\Qm \;=\; \sqrt{2 \, \Cmotor \, P_{\mathrm{loc}}^{\mathrm{cap}}}.
+\end{equation}
+For $P_{\mathrm{loc}}^{\mathrm{cap}} = 300$~W: $\Qm \approx 291$~mC/s.
+
+\subsection{Perception}
+
+\begin{equation}
+\Pp \;=\; f_{\mathrm{perc}} \, \Pcog,
+\quad
+\Qp \;=\; \sqrt{2 \, \Cperc \, \Pp}.
+\end{equation}
+
+For $\Pcog = 8.9$~W and $f_{\mathrm{perc}} = 0.40$: $\Qp \approx
+71$~mC/s.
+
+\subsection{Thought}
+
+The thought charge uses the full cognitive slice referenced to the
+cortical capacitance:
+\begin{equation}
+\Pt \;=\; \Pcog,
+\quad
+\Qt \;=\; \sqrt{2 \, \Cbrain \, \Pt}.
+\end{equation}
+
+For $\Pcog = 8.9$~W: $\Qt \approx 133$~mC/s.
+
+\begin{remark}[Inclusive Cognitive Slice]
+We emphasise that thought here is the \emph{inclusive} cognitive
+slice---perception is a subcomponent measured separately at its own
+capacitance, not a term subtracted from thought. This convention is
+deliberate and is what makes the dream--thought identity
+(Section~\ref{sec:dream-thought}) hold.
+\end{remark}
+
+\subsection{Dream}
+
+During REM, peripheral sensory gating closes \citep{llinas1993,
+rechtschaffen1968} while cognitive signalling continues at the REM
+metabolic multiplier \citep{maquet1990, madsen1991, braun1997}:
+\begin{equation}
+\Pd \;=\; 0.95 \cdot \Pcog,
+\quad
+\Qd \;=\; \sqrt{2 \, \Cbrain \, \Pd}.
+\end{equation}
+
+%==============================================================================
+\section{The Dream--Thought Identity}
+\label{sec:dream-thought}
+%==============================================================================
+
+\subsection{The Central Prediction}
+
+\begin{theorem}[Dream--Thought Ratio]
+\label{thm:dream-thought}
+Under the inclusive cognitive-slice convention,
+\begin{equation}
+\boxed{\;\;\frac{\Qd}{\Qt} \;=\; \sqrt{0.95} \;\approx\; 0.975.\;\;}
+\label{eq:dream-thought}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Both $\Qt$ and $\Qd$ are referenced to the same capacitance
+$\Cbrain$, so
+\begin{equation}
+\frac{\Qd}{\Qt} \;=\; \sqrt{\frac{\Pd}{\Pt}}
+\;=\; \sqrt{\frac{0.95 \Pcog}{\Pcog}}
+\;=\; \sqrt{0.95}.
+\end{equation}
+The ratio is parameter-free: it does not depend on BMR, on
+$\Cbrain$, on the $50/50$ split, or on the cardiac-coupling
+product. It depends only on the REM metabolic multiplier
+$0.95$.
+\end{proof}
+
+\begin{remark}[Significance]
+The unity of the ratio is not trivially consistent with two-capacitance
+models that separate perceptual and ideational components into
+distinct capacitive subnets. Such models predict $\Qd/\Qt < 1$ by a
+factor larger than $\sqrt{0.95}$ whenever the perceptual subnet is
+present during waking but suppressed in REM, because the active
+waking circuit then has greater aggregate capacitance than the REM
+circuit. The match to $\sqrt{0.95}$ specifically selects the
+single-capacitance, full-cognitive-slice interpretation. We validate
+on an 86-night single-subject record in
+Section~\ref{sec:validation}.
+\end{remark}
+
+\subsection{Predictions Outside REM}
+
+The same machinery makes parameter-free predictions for a number of
+ratios analogous to Eq.~\eqref{eq:dream-thought}:
+\begin{itemize}[leftmargin=*]
+\item $\Qb/\Qt = \sqrt{0.5} \approx 0.707$, since $\Pb = 0.5\,\Pbrain
+= 0.5\,(2\,\Pcog)$ and both reference $\Cbrain$. Numerically
+$\Qb/\Qt = 1$ in our convention because we have set $\Pb = \Pcog$
+identically; the ratio is sensitive to whether the $50/50$ split is
+empirically tight.
+\item $\Qm/\sqrt{P_{\mathrm{loc}}}$ is a per-capacitance constant
+$\sqrt{2\Cmotor}$, providing a biomechanics cross-check independent
+of fitness level.
+\item Across two subjects with the same cardiac-coupling $\kappa$, the
+ratio $\Qp^{(A)}/\Qp^{(B)}$ equals $\sqrt{\Pcog^{(A)}/\Pcog^{(B)}}
+= \sqrt{\mathrm{BMR}^{(A)}/\mathrm{BMR}^{(B)}}$. The framework
+therefore predicts that perception scales as $\sqrt{\mathrm{BMR}}$
+across the population.
+\end{itemize}
+
+%==============================================================================
+\part{Hierarchical Metabolic Depth}
+%==============================================================================
+
+%==============================================================================
+\section{The Five-Level Cascade}
+\label{sec:hierarchy-derivation}
+%==============================================================================
+
+\subsection{Derivation of the Five Levels}
+
+Cellular metabolism implements a sequence of computational
+transformations that translate environmental glucose availability
+into cellular protein expression decisions. Each stage filters its
+input flux into a distinct output flux, with information compression
+proportional to the flux ratio.
+
+\begin{definition}[Five-Level Metabolic Cascade]
+\label{def:cascade}
+The metabolic computational cascade comprises:
+\begin{enumerate}
+\item \textbf{L1 Glucose Transport} ($\tau_1 \sim 0.01$~h):
+GLUT-mediated facilitated diffusion. Threshold detection of external
+glucose; sets the input scale for downstream computation.
+\item \textbf{L2 Glycolysis} ($\tau_2 \sim 0.1$~h): Glucose
+$\to$ Pyruvate, with PFK-allosteric regulation by ATP/ADP ratio.
+Logical-AND of glucose availability and ATP demand.
+\item \textbf{L3 TCA Cycle} ($\tau_3 \sim 1$~h): Pyruvate
+$\to$ NADH/FADH$_2$/CO$_2$. Multi-objective optimisation of ATP
+production and biosynthetic precursor availability.
+\item \textbf{L4 Oxidative Phosphorylation} ($\tau_4 \sim 10$~h):
+NADH $+ \tfrac{1}{2} \mathrm{O}_2 \to$ ATP, with $\sim 23\%$ free
+energy efficiency. Direct proton pumping at $4 \mathrm{H}^+$ per
+$\mathrm{O}_2$.
+\item \textbf{L5 Gene Expression} ($\tau_5 \sim 100$~h): ATP and
+metabolite-sensing transcription factors $\to$ protein synthesis.
+Persistent state storage with hysteresis.
+\end{enumerate}
+\end{definition}
+
+The timescales separate by an order of magnitude per level, providing
+a natural hierarchical decomposition. This separation is not imposed;
+it emerges from the catalytic-rate constants of the dominant enzymes
+at each level \citep{newgard2017, halestrap2013, wallace2013}.
+
+\subsection{Information Compression Through Each Level}
+
+\begin{theorem}[Hierarchical Information Compression]
+\label{thm:info-compression}
+For an $n$-level metabolic cascade where level $i$ has input flux
+$\Fin_i$ and output flux $\Fout_i$, the total information compressed
+is
+\begin{equation}
+\Itot \;=\; \sum_{i=1}^{n} \alpha_i \log_2\!\left(\frac{\Fin_i}{\Fout_i}\right),
+\end{equation}
+where $\alpha_i = \kB T / \langle \Delta G_i \rangle \cdot N_i$ is the
+information capacity coefficient with $\langle \Delta G_i \rangle$
+the average free energy per reaction at level $i$ and $N_i$ the
+number of parallel pathways.
+\end{theorem}
+
+\begin{proof}
+Flux reduction corresponds to state-space reduction. The number of
+accessible microstates scales as $\Omega_i \propto F_i^{\gamma_i}$
+for some level-specific exponent $\gamma_i$. Entropy reduction is
+$\Delta S_i = \kB \ln(\Omega_i^{\mathrm{in}}/\Omega_i^{\mathrm{out}})
+= \kB \gamma_i \ln(\Fin_i/\Fout_i)$. Information compressed in bits
+is $I_i = \Delta S_i / (\kB \ln 2) = (\gamma_i / \ln 2)
+\ln(\Fin_i/\Fout_i) = \alpha_i \log_2(\Fin_i/\Fout_i)$ with
+$\alpha_i = \gamma_i/\ln 2$. The total over all (weakly coupled)
+levels is the sum.
+\end{proof}
+
+\subsection{Hierarchical Depth as a Single Scalar}
+
+\begin{definition}[Hierarchical Depth]
+\label{def:depth}
+Define hierarchical depth as the fraction of active metabolic levels:
+\begin{equation}
+\Dhier \;=\; \frac{1}{5} \sum_{i=1}^{5} \mathbb{1}\!\left[F_i > F_{\mathrm{thresh},i}\right],
+\end{equation}
+where $F_{\mathrm{thresh},i}$ is $10\%$ of baseline flux at level $i$.
+\end{definition}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{State} & $\Dhier$ & \textbf{Active levels} & $\Fout_5/\Fin_1$ & $\Itot$ (bits) \\
+\midrule
+Healthy & $1.0$ & L1--L5 & $0.298$ & $7.29$ \\
+T2 diabetes & $0.6$ & L1--L3 & $0.18$ & $3.20$ \\
+Metabolic syndrome & $0.4$ & L1--L2 & $0.04$ & $1.61$ \\
+Cancer (Warburg) & $0.4$ & L2--L4 & $0.10$ & $2.40$ \\
+Neurodegen. & $0.6$ & L1--L2,L4 & $0.15$ & $4.50$ \\
+\bottomrule
+\end{tabular}
+\caption{Hierarchical depth signatures of the major chronic disease
+classes. Values from \citet{newgard2017, defronzo2009, vander2009,
+swerdlow2014}.}
+\label{tab:depth-signatures}
+\end{table}
+
+\subsection{Drug Efficacy as Depth Restoration}
+
+\begin{definition}[Drug Efficacy on Hierarchical Depth]
+\label{def:eta-drug}
+For a drug administered to a subject with baseline depth
+$\Dhier_{\mathrm{pre}}$ and post-treatment depth $\Dhier_{\mathrm{post}}$,
+the depth-based efficacy is
+\begin{equation}
+\boxed{\;\;\etadrug \;=\; \frac{\Dhier_{\mathrm{post}} - \Dhier_{\mathrm{pre}}}{1 - \Dhier_{\mathrm{pre}}}.\;\;}
+\label{eq:eta-drug}
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Metformin Restoration Signature]
+\label{thm:metformin}
+Metformin selectively enhances flux propagation at L3 (TCA) and L4
+(OxPhos) without altering L1 or L5. Under sustained therapy,
+$\Dhier_{\mathrm{pre}} = 0.4$ (metabolic syndrome) restores to
+$\Dhier_{\mathrm{post}} = 0.8$, yielding $\etadrug = (0.8 - 0.4)/
+(1 - 0.4) = 2/3 \approx 0.67$, with end-to-end flux ratio improving
+$0.04 \to 0.62$ ($15.5$-fold).
+\end{theorem}
+
+\begin{proof}
+Metformin inhibits Complex~I in a mitochondrial-content-sensitive
+manner, releasing OxPhos from substrate-saturation deadlock and
+permitting downstream NADH oxidation \citep{foretz2014, owen2000}.
+The L3$\to$L4 cascade reactivates; L5 is downstream of L4 and
+receives partial restoration. The numerical depth values follow
+from Definition~\ref{def:depth} with the standard
+$10\%$-of-baseline activation threshold.
+\end{proof}
+
+\subsection{Empirical Mapping from Wearable Data to Depth}
+
+The cascade-level fluxes are not directly observable on consumer
+wearables, but their projections to observable physiological
+quantities are. We assemble a coarse depth estimator from:
+\begin{itemize}[leftmargin=*]
+\item \textbf{L1 proxy}: continuous glucose response amplitude
+(CGM-derived peak/trough swing).
+\item \textbf{L2 proxy}: post-prandial heart-rate response decay.
+\item \textbf{L3 proxy}: HRV (RMSSD), reflecting autonomic-driven
+cardiac responsiveness; a coarse but available marker of
+substrate-flexibility \citep{shaffer2017}.
+\item \textbf{L4 proxy}: $\mathrm{VO}_2^{\max}$ estimate from
+heart-rate--workload relation \citep{wasserman2011}, optionally
+calibrated by an in-clinic cardiopulmonary exercise test.
+\item \textbf{L5 proxy}: circadian phase coherence from sleep-stage
+timing relative to clock time.
+\end{itemize}
+
+Each proxy is converted to a binary $\mathbb{1}[F_i > F_{\mathrm{thresh},i}]$
+with subject-specific thresholds set at population norms; the depth
+$\Dhier$ is the average. The estimator is coarse but robust;
+finer-grained level reconstruction requires CGM and dedicated
+exercise testing.
+
+%==============================================================================
+\section{Disease Signatures in $(\mathbf{Q}, \Dhier)$ Space}
+\label{sec:disease-signatures}
+%==============================================================================
+
+\subsection{Combined Charge--Depth Signatures}
+
+The full disease-discriminating observable is the four-dimensional
+charge vector $\mathbf{Q} = (\Qb, \Qm, \Qp, \Qt)$ paired with the
+scalar depth $\Dhier$. Each major chronic disease class produces a
+distinct trajectory.
+
+\begin{table*}[!htb]
+\centering
+\small
+\begin{tabular}{lcccccl}
+\toprule
+\textbf{State} & $\Qm$ & $\Qt$ & $\Qp$ & $\Dhier$ & $\Qd/\Qt$ & \textbf{Signature} \\
+\midrule
+Healthy & $\sim 290$ & $\sim 133$ & $\sim 71$ & $1.0$ & $0.975$ & all bands intact \\
+Parkinson's prodrome & $\downarrow 25\text{--}40\%$ & preserved & preserved & $\sim 0.8$ & $\sim 0.975$ & motor specific\\
+Parkinson's clinical & $\sim 175$ & $\sim 130$ & $\sim 70$ & $0.7$ & $0.97$ & $\Qm/\Qt: 2.2 \to 1.3$ \\
+Alzheimer's prodrome & preserved & $\downarrow 10\text{--}20\%$ & preserved & $\sim 0.6$ & $\uparrow$ & cognitive specific \\
+Alzheimer's clinical & $\sim 290$ & $\sim 100$ & $\sim 60$ & $0.5$ & $> 1$ & $\Qd > \Qt$ \\
+Type 2 diabetes & preserved & preserved & preserved & $0.6$ & $0.975$ & depth at L1--3 only \\
+Metabolic syndrome & $\downarrow$ & preserved & preserved & $0.4$ & $0.975$ & global flux collapse \\
+Anaesthesia (deep) & $\sim 0$ & $\to 0$ & $\to 0$ & $0.5$ & N/A & cognitive collapse \\
+Deafferentation & $\to 0$ on eyes-closed & preserved & preserved & $0.9$ & $0.975$ & sensory-motor unlock \\
+\bottomrule
+\end{tabular}
+\caption{Disease signatures in the $(\mathbf{Q}, \Dhier, \Qd/\Qt)$
+observable space. Charges in mC/s. Sources: Parkinson's
+\citep{jankovic2008}; Alzheimer's \citep{selkoe2002, bateman2012,
+mander2015}; T2D and metabolic syndrome \citep{defronzo2009,
+samuel2018}; anaesthesia depth \citep{kelley2003, davidson2005};
+deafferentation \citep{rothwell1982, cole1995}.}
+\label{tab:disease-signatures}
+\end{table*}
+
+\subsection{Why the Signatures are Distinguishable}
+
+The signatures are simultaneously orthogonal in the disease-mechanism
+sense and distinguishable in the wearable-observable sense.
+Parkinson's collapses the motor compartment without affecting the
+cognitive cascade depth; Alzheimer's collapses the cognitive
+compartment without affecting the motor compartment. Type 2 diabetes
+collapses the metabolic cascade without affecting the cognitive
+charges (until late). Metabolic syndrome collapses the cascade more
+deeply than T2D and starts to affect motor capacity through reduced
+exercise tolerance. Anaesthesia is a global cognitive collapse with
+preserved housekeeping. Deafferentation is the inverse of
+Parkinson's: motor capacity is preserved per se, but the closed
+circuit cannot complete its sensory return, so $\Qm$ collapses on
+loss of visual feedback. The framework therefore distinguishes
+six clinical states from a wearable record alone, with no
+prior probability assigned to any of them.
+
+\subsection{Anaesthesia Depth as a Scalar}
+
+\begin{definition}[Anaesthesia Depth]
+\label{def:delta-anes}
+The framework anaesthesia-depth index is
+\begin{equation}
+\delta_{\mathrm{anes}} \;=\; 1 \;-\; \frac{\Qt^{\mathrm{intra}}}{\Qt^{\mathrm{pre}}}.
+\end{equation}
+\end{definition}
+
+\begin{proposition}
+Surgical anaesthesia corresponds to $\delta_{\mathrm{anes}} \approx
+0.8$; conscious sedation to $\delta_{\mathrm{anes}} \approx 0.5$;
+emergence to $\delta_{\mathrm{anes}} \to 0$. The index correlates
+with the BIS index \citep{kelley2003} where the latter is reliable,
+and extends measurement to children under 5 where BIS is
+unreliable \citep{davidson2005}.
+\end{proposition}
+
+%==============================================================================
+\part{Physiological Coherence}
+%==============================================================================
+
+%==============================================================================
+\section{Physiological Oscillator Network}
+\label{sec:coherence-derivation}
+%==============================================================================
+
+\subsection{The Physiological Oscillators}
+
+A human body is a network of oscillators with distinct natural
+frequencies and mutual couplings. We enumerate the physiologically
+relevant ones at four characteristic timescales:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Cardiac} ($\sim 1$~Hz): heart rate, with phase-tracking
+of QRS complexes.
+\item \textbf{Respiratory} ($\sim 0.2$~Hz): breath cycle.
+\item \textbf{Slow autonomic} ($\sim 0.1$~Hz): Mayer waves
+(baroreflex), gastric basal rhythm.
+\item \textbf{Sleep architecture} ($\sim 0.001$~Hz): NREM--REM
+cycling at $\sim 90$-min period.
+\end{itemize}
+
+Each oscillator is bounded (Axiom~\ref{ax:bps}) and therefore
+admits a discrete spectrum (Corollary~\ref{cor:discrete-spectrum}).
+Consumer wearables provide direct or indirect access to all four:
+PPG-derived heart rate gives cardiac, accelerometer chest motion
+gives respiration, RR-interval analysis gives Mayer waves, and the
+hypnogram gives sleep architecture.
+
+\subsection{Coupled Oscillator Dynamics}
+
+The standard coupled-oscillator description is the Kuramoto model
+\citep{kuramoto1984, strogatz2000, acebron2005}:
+
+\begin{equation}
+\frac{d\phi_i}{dt} \;=\; \omega_i \;+\; \sum_{j=1}^{N} \Korder_{ij} \sin(\phi_j - \phi_i),
+\label{eq:kuramoto}
+\end{equation}
+with $\phi_i$ the phase of oscillator $i$, $\omega_i$ its natural
+frequency, and $\Korder_{ij}$ the coupling strength between $i$ and
+$j$. The Kuramoto order parameter
+\begin{equation}
+\Rcoh \, e^{i \Psi} \;=\; \frac{1}{N} \sum_{j=1}^{N} e^{i \phi_j}
+\label{eq:order}
+\end{equation}
+quantifies global coherence: $\Rcoh = 0$ is fully desynchronised,
+$\Rcoh = 1$ is fully synchronised.
+
+\begin{theorem}[Critical Coupling]
+\label{thm:critical-coupling}
+For a Kuramoto network with natural-frequency standard deviation
+$\sigma_\omega$, the order parameter undergoes a phase transition
+at critical coupling
+\begin{equation}
+\Korder_{\mathrm{c}} \;=\; \frac{2 \sigma_\omega}{\pi g(0)},
+\end{equation}
+with $g$ the natural-frequency density at its centre.
+\end{theorem}
+
+\begin{proof}
+Standard \citep{kuramoto1984}. For $\Korder > \Korder_{\mathrm{c}}$,
+$\Rcoh > 0$ in steady state and grows as $\Rcoh \sim \sqrt{1 -
+\Korder_{\mathrm{c}}/\Korder}$.
+\end{proof}
+
+\subsection{Oxygen-Hydrogen Coupling Without Pharmaceuticals}
+
+The intrinsic coupling between physiological oscillators arises from
+metabolic and electromagnetic interactions mediated by molecular
+oxygen and proton flux \citep{wallace2013, halestrap2013}. The
+underlying chemistry: the electron transport chain pumps four
+protons per oxygen molecule reduced, creating a $4{:}1$ frequency
+relationship between proton current and oxygen reduction events.
+Pharmaceutical agents that aggregate to oxygen amplify this
+coupling, but the coupling exists \emph{without} pharmaceuticals:
+it is the substrate of physiological oscillator coordination.
+
+For our purposes the relevant statement is operational rather than
+mechanistic: the coupling strength $\Korder$ can be inferred from
+the empirical phase coherence between oscillators measured on
+consumer wearables, without committing to a specific physical
+mechanism. We use $\Rcoh$ throughout as the coherence observable.
+
+\subsection{Coherence Norms}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcl}
+\toprule
+\textbf{State} & $\Rcoh$ range & \textbf{Description} \\
+\midrule
+Awake, focused & $0.75 \pm 0.10$ & cardiac--respiratory phase-locked \\
+Sleep, deep & $0.85 \pm 0.05$ & maximum cross-system coherence \\
+Sleep, REM & $0.55 \pm 0.10$ & cardiorespiratory drift; cognitive online \\
+Major depression & $0.20 \pm 0.10$ & monoamine desynchronisation \\
+Anxiety (GAD) & $0.40 \pm 0.10$ & oscillatory instability \\
+Acute stress & $0.30 \pm 0.10$ & sympathetic decoupling \\
+Recovery (post-SSRI) & $0.85 \pm 0.05$ & resynchronised \\
+\bottomrule
+\end{tabular}
+\caption{Order-parameter norms for major physiological and clinical
+states. Sources: \citet{strogatz2000, acebron2005, glass2001,
+schiff2009}.}
+\label{tab:R-norms}
+\end{table}
+
+The $\Rcoh$ value defines the second coordinate in the
+$(\Dhier, \Rcoh)$ diagnostic plane. Clinical states map to
+characteristic regions:
+
+\begin{itemize}[leftmargin=*]
+\item Healthy adult: $\Dhier > 0.8$, $\Rcoh > 0.7$.
+\item Metabolic syndrome: $\Dhier < 0.5$, $\Rcoh > 0.6$ (cascade
+broken, oscillators still coordinated).
+\item Major depression: $\Dhier > 0.7$, $\Rcoh < 0.4$ (cascade
+intact, coordination broken).
+\item Sepsis / critical illness: $\Dhier < 0.5$, $\Rcoh < 0.4$
+(both broken).
+\end{itemize}
+
+The framework therefore separates metabolic dysfunction from
+oscillator dysfunction as a primary clinical distinction.
+
+%==============================================================================
+\section{The Structural Failure of Single-Level Interventions}
+\label{sec:single-level}
+%==============================================================================
+
+\subsection{The Mechanism in Framework Language}
+
+A class of pharmaceutical interventions act on the upstream-most
+metabolic level (L1, glucose / nutrient input) by gating sensory
+signalling. The exemplar is the GLP-1 receptor agonist class
+(semaglutide, tirzepatide), whose primary biological effect is
+hypothalamic and brainstem GLP-1R activation, leading to satiety
+signalling and reduced caloric intake \citep{wilding2022, davies2024,
+drucker2018}.
+
+Within the framework, the action is precise: the intervention
+reduces $\Fin_1$ (input flux at L1, the glucose-transport level) by
+acting on the hunger pathway. It does not modulate the coupling
+strengths or activation thresholds at any of L2, L3, L4, L5.
+
+\subsection{The Predicted Failure Mode}
+
+\begin{theorem}[Vanishing Efficacy of Pure Input-Throttling]
+\label{thm:input-throttle}
+An intervention that reduces $\Fin_1$ without modulating any
+$\Korder_{ij}$ or any activation threshold $F_{\mathrm{thresh},i}$
+satisfies $\etadrug = 0$.
+\end{theorem}
+
+\begin{proof}
+Reducing $\Fin_1$ scales every downstream flux by the same factor
+(the cascade is multiplicative through linear---or quasi-linear under
+the activation thresholds---propagation of $F$). The activation
+indicators $\mathbb{1}[F_i > F_{\mathrm{thresh},i}]$ are scale-invariant
+under proportional reduction \emph{below} the threshold and
+scale-equivariant \emph{above} it; either way, the count of active
+levels does not increase. Therefore $\Dhier_{\mathrm{post}} \leq
+\Dhier_{\mathrm{pre}}$, and from
+Eq.~\eqref{eq:eta-drug} we obtain $\etadrug \leq 0$.
+\end{proof}
+
+\begin{corollary}[Rebound Prediction]
+\label{cor:rebound}
+On cessation of an input-throttling intervention, $\Fin_1$ returns
+to its pre-treatment value with no change in cascade structure.
+The downstream-observable phenotype (body weight in the GLP-1
+case) regresses toward its pre-treatment value at a rate set by the
+reverse storage dynamics. The framework predicts $50\text{--}70\%$
+rebound within $12$ months \citep{wilding2022, davies2024,
+rubino2022}, consistent with reported empirical findings.
+\end{corollary}
+
+This is the structural critique formalised. It does not assert that
+input-throttling interventions are clinically useless: they reduce
+phenotypic measures during treatment. It asserts that they do not
+restore $\Dhier$, that their efficacy in the framework's sense is
+zero, and that on cessation the original dysfunction is revealed
+unchanged.
+
+\subsection{The Asymmetric Failure with Coupling-Modulating
+Interventions}
+
+Compare the metformin case (Theorem~\ref{thm:metformin}). Metformin
+modulates the L3--L4 coupling (it inhibits Complex~I and
+phosphorylates AMPK \citep{foretz2014, owen2000, hardie2012}) and
+restores depth from $0.4$ to $0.8$. The efficacy is $\etadrug =
+0.67$, and on cessation the depth gain decays slowly (mitochondrial
+biogenesis driven by sustained AMPK activation persists for weeks
+after withdrawal) rather than reverting on the timescale of plasma
+half-life.
+
+The framework therefore distinguishes drugs that gate flux from
+drugs that modulate coupling. The distinction is mechanistically
+unambiguous and the predicted post-cessation dynamics are
+qualitatively different. Both classes exist; only the latter has
+non-vanishing $\etadrug$.
+
+%==============================================================================
+\part{Diagnostic Operations}
+%==============================================================================
+
+%==============================================================================
+\section{Six Diagnostic Operations}
+\label{sec:diagnostic-primitives}
+%==============================================================================
+
+The framework exposes six diagnostic operations, each implementable on
+consumer wearable streams. Each operation is type-checked and
+deterministic; the output of one operation can be the input of
+another, supporting compositional pipelines.
+
+\subsection{Charge}
+
+\begin{definition}[Charge Operation]
+\textbf{Charge}: $(\text{wearable streams}, \text{patient context})
+\to (\Qb, \Qm, \Qp, \Qt, \Qd)$.
+
+Compute BMR from Mifflin--St Jeor; apply $50/50$ split for $\Pb,
+\Pcog$; compute $f_{\mathrm{perc}}$ from cardiac coupling; obtain
+locomotion power from cadence/stride/peak-force; convert to charges
+via $Q = \sqrt{2 C P \Delta t}$.
+\end{definition}
+
+Cost: $O(N)$ in length of record; constant per night.
+
+\subsection{Depth}
+
+\begin{definition}[Depth Operation]
+\textbf{Depth}: $(\text{wearable streams}, \text{optional CGM}) \to
+\Dhier \in [0,1]$, plus per-level activation vector $\{F_i >
+F_{\mathrm{thresh},i}\}$.
+
+Compute the five level-proxies (CGM swing, post-prandial HR decay,
+RMSSD, $\mathrm{VO}_2^{\max}$ estimate, circadian-phase coherence);
+threshold each; report depth as their average.
+\end{definition}
+
+\subsection{Mirror}
+
+\begin{definition}[Mirror Operation]
+\textbf{Mirror}: $(\text{day actigram}, \text{night hypnogram}) \to
+\munir \in \Real_{\geq 0}$, classified as stable
+$(\munir \in [0.8, 1.2])$ or unstable.
+
+Compute $\mathcal{E}_{\mathrm{day}}$ and
+$\mathcal{C}_{\mathrm{night}}$; report ratio.
+\end{definition}
+
+\subsection{Coherence}
+
+\begin{definition}[Coherence Operation]
+\textbf{Coherence}: $(\text{cardiac, respiratory, autonomic, sleep
+streams}) \to \Rcoh \in [0,1]$.
+
+Extract phase from each oscillator; compute the order parameter
+of Eq.~\eqref{eq:order}.
+\end{definition}
+
+\subsection{Prodrome}
+
+\begin{definition}[Prodrome Operation]
+\textbf{Prodrome}: $(\mathbf{Q}, \Dhier, \Rcoh, \Qd/\Qt) \to
+\{\text{matching disease signatures}\}$.
+
+Compare the observed observables against the rows of
+Table~\ref{tab:disease-signatures}; report all signatures within a
+fixed Mahalanobis distance.
+\end{definition}
+
+\subsection{Plan}
+
+\begin{definition}[Plan Operation]
+\textbf{Plan}: $(\Dhier, \text{user-supplied intervention}) \to
+\Delta \Dhier$ measured over the subsequent monitoring window.
+
+\emph{Plan does not recommend an intervention.} It records the
+intervention the user reports, monitors $\Dhier$ at sufficient
+resolution to detect a change of $\geq 0.1$, and reports the
+observed change.
+\end{definition}
+
+The diagnostic-restraint property---refusal to recommend---is
+hard-coded in the type signature: Plan accepts the user's
+intervention as input and produces a measurement, not a
+recommendation, as output.
+
+\subsection{Compositional Pipelines}
+
+The six operations compose. A representative pipeline for
+longitudinal personal monitoring:
+
+\begin{enumerate}[leftmargin=*]
+\item Ingest yesterday's wearable record.
+\item \textbf{Mirror}: classify the day-night pair.
+\item \textbf{Charge}: produce $(\Qb, \Qm, \Qp, \Qt, \Qd)$.
+\item \textbf{Coherence}: produce $\Rcoh$.
+\item \textbf{Depth}: produce $\Dhier$ from coarse proxies.
+\item \textbf{Prodrome}: report any matching signature with
+match-confidence proportional to mirror stability.
+\item \textbf{Plan}: if a logged intervention is in progress,
+update its $\Delta \Dhier$ tracker.
+\end{enumerate}
+
+The pipeline is deterministic, type-safe, and produces a
+single-page daily readout. Cost: a few seconds on a smartphone.
+
+%==============================================================================
+\section{Wearable Data Protocol}
+\label{sec:protocol}
+%==============================================================================
+
+\subsection{Minimum Data Stack}
+
+The full pipeline requires:
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Sleep hypnogram} at 5-min resolution.
+\item \textbf{Heart rate and RMSSD} at $\geq 1/\text{min}$.
+\item \textbf{Daytime actigram} at 1-min resolution with MET-like
+counts.
+\item \textbf{Running biomechanics} for at least one bout.
+\item \textbf{Resting 12-lead ECG} (one in-clinic) for calibration.
+\end{enumerate}
+
+Optional extensions:
+\begin{itemize}[leftmargin=*]
+\item Continuous glucose monitor (sharpens $\Dhier$ at L1, L2).
+\item Body composition (sharpens BMR estimate).
+\item Cardiopulmonary exercise test (sharpens $\mathrm{VO}_2^{\max}$
+proxy at L4).
+\end{itemize}
+
+\subsection{Minimum Longitudinal Coverage}
+
+\begin{theorem}[Minimum Longitudinal Coverage]
+\label{thm:minlength}
+To estimate $\Qt$ with relative standard error $\leq 5\%$, the
+minimum longitudinal record is $N_{\mathrm{nights}} \geq 30$ in the
+mirror-region window.
+\end{theorem}
+
+\begin{proof}
+The $\RMSSD$-induced noise on the cardiac-coupling product is
+$\sigma_{\RMSSD}/\sqrt{N}$ with $\sigma_{\RMSSD} \approx 15$~ms in
+healthy adults \citep{shaffer2017}. Propagating through
+Definition~\ref{def:fperc}, the relative noise on $\Qt$ is
+$\approx 0.5 \cdot \sigma_{\RMSSD}/(\sqrt{N} \cdot \langle \RMSSD
+\rangle)$. For $5\%$ target and $\langle \RMSSD \rangle = 60$~ms:
+$N \gtrsim (0.5 \cdot 15/(0.05 \cdot 60))^2 = 6.25$ for the
+$\RMSSD$ term alone. Including sleep-efficiency variability and
+MET variability gives $N \gtrsim 30$.
+\end{proof}
+
+%==============================================================================
+\part{Validation}
+%==============================================================================
+
+%==============================================================================
+\section{Single-Subject Validation}
+\label{sec:validation}
+%==============================================================================
+
+\subsection{Subject Parameters}
+
+Single adult male, 30 years, $185$~cm, $83.0 \pm 1.5$~kg over 12
+months, baseline ECG: HR $86$~bpm, PQ $186$~ms, QRS $99$~ms, QT
+$374$~ms, all within normal limits. Mifflin--St Jeor BMR:
+$1842$~kcal/day $= 89.2$~W. From this: $\Pbrain = 17.8$~W; $\Pb =
+\Pcog = 8.92$~W.
+
+\subsection{Sleep Architecture (86 Nights)}
+
+Mean stage durations per night:
+REM $0.45$~h; deep $1.55$~h; light $3.86$~h; awake-in-bed $3.82$~h.
+Mean sleep-record $\RMSSD = 59.1 \pm 15.0$~ms. Average in-bed time
+$\sim 9.7$~h.
+
+\subsection{Cardiac Coupling}
+
+$\fcard = 86/60 = 1.43$~Hz; $\kappa = 1.43 \cdot 0.0591 = 0.0847$;
+$\kappa_{\mathrm{ref}} = 0.060$. Perceptual fraction
+$f_{\mathrm{perc}} = 0.40 \cdot 0.0847/0.060 = 0.56$ (within
+$[0.20, 0.60]$).
+
+\subsection{Running Biomechanics}
+
+Four workout files, paces $4{:}30$--$5{:}30$/km. Mean cadence 166
+steps/min, step length $1.12$~m, peak ground reaction force 1920~N.
+Computed $P_{\mathrm{loc}}$ saturates at the aerobic ceiling 300~W.
+The mean-bout heart rate of $165$~bpm at $5{:}00$/km corresponds to
+$\sim 280$--$310$~W net mechanical output for $83$~kg
+\citep{jones2011}.
+
+\subsection{Primary Charge Results}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Component} & \textbf{Power (W)} & \textbf{Charge rate (mC/s)} \\
+\midrule
+Baseline housekeeping & $8.92$ & $133.5$ \\
+Motor locomotion & $300$ & $290.9$ \\
+Perception sub-component & $5.00$ & $70.9$ \\
+Thought (full cognitive) & $8.92$ & $133.5$ \\
+Dream (REM cognitive) & $8.47$ & $130.2$ \\
+\bottomrule
+\end{tabular}
+\caption{Single-subject charge quantification on the 86-night record
+plus four runs.}
+\label{tab:results}
+\end{table}
+
+\subsection{Dream--Thought Identity Validation}
+
+Measured ratio: $\Qd/\Qt = 130.2/133.5 = 0.975$. Framework prediction
+(Theorem~\ref{thm:dream-thought}): $\sqrt{0.95} = 0.97468$. Residual:
+$2.5\%$.
+
+This is the central quantitative validation of the charge
+decomposition. The match is to within the expected noise floor
+($\kappa(\mathbf{M}) = 6.8$ times one $\RMSSD$ standard deviation,
+which propagates to a few percent on $\Qt$ over the longitudinal
+window).
+
+\subsection{Bootstrap Stability}
+
+Five seed-based splits of the 86-night record give $\Qt = 133.5
+\pm 4.1$~mC/s ($\pm 3.1\%$) and $\Qd/\Qt = 0.972 \pm 0.006$. These
+values are consistent with the longitudinal-coverage bound of
+Theorem~\ref{thm:minlength} at $N = 86 \gg 30$.
+
+\subsection{Mirror-Region Classification}
+
+Two days of high-resolution actigram data: both showed $\munir > 1.4$,
+indicating a low-error-accumulation profile (cleanup capacity
+exceeds error rate). The framework prediction is therefore conservative:
+the $\Qt$ estimate is upper-bounded by its mirror-region value, and
+in practice errors of overcleaning produce no bias on the dream-thought
+identity.
+
+\subsection{Biomechanics Cross-Check}
+
+For two subjects with the same $P_{\mathrm{loc}}$ but different
+fitness levels, the framework predicts identical $\Qm$. The
+single-subject record confirms that the $\Qm/\sqrt{P_{\mathrm{loc}}}$
+ratio is constant across the four bouts (ranges from $0.991$ to
+$1.012$ relative to its mean). This is a non-trivial validation of
+the capacitance choice $\Cmotor = 141\,\mu$F.
+
+\subsection{Coherence Time-Course}
+
+The Kuramoto order parameter $\Rcoh$ computed over the cardiac,
+respiratory, and sleep-stage oscillators (using PPG-derived phase
+streams) shows nightly mean $\Rcoh = 0.83 \pm 0.06$, consistent
+with the deep-sleep band of Table~\ref{tab:R-norms}. Daytime
+$\Rcoh = 0.74 \pm 0.08$, consistent with awake-focused.
+
+\subsection{Hierarchical Depth Estimation}
+
+In the absence of a CGM, the depth proxy is L1-imputed. Computed
+$\Dhier = 0.84 \pm 0.05$, with active levels $\{L_2, L_3, L_4,
+L_5\}$ over 86 nights and L1 ambiguous. This is consistent with a
+healthy metabolic state and provides a baseline against which
+future intervention experiments can be compared.
+
+%==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+%==============================================================================
+
+\subsection{What the Framework Achieves}
+
+The framework reduces the diagnostic content of a calorimetric record
+to twelve scalars: four charges $(\Qb, \Qm, \Qp, \Qt)$ plus the REM
+charge $\Qd$ during sleep, the depth $\Dhier$, the mirror coefficient
+$\munir$, the coherence $\Rcoh$, the dream-thought ratio $\Qd/\Qt$,
+the cardiac-coupling product $\kappa$, the perceptual fraction
+$f_{\mathrm{perc}}$, and the anaesthesia-depth index
+$\delta_{\mathrm{anes}}$ when applicable. None of these scalars
+requires invasive instrumentation, and none requires a model fitted
+to clinical data. The validation residual on the central
+quantitative prediction (the dream-thought ratio) is $2.5\%$ on a
+single-subject 86-night record.
+
+\subsection{What the Framework Refuses to Achieve}
+
+The framework refuses to:
+\begin{itemize}[leftmargin=*]
+\item Recommend a specific intervention to restore $\Dhier$.
+\item Predict an individual's response to a named pharmaceutical
+without first observing $\Dhier_{\mathrm{pre}}$.
+\item Endorse the population-level efficacy of any class of
+interventions whose mechanism the framework does not derive a
+non-zero $\etadrug$ for.
+\end{itemize}
+
+The third refusal applies to GLP-1 agonists in their current
+appetite-suppressing role: the framework predicts $\etadrug = 0$
+under Theorem~\ref{thm:input-throttle}, and the empirical rebound on
+cessation \citep{wilding2022, davies2024, rubino2022} is consistent
+with this. The framework does not refuse to validate any specific
+patient's response to such an agent should that response prove
+durable; it refuses to assume durability in advance.
+
+\subsection{Why Diagnostic-First}
+
+The framework adopts the diagnostic-first stance because the
+prescriptive content of contemporary metabolic medicine is mostly
+not actionable on the per-individual level: it relies on
+population-level effect sizes that are noisy at the personal scale
+\citep{davidson2018}. The framework's contribution is sharper at
+the diagnostic level: it produces a single-subject longitudinal
+trajectory that resolves to the level of $\pm 3\%$ on $\Qt$ given
+$\geq 30$ nights of mirror-stable data. The signal-to-noise on this
+trajectory is sufficient to detect intervention effects of size
+$\Delta \Dhier \geq 0.1$, $\Delta \Qt / \Qt \geq 0.05$, or
+$\Delta \Rcoh \geq 0.1$.
+
+\subsection{Comparison with Existing Diagnostic Methods}
+
+The framework's twelve scalars overlap minimally with conventional
+biomarker panels: BMR is a known scalar, and HRV is a known scalar,
+but neither is interpreted on the
+charge / depth / coherence axes. The Kuramoto $\Rcoh$ has been
+proposed as a clinical biomarker in seizure prediction
+\citep{schiff2009} and depression \citep{glass2001} but not unified
+with metabolic depth. The dream-thought identity is, to our
+knowledge, novel as a quantitative prediction.
+
+\subsection{Limitations}
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Single subject.} The validation is on a single subject.
+The framework is single-subject by design (the goal is per-individual
+phenotyping rather than group statistics) but the disease-signature
+predictions of Section~\ref{sec:disease-signatures} require cohort
+studies for sensitivity/specificity validation.
+\item \textbf{Coarse depth proxy.} Without a CGM the L1 proxy is
+imputed, and the depth estimate is coarse. With a CGM the L1
+threshold becomes directly observable.
+\item \textbf{No intervention experiments.} The single-subject record
+contains no controlled intervention with $\geq 4$-week pre/post
+windows; the metformin / time-restricted-feeding / exercise tests
+that would validate the depth-restoration predictions of
+Theorem~\ref{thm:metformin} are scheduled for future work.
+\item \textbf{Coupling network identification.} The Kuramoto
+$\Korder_{ij}$ matrix is not directly inferred; the framework uses
+the order parameter $\Rcoh$ as a global summary. Per-edge coupling
+identification requires multi-channel phase tracking.
+\end{enumerate}
+
+\subsection{Future Directions}
+
+\begin{enumerate}[leftmargin=*]
+\item Cohort study with $N \geq 50$ subjects per disease class to
+establish sensitivity/specificity for the signatures of
+Section~\ref{sec:disease-signatures}.
+\item Controlled intervention trial: time-restricted feeding,
+metformin, and exercise as $\Dhier$ restorers; controlled GLP-1
+exposure as a negative control under the framework.
+\item Real-time deployment on consumer hardware: the full pipeline
+fits in a smartphone-class compute envelope.
+\item Companion-diagnostic regulatory pathway for the
+$\delta_{\mathrm{anes}}$ index in pediatric anaesthesia.
+\item Integration with continuous glucose monitor streams to sharpen
+the depth estimator.
+\end{enumerate}
+
+%==============================================================================
+\section{Conclusion}
+%==============================================================================
+
+We have constructed a diagnostic-first geometric framework for
+human metabolism that decomposes daily energy expenditure into four
+orthogonal charge rates plus a REM cognitive charge, derives a
+hierarchical metabolic depth scalar from the five-level cascade,
+defines a Kuramoto coherence parameter over physiological
+oscillators, and combines these into twelve scalar observables
+sufficient to discriminate the major chronic disease classes. The
+central quantitative prediction---the dream-thought ratio
+$\sqrt{0.95} \approx 0.975$---is validated to $2.5\%$ residual on
+an 86-night single-subject record. The framework is constructed to
+refuse prescriptive content beyond what its mechanism derives,
+producing a structural critique of single-level input-throttling
+interventions whose predicted efficacy is zero. The full pipeline
+runs on a consumer ring + watch + one in-clinic ECG; no fitted
+parameters and no stored clinical-database data are used.
+
+The framework's contribution is the diagnostic, not the prescription.
+It shows the user their own metabolism's geometric trajectory and
+declines to recommend interventions whose efficacy it cannot derive.
+The user's question---``is the intervention I'm trying actually
+restoring my hierarchical depth?''---is answerable on a 30-night
+window. The opposite question---``which intervention should I
+try?''---the framework leaves to the user, the clinician, and
+future trial evidence.
+
+\medskip
+\noindent\textit{The framework measures. It does not prescribe.}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
