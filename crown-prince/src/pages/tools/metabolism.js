@@ -17,6 +17,8 @@ import Scatter from "@/components/charts/Scatter";
 import CascadeFlow from "@/components/charts/CascadeFlow";
 import RadialGauge from "@/components/charts/RadialGauge";
 import MirrorBand from "@/components/charts/MirrorBand";
+import AnatomyChargeMap from "@/components/anatomy/AnatomyChargeMap";
+import AnatomyOrganMap from "@/components/anatomy/AnatomyOrganMap";
 
 const SignatureCube = dynamic(
   () => import("@/components/canvas/SignatureCube"),
@@ -332,7 +334,7 @@ export default function MetabolismEngine() {
             Section 01 — Charge Decomposition
         ═════════════════════════════════════════════════════════════════════ */}
         <SectionTitle n="01" title="Charge decomposition" />
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Panel title="Five component charges  ·  Q = √(2 C P)  mC/s">
             <BarChart
               data={chargeData}
@@ -378,13 +380,16 @@ export default function MetabolismEngine() {
               </div>
             </div>
           </Panel>
+          <Panel title="Charge distribution  ·  body map">
+            <AnatomyChargeMap charges={charges} />
+          </Panel>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════
             Section 02 — Hierarchical Depth
         ═════════════════════════════════════════════════════════════════════ */}
         <SectionTitle n="02" title="Hierarchical metabolic depth" />
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Panel title="Five-level cascade  ·  threshold = 10% of L1">
             <CascadeFlow
               proxies={depth.proxies}
@@ -406,6 +411,9 @@ export default function MetabolismEngine() {
               yLabel="D"
               caption="D = fraction of active metabolic levels · red dashed = prodrome gate"
             />
+          </Panel>
+          <Panel title="Organ metabolic map  ·  cascade levels">
+            <AnatomyOrganMap proxies={depth.proxies} active={depth.active} />
           </Panel>
         </div>
 
