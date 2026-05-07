@@ -10,6 +10,13 @@ const TOOLS = [
     status: "live",
   },
   {
+    href: "/tools/metabolism",
+    name: "Partitioned Metabolism Engine",
+    sub: "Q_b Q_m Q_p Q_t Q_d · hierarchical depth D · Kuramoto R · six diagnostic primitives · GLP-1 critique · η_drug",
+    op: "Charge · Depth · Diagnose",
+    status: "live",
+  },
+  {
     href: "/tools/observe",
     name: "Partition Observation",
     sub: "fragment shader as categorical instrument: 65 536 cell observations per draw call",
