@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { paperById } from "./_meta";
 import { Section, Sub, P, L } from "@/components/paper/Section";
 import {
@@ -442,13 +443,13 @@ function Body() {
           The therapeutic drug for a given patient circuit is a drug{" "}
           <M>\Drug</M> whose trajectory intersection pattern with the target
           trie reproduces the optimal edge perturbation{" "}
-          <M>\boldsymbol{\eta}^*</M>. Inverse synthetic retrieval enumerates
+          <M>{"\\boldsymbol{\\eta}^*"}</M>. Inverse synthetic retrieval enumerates
           these drugs from <M>{"\\mathcal{T}_\\Drug"}</M>.
         </Theorem>
         <Sub title="Zero-dictionary drug discovery">
           <P>
             The pipeline: solve the sparse <M>\ell_1</M> LP for{" "}
-            <M>\boldsymbol{\eta}^*</M>; convert to required target interactions;
+            <M>{"\\boldsymbol{\\eta}^*"}</M>; convert to required target interactions;
             invoke inverse synthetic retrieval per target; intersect the
             retrieved drug sets; if empty, solve the inverse design problem to
             generate a synthetic molecule with the required S-entropy
@@ -469,7 +470,7 @@ function Body() {
         </Definition>
         <Theorem label="DDI feasibility">
           Drugs interact significantly iff (i) their ADME trajectories share at
-          least one edge at which <M>\Gres_e^{\max}</M> is exceeded, OR (ii)
+          least one edge at which <M>{"\\Gres_e^{\\max}"}</M> is exceeded, OR (ii)
           their target sets retrieved via{" "}
           <M>{"\\Iso_{\\Drug \\to \\Target}"}</M> have non-empty intersection.
         </Theorem>

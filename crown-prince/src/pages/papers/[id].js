@@ -1,13 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { PAPERS, paperById } from "@/content/papers/_meta";
 import PaperLayout from "@/components/paper/PaperLayout";
+import synthenticPaper from "@/content/papers/synthentic-isomorphism";
 
-// Dynamically loadable paper modules.
-const LIVE = {
-  "synthentic-isomorphism-database": () =>
-    import("@/content/papers/synthentic-isomorphism"),
-};
+const LIVE = new Set(["synthentic-isomorphism-database"]);
 
 export default function PaperPage({ id, isLive }) {
   const meta = paperById(id);
@@ -23,7 +21,7 @@ export default function PaperPage({ id, isLive }) {
     return <Stub meta={meta} />;
   }
 
-  return <LivePaper id={id} />;
+  return <LivePaper />;
 }
 
 function Stub({ meta }) {
@@ -74,16 +72,13 @@ function Stub({ meta }) {
   );
 }
 
-function LivePaper({ id }) {
-  // For the synthentic paper, we statically import to avoid dynamic-import
-  // boundaries during SSR for KaTeX/d3.
-  // (Could be replaced by next/dynamic if more papers go live.)
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require("@/content/papers/synthentic-isomorphism").default;
-  const { meta, sections, Body } = mod;
+function LivePaper() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const { meta, sections, Body } = synthenticPaper;
   return (
     <PaperLayout meta={meta} sections={sections}>
-      <Body />
+      {mounted ? <Body /> : null}
     </PaperLayout>
   );
 }
@@ -100,7 +95,7 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       id,
-      isLive: !!LIVE[id],
+      isLive: LIVE.has(id),
     },
   };
 }

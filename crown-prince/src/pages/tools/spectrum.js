@@ -121,7 +121,7 @@ export default function CellSpectralHologram() {
             from which the vibrational coupling matrix, Franck–Condon factors,
             Stokes shift decomposition, and 2D diffraction symmetry are
             extractable in a single measurement. This tool implements the
-            full pipeline on a synthetic cell, derives the cell's S-entropy
+            full pipeline on a synthetic cell, derives the cell&apos;s S-entropy
             address, computes its loop-holonomy diagnostic, and produces the
             sparse <span className="mono accent">η*</span> therapeutic
             perturbation.

@@ -19,25 +19,25 @@ function Block({ kind, label, children, accent }) {
 }
 
 export const Axiom = ({ label, children }) => (
-  <Block kind="Axiom" label={label} accent="#58E6D9" children={children} />
+  <Block kind="Axiom" label={label} accent="#58E6D9">{children}</Block>
 );
 export const Theorem = ({ label, children }) => (
-  <Block kind="Theorem" label={label} accent="#EE6677" children={children} />
+  <Block kind="Theorem" label={label} accent="#EE6677">{children}</Block>
 );
 export const Lemma = ({ label, children }) => (
-  <Block kind="Lemma" label={label} accent="#CCBB44" children={children} />
+  <Block kind="Lemma" label={label} accent="#CCBB44">{children}</Block>
 );
 export const Corollary = ({ label, children }) => (
-  <Block kind="Corollary" label={label} accent="#AA3377" children={children} />
+  <Block kind="Corollary" label={label} accent="#AA3377">{children}</Block>
 );
 export const Proposition = ({ label, children }) => (
-  <Block kind="Proposition" label={label} accent="#4477AA" children={children} />
+  <Block kind="Proposition" label={label} accent="#4477AA">{children}</Block>
 );
 export const Definition = ({ label, children }) => (
-  <Block kind="Definition" label={label} accent="#228833" children={children} />
+  <Block kind="Definition" label={label} accent="#228833">{children}</Block>
 );
 export const Remark = ({ label, children }) => (
-  <Block kind="Remark" label={label} accent="#888" children={children} />
+  <Block kind="Remark" label={label} accent="#888">{children}</Block>
 );
 
 export function Proof({ children }) {
