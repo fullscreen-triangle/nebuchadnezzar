@@ -49,10 +49,10 @@ const DEPTH = 18;
 
 export default function CellSpectralHologram() {
   const [cellId, setCellId] = useState("hepatocyte");
-  const cell = { id: cellId, ...CELL_TYPES[cellId] };
+  const cell = useMemo(() => ({ id: cellId, ...CELL_TYPES[cellId] }), [cellId]);
 
   // --- Spectra: ground IR (red), excited Raman (teal), emission (yellow)
-  const spectra = useMemo(() => buildSpectra(cell), [cellId]);
+  const spectra = useMemo(() => buildSpectra(cell), [cell]);
   const yIR = useMemo(() => sampleSpectrum(spectra.ground, FREQ_GRID), [spectra]);
   const yRaman = useMemo(() => sampleSpectrum(spectra.excited, FREQ_GRID), [spectra]);
   const yEm = useMemo(
@@ -66,21 +66,21 @@ export default function CellSpectralHologram() {
   // --- Hologram H(omega, t)
   const hologram = useMemo(
     () => buildHologram(cell, FREQ_GRID, TIME_GRID),
-    [cellId]
+    [cell]
   );
 
   // --- Coupling matrix
-  const { K, labels } = useMemo(() => couplingMatrix(cell), [cellId]);
+  const { K, labels } = useMemo(() => couplingMatrix(cell), [cell]);
 
   // --- Franck-Condon
-  const fc = useMemo(() => franckCondon(cell), [cellId]);
+  const fc = useMemo(() => franckCondon(cell), [cell]);
 
   // --- Stokes
-  const stokes = useMemo(() => stokesShift(cell), [cellId]);
+  const stokes = useMemo(() => stokesShift(cell), [cell]);
 
   // --- Holonomy + sparse drug design
-  const hol = useMemo(() => holonomy(cell), [cellId]);
-  const perturbation = useMemo(() => sparsePerturbation(cell, hol), [cellId, hol]);
+  const hol = useMemo(() => holonomy(cell), [cell]);
+  const perturbation = useMemo(() => sparsePerturbation(cell, hol), [cell, hol]);
   const diseasedCycles = hol.filter((c) => !c.healthy).length;
 
   // --- S-entropy address from the dominant ground-state spectrum
