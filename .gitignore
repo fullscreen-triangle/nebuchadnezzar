@@ -284,6 +284,10 @@ $RECYCLE.BIN/
 !crown-prince/src/**/*.json
 !crown-prince/content/**/*.json
 
+# Web app lib/ (overrides the Python lib/ ignore above)
+!crown-prince/src/lib/
+!crown-prince/src/lib/**
+
 # Validation outputs published with the papers (small, useful for reproducing tables)
 !crown-prince/publication/validation/*.json
 
