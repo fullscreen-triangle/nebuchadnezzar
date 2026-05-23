@@ -17,6 +17,13 @@ const TOOLS = [
     status: "live",
   },
   {
+    href: "/tools/hologram",
+    name: "Phase-Holographic Cell",
+    sub: "(n, ℓ, m, s) partition field · volume ray march · Kuramoto organelle coupling · ΔP timing space · T(m,D) trajectory count · phase-locked regime classifier",
+    op: "Identify · Regulate · Protect",
+    status: "live",
+  },
+  {
     href: "/tools/observe",
     name: "Partition Observation",
     sub: "fragment shader as categorical instrument: 65 536 cell observations per draw call",
