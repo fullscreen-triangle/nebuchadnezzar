@@ -7,18 +7,28 @@ const TOOLS = [
     name: "Cell Spectral Hologram",
     sub: "three-state superposition · cell partition state · holonomy diagnostic · sparse η*",
     op: "Identify · Predict · Close",
+    live: true,
+  },
+  {
+    href: "/tools/hologram",
+    name: "Phase-Holographic Cell",
+    sub: "(n, ℓ, m, s) partition field · volume ray march · Kuramoto coupling · T(m,D) trajectory count",
+    op: "Identify · Regulate · Protect",
+    live: true,
   },
   {
     href: "/tools/observe",
     name: "Partition Observation",
     sub: "fragment shader as categorical instrument",
     op: "Predict",
+    live: false,
   },
   {
     href: "/tools/interfere",
     name: "Interference Similarity",
     sub: "two textures → visibility scalar",
     op: "Similar",
+    live: false,
   },
 ];
 
@@ -57,21 +67,25 @@ export default function Home() {
       <section className="mx-auto max-w-5xl px-6 py-12 md:px-10">
         <p className="panel-title">Available tools</p>
         <div className="grid gap-4 md:grid-cols-3">
-          {TOOLS.map((t) => (
-            <Link
-              key={t.href}
-              href={t.href}
-              className="panel group transition hover:border-primaryDark/40"
-            >
-              <p className="text-[10px] uppercase tracking-[0.25em] text-primaryDark/80">
-                Primitive · {t.op}
-              </p>
-              <h3 className="mt-2 text-lg font-medium text-light group-hover:text-primaryDark">
-                {t.name}
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-light/60">{t.sub}</p>
-            </Link>
-          ))}
+          {TOOLS.map((t) => {
+            const Wrapper = t.live !== false ? Link : "div";
+            const props = t.live !== false ? { href: t.href } : {};
+            return (
+              <Wrapper
+                key={t.href}
+                {...props}
+                className={`panel group transition ${t.live !== false ? "hover:border-primaryDark/40" : "opacity-50"}`}
+              >
+                <p className="text-[10px] uppercase tracking-[0.25em] text-primaryDark/80">
+                  Primitive · {t.op}
+                </p>
+                <h3 className="mt-2 text-lg font-medium text-light group-hover:text-primaryDark">
+                  {t.name}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-light/60">{t.sub}</p>
+              </Wrapper>
+            );
+          })}
         </div>
       </section>
 
