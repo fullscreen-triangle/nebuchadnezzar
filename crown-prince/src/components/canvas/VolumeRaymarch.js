@@ -5,37 +5,32 @@ import * as THREE from "three";
 import { detectWebGL } from "@/lib/webgl";
 import WebGLBoundary, { GLFallback } from "./WebGLBoundary";
 
-// ── GLSL ──────────────────────────────────────────────────────────────────────
-// Vertex: pass model-space position through to fragment shader.
+// ── GLSL 3 ES shaders ─────────────────────────────────────────────────────────
+// Three.js prepends "#version 300 es" when glslVersion = THREE.GLSL3.
+// Must use: out/in instead of varying, out vec4 fragColor instead of gl_FragColor.
+
 const VERT = `
-  varying vec3 vLocalPos;
+  out vec3 vLocalPos;
   void main() {
     vLocalPos = position;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
 
-// Fragment: ray-box intersection + front-to-back compositing.
-// Triple observable accumulator: μ_acc (absorption), ret_acc (retardance),
-// J_acc (coupling density).  Reference: distributed-control-system.tex §4.
 const FRAG = `
-  #ifdef GL_FRAGMENT_PRECISION_HIGH
-    precision highp float;
-    precision highp sampler3D;
-  #else
-    precision mediump float;
-    precision mediump sampler3D;
-  #endif
+  precision highp float;
+  precision highp sampler3D;
 
   uniform sampler3D uVolume;
   uniform vec3 uCamLocalPos;
   uniform float uSteps;
   uniform float uAlpha;
-  uniform int uChannel;   // 0=composite 1=n 2=l 3=m 4=s
+  uniform int uChannel;
 
-  varying vec3 vLocalPos;
+  in vec3 vLocalPos;
+  out vec4 fragColor;
 
-  // Slab ray–box intersection for unit box [-0.5, 0.5]^3
+  // Slab ray-box intersection for unit box [-0.5, 0.5]^3
   vec2 boxHit(vec3 ro, vec3 rd) {
     vec3 m = 1.0 / rd;
     vec3 n = m * ro;
@@ -55,10 +50,7 @@ const FRAG = `
     float stepSz = (t.y - tStart) / uSteps;
     vec3  pos    = uCamLocalPos + tStart * rd;
 
-    vec4  result  = vec4(0.0);
-    float mu_acc  = 0.0;
-    float ret_acc = 0.0;
-    float j_acc   = 0.0;
+    vec4 result = vec4(0.0);
 
     for (int i = 0; i < 256; i++) {
       if (float(i) >= uSteps) break;
@@ -70,12 +62,6 @@ const FRAG = `
       vec4 s = texture(uVolume, tc);
 
       if (s.r > 0.01 || s.g > 0.02) {
-        // Triple accumulator (Theorem 6.2)
-        mu_acc  += s.r * stepSz;
-        ret_acc += s.g * stepSz;
-        j_acc   += s.b * s.a * stepSz;
-
-        // Per-channel or composite transfer function
         float val;
         if      (uChannel == 1) val = s.r;
         else if (uChannel == 2) val = s.g;
@@ -87,9 +73,8 @@ const FRAG = `
 
         vec3 col;
         if (uChannel == 0) {
-          col = vec3(0.12 + s.b * 0.78, 0.12 + s.r * 0.72, 0.20 + (1.0-s.b) * 0.68);
+          col = vec3(0.12 + s.b * 0.78, 0.12 + s.r * 0.72, 0.20 + (1.0 - s.b) * 0.68);
         } else if (uChannel == 2) {
-          // Gradient (ℓ): highlight membranes in amber
           col = mix(vec3(0.1, 0.1, 0.1), vec3(0.90, 0.73, 0.26), val);
         } else {
           col = mix(vec3(0.08, 0.55, 0.53), vec3(0.67, 0.20, 0.47), val);
@@ -103,9 +88,18 @@ const FRAG = `
     }
 
     if (result.a < 0.005) discard;
-    gl_FragColor = result;
+    fragColor = result;
   }
 `;
+
+// 1×1×1 transparent placeholder — keeps uVolume non-null before real data arrives
+function makeDummyTexture() {
+  const t = new THREE.Data3DTexture(new Uint8Array(4), 1, 1, 1);
+  t.format = THREE.RGBAFormat;
+  t.type   = THREE.UnsignedByteType;
+  t.needsUpdate = true;
+  return t;
+}
 
 // ── Inner mesh component ──────────────────────────────────────────────────────
 function RaymarchMesh({ volume, channel, alpha, steps }) {
@@ -118,31 +112,40 @@ function RaymarchMesh({ volume, channel, alpha, steps }) {
     if (!volume) return null;
     const { data, size } = volume;
     const tex = new THREE.Data3DTexture(data, size, size, size);
-    tex.format      = THREE.RGBAFormat;
-    tex.type        = THREE.UnsignedByteType;
-    tex.minFilter   = THREE.LinearFilter;
-    tex.magFilter   = THREE.LinearFilter;
+    tex.format         = THREE.RGBAFormat;
+    tex.type           = THREE.UnsignedByteType;
+    tex.minFilter      = THREE.LinearFilter;
+    tex.magFilter      = THREE.LinearFilter;
     tex.unpackAlignment = 1;
-    tex.needsUpdate = true;
+    tex.needsUpdate    = true;
     return tex;
   }, [volume]);
 
+  // Uniforms created once; real texture is injected via useEffect after mount.
   const uniforms = useMemo(() => ({
-    uVolume:     { value: null },
-    uCamLocalPos:{ value: new THREE.Vector3() },
-    uSteps:      { value: 96 },
-    uAlpha:      { value: 1.2 },
-    uChannel:    { value: 0 },
+    uVolume:      { value: makeDummyTexture() },
+    uCamLocalPos: { value: new THREE.Vector3() },
+    uSteps:       { value: steps },
+    uAlpha:       { value: alpha },
+    uChannel:     { value: channel },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), []);
 
-  // Sync texture and controls into uniforms
-  if (matRef.current) {
-    matRef.current.uniforms.uVolume.value  = texture;
+  // Sync volume texture after commit (matRef.current is available by then)
+  useEffect(() => {
+    if (!matRef.current) return;
+    matRef.current.uniforms.uVolume.value = texture ?? makeDummyTexture();
+  }, [texture]);
+
+  // Sync scalar uniforms
+  useEffect(() => {
+    if (!matRef.current) return;
     matRef.current.uniforms.uSteps.value   = steps;
     matRef.current.uniforms.uAlpha.value   = alpha;
     matRef.current.uniforms.uChannel.value = channel;
-  }
+  }, [steps, alpha, channel]);
 
+  // Per-frame: transform camera position into model space
   useFrame(({ camera }) => {
     if (!matRef.current || !meshRef.current) return;
     invMat.copy(meshRef.current.matrixWorld).invert();
@@ -150,8 +153,6 @@ function RaymarchMesh({ volume, channel, alpha, steps }) {
     camLocal.applyMatrix4(invMat);
     matRef.current.uniforms.uCamLocalPos.value.copy(camLocal);
   });
-
-  if (!texture) return null;
 
   return (
     <mesh ref={meshRef}>
@@ -161,6 +162,7 @@ function RaymarchMesh({ volume, channel, alpha, steps }) {
         uniforms={uniforms}
         vertexShader={VERT}
         fragmentShader={FRAG}
+        glslVersion={THREE.GLSL3}
         side={THREE.DoubleSide}
         transparent
         depthWrite={false}
@@ -170,11 +172,6 @@ function RaymarchMesh({ volume, channel, alpha, steps }) {
 }
 
 // ── Public component ──────────────────────────────────────────────────────────
-// Props:
-//   volume   { data: Uint8Array, size: number }  from buildPartitionField()
-//   channel  0=composite | 1=n | 2=ℓ | 3=m | 4=s
-//   alpha    opacity scale (default 1.2)
-//   steps    ray march steps (default 96)
 export default function VolumeRaymarch({ volume, channel = 0, alpha = 1.2, steps = 96 }) {
   const [gl, setGl] = useState({ supported: true, version: 2 });
   useEffect(() => setGl(detectWebGL()), []);
