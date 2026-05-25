@@ -44,7 +44,7 @@ export default function Shell({ children }) {
           ))}
         </nav>
       </header>
-      <main className="flex-1">{children}</main>
+      <main className="flex flex-1 flex-col">{children}</main>
       <footer className="flex items-center justify-between border-t border-light/10 px-6 py-3 text-[10px] uppercase tracking-[0.25em] text-light/40 md:px-10">
         <span>Bounded Phase Space Law &middot; empty dictionary</span>
         <span className="font-mono">v0.1</span>
