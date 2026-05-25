@@ -1,6 +1,7 @@
 import { Suspense, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, useAnimations, OrbitControls } from "@react-three/drei";
+import WebGLBoundary from "./WebGLBoundary";
 
 function Model() {
   const group = useRef();
@@ -26,6 +27,7 @@ useGLTF.preload("/nebuchadnezzar_cylinder_cuneiform_1096.glb");
 
 export default function ModelViewer() {
   return (
+    <WebGLBoundary fallback={<div className="h-full w-full bg-dark" />}>
     <Canvas
       camera={{ position: [0, 1, 4], fov: 42 }}
       dpr={[1, 1.5]}
@@ -52,5 +54,6 @@ export default function ModelViewer() {
         dampingFactor={0.06}
       />
     </Canvas>
+    </WebGLBoundary>
   );
 }

@@ -18,7 +18,6 @@ const VERT = `
 `;
 
 const FRAG = `
-  precision highp float;
   precision highp sampler3D;
 
   uniform sampler3D uVolume;
