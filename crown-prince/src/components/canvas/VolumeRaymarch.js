@@ -47,18 +47,17 @@ const FRAG = `
 
     float tStart = max(t.x, 0.0);
     float stepSz = (t.y - tStart) / uSteps;
-    vec3  pos    = uCamLocalPos + tStart * rd;
+    // Begin half a step inside so the entry-face sample is never on tc=0/1
+    vec3  pos    = uCamLocalPos + (tStart + 0.5 * stepSz) * rd;
 
     vec4 result = vec4(0.0);
 
     for (int i = 0; i < 256; i++) {
       if (float(i) >= uSteps) break;
+      // Exit when pos leaves the [-0.5, 0.5]^3 box
+      if (any(greaterThan(abs(pos), vec3(0.5)))) break;
 
-      vec3 tc = pos + 0.5; // [-0.5,0.5] → [0,1]
-      if (any(lessThan(tc, vec3(0.001))) ||
-          any(greaterThan(tc, vec3(0.999)))) break;
-
-      vec4 s = texture(uVolume, tc);
+      vec4 s = texture(uVolume, pos + 0.5);
 
       if (s.r > 0.01 || s.g > 0.02) {
         float val;
