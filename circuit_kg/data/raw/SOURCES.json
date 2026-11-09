@@ -1,0 +1,50 @@
+{
+  "chebi_compounds.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/compounds.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "66d9a9a66279e00d1f8ed001664d0efc366208d873b3693e564bd682af055893",
+    "bytes": 6997481
+  },
+  "chebi_database_accession.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/database_accession.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "4b825bc323915190a6db8e8cfa85f9b40d1902fb0918ba72bbb32e351db17ab5",
+    "bytes": 4397920
+  },
+  "chebi_source.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/source.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "eb2d197dcb72c16b3775abfa8960b2e83c7a539a108c0d085701645983607662",
+    "bytes": 3723
+  },
+  "chebi_relation.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/relation.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "2079829bb38024907de7375ae0c9397bc3990cdba35a8dd30f365c2fa6d8de8b",
+    "bytes": 2701675
+  },
+  "chebi_relation_type.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/relation_type.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "3c681c7388b182a9c1668cefe6de69067917c4b5ccbeedb20e2a06fab86a23d2",
+    "bytes": 252
+  },
+  "chebi_secondary_ids.tsv.gz": {
+    "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/flat_files/secondary_ids.tsv.gz",
+    "retrieved": "2026-11-09",
+    "sha256": "807e476348d7418babbbf3982ec53245d98d2efa21c6cec40e0e95a79990714e",
+    "bytes": 86794
+  },
+  "tecrdb_transformed.csv": {
+    "copied_from": "C:\\Users\\kunda\\Documents\\health\\syndrome\\cause-for-concern\\docs\\disease-circuit-tolerance\\validation\\realdata\\derived\\tecrdb_transformed.csv",
+    "retrieved": "2026-11-09",
+    "sha256": "c9dcd8cee80e1c820bc3ef0af306670b152b32b08d44e4257a07c392719743cb",
+    "bytes": 922450,
+    "note": "TECRDB (component-contribution repo, sha256 b84fe77e...) reverse-transformed by syndrome run_realdata.py stage A"
+  },
+  "reactome": {
+    "path": "C:\\Users\\kunda\\Documents\\systems\\nebuchadnezzar\\demo\\public\\homo_sapiens.3.1.sbml.tgz",
+    "sha256": "c555ca402b5f03b3ba65e2e9ad293a8a370281916afaccf803e36e406209692d",
+    "bytes": 58249878
+  }
+}

@@ -1,0 +1,7 @@
+data/raw/*.tsv.gz
+data/raw/*.csv
+data/derived/
+results/
+__pycache__/
+!media/*.json
+!data/raw/SOURCES.json

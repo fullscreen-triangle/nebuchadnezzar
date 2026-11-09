@@ -1,0 +1,16 @@
+{
+  "name": "cytosol",
+  "convention": "ambient-reservoir",
+  "meaning": "Species listed here are pools buffered by the cytosol: their potential is fixed by the medium (ground), so they are folded into the medium vertex rather than kept as items. This is a declaration, not a finding; change the list and every downstream number changes with it.",
+  "ambient_chebi": {
+    "15377": "H2O", "15378": "H+", "43474": "Pi", "30616": "ATP", "456216": "ADP",
+    "456215": "AMP", "57540": "NAD+", "57945": "NADH", "58349": "NADP+", "57783": "NADPH",
+    "16526": "CO2", "15379": "O2", "33019": "PPi", "57287": "CoA-SH"
+  },
+  "medium_floor_weight": 1.0,
+  "modifier_weight": 1.0,
+  "concentration_window_M": [1e-6, 1e-2],
+  "pH_window": [6.8, 7.6],
+  "concentrations_M": {},
+  "exchange_conductance": {}
+}
