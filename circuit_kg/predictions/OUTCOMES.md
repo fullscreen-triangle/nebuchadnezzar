@@ -5,10 +5,11 @@ PREDICTIONS.md was committed (de6f210) before any of this code ran.
 
 ## Check before M1: the transform itself
 
-The per-compound Legendre transform, written from equilibrator_cache 0.8.1 and
-evaluated on the local eQuilibrator compound cache, reproduces syndrome's
-`transform` column on all 3,276 TECRDB rows in the window, with a largest
-difference of 6.8e-13 kJ/mol. Controls: shifting pH by 0.1 leaves 66 rows within
+The per-compound Legendre transform is written from equilibrator_cache 0.8.1 and
+evaluated on the local eQuilibrator compound cache. It reproduces syndrome's
+`transform` column on all 3,276 rows in the window of the Thermodynamics of
+Enzyme-Catalyzed Reactions Database (TECRDB), with a largest difference of
+6.8e-13 kJ/mol. Controls: shifting pH by 0.1 leaves 66 rows within
 1e-6 kJ/mol, and dropping the Debye-Hueckel term leaves 59.
 
 ## M1 — the medium transfers: supported
@@ -43,13 +44,13 @@ Each entry is the mean absolute error in kJ/mol.
 
 Of 201 reactions with a chemical value (75 measured, 30 Hess, 96 carrier/slot):
 
-- answered forward: 2 (PPi hydrolysis by PPA1 and by LHPP), against 3 before;
+- answered forward: 2 (pyrophosphate hydrolysis by two cytosolic pyrophosphatases), against 3 before;
 - undecidable because of the concentration window: 156;
 - undecidable because of the medium window: 43.
 
 The prediction "more than 3 answered" fails. The old 3 used the measured
 Delta_r G'deg study means in the pH window, with no uncertainty and no ionic
-strength or pMg range. AMP hydrolysis (NT5C1B) rested on one study. Here, adding
+strength or pMg range. Adenosine monophosphate hydrolysis by a nucleotidase rested on one study. Here, adding
 q·sigma and the I and pMg windows removes it. The two survivors clear zero by only
 0.28 kJ/mol.
 
@@ -60,7 +61,7 @@ them. This includes all 96 carrier/slot reactions.
 ## M3 — crowding and dilution: fails on both counts
 
 - **Crowding.** It changes 2 of the 2 decided verdicts, which is above the 5% limit.
-  Both PPi hydrolyses add a solute particle (PPi + H2O -> 2 Pi). Their 0.28 kJ/mol
+  Both PPi hydrolyses add a solute particle (one pyrophosphate and one water give two phosphates). Their 0.28 kJ/mol
   margin is below the 0.92 kJ/mol crowding shift at a = 0.7. With crowding in the
   medium, no reaction in the kernel has a decided direction.
 - **Dilution.** The bound 2·n·v at 10 mM has a median of 0.0035 per particle, but
@@ -72,7 +73,7 @@ them. This includes all 96 carrier/slot reactions.
 
 Numbers are from `python -m circuit_kg kinetics` (writes `results/kinetics.json`).
 SABIO-RK (export API, human, wild type, K_m): 7,458 entries give 5,682 substrate
-K_m records and 3,559 (protein, KEGG compound) pairs. Of these, 272 proteins with
+K_m records and 3,559 (protein, Kyoto Encyclopedia of Genes and Genomes (KEGG) compound) pairs. Of these, 272 proteins with
 AlphaFold descriptors and 1,228 pairs entered the leave-one-protein-out test.
 
 | model | mean abs error, log10 K_m |
@@ -83,7 +84,7 @@ AlphaFold descriptors and 1,228 pairs entered the leave-one-protein-out test.
 The descriptor model is better for 105 proteins and worse for 127. The one-sided
 Wilcoxon test gives p = 0.94, so the prediction holds.
 
-Positive control: adding a synthetic effect of 0.5 SD of log10(residues) to
+Positive control: adding a synthetic effect of 0.5 standard deviations of log10(residues) to
 log10 K_m is detected (p = 0.007), so the test can find a protein-level effect
 that the descriptors carry.
 
@@ -96,8 +97,9 @@ These analyses are computed, not tested; none of them was written down in advanc
   PaxDb abundance for every binding enzyme. Their median retention factor
   k = sum [E]/K_m is 0.001-0.003 under the protein-ppm-to-molar convention, so
   metabolites are almost entirely free. Their capacitance is barely raised by
-  binding. Only 8 exceed k = 1 at the upper total: 5-PP-IP5 (9-26), SAM, F1,6BP,
-  NADPH and four others.
+  binding. Only 8 exceed k = 1 at the upper total: 5-PP-IP5 (9-26),
+  S-adenosylmethionine, F1,6BP, reduced nicotinamide adenine
+  dinucleotide phosphate and four others.
 - **Locality.** The enzymes are not dilute. For 223 enzymes, the concentration at
   which they leave the dilute (local) regime, c* = 0.1 / sum(1/K_m), has median
   2.4 uM; 76 leave it below 1 uM. None stays dilute across the whole 1 uM-10 mM

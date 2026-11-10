@@ -24,7 +24,8 @@ python -m pytest circuit_kg/tests -q
 about 13 min. Most of that is the singular value decompositions (SVDs) of the
 stoichiometric matrix, before and after the enzyme expansion. `medium` needs the
 local eQuilibrator compound cache (set `CIRCUIT_KG_EQ_CACHE` if it is not in the
-default place). It takes about 30 s. `kinetics` fetches 15 pages from SABIO-RK
+default place). It takes about 30 s. `kinetics` fetches 15 pages from the System for the Analysis of Biochemical
+Pathways - Reaction Kinetics database (SABIO-RK)
 once and then takes about 5 min. `complete` takes about 45 s.
 
 The ideas behind `medium`, `kinetics` and `complete` come from the chromatography
