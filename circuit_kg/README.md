@@ -17,6 +17,7 @@ python -m circuit_kg attach     # attach protein graphs through named slots -> r
 python -m circuit_kg medium     # Legendre transforms, test M1, direction over the medium -> results/medium.json
 python -m circuit_kg kinetics   # SABIO-RK K_m + PaxDb: retention, locality, test P1 -> results/kinetics.json
 python -m circuit_kg complete   # source-to-target completions; separation left after refinement -> results/complete.json
+python -m circuit_kg folding    # levinthal's oscillator folding ideas tested against AlphaFold -> results/folding.json
 python -m pytest circuit_kg/tests -q
 ```
 
@@ -26,7 +27,7 @@ stoichiometric matrix, before and after the enzyme expansion. `medium` needs the
 local eQuilibrator compound cache (set `CIRCUIT_KG_EQ_CACHE` if it is not in the
 default place). It takes about 30 s. `kinetics` fetches 15 pages from the System for the Analysis of Biochemical
 Pathways - Reaction Kinetics database (SABIO-RK)
-once and then takes about 5 min. `complete` takes about 45 s.
+once and then takes about 5 min. `complete` takes about 45 s. `folding` takes about 15 min.
 
 The ideas behind `medium`, `kinetics` and `complete` come from the chromatography
 and ideal-gas papers in `maxwell`. Their predictions were committed before the
@@ -96,6 +97,7 @@ Each supplied convention is named where it is used:
 | `attach.py` | residue graphs attached through slot edges; separation-cost monotonicity check against a real-weight control; exposure test |
 | `medium.py` | per-compound Legendre transform (eQuilibrator's formula and microspecies), held-out-condition test, direction over the medium window, crowding |
 | `kinetics.py` | SABIO-RK K_m and PaxDb abundance; retention factor per metabolite; departure from the dilute limit per enzyme; test P1 |
+| `folding.py` | DSSP-style secondary structure, sequence and AlphaFold couplings, Kuramoto phase-lock groups and local order, ternary addresses; experiments F1-F5 |
 | `complete.py` | forward scope and backward completion under three direction semantics; bits left after refinement |
 
 Edge weights used for cuts are always counts (stoichiometry, contacts, exposed

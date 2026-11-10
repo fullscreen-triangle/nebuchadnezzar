@@ -153,3 +153,84 @@ in shared classes.
   independent keys are needed to give 8,244 items distinct positions. Refinement
   rounds supply them through neighbours, but cannot split a class whose members
   are structurally identical.
+
+# Folding ideas from levinthal, tested with AlphaFold
+
+Numbers are from `python -m circuit_kg folding` (writes `results/folding.json`, 15 min).
+The predictions were committed in d77d09c, before `folding.py` was written.
+
+## Check before F2-F4: the secondary-structure assignment
+
+The assignment is DSSP-style, from backbone hydrogen bonds. Against the authors'
+helix and sheet records in four experimental structures, per-residue agreement is 0.87
+(1CRN), 0.83 (1UBQ), 0.87 (2LZM) and 0.91 (3CHY). Shuffling the residues drops it
+to 0.24-0.42. The assignment gives fewer strand residues than the author records.
+
+## F1 — contacts from sequence: reproduced
+
+On 607 AlphaFold models (pLDDT ≥ 90, 50-400 residues), the paper's coupling K_seq
+reaches top-L precision 0.81 times the base rate. That is worse than random
+(two-sided Wilcoxon p = 7e-11). The hydrophobicity product reaches 2.36 times. No
+protein meets the paper's criterion (precision ≥ 0.7, recall ≥ 0.5) with any score.
+On the experimental crambin structure 1CRN, K_seq has precision 0.11 against a
+base rate of 0.07.
+
+## F2 — eigenvalue count equals the number of SSEs: fails
+
+On 149 proteins, the median number of secondary-structure elements (SSEs) is 12.
+
+| count | exact matches | mean absolute error |
+|---|---|---|
+| eigenvalues of K_seq above λ_c | 0 | 7.1 |
+| eigenvalues of K_AF above λ_c | 3 | 9.1 |
+| length-only baseline | 23 | 2.2 |
+
+Both couplings give too many eigenvalues above λ_c (medians 18 and 20). The
+excess holds even for K_AF, which is built from the real structure.
+
+## F3 — phase-lock groups are SSEs: fails
+
+Agreement with the SSE/loop segmentation is measured by the adjusted Rand index,
+taking the best value over the K0 sweep.
+
+- **Against blocks.** Phase-lock groups from K_AF score 0.067. Equal contiguous
+  blocks score 0.486 and are better for 148 of 149 proteins (p = 1.0 for the
+  hypothesis).
+- **Sequence coupling.** K_seq phase-lock groups score 0.001.
+- **Dynamics against the coupling itself.** The dynamics do not beat the static
+  coupling: the static components of the top K_AF pairs score 0.057, and the
+  dynamics win 80 proteins and lose 66 (p = 0.14). Synchronisation adds nothing
+  significant to the contact graph it runs on.
+
+## F4 — phosphosites are less synchronised, and disorder accounts for it: both parts hold, the second weakly
+
+Kuramoto runs on K_AF at K0 = 2. The comparison set is 158 named sites against
+3,870 same-type residues in the same proteins.
+
+- **Prediction 1 holds.** Sites have lower local order: median 0.912 against
+  0.936, one-sided Mann-Whitney p = 0.012. They also have lower pLDDT: 53.7 against
+  57.9, p = 0.043.
+- **Prediction 2 holds.** Within pLDDT strata the difference is not significant:
+  p = 0.39 below 70 (106 sites) and p = 0.13 at 70 or above (52 sites).
+- **Caveat on prediction 2.** It rests on an absence of significance. The ≥ 70
+  stratum is small, and its medians still point the same way (0.933 against
+  0.953). A small residual effect is not excluded.
+
+## F5 — ternary addresses (measured)
+
+- **The bound.** On 150 AlphaFold models, the distance-preservation bound holds for
+  all 2,480,054 Cα pairs, with no violations.
+- **The proximity key.** The deepest level whose cells are at least 8 Å on a side
+  is one full triple of digits (median), i.e. 27 cells. Only 54.6% of the 122,559
+  Cα contacts share that prefix. As a proximity key the address is one-sided:
+  sharing the prefix bounds the distance, but 45% of contacting pairs fall either
+  side of a cell boundary.
+
+## What this means for the kernel
+
+AlphaFold's counted contact graph stays the protein representation. On every test
+here, the oscillator layer added nothing to it: not secondary structure, not
+eigen-counts, and not phosphosite placement beyond what pLDDT already says. The
+sequence-only coupling carries less contact information than a hydrophobicity
+product. The ternary address is usable as a hierarchical key only together with
+its neighbouring cells.

@@ -290,8 +290,34 @@ def complete_stage(n_sources=None) -> dict:
     return out
 
 
-def main():
-    ap = argparse.ArgumentParser(prog="circuit_kg")
+def folding_stage() -> dict:
+    """Levinthal's folding ideas beside AlphaFold: experiments F1-F5 (predictions/PREDICTIONS.md)."""
+    from . import attach, hess, slot, thermo
+    from . import folding as F
+    from .graph import load_medium
+    timing, t0 = {}, time.time()
+    out = {"ss_check_vs_author_records": F.check_ss(F.fetch_pdb())}
+    models = F.high_confidence_models()
+    out["F1_contacts"] = F.f1_contacts(F.high_confidence_models(hi=400, limit=None),
+                                       F.PDB_DIR / "1CRN.pdb")
+    timing["F1"] = time.time() - t0
+    out["F2_eigencount"] = F.f2_eigencount(models)
+    out["F3_phaselock"] = F.f3_phaselock(models)
+    timing["F3"] = time.time() - t0
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    smap = thermo.species_kegg(corpus, thermo.Chebi())
+    tecr = thermo.load_tecrdb(pH_window=tuple(med["pH_window"]))
+    match = thermo.match_reactions(corpus, smap, tecr)
+    slots = slot.carrier_slot(corpus, match, smap, hess.HessSpan(tecr))
+    out["F4_sites"] = F.f4_sites(attach.locate_slots(corpus, slots)["slots"])
+    timing["F4"] = time.time() - t0
+    out["F5_ternary"] = F.f5_ternary(models)
+    timing["total"] = time.time() - t0
+    out["timing_s"] = timing
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "folding.json").write_text(json.dumps(out, indent=1))
+    return out
 
 
 def kinetics_stage() -> dict:
@@ -340,7 +366,8 @@ def kinetics_stage() -> dict:
 def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
     ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium",
-                                          "kinetics", "complete"])
+                                          "kinetics", "complete",
+                                          "folding"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -363,6 +390,8 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "folding":
+        print(json.dumps(folding_stage(), indent=1))
     elif a.stage == "complete":
         print(json.dumps(complete_stage(), indent=1))
     elif a.stage == "kinetics":
