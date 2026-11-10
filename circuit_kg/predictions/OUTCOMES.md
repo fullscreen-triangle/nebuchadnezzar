@@ -110,3 +110,44 @@ These analyses are computed, not tested; none of them was written down in advanc
   The enzyme-substrate nodes cannot be folded into the free species'
   capacitance; they have to stay explicit with conserved enzyme totals, as in
   the enzyme expansion.
+
+## Not predicted, measured: completion and separation
+
+These numbers are from `python -m circuit_kg complete` (writes `results/complete.json`).
+
+**Completion.** The question is whether the kernel turns source S into target P
+using only S, the medium (14 ambient species) and the 2,241 proteins that no
+reaction makes. The survey covers 540 small-molecule sources and 779 targets, so
+420,120 pairs.
+
+| directions allowed | one completion | several | none (certified empty) | made without S |
+|---|---|---|---|---|
+| as annotated by Reactome | 659 | 634 | 362,739 | 56,088 |
+| both, unless thermodynamics decides (2 fixed) | 352 | 1,464 | 258,690 | 159,614 |
+| both, with the sign of Delta_r G'm at 1 mM (158 fixed) | 390 | 1,510 | 276,937 | 141,283 |
+
+- **Reading the outcomes.** A unique completion is an order-determined ladder in
+  the ladder paper's sense. Several completions means order-determination fails.
+- **Most pairs have no completion.** Most reactions need a second small molecule
+  that a single source cannot supply.
+- **Reversibility.** Allowing reactions to run backwards halves the unique
+  completions and lets the medium and proteins make many more targets on their
+  own.
+- **Measured directions.** Fixing the 156 directions that measured concentrations
+  near 1 mM would decide adds 38 unique completions (+11%) and removes 18,331
+  targets from "made without S".
+- **Limitation.** A completion may not pass through its own target. Alternatives
+  that pass through other cycles among intermediates still count as "several", so
+  that column is an upper count.
+
+**Separation.** Refinement leaves 6,792 classes over 8,244 items, with 1,988 items
+in shared classes.
+
+- Locating an item within its class needs 0.65 binary distinctions on average,
+  and at most 7.1 (the largest class). This information is absent from the graph's
+  structure, as with two analytes of equal retention, which no column length
+  separates.
+- With 63 values of the initial cut key, at least log K / log n_c = 2.2
+  independent keys are needed to give 8,244 items distinct positions. Refinement
+  rounds supply them through neighbours, but cannot split a class whose members
+  are structurally identical.

@@ -5,7 +5,7 @@ import argparse
 import json
 import math
 import time
-from collections import Counter
+from collections import Counter, defaultdict
 
 from .core import DERIVED, RESULTS
 
@@ -242,8 +242,56 @@ def medium_stage() -> dict:
             "dilute_bound_10mM": md.dilute_bound(L, sorted(metabolites), 1e-2)},
     }
     RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / "medium.json").write_text(json.dumps(out, indent=1, default=str))
+    (RESULTS / "medium.json").write_text(json.dumps({**out, "per_reaction": d}, indent=1,
+                                                    default=str))
     return out
+
+
+def complete_stage(n_sources=None) -> dict:
+    """COMPLETE from source to target under three direction semantics; separation bound."""
+    from . import analyses
+    from . import complete as cp
+    from .graph import CircuitKG, load_medium
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    mpath = RESULTS / "medium.json"
+    if not mpath.exists() or "per_reaction" not in json.loads(mpath.read_text()):
+        medium_stage()
+    mdir = json.loads(mpath.read_text())["per_reaction"]
+    kg = CircuitKG(corpus, med, {})
+    sp = corpus["species"]
+    used = defaultdict(set)
+    for r in corpus["reactions"].values():
+        for s, *_ in r["reactants"]:
+            used[s].add("in")
+        for s, *_ in r["products"]:
+            used[s].add("out")
+    # proteins present from the start: those no reaction makes (complexes are made, so a
+    # complex holding a small ligand is not a free source of that ligand)
+    base = set(kg.ambient) | {s for s, v in sp.items()
+                              if v["kind"] != "small" and "out" not in used[s]}
+    small = sorted(s for s in used if s not in base and sp[s]["kind"] == "small")
+    sources = [s for s in small if "in" in used[s]][:n_sources]
+    targets = set(small)
+    surveys = {}
+    for mode in ("as-annotated", "reversible", "at-1mM"):
+        t = time.time()
+        allowed = cp.allowed_directions(corpus, mdir, mode)
+        surveys[mode] = cp.survey(corpus, base, sources, targets, allowed)
+        surveys[mode]["fixed_direction_reactions"] = sum(len(v) == 1 for v in allowed.values())
+        surveys[mode]["seconds"] = round(time.time() - t, 1)
+    keys1 = analyses.cut_keys(kg, [1])[1]
+    ref = analyses.refine(kg, keys1)
+    out = {"base": {"ambient": len(kg.ambient), "unmade_macromolecules": len(base) - len(kg.ambient)},
+           "small_species": len(small), "surveys": surveys,
+           "separation": cp.separation(ref["rounds"], keys1)}
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "complete.json").write_text(json.dumps(out, indent=1))
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="circuit_kg")
 
 
 def kinetics_stage() -> dict:
@@ -292,7 +340,7 @@ def kinetics_stage() -> dict:
 def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
     ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium",
-                                          "kinetics"])
+                                          "kinetics", "complete"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -315,6 +363,8 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "complete":
+        print(json.dumps(complete_stage(), indent=1))
     elif a.stage == "kinetics":
         print(json.dumps(kinetics_stage(), indent=1, default=str))
     elif a.stage == "medium":

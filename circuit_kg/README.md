@@ -14,11 +14,23 @@ python -m circuit_kg extract    # Reactome SBML tarball -> data/derived/reactome
 python -m circuit_kg build      # -> results/summary.json, graph.json, supplements.json
 python -m circuit_kg proteins   # AlphaFold DB models -> residue contact graphs (data/raw/alphafold)
 python -m circuit_kg attach     # attach protein graphs through named slots -> results/attach.json
+python -m circuit_kg medium     # Legendre transforms, test M1, direction over the medium -> results/medium.json
+python -m circuit_kg kinetics   # SABIO-RK K_m + PaxDb: retention, locality, test P1 -> results/kinetics.json
+python -m circuit_kg complete   # source-to-target completions; separation left after refinement -> results/complete.json
 python -m pytest circuit_kg/tests -q
 ```
 
 `extract` streams every pathway file once and takes about 100 s. `build` takes
-about 60 s, most of it in one dense singular value decomposition (SVD) of the stoichiometric matrix.
+about 13 min. Most of that is the singular value decompositions (SVDs) of the
+stoichiometric matrix, before and after the enzyme expansion. `medium` needs the
+local eQuilibrator compound cache (set `CIRCUIT_KG_EQ_CACHE` if it is not in the
+default place). It takes about 30 s. `kinetics` fetches 15 pages from SABIO-RK
+once and then takes about 5 min. `complete` takes about 45 s.
+
+The ideas behind `medium`, `kinetics` and `complete` come from the chromatography
+and ideal-gas papers in `maxwell`. Their predictions were committed before the
+code ran (`predictions/PREDICTIONS.md`), and the results are in
+`predictions/OUTCOMES.md`.
 
 ## The graph
 
@@ -57,6 +69,14 @@ Each supplied convention is named where it is used:
 - `enzyme-cycle-2`: each catalysed reaction becomes two steps, binding then
   catalysis, which return the enzyme.
 - `medium-floor-residue`: a buried residue still gets a medium edge of weight 1.
+- `medium-window`: pH 6.8 to 7.6, ionic strength 0.1 to 0.25 M, pMg 2.8 to 3.5,
+  at 298.15 K. Chemical-reference values are Legendre-transformed over this window.
+- `accessible-volume`: mu = mu0 + RT ln(c/a), with one a in [0.7, 1] for every
+  small solute.
+- `protein-ppm-to-molar`: PaxDb parts per million times 2 to 6 mM of total
+  protein molecules.
+- `scope-from-source`: a completion may use the source, the medium, and the
+  proteins that no reaction makes.
 
 ## Modules
 
@@ -73,6 +93,9 @@ Each supplied convention is named where it is used:
 | `enzyme.py` | catalysts expanded into two-step enzyme cycles; checks that each enzyme total is conserved |
 | `proteins.py` | AlphaFold DB fetch, Shrake-Rupley surface areas, residue contact graphs with counted weights |
 | `attach.py` | residue graphs attached through slot edges; separation-cost monotonicity check against a real-weight control; exposure test |
+| `medium.py` | per-compound Legendre transform (eQuilibrator's formula and microspecies), held-out-condition test, direction over the medium window, crowding |
+| `kinetics.py` | SABIO-RK K_m and PaxDb abundance; retention factor per metabolite; departure from the dilute limit per enzyme; test P1 |
+| `complete.py` | forward scope and backward completion under three direction semantics; bits left after refinement |
 
 Edge weights used for cuts are always counts (stoichiometry, contacts, exposed
 atoms). Real-valued quantities such as Delta G or a conductance stay in the
