@@ -11,6 +11,17 @@
   "modifier_weight": 1.0,
   "concentration_window_M": [1e-6, 1e-2],
   "pH_window": [6.8, 7.6],
+  "medium_window": {
+    "tag": "supplied",
+    "convention": "medium-window",
+    "meaning": "The eluent of the cytosol: the conditions under which chemical-reference Delta_r G deg values are Legendre-transformed. Typical cytosolic values, not measured for this kernel. T is 298.15 K because the TECRDB values are not temperature-corrected (T window 293-313 K).",
+    "pH": [6.8, 7.6],
+    "ionic_strength_M": [0.1, 0.25],
+    "pMg": [2.8, 3.5],
+    "T_K": 298.15,
+    "accessible_volume_fraction": [0.7, 1.0],
+    "accessible_volume_meaning": "convention accessible-volume: mu = mu deg + RT ln(c/a), one a for every small solute; 0.7 is a generous lower bound (macromolecules occupy up to about 30% of the cytosol, and small solutes reach more than the free volume)"
+  },
   "concentrations_M": {},
   "exchange_conductance": {}
 }

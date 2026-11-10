@@ -184,9 +184,70 @@ def attach_stage(n_items=60, seed=0) -> dict:
     return out
 
 
+def medium_stage() -> dict:
+    """The medium as the eluent: transform check, transfer test (M1), direction (M2, M3)."""
+    from . import hess, slot, thermo
+    from . import medium as md
+    from .core import RT
+    from .graph import load_medium
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    smap = thermo.species_kegg(corpus, thermo.Chebi())
+    tecr = thermo.load_tecrdb(pH_window=tuple(med["pH_window"]))
+    match = thermo.match_reactions(corpus, smap, tecr)
+    hs = hess.HessSpan(tecr)
+    unmeasured = hess.derive_unmeasured(corpus, match, smap, hs)
+    slots = slot.carrier_slot(corpus, match, smap, hs)
+    rows = md.tecrdb_rows()
+    values = md.chemical_values(match, tecr, unmeasured, slots)
+    metabolites = {k for v in smap.values() for k in v["kegg"]}
+    ids = ({k for r in rows for k, _ in r["key"]} | {k for v in values.values() for k in v["st"]}
+           | metabolites)
+    have = json.loads(md.TABLE.read_text())["compounds"] if md.TABLE.exists() else {}
+    if not ids <= set(have):
+        if not md.EQ_CACHE.exists():
+            raise SystemExit(f"no eQuilibrator compound cache at {md.EQ_CACHE} "
+                             "(set CIRCUIT_KG_EQ_CACHE)")
+        md.build_table(ids)
+    L = md.Legendre()
+    d = md.direction_with_medium(values, L, med, tecr["q"]["gaussian"], RT)
+    decided = [v for v in d.values() if v["label"] == "answered"]
+    out = {
+        "legendre_source": L.source,
+        "reproduce_syndrome_transform": md.reproduce_transform_column(L, rows),
+        "controls": {
+            "pH_plus_0.1": md.reproduce_transform_column(
+                L, rows, perturb=lambda c: {**c, "pH": c["pH"] + 0.1}),
+            "no_debye_hueckel": md.reproduce_transform_column(
+                L, rows, perturb=lambda c: {**c, "I": 0.0})},
+        "M1_transfer": md.transfer_test(rows),
+        "M2_direction": {
+            "reactions_with_chemical_value": len(values),
+            "by_source": dict(Counter(v["source"] for v in values.values())),
+            "labels": dict(Counter(f'{v["label"]}:{v.get("payload") or v.get("blocker")}'
+                                   for v in d.values())),
+            "labels_by_source": dict(Counter(f'{v["source"]}|{v["label"]}:'
+                                             f'{v.get("payload") or v.get("blocker")}'
+                                             for v in d.values())),
+            "answered": sorted(({"reaction": corpus["reactions"][r]["name"], **v}
+                                for r, v in d.items() if v["label"] == "answered"),
+                               key=lambda x: x["reaction"]),
+            "absent_compounds": dict(Counter(c for v in d.values() if v["label"] == "absent"
+                                             for c in v["compounds"]))},
+        "M3_crowding": {
+            "decided_without_crowding": len(decided),
+            "verdicts_changed_by_crowding": sum(v.get("crowding_changes_verdict", False)
+                                                for v in d.values()),
+            "dilute_bound_10mM": md.dilute_bound(L, sorted(metabolites), 1e-2)},
+    }
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "medium.json").write_text(json.dumps(out, indent=1, default=str))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
-    ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach"])
+    ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -209,6 +270,16 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "medium":
+        o = medium_stage()
+        o["M2_direction"].pop("answered")
+        print(json.dumps({k: o[k] for k in ("reproduce_syndrome_transform", "M2_direction",
+                                            "M3_crowding")}, indent=1))
+        m1 = o["M1_transfer"]
+        print("M1 replicate", m1["replicate_noise"])
+        for dsg, x in m1["designs"].items():
+            print(dsg, {m: round(s["mean"], 2) for m, s in x["all"].items()},
+                  json.dumps(x["paired_per_reaction"]))
     else:
         s = build(a.radii)
         print(json.dumps({k: s[k] for k in ("thermo_match", "structure", "cut_keys",

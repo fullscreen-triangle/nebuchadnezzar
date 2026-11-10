@@ -72,7 +72,8 @@ class HessSpan:
         value = float(b @ self.mu)
         sigma = float(np.sqrt(max(b @ self.cov @ b, 0.0)))
         return answered(value, sigma=sigma, sigma_birge=sigma * self.birge, tag="supplied",
-                        convention=["hess-span"], reference_state="chemical (H+ dropped)")
+                        convention=["hess-span"], reference_state="chemical (H+ dropped)",
+                        stoich={k: float(v) for k, v in sorted(st.items()) if v})
 
     def fit(self) -> dict:
         return {"measured_reactions": len(self.keys), "compounds": len(self.compounds),
