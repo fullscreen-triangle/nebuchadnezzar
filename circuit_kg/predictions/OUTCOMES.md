@@ -67,3 +67,46 @@ them. This includes all 96 carrier/slot reactions.
   exceeds 1e-2 for large compounds. The worst is C05893 (1,873 Da) at 0.027. The
   ideal-solution form of mu is safe for ordinary metabolites at 10 mM, but not for
   molecules this size at the top of the concentration window.
+
+## P1 — whole-protein descriptors do not carry K_m: supported
+
+Numbers are from `python -m circuit_kg kinetics` (writes `results/kinetics.json`).
+SABIO-RK (export API, human, wild type, K_m): 7,458 entries give 5,682 substrate
+K_m records and 3,559 (protein, KEGG compound) pairs. Of these, 272 proteins with
+AlphaFold descriptors and 1,228 pairs entered the leave-one-protein-out test.
+
+| model | mean abs error, log10 K_m |
+|---|---|
+| substrate baseline | 0.775 |
+| baseline + 5 protein descriptors (ridge) | 0.780 |
+
+The descriptor model is better for 105 proteins and worse for 127. The one-sided
+Wilcoxon test gives p = 0.94, so the prediction holds.
+
+Positive control: adding a synthetic effect of 0.5 SD of log10(residues) to
+log10 K_m is detected (p = 0.007), so the test can find a protein-level effect
+that the descriptors carry.
+
+## Not predicted, measured: retention and locality
+
+These analyses are computed, not tested; none of them was written down in advance.
+
+- **Retention.** 370 of the 1,631 catalysed kernel reactions have a measured K_m
+  for a substrate (596 contacts). Of 168 metabolites with a K_m, 161 have a
+  PaxDb abundance for every binding enzyme. Their median retention factor
+  k = sum [E]/K_m is 0.001-0.003 under the protein-ppm-to-molar convention, so
+  metabolites are almost entirely free. Their capacitance is barely raised by
+  binding. Only 8 exceed k = 1 at the upper total: 5-PP-IP5 (9-26), SAM, F1,6BP,
+  NADPH and four others.
+- **Locality.** The enzymes are not dilute. For 223 enzymes, the concentration at
+  which they leave the dilute (local) regime, c* = 0.1 / sum(1/K_m), has median
+  2.4 uM; 76 leave it below 1 uM. None stays dilute across the whole 1 uM-10 mM
+  window, and 221 depart by more than 10% at 1 mM. 106 enzymes have two or more
+  measured substrates sharing the same sites.
+- **In chromatographic terms.** The cytosolic column is overloaded: analyte far
+  exceeds sites. For the metabolite the stationary phase is negligible (k << 1),
+  but for the enzyme the contacts are non-local (Langmuir, not linear). The
+  ladder paper's condition for dropping the carrier fails on the enzyme side.
+  The enzyme-substrate nodes cannot be folded into the free species'
+  capacitance; they have to stay explicit with conserved enzyme totals, as in
+  the enzyme expansion.

@@ -6,3 +6,5 @@ __pycache__/
 !media/*.json
 !data/raw/SOURCES.json
 data/raw/alphafold/
+data/raw/sabio/
+data/raw/paxdb-*.txt

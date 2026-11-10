@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import time
 from collections import Counter
 
@@ -245,9 +246,53 @@ def medium_stage() -> dict:
     return out
 
 
+def kinetics_stage() -> dict:
+    """K_m contacts: retention factors, the locality diagnostic, and test P1."""
+    import numpy as np
+    from . import kinetics as kn
+    from . import thermo
+    from .graph import load_medium
+    from .proteins import AF_DIR
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    smap = thermo.species_kegg(corpus, thermo.Chebi())
+    src = kn.fetch()
+    table = kn.km_table(kn.km_records())
+    contacts = kn.kernel_contacts(corpus, smap, table)
+    gene_of = {}
+    for f in AF_DIR.glob("AF-*.json"):
+        if not f.name.endswith(".graph.json"):
+            m = json.loads(f.read_text())
+            gene_of[m["acc"]] = m.get("gene")
+    rs = kn.retention_and_saturation(corpus, contacts, kn.paxdb_ppm(), gene_of,
+                                     med["concentration_window_M"])
+    desc = {u: d for u in {u for u, _ in table} if (d := kn.protein_descriptors(u)) is not None}
+    p1 = kn.p1_test(table, desc)
+    logn = {u: math.log10(d[0]) for u, d in desc.items()}
+    m, s = np.mean(list(logn.values())), np.std(list(logn.values()))
+    control = kn.p1_test(table, desc, plant=lambda u: 0.5 * (logn[u] - m) / s)
+    with_rows = [r for r in contacts.values() if r]
+    out = {
+        "sources": {"sabio_total_entries": src["sabio"]["total_count"],
+                    "km_pairs": len(table), "km_proteins": len({u for u, _ in table})},
+        "kernel_join": {"catalysed_reactions": len(contacts),
+                        "with_a_measured_km": len(with_rows),
+                        "contacts": sum(len(r) for r in with_rows)},
+        "retention": rs["retention"], "saturation": rs["saturation"],
+        "P1": p1, "P1_positive_control_planted_size_effect": control,
+        "P1_descriptors": kn.DESCRIPTORS,
+    }
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "kinetics.json").write_text(json.dumps(
+        {**out, "per_metabolite": rs["per_metabolite"], "per_enzyme": rs["per_enzyme"]},
+        indent=1, default=str))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
-    ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium"])
+    ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium",
+                                          "kinetics"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -270,6 +315,8 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "kinetics":
+        print(json.dumps(kinetics_stage(), indent=1, default=str))
     elif a.stage == "medium":
         o = medium_stage()
         o["M2_direction"].pop("answered")
