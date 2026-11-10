@@ -26,10 +26,22 @@ def _null_rows(N: np.ndarray, tol=1e-9):
         return np.zeros(0, bool), 0
     if N.shape[0] == 0:
         return np.zeros(N.shape[1], bool), N.shape[1]
-    u, s, vt = np.linalg.svd(N, full_matrices=True)
-    rank = int((s > tol * max(N.shape) * (s[0] if len(s) else 1)).sum())
+    # the right null space needs all n right singular vectors; U is never used, so the
+    # m x m factor is only formed when m < n (then it is the small side)
+    u, s, vt = np.linalg.svd(N, full_matrices=N.shape[0] < N.shape[1])
+    # Rank by a relative cut of 1e-9 placed inside the spectral gap.  A cut scaled by
+    # max(shape) (the numpy default form) fell above the smallest genuine singular value of
+    # the enzyme-expanded matrix (4.6e-6 relative) and invented null vectors.
+    rel = s / s[0] if len(s) and s[0] > 0 else s
+    rank = int((rel > tol).sum())
+    kept, dropped = rel[:rank], rel[rank:]
+    if rank and len(dropped) and dropped.max() > 1e-12 and kept.min() < 1e-6:
+        raise ValueError(f"no spectral gap at the rank cut: kept {kept.min():.2e}, "
+                         f"dropped {dropped.max():.2e}")
     V0 = vt[rank:].T
     blocked = np.linalg.norm(V0, axis=1) < 1e-8 if V0.size else np.ones(N.shape[1], bool)
+    _null_rows.last_gap = (float(kept.min()) if rank else None,
+                           float(dropped.max()) if len(dropped) else None)
     return blocked, rank
 
 
@@ -39,6 +51,7 @@ def structure(kg: CircuitKG) -> dict:
     produced, consumed = (N > 0).any(1), (N < 0).any(1)
     boundary = ~(produced & consumed)
     blocked_closed, rank = _null_rows(N)
+    gap = _null_rows.last_gap
     blocked_open, rank_open = _null_rows(N[~boundary])
     roles = Counter()
     for n in sp_nodes:
@@ -51,12 +64,15 @@ def structure(kg: CircuitKG) -> dict:
         "internal_species": len(sp_nodes), "junctions": len(jn),
         "ambient_species_folded": len(kg.ambient),
         "rank_N": rank,
+        "spectral_gap": {"smallest_kept_relative": gap[0], "largest_dropped_relative": gap[1]},
         "conservation_laws_dim": len(sp_nodes) - rank,
         "steady_flux_modes_dim": len(jn) - rank,
         "boundary_species": int(boundary.sum()),
         "blocked_if_only_ambient_open": int(blocked_closed.sum()),
         "blocked_if_boundary_species_also_open": int(blocked_open.sum()),
         "species_roles": dict(roles),
+        "blocked_ids_closed": [jn[i][1] for i in np.flatnonzero(blocked_closed)],
+        "blocked_ids_open": [jn[i][1] for i in np.flatnonzero(blocked_open)],
         "reading": "A blocked junction carries zero flux in every steady state of the node "
                    "laws with the stated ground connections.  The count is a property of the "
                    "ODE system's structure, independent of every rate constant.",

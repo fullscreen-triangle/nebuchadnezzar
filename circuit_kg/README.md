@@ -11,7 +11,9 @@ is a verdict: `answered`, `certified-empty`, `absent`, `underdetermined`,
 ```bash
 python -m circuit_kg fetch      # ChEBI flat files (about 14 MB) + TECRDB derived table -> data/raw
 python -m circuit_kg extract    # Reactome SBML tarball -> data/derived/reactome_cytosol.json
-python -m circuit_kg build      # -> results/summary.json, results/graph.json
+python -m circuit_kg build      # -> results/summary.json, graph.json, supplements.json
+python -m circuit_kg proteins   # AlphaFold DB models -> residue contact graphs (data/raw/alphafold)
+python -m circuit_kg attach     # attach protein graphs through named slots -> results/attach.json
 python -m pytest circuit_kg/tests -q
 ```
 
@@ -47,6 +49,14 @@ Each supplied convention is named where it is used:
   Database (TECRDB) that holds once water is balanced.
 - `concentration-window`: 1 uM to 10 mM.
 - `pH-window`: 6.8 to 7.6.
+- `hess-span`: a Delta G derived from measured reactions by Hess's law.
+- `carrier-slot`: a protein that is the same on both sides of a reaction adds
+  nothing to its Delta G; only the modified residues (slots) do.
+- `free-residue`: a residue in a protein reacts like the free amino acid.
+- `slot-from-name`: modified residues are read from Reactome species names.
+- `enzyme-cycle-2`: each catalysed reaction becomes two steps, binding then
+  catalysis, which return the enzyme.
+- `medium-floor-residue`: a buried residue still gets a medium edge of weight 1.
 
 ## Modules
 
@@ -58,6 +68,15 @@ Each supplied convention is named where it is used:
 | `solve.py` | Gauss-Seidel node relaxation, linear and mass action |
 | `ladder.py` | rung powers from resistances; shares equal flux control coefficients |
 | `analyses.py` | structure, cycles, direction, local cut keys and derived power, refinement lattice, series chains |
+| `hess.py` | weighted least-squares formation energies; Delta G and its sigma for any reaction in the span of measured ones |
+| `slot.py` | phosphosite parser and carrier/slot decomposition of reactions refused by TECRDB |
+| `enzyme.py` | catalysts expanded into two-step enzyme cycles; checks that each enzyme total is conserved |
+| `proteins.py` | AlphaFold DB fetch, Shrake-Rupley surface areas, residue contact graphs with counted weights |
+| `attach.py` | residue graphs attached through slot edges; separation-cost monotonicity check against a real-weight control; exposure test |
+
+Edge weights used for cuts are always counts (stoichiometry, contacts, exposed
+atoms). Real-valued quantities such as Delta G or a conductance stay in the
+edge laws and never become cut weights.
 
 The TECRDB table is copied from the disease-circuit-tolerance validation suite.
 Its `dG0_prime_measured` column keeps the original TECRDB orientation, while

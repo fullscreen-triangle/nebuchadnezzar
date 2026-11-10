@@ -219,3 +219,18 @@ def test_transformed_values_are_in_canonical_orientation():
     assert sign * p["mean"] < 0         # TPI favours DHAP: Delta_r G'deg ~ -7.5 kJ/mol
     chem = t["reactions"][key]["value"]
     assert sign * chem < 0
+
+
+def test_rank_cut_keeps_small_genuine_singular_values():
+    import numpy as np
+    from circuit_kg.analyses import _null_rows
+    # tall matrix whose second singular value is 1e-7 of the first: genuine, and below the
+    # size-scaled cut 1e-9 * 3000 = 3e-6 that once invented a null vector here
+    N = np.zeros((3000, 2))
+    N[0, 0], N[1, 1] = 1.0, 1e-7
+    blocked, rank = _null_rows(N)
+    assert rank == 2 and blocked.all()
+    # control: an exactly zero column is a genuine null vector and is not blocked
+    N[1, 1] = 0.0
+    blocked, rank = _null_rows(N)
+    assert rank == 1 and blocked[0] and not blocked[1]
