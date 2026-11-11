@@ -152,3 +152,89 @@ picks the axis, the digit picks the third). Measured:
   deepest level whose cells are still at least 8 Å on a side. This is the cost of
   using the prefix as a proximity key, since neighbours split across cell
   boundaries.
+
+# Extensions from the P450 monograph and the dcat-ap-plus-p450 specification
+
+Sources: levinthal `cytochrome/publications` (the 19 manuscripts) and
+`dcat-ap-plus-p450/docs/specifications/components-graph.md`. The numbers in those
+papers are not carried over. Their structures are implemented here on the kernel's
+own public data: Reactome, TECRDB with eQuilibrator transforms, SABIO-RK (all human
+wild-type kinetic laws), PaxDb, UniProt (EC, Pfam, families), AlphaFold, and PDB.
+
+## Measured, not predicted (instrumentation)
+
+- **X1 — verdict axes.** Basis composes as max (stated < supplied < derived). Every
+  empty or absent verdict gets a gate letter (+ witnessed absent, − not recorded,
+  open = a name the source never uses, ? undecided). Every kernel fact gets a ground
+  verdict from its provenance chain (symbol / collapsed / index / icon / composite).
+  A `subfloor` verdict names the shortfall when a ladder's composite power is below
+  its declared target. Results carry a stage digest of their content and
+  conventions. Reported: the census of each axis over the kernel's outputs.
+- **X2 — modifier stack.** Inhibitor and stimulator edges get additive log-rate
+  modifiers from SABIO-RK K_i (factor 1/(1+[I]/K_i) over the concentration window),
+  and `absent` where no K_i exists. Each enzyme total that is not conserved is
+  classified by what breaks it. Reported: coverage and the classification.
+- **X3 — branching.** At every small-molecule branch point, each consuming branch's
+  share at the dilute limit is (k_cat/K_m)_i·[E_i] / Σ_j (k_cat/K_m)_j·[E_j]. The
+  verdict is answered only when every sibling has k_cat, K_m and abundance;
+  otherwise the missing sibling is named. Reported: coverage.
+
+## X4 — the redox ladder (predicted)
+
+Couple potentials differences ΔE'° = −ΔG'°/(nF) come from the Hess span with the
+Legendre transform at pH 7, I = 0.25 M, 298.15 K.
+
+- **X4a.** NAD+/NADH and NADP+/NADPH lie within 10 mV of each other. Textbook:
+  −320 and −324 mV.
+- **X4b.** NADPH reduces glutathione: ΔG'° of NADPH + GSSG -> NADP+ + 2 GSH is
+  negative and within 10 kJ/mol of −16 kJ/mol. Textbook: E°' −324 against −240 mV.
+
+Against: either falls outside its band, or the value is not derivable (then
+`absent`, not a failure of the prediction, and recorded as such).
+
+## X4c — the Moser–Dutton ruler on a cytosolic relay (predicted, weak by design)
+
+For glutathione reductase (PDB 3GRS) and thioredoxin reductase 1 (PDB 2J3N), the
+edge distance from the FAD isoalloxazine ring to the redox-active cysteine sulfur
+gives a ruler rate (λ = 0.7 eV, ΔG = 0, packing density 0.76; convention
+`moser-dutton-defaults`).
+
+- Prediction: the ruler rate exceeds the enzyme's measured k_cat (SABIO-RK, human
+  wild type), so intramolecular electron transfer is not rate-limiting.
+- Control: the same calculation at 25 Å must fall below k_cat. If it does not, the
+  check cannot fail and is reported as non-discriminating.
+
+## X5 — EC labels and structural classes (predicted)
+
+After colour refinement, 537 junctions sit in shared classes. Junctions get the EC
+class (first digit) of their catalyst where one exists.
+
+- Prediction: EC labels are concordant with structure. Real labels split fewer
+  shared classes than labels shuffled among the same junctions (200 shuffles,
+  one-sided empirical p < 0.05).
+- Against: p ≥ 0.05. The labels would then add distinctions no more aligned with
+  structure than random ones.
+
+Also reported (measured): for every shared class, the coarsest label — EC level
+1-4, Pfam, gene — that splits it, or `underdetermined` naming none.
+
+## X6 — stoichiometric signatures of reaction classes (predicted)
+
+Each reaction gets a class from its stoichiometry alone, by fixed rules:
+
+- oxidoreductase: an NAD(P)(H), FAD or glutathione/thioredoxin couple changes state;
+- hydrolase: water consumed and the number of small-molecule products exceeds the
+  number of reactants excluding water;
+- ligase: a nucleoside triphosphate is split to NDP+Pi or NMP+PPi alongside a bond
+  formation;
+- transferase: a group donor/acceptor pair (ATP -> ADP with a phosphorylated
+  product, or SAM -> SAH, or CoA esters);
+- isomerase: one small molecule in, one out, with identical formula;
+- lyase: one small molecule in, two out, no water.
+
+When several rules match, the verdict is `underdetermined`.
+
+- Prediction: on reactions whose catalyst has a single EC class, the signature
+  class agrees with that EC class in more than 60% of classifiable reactions, and
+  above a shuffle null (EC labels permuted, 200 times, one-sided p < 0.05).
+- Against: agreement at or below 60%, or p ≥ 0.05.
