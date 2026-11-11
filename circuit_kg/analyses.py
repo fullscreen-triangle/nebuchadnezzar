@@ -275,6 +275,7 @@ def chains(kg: CircuitKG, match: dict, min_len=3) -> list:
             drops = [match.get(j[1], {}).get("dG0") for j in path]
             out.append({
                 "rungs": [kg.G.nodes[j]["name"] for j in path],
+                "junctions": [j[1] for j in path],
                 "rung_powers": absent("rung power needs junction conductances G_r",
                                       remedy="exchange fluxes or rate constants per junction").as_json(),
                 "stated_dG0_chemical": drops})

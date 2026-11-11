@@ -61,16 +61,26 @@ def _get(url, tries=5):
     raise RuntimeError(f"failed: {url}")
 
 
-def fetch(page_size=500) -> dict:
-    SABIO_DIR.mkdir(parents=True, exist_ok=True)
+SABIO_ALL_QUERY = 'Organism:"Homo sapiens" AND EnzymeType:wildtype'
+SABIO_ALL_DIR = RAW / "sabio_all"
+
+
+def fetch_all(page_size=500) -> dict:
+    """Every human wild-type kinetic law (K_m, k_cat, K_i, ... in one pass)."""
+    return fetch(page_size, query=SABIO_ALL_QUERY, dest_dir=SABIO_ALL_DIR, with_paxdb=False)
+
+
+def fetch(page_size=500, query=SABIO_QUERY, dest_dir=None, with_paxdb=True) -> dict:
+    dest_dir = dest_dir or SABIO_DIR
+    dest_dir.mkdir(parents=True, exist_ok=True)
     pages, page, total = [], 1, None
     while True:
-        dest = SABIO_DIR / f"page-{page:03d}.json.gz"
+        dest = dest_dir / f"page-{page:03d}.json.gz"
         if dest.exists():
             body = gzip.decompress(dest.read_bytes())
         else:
             url = SABIO_URL + "?" + urllib.parse.urlencode(
-                {"q": SABIO_QUERY, "page": page, "pageSize": page_size})
+                {"q": query, "page": page, "pageSize": page_size})
             body = _get(url)
             dest.write_bytes(gzip.compress(body))
         meta = json.loads(body)["meta"]
@@ -79,14 +89,15 @@ def fetch(page_size=500) -> dict:
         if page >= meta["total_pages"]:
             break
         page += 1
-    if not PAXDB_FILE.exists():
-        PAXDB_FILE.write_bytes(_get(PAXDB_URL))
-    rec = {"sabio": {"url": SABIO_URL, "query": SABIO_QUERY, "page_size": page_size,
+    rec = {"sabio": {"url": SABIO_URL, "query": query, "page_size": page_size,
                      "total_count": total, "pages": pages,
-                     "retrieved": time.strftime("%Y-%m-%d")},
-           "paxdb": {"url": PAXDB_URL,
-                     "sha256": hashlib.sha256(PAXDB_FILE.read_bytes()).hexdigest()}}
-    (SABIO_DIR / "SOURCES.json").write_text(json.dumps(rec, indent=1))
+                     "retrieved": time.strftime("%Y-%m-%d")}}
+    if with_paxdb:
+        if not PAXDB_FILE.exists():
+            PAXDB_FILE.write_bytes(_get(PAXDB_URL))
+        rec["paxdb"] = {"url": PAXDB_URL,
+                        "sha256": hashlib.sha256(PAXDB_FILE.read_bytes()).hexdigest()}
+    (dest_dir / "SOURCES.json").write_text(json.dumps(rec, indent=1))
     return rec
 
 
@@ -94,8 +105,19 @@ def fetch(page_size=500) -> dict:
 
 def km_records() -> list[dict]:
     """One record per (entry, substrate K_m): uniprot ids, KEGG ids of the substrate, K_m in M."""
+    return [{**{k: v for k, v in r.items() if k not in ("value", "kind", "role")}, "km_M": r["value"]}
+            for r in parameter_records(("Km",), roles=("Substrate",), src=SABIO_DIR)]
+
+
+UNIT_OK = {"Km": "M", "Ki": "M", "kcat": "s^(-1)"}
+
+
+def parameter_records(kinds=("Km", "kcat", "Ki"), roles=("Substrate", "Inhibitor"),
+                      src=None) -> list[dict]:
+    """One record per (entry, parameter): kind, value in normalised units, the species it refers
+    to (KEGG ids and role), uniprot ids.  k_cat records carry no species when SABIO gives none."""
     out = []
-    for f in sorted(SABIO_DIR.glob("page-*.json.gz")):
+    for f in sorted((src or SABIO_ALL_DIR).glob("page-*.json.gz")):
         for e in json.loads(gzip.decompress(f.read_bytes()))["data"]:
             ed = e.get("enzyme_description") or {}
             if (ed.get("wildtype") or "").lower() != "wildtype":
@@ -111,19 +133,22 @@ def km_records() -> list[dict]:
             cond = e.get("experimental_conditions") or {}
             pH = (cond.get("envvar_ph") or {}).get("start_value")
             for p in (e.get("kineticlaw") or {}).get("parameter", []):
-                if (p.get("parameter_type") or {}).get("name") != "Km":
+                kind = (p.get("parameter_type") or {}).get("name")
+                if kind not in kinds:
                     continue
                 v = p.get("n_start_value")
-                if not v or v <= 0 or (p.get("unit") or {}).get("n_name") != "M":
+                if not v or v <= 0 or (p.get("unit") or {}).get("n_name") != UNIT_OK.get(kind):
                     continue
                 key = ((p.get("species") or {}).get("species_key") or "").split(" | ")
-                if len(key) != 3 or key[2] != "Substrate":
+                role, name, keggs = None, None, []
+                if len(key) == 3:
+                    name, role = key[1], key[2]
+                    cid = by_name.get((name, role))
+                    keggs = sorted(kegg.get(cid, ())) if cid is not None else []
+                if kind != "kcat" and (role not in roles or not keggs):
                     continue
-                cid = by_name.get((key[1], "Substrate"))
-                if cid is None or not kegg.get(cid):
-                    continue
-                out.append({"entry": e["id"], "uniprot": uni, "kegg": sorted(kegg[cid]),
-                            "name": key[1], "km_M": float(v), "pH": pH})
+                out.append({"entry": e["id"], "uniprot": uni, "kind": kind, "value": float(v),
+                            "kegg": keggs, "name": name, "role": role, "pH": pH})
     return out
 
 

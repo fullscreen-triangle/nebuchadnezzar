@@ -7,7 +7,7 @@ import math
 import time
 from collections import Counter, defaultdict
 
-from .core import DERIVED, RESULTS
+from .core import DERIVED, RAW, RESULTS
 
 
 def build(radii) -> dict:
@@ -320,6 +320,177 @@ def folding_stage() -> dict:
     return out
 
 
+def extend_stage() -> dict:
+    """Extensions from the P450 monograph and dcat-ap-plus-p450: X1-X6 (predictions file)."""
+    import numpy as np
+    from . import analyses, annotations, axes, branching, hess, labels, modifiers, redox, slot
+    from . import kinetics as kn
+    from . import medium as md
+    from . import thermo
+    from .core import combine
+    from .folding import PDB_DIR, fetch_pdb
+    from .graph import CircuitKG, load_medium
+    t0, timing = time.time(), {}
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    smap = thermo.species_kegg(corpus, thermo.Chebi())
+    tecr = thermo.load_tecrdb(pH_window=tuple(med["pH_window"]))
+    match = thermo.match_reactions(corpus, smap, tecr)
+    hs = hess.HessSpan(tecr)
+    kn.fetch_all()
+    recs = kn.parameter_records()
+    kc, km = branching.rate_tables(recs)
+    kis = modifiers.ki_table(recs)
+    sp = corpus["species"]
+    ann = annotations.fetch({u for s in sp.values() for u in s["uniprot"]})
+    ppm = kn.paxdb_ppm()
+    total_M = float(np.mean(kn.TOTAL_PROTEIN_MOLECULES_M))
+    molar = {u: ppm[a["gene"].upper()] * 1e-6 * total_M for u, a in ann.items()
+             if a and a.get("gene") and a["gene"].upper() in ppm}
+    kg = CircuitKG(corpus, med, match)
+    out = {"data": {"sabio_records": dict(Counter(r["kind"] for r in recs)),
+                    "uniprot": {"accessions": len(ann), "with_EC": sum(bool(a and a["ec"]) for a in ann.values())},
+                    "proteins_with_molar_abundance": len(molar)}}
+    timing["load"] = time.time() - t0
+
+    # X2 -- modifier stack
+    medges = modifiers.modifier_edges(corpus, smap, kis, med["concentration_window_M"])
+    out["X2_modifiers"] = {
+        "edges": len(medges),
+        "labels_by_role": dict(Counter(f'{v["role"]}|{v["label"]}' for v in medges.values())),
+        "strength_of_answered": dict(Counter(v["detail"]["strength"] for v in medges.values()
+                                             if v["label"] == "answered")),
+        "answered": [{"edge": k, **v["detail"]} for k, v in medges.items() if v["label"] == "answered"],
+        "enzyme_totals": modifiers.classify_breakers(corpus),
+        "loss_of_function_variants": dict(Counter(v["label"] for v in
+                                                 modifiers.variant_edges(corpus).values()))}
+
+    # X3 -- current dividers, and ladder floors on chains
+    div = branching.dividers(corpus, smap, kg.ambient, kc, km, molar)
+    miss = Counter()
+    for v in div.values():
+        for w in v.get("detail", {}).get("missing", {}).values():
+            miss["uncatalysed sibling" if w.startswith("uncatalysed") else
+                 "abundance" if "PaxDb" in w else "k_cat or K_m"] += 1
+    chains = analyses.chains(kg, match)
+    floors = []
+    for ch in chains:
+        g = []
+        for rid in ch["junctions"]:
+            rx = corpus["reactions"][rid]
+            ks = [k for s, *_ in rx["reactants"] for k in smap.get(s, {}).get("kegg", [])]
+            v, _ = branching.specificity(rid, ks, corpus, kc, km, molar)
+            g.append(v)
+        if all(x is not None for x in g):
+            R = [1 / x for x in g]
+            from .ladder import rung_powers
+            pw = rung_powers(R, max(R))          # convention: medium-as-slowest-rung
+            floors.append(axes.judge_ladder(pw, 0.95).as_json())
+    out["X3_branching"] = {
+        "branch_points": len(div),
+        "labels": dict(Counter(v["label"] for v in div.values())),
+        "missing_by_kind": dict(miss),
+        "answered": {sp[s]["name"]: v["payload"] for s, v in div.items() if v["label"] == "answered"},
+        "partial_coverage": float(np.mean([v["detail"]["complete"] / v["detail"]["siblings"]
+                                           for v in div.values() if v["label"] == "absent"])),
+        "ladder_chains": len(chains),
+        "chains_with_all_rung_conductances": len(floors),
+        "ladder_floor_verdicts (target 0.95, convention medium-as-slowest-rung)":
+            dict(Counter(f["label"] for f in floors)), "floor_details": floors}
+    timing["X2_X3"] = time.time() - t0
+
+    # X4 -- redox ladder and the Moser-Dutton ruler
+    rids = {k for c in redox.COUPLES.values() for side in c for k in side}
+    have = json.loads(md.TABLE.read_text())["compounds"] if md.TABLE.exists() else {}
+    if not rids <= set(have):
+        md.build_table(set(have) | rids)
+    L = md.Legendre()
+    lad = redox.couple_ladder(hs, L)
+    nad, gsh = lad.get("NAD", {}), lad.get("glutathione", {})
+    fetch_pdb(("3GRS", "2J3N"))
+    md_rows = {}
+    for name, pid, acc, cys in (("glutathione reductase", "3GRS", "P00390", (58, 63)),
+                                ("thioredoxin reductase 1", "2J3N", "Q16881", (59, 64))):
+        R = redox.flavin_to_cys(PDB_DIR / f"{pid}.pdb", cys)
+        kcats = [r["value"] for r in recs if r["kind"] == "kcat" and acc in r["uniprot"]]
+        if R is None:
+            md_rows[name] = {"label": "absent", "blocker": "no flavin-cysteine distance"}
+            continue
+        k_et, k_ctrl = redox.moser_dutton(R), redox.moser_dutton(25.0)
+        if not kcats:
+            md_rows[name] = {"label": "absent", "blocker": "no k_cat in SABIO-RK (human, wild type)",
+                             "pdb": pid, "edge_distance_A": R, "k_ET_ruler_per_s": k_et,
+                             "k_ET_control_25A_per_s": k_ctrl}
+            continue
+        kcat = float(np.median(kcats))
+        md_rows[name] = {"pdb": pid, "edge_distance_A": R, "k_ET_ruler_per_s": k_et,
+                         "k_cat_median_per_s": kcat, "k_cat_records": len(kcats),
+                         **axes.check("ruler rate exceeds k_cat", k_et > kcat, k_ctrl > kcat)}
+    out["X4_redox"] = {
+        "conditions": redox.TEXTBOOK, "ladder_mV_relative_to_NADP": lad,
+        "X4a_NAD_vs_NADP_within_10mV": (abs(nad["payload"]) <= 10) if nad.get("label") == "answered" else None,
+        "X4b_GSSG_reduction_dG_within_10kJ_of_minus16": (
+            gsh["detail"]["dG_prime_kJ"] < 0 and abs(gsh["detail"]["dG_prime_kJ"] + 16) <= 10)
+            if gsh.get("label") == "answered" else None,
+        "X4c_moser_dutton": md_rows}
+    timing["X4"] = time.time() - t0
+
+    # X5 -- labels on structural classes;  X6 -- stoichiometric signatures
+    kg0 = CircuitKG(corpus, med, {})
+    keys1 = analyses.cut_keys(kg0, [1])[1]
+    final = analyses.refine(kg0, keys1)["rounds"][-1]
+    classes = labels.shared_junction_classes(final)
+    jl = labels.junction_labels(corpus, ann)
+    out["X5_labels"] = {
+        "concordance_EC1": labels.concordance(classes, jl, "EC1"),
+        "concordance_EC3": labels.concordance(classes, jl, "EC3"),
+        "discriminating_dimension": labels.discriminating_dimension(classes, jl),
+        "bits_left_per_item": {k or "structure only": labels.bits_left(final, jl, k)
+                               for k in (None, "EC1", "EC4", "pfam", "gene")}}
+    formula = labels.formulas({k for v in smap.values() for k in v["kegg"]}, md.EQ_CACHE)
+    out["X6_signatures"] = labels.signature_test(corpus, smap, jl, formula)
+    timing["X5_X6"] = time.time() - t0
+
+    # X1 -- verdict axes over everything the kernel has written, including this run
+    unmeasured = hess.derive_unmeasured(corpus, match, smap, hs)
+    slots = slot.carrier_slot(corpus, match, smap, hs)
+    census = Counter()
+    live = {"thermo_match": match, "hess": unmeasured, "carrier_slot": slots,
+            "modifier_edges": medges, "dividers": div, "variants": modifiers.variant_edges(corpus),
+            "redox_ladder": lad}
+    if (RESULTS / "medium.json").exists():
+        live["direction"] = json.loads((RESULTS / "medium.json").read_text()).get("per_reaction", {})
+    for d in live.values():
+        census.update(axes.gate_census(list(d.values())))
+    census.update(axes.gate_census(floors))
+    _, ground = axes.kernel_prov()
+    mdir = json.loads((RESULTS / "medium.json").read_text()).get("per_reaction", {}) \
+        if (RESULTS / "medium.json").exists() else {}
+    basis = Counter(combine("stated" if v.get("source") == "measured" else "derived",
+                            "supplied").value for v in mdir.values())
+    conv = {"medium": med, "conventions": ["protein-ppm-to-molar", "dilute-limit-share",
+                                           "medium-as-slowest-rung", "textbook-standard-conditions",
+                                           "moser-dutton-defaults", "scope-from-source"]}
+    st = axes.stage({"corpus": DERIVED / "reactome_cytosol.json",
+                     "tecrdb": RAW / "tecrdb_transformed.csv", "legendre": md.TABLE,
+                     "sabio": kn.SABIO_ALL_DIR / "SOURCES.json", "uniprot": annotations.TABLE},
+                    conv)
+    altered = json.loads(json.dumps(conv)); altered["medium"]["pH_window"] = [7.0, 7.4]
+    out["X1_axes"] = {
+        "gate_letters": dict(Counter(g for (_, g, _), n in census.items() for _ in range(n))),
+        "gate_by_blocker": [{"label": l, "gate": g, "blocker": b, "n": n}
+                            for (l, g, b), n in census.most_common(25)],
+        "ground_by_fact_family": ground,
+        "direction_verdict_basis": dict(basis),
+        "stage": st,
+        "stage_check": axes.check("stage is current under its own conventions",
+                                  axes.is_current(st, conv), axes.is_current(st, altered))}
+    out["timing_s"] = {k: round(v, 1) for k, v in timing.items()}
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "extend.json").write_text(json.dumps(out, indent=1, default=str))
+    return out
+
+
 def kinetics_stage() -> dict:
     """K_m contacts: retention factors, the locality diagnostic, and test P1."""
     import numpy as np
@@ -367,7 +538,7 @@ def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
     ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium",
                                           "kinetics", "complete",
-                                          "folding"])
+                                          "folding", "extend"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -390,6 +561,11 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "extend":
+        o = extend_stage()
+        print(json.dumps({k: v for k, v in o.items() if k not in ("X1_axes",)}, indent=1,
+                         default=str)[:12000])
+        print(json.dumps({k: v for k, v in o["X1_axes"].items() if k != "stage"}, indent=1))
     elif a.stage == "folding":
         print(json.dumps(folding_stage(), indent=1))
     elif a.stage == "complete":

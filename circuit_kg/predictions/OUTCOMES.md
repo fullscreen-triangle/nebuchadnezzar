@@ -234,3 +234,118 @@ eigen-counts, and not phosphosite placement beyond what pLDDT already says. The
 sequence-only coupling carries less contact information than a hydrophobicity
 product. The ternary address is usable as a hierarchical key only together with
 its neighbouring cells.
+
+# Extensions from the P450 monograph and the dcat-ap-plus-p450 specification
+
+Numbers are from `python -m circuit_kg extend` (writes `results/extend.json`). The
+predictions were committed in cddf153, before the code. Data: SABIO-RK, all human
+wild-type kinetic laws (5,682 K_m, 3,089 k_cat and 771 K_i records); UniProt
+annotations for 3,207 proteins, 1,481 of them with an Enzyme Commission (EC) number; PaxDb abundance for
+3,048 proteins.
+
+## X1 — verdict axes (measured)
+
+- **Gate letters.** Every empty or absent verdict from the live producers now carries
+  one: thermo match, Hess, carrier/slot, direction, modifiers, dividers, variants and
+  the redox ladder. Of 1,681 such verdicts, 686 are not recorded (`-`), 605 are a name
+  the source never uses (`open`) and 390 are witnessed absent (`+`). None is undecided.
+- **Ground verdicts by fact family.**
+  - Index: TECRDB rows, SABIO-RK parameters, PaxDb and Protein Data Bank (PDB) coordinates.
+  - Composite: every ΔG the kernel pools or derives, direction verdicts, retention
+    factors and PDB distances.
+  - Icon: AlphaFold models and the contact graphs and enzyme cycles built on them.
+  - Collapsed: Reactome stoichiometry, UniProt EC and eQuilibrator microspecies, which
+    are curation with no contact recorded.
+  - Symbol: the potential μ, which is never stored.
+- **Basis of direction verdicts.** 75 are supplied (a measured ΔG under the supplied
+  medium window) and 126 derived. None can be reported as stated.
+- **Stage digest.** It is current under its own conventions. The control, with the pH
+  window changed, makes it stale, so the check is discriminating.
+- **Subfloor.** The `subfloor` verdict reproduces the specification's example: a
+  composite of 0.9475 against a target of 0.95 gives a shortfall of 0.0025. On real data
+  no ladder chain has all its rung conductances (0 of 17), so it never fires there.
+
+## X2 — modifier stack (measured)
+
+- **Inhibitor edges (175).** 147 are macromolecular binding partners. They are refused,
+  since no K_i applies to them. 26 small molecules have no K_i in SABIO-RK for their
+  enzyme (absent, `-`), and 2 have no KEGG compound (`open`).
+- **Stimulator edges (105).** 52 are macromolecular. The 53 small molecules have no
+  activation constant in SABIO-RK. No modifier edge is answered.
+- **Broken enzyme totals.** The stoichiometry does not conserve 434 enzyme totals. The
+  reactions that make or consume those enzymes are:
+  - assembly or dissociation (266);
+  - covalent modification (140);
+  - degradation (124);
+  - other (103).
+
+  An enzyme can have several kinds. Where only one kind applies, the counts are 91, 52,
+  49 and 45. Induction and inactivation would act on these boundary currents.
+- **Disease variants.** Reactome has 58 loss-of-function variant reactions. 23 attach
+  to one wild-type edge as a modifier, 19 match several (underdetermined) and 16 match
+  none.
+
+## X3 — current dividers (measured)
+
+- **Coverage.** Of 168 healthy-cell branch points (variant siblings removed), 3 are
+  answered. The others lack k_cat/K_m for a sibling (487 sibling gaps) or have an
+  uncatalysed sibling (135). On average 7.6% of a branch point's siblings are complete.
+- **The three answered branch points:**
+  - fructose 1,6-bisphosphate: fructose-1,6-bisphosphatase 0.67, aldolase 0.33;
+  - galactose: galactokinase 0.98, aldose reductase 0.02;
+  - glucose: aldose reductase 0.52, hexokinases 0.48.
+- **The glucose share is not credible.** At millimolar glucose the hexokinases are
+  saturated (K_m about 0.1 mM), so the dilute limit does not hold. The abundances are
+  also whole-organism figures. The failed share repeats the locality failure from the
+  kinetics stage.
+
+## X4 — redox ladder: X4a and X4b hold, X4c is absent
+
+The couples include nicotinamide adenine dinucleotide phosphate (NADP), as NADP+ and
+reduced NADP (NADPH). They include nicotinamide adenine dinucleotide (NAD), as NAD+ and
+reduced NAD (NADH). They also include glutathione disulfide (GSSG), reduced glutathione
+(GSH) and flavin adenine dinucleotide (FAD). Potentials are relative to the NADP couple. They come
+from the Hess span and the Legendre transform at pH 7, I = 0.25 M and 298.15 K. The
+textbook differences are approximate.
+
+| couple | E − E_NADP (mV) | sigma (mV) | textbook difference (mV) |
+|---|---|---|---|
+| NAD+/NADH | +1.6 | 7.5 | +4 |
+| GSSG/GSH | +71.7 | 12.7 | about +84 |
+| lipoamide | +25.1 | 29.1 | about +34 |
+| thioredoxin | +57.9 | 28.2 | about +54 |
+| pyruvate/lactate | +138.7 | 10.6 | +139 |
+| oxaloacetate/malate | +156.6 | 9.1 | +158 |
+
+- **X4a holds.** The NAD and NADP couples lie 1.6 mV apart.
+- **X4b holds.** NADPH + GSSG → NADP+ + 2 GSH has ΔG'° = −13.8 kJ/mol, inside the
+  predicted −16 ± 10.
+- **Not derivable.** Cystine and dehydroascorbate were never measured in TECRDB
+  (`open`). FAD is not a combination of measured reactions (`-`).
+- **X4c is absent, not tested.** The flavin-to-cysteine edge distance is 3.42 Å in
+  glutathione reductase (3GRS) and 3.33 Å in thioredoxin reductase 1 (2J3N). Both
+  distances give a ruler rate of 6.8e10 per second. The control at 25 Å gives 0.014 per second, so the
+  check would discriminate, but SABIO-RK has no human wild-type k_cat for either enzyme.
+
+## X5 — EC labels are concordant with structural classes: holds
+
+An EC number truncated to its first level is written EC level 1 (EC1), and so on to
+EC level 4 (EC4).
+
+- **Concordance.** Real EC1 labels split 4 of the 147 shared junction classes (210
+  labelled junctions). Shuffled labels split 53.7 on average, with a minimum of 41
+  (empirical p = 0.005). At EC level 3 the counts are 4 against 61.8.
+- **Coarsest splitting label.** For 100 classes no label splits them
+  (underdetermined). For the rest it is the gene (18), EC1 (11), Pfam (8), EC4 (8), EC2
+  (1) or EC3 (1). 32 classes are separated completely.
+- **Bits left per item.** 0.649 with structure alone, then 0.641 with EC1, 0.629 with
+  EC4, 0.627 with Pfam and 0.619 with the gene.
+
+## X6 — stoichiometric signatures match EC classes: holds
+
+- **Verdicts.** 798 answered, 42 underdetermined (mostly lyase+transferase, 28), 653
+  absent and 1,421 refused (macromolecular events).
+- **Agreement.** On 634 reactions with a single-EC catalyst the signature agrees in
+  593 (93.5%), against 32.5% for shuffled EC labels (empirical p = 0.005).
+- **Largest confusions.** Lyase against EC oxidoreductase (8) and hydrolase against EC
+  transferase (8).

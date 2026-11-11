@@ -8,3 +8,6 @@ __pycache__/
 data/raw/alphafold/
 data/raw/sabio/
 data/raw/paxdb-*.txt
+data/raw/sabio_all/
+data/raw/uniprot/
+data/raw/pdb/

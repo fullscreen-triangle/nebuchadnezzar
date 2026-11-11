@@ -26,7 +26,20 @@ UNIT_ROUNDOFF = 2.0 ** -53
 class Tag(str, Enum):
     STATED = "stated"        # the source record asserts it
     SUPPLIED = "supplied"    # a named convention produced it
+    DERIVED = "derived"      # the kernel computed it from other values
     ABSENT = "absent"        # neither source nor convention determines it
+
+
+_BASIS_ORDER = {Tag.STATED: 0, Tag.SUPPLIED: 1, Tag.DERIVED: 2}
+
+
+def combine(*tags: Tag) -> Tag:
+    """Basis is never laundered (dcat-ap-plus-p450 R2): tags compose as max under
+    stated < supplied < derived, and anything combined with an absent value is absent."""
+    tags = [Tag(t) for t in tags]
+    if not tags or Tag.ABSENT in tags:
+        return Tag.ABSENT
+    return max(tags, key=_BASIS_ORDER.__getitem__)
 
 
 @dataclass(frozen=True)
@@ -58,6 +71,12 @@ class Label(str, Enum):
     UNDERDETERMINED = "underdetermined"  # several readings, no rule selects
     UNDECIDABLE = "undecidable"    # data cannot resolve it (within tolerance)
     REFUSED = "refused"            # the question is outside what the graph can state
+    SUBFLOOR = "subfloor"          # a composite power below its declared target
+
+
+# Empty-answer letters (dcat-ap-plus-p450 section 7.2), orthogonal to the label
+GATES = {"+": "witnessed absent", "-": "not recorded", "a": "both", "open":
+         "a name the source never uses", "?": "undecided"}
 
 
 @dataclass
@@ -67,16 +86,22 @@ class Verdict:
     blocker: str | None = None
     remedy: str | None = None
     detail: dict = field(default_factory=dict)
+    gate: str | None = None
 
     def __post_init__(self):
         if self.label is not Label.ANSWERED and self.payload is not None:
             raise ValueError(f"verdict {self.label.value} may not carry a payload")
         if self.label not in (Label.ANSWERED, Label.EMPTY) and not self.blocker:
             raise ValueError(f"verdict {self.label.value} must name its blocker")
+        if self.gate is not None:
+            if self.gate not in GATES:
+                raise ValueError(f"unknown gate letter {self.gate!r}")
+            if self.label not in (Label.EMPTY, Label.ABSENT):
+                raise ValueError("a gate letter belongs to an empty or absent answer")
 
     def as_json(self):
         d = {"label": self.label.value}
-        for k in ("payload", "blocker", "remedy"):
+        for k in ("payload", "blocker", "remedy", "gate"):
             v = getattr(self, k)
             if v is not None:
                 d[k] = v

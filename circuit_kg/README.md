@@ -18,6 +18,7 @@ python -m circuit_kg medium     # Legendre transforms, test M1, direction over t
 python -m circuit_kg kinetics   # SABIO-RK K_m + PaxDb: retention, locality, test P1 -> results/kinetics.json
 python -m circuit_kg complete   # source-to-target completions; separation left after refinement -> results/complete.json
 python -m circuit_kg folding    # levinthal's oscillator folding ideas tested against AlphaFold -> results/folding.json
+python -m circuit_kg extend     # verdict axes, modifiers, dividers, redox ladder, labels -> results/extend.json
 python -m pytest circuit_kg/tests -q
 ```
 
@@ -28,9 +29,12 @@ local eQuilibrator compound cache (set `CIRCUIT_KG_EQ_CACHE` if it is not in the
 default place). It takes about 30 s. `kinetics` fetches 15 pages from the System for the Analysis of Biochemical
 Pathways - Reaction Kinetics database (SABIO-RK)
 once and then takes about 5 min. `complete` takes about 45 s. `folding` takes about 15 min.
+`extend` fetches 22 SABIO-RK pages and the UniProt annotations once, then takes
+about a minute.
 
 The ideas behind `medium`, `kinetics` and `complete` come from the chromatography
-and ideal-gas papers in `maxwell`. Their predictions were committed before the
+and ideal-gas papers in `maxwell`. The ideas behind `extend` come from the
+cytochrome P450 monograph and the dcat-ap-plus-p450 specification in `levinthal`. Their predictions were committed before the
 code ran (`predictions/PREDICTIONS.md`), and the results are in
 `predictions/OUTCOMES.md`.
 
@@ -79,6 +83,17 @@ Each supplied convention is named where it is used:
   protein molecules.
 - `scope-from-source`: a completion may use the source, the medium, and the
   proteins that no reaction makes.
+- `dilute-limit-share`: a branch's share of flux is (k_cat/K_m)[E] over the sum
+  of its siblings'. Each k_cat is paired with the K_m values of the same SABIO-RK
+  kinetic law, because SABIO-RK records no substrate on k_cat.
+- `loss-of-function-variant`: Reactome's "Defective ..." reactions are modifiers
+  on their wild-type edge, not competing siblings.
+- `textbook-standard-conditions`: redox couples at pH 7, ionic strength 0.25 M,
+  298.15 K, no Mg.
+- `moser-dutton-defaults`: reorganisation energy 0.7 eV, driving force 0,
+  packing density 0.76.
+- `medium-as-slowest-rung`: when a ladder chain's floor is judged, its medium
+  resistance is taken equal to its slowest rung's.
 
 ## Modules
 
@@ -99,6 +114,12 @@ Each supplied convention is named where it is used:
 | `kinetics.py` | SABIO-RK K_m and PaxDb abundance; retention factor per metabolite; departure from the dilute limit per enzyme; test P1 |
 | `folding.py` | DSSP-style secondary structure, sequence and AlphaFold couplings, Kuramoto phase-lock groups and local order, ternary addresses; experiments F1-F5 |
 | `complete.py` | forward scope and backward completion under three direction semantics; bits left after refinement |
+| `axes.py` | gate letters for empty answers, ground verdicts from provenance, stage digests, ladder floors, check markers |
+| `annotations.py` | UniProt EC numbers, Pfam domains and families for every protein |
+| `modifiers.py` | additive log-rate modifier stacks, inhibitor constants, what breaks enzyme totals, disease-variant edges |
+| `branching.py` | flux shares at branch species from k_cat/K_m and abundance |
+| `redox.py` | redox couple ladder from the Hess span; Moser-Dutton ruler on PDB distances |
+| `labels.py` | EC, Pfam and gene labels on structural classes with a shuffle null; stoichiometric signatures |
 
 Edge weights used for cuts are always counts (stoichiometry, contacts, exposed
 atoms). Real-valued quantities such as Delta G or a conductance stay in the
