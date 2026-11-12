@@ -349,3 +349,98 @@ EC level 4 (EC4).
   593 (93.5%), against 32.5% for shuffled EC labels (empirical p = 0.005).
 - **Largest confusions.** Lyase against EC oxidoreductase (8) and hydrolase against EC
   transferase (8).
+
+
+# Databases (Rhea, MetaNetX, localisation, UniProt features, M-CSA, PDBe, DisProt, Human-GEM)
+
+`python -m circuit_kg databases` -> `results/databases.json` (about 12 min, most of it
+the experimental-structure downloads). Five predictions hold and three fail.
+
+| test | outcome | number |
+|---|---|---|
+| R1 curated direction against the 1 mM sign | fails | 45 of 62 agree (72.6%), predicted above 80% |
+| X1 MetaNetX closes identifier misses | fails | 34 of 197 unblocked (17%), predicted a quarter |
+| L1 catalysts have cytosol support | holds | 1,947 of 2,047 proteins with data (95.1%) |
+| S1 slots sit on curated phospho-residues | holds | 168 of 206 (81.6%); one offset explains 5 of 9 mismatches |
+| C1 catalytic residues are contact hubs | holds | median 55 against 43 contacts, p = 2.7e-18; control p = 0.46 |
+| P1 AlphaFold contacts match experiment | holds | median Jaccard 0.90 on 60 chains; shift-by-3 control 0.14 |
+| D1 disorder explains the phosphosite effect | fails | outside DisProt disorder the sites still sit lower, p = 0.0012 |
+| G1 Human-GEM coefficients agree | holds | 324 of 324; only 23 of them have a coefficient other than 1 |
+
+## R1 — fails, and the failures are uphill reactions
+
+The disagreements include triose-phosphate isomerase, glyceraldehyde-3-phosphate
+dehydrogenase, lactate oxidation by lactate dehydrogenase, ethanol oxidation, creatine
+kinase forming phosphocreatine and the thiolase condensation of two acetyl-CoA. All of
+them run uphill at 1 mM and run in the cell because product is drawn away. The 1 mM sign is therefore not
+a direction; the concentration ratio is. These 17 reactions are where measured concentration windows
+(`measured-window`) would decide the direction. Coverage: 460 kernel reactions map to
+Rhea (403 left-to-right, 69 right-to-left), and the participant sets agree in 421 of 459.
+
+## X1 — fails, and the blocker moves
+
+MetaNetX gives 36 more species a KEGG compound and unblocks 34 of the 197 reactions.
+One of them gains a TECRDB match; 33 are now blocked by "no TECRDB measurement of this
+reaction". The Hess-derived count stays at 30. The gate letter of those 33 changes from
+`open` (a name the source never uses) to `-` (not recorded). The limit is measurement,
+not identifiers.
+
+## L1 — holds
+
+Of 2,134 catalyst proteins, 1,947 have cytosol support in the Human Protein Atlas or in
+COMPARTMENTS (confidence at least 3), 100 have none and 87 have no data. By reaction:
+1,404 have all catalysts supported, 79 some and 78 none. The unsupported list includes
+the three fibrinogen chains (P02671, P02675, P02679), which are secreted. These 78
+reactions are candidates for a scope error in the cytosol filter.
+
+## S1 — holds
+
+168 of the 206 located phosphosites coincide with a UniProt phospho modified residue;
+141 of those carry experimental evidence in the Evidence and Conclusion Ontology (ECO),
+codes ECO:0000269 or ECO:0007744. One offset per protein explains 5 of the 9 residue
+mismatches: +39 in Q04637 (3 sites), +2 in Q14155 and −48 in tau (P10636, an isoform
+numbering). A first run reported 19%, because the parser cut each note at its first
+semicolon. Notes name the kinase after one, as the mechanistic target of rapamycin
+(MTOR) in "Phosphoserine; by MTOR". The fixed parser has a regression test, and the
+cache now keeps UniProt's raw text.
+
+UniProt also names 31 phosphorylated enzyme intermediates among the catalysts
+(phosphohistidine, phosphocysteine, phosphoserine). They are the enzymes whose
+`enzyme-cycle-2` expansion should carry a covalent intermediate.
+
+## C1 — holds
+
+Over 50 enzymes in the Mechanism and Catalytic Site Atlas (M-CSA), 255 catalytic residues have a median of 55 heavy-atom contacts.
+The 3,773 residues of the same amino-acid types have a median of 43 (one-sided
+Mann-Whitney p = 2.7e-18). A random same-type sample of equal size gives p = 0.46.
+
+## P1 — holds
+
+Of 313 high-confidence AlphaFold models, 60 were compared with the first X-ray chain
+covering at least 80% of them (PDBe best structures, numbering from Structure Integration with Function, Taxonomy and Sequences (SIFTS)). The median
+Jaccard of contact sets is 0.90, the shift-by-3 control is 0.14, and the buried and
+exposed calls agree for 95% of residues. The AlphaFold contact graphs used by `attach`
+and `folding` stand in for measured ones on these proteins.
+
+## D1 — fails
+
+Over 40 proteins with located sites and DisProt entries, named sites outside the
+disordered regions still have lower local order than same-type residues (median 0.88
+against 0.94, one-sided p = 0.0012, 34 sites). Inside disordered regions they do not
+differ (p = 0.37, 26 sites). Measured disorder does not account for the weak F4
+effect. DisProt is incomplete, so "outside" is not the same as "ordered".
+
+## G1 — holds, weakly discriminating
+
+505 kernel small-molecule reactions have KEGG ids for every participant. 324 match a
+Human-GEM cytosolic reaction by participant set, and all 324 have the same coefficients.
+Only 23 have a coefficient other than 1, so the agreement rests on those 23.
+Reversibility agrees in 244 of 324.
+
+## Loaders, not yet answering
+
+- **Concentrations.** `absent`: no file under `data/raw/concentrations/`. The supplementary
+  tables of Park et al. (2016) need a Nature login and the Human Metabolome Database (HMDB) refuses scripted downloads.
+- **BRaunschweig ENzyme DAtabase (BRENDA).** `absent`: the JSON release needs its licence accepted on the download page.
+- **HeLa abundance.** With HeLa abundances (PaxDb) 1 branch point is answered, against 3 with whole-organism ones.
+  Galactose goes to galactokinase 0.96 (whole organism 0.98).

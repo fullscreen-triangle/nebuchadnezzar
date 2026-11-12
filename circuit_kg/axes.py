@@ -86,6 +86,7 @@ CONTACT = {"EquilibriumMeasurement", "KineticAssay", "AbundanceMeasurement", "Cr
 DERIVATION = {"Pooling", "HessDerivation", "LegendreTransform", "CarrierSlotDecomposition",
               "StructurePrediction", "ContactGraphComputation", "EnzymeExpansion",
               "WindowJudgement", "RatioComputation", "LadderEvaluation"}
+PREDICTION = {"ComponentContribution", "MLPrediction", "GroupContribution"}
 GROUND = {(0, 0, 0): "symbol", (1, 0, 0): "collapsed", (1, 1, 0): "index",
           (1, 0, 1): "icon", (1, 1, 1): "composite"}
 
@@ -110,7 +111,7 @@ class Prov:
         a0 = self.generated_by.get(rid)
         if a0 is None:
             return "symbol"
-        c = d = 0
+        c = d = e = 0
         seen, todo = set(), [a0]
         while todo:
             a = todo.pop()
@@ -120,10 +121,12 @@ class Prov:
             t = self.activity_type.get(a)
             c |= t in CONTACT
             d |= t in DERIVATION
+            e |= t in PREDICTION
             for u in self.used.get(a, ()):
                 if u in self.generated_by:
                     todo.append(self.generated_by[u])
-        return GROUND.get((1, c, d), "collapsed")
+        # a model prediction anywhere in the chain is reported as such, never as measured
+        return "estimated" if e else GROUND.get((1, c, d), "collapsed")
 
 
 def kernel_prov() -> tuple[Prov, dict]:

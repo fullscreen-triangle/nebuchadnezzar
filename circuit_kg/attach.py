@@ -53,7 +53,7 @@ def locate_slots(corpus: dict, slots: dict) -> dict:
     for acc, m in man.items():
         if m.get("status") == "ok" and m.get("gene"):
             gene_to_acc[m["gene"].upper()].add(acc)
-    out, checks = {}, defaultdict(int)
+    out, checks, mismatches = {}, defaultdict(int), []
     for rid, v in slots.items():
         kind = v.get("detail", {}).get("kind")
         if kind not in ("kinase", "phosphatase"):
@@ -89,12 +89,14 @@ def locate_slots(corpus: dict, slots: dict) -> dict:
                 checks["position outside the model"] += 1
             elif letter != res:
                 checks["residue in sequence differs from name"] += 1
+                mismatches.append({"reaction": rid, "acc": acc, "pos": pos, "named": res,
+                                   "in_sequence": letter})
             else:
                 checks["residue matches sequence"] += 1
                 located.append((acc, pos, res))
         if located:
             out[rid] = located
-    return {"slots": out, "checks": dict(checks)}
+    return {"slots": out, "checks": dict(checks), "mismatches": mismatches}
 
 
 def attach(kg, located: dict) -> dict:

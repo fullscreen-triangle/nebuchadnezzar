@@ -19,6 +19,7 @@ python -m circuit_kg kinetics   # SABIO-RK K_m + PaxDb: retention, locality, tes
 python -m circuit_kg complete   # source-to-target completions; separation left after refinement -> results/complete.json
 python -m circuit_kg folding    # levinthal's oscillator folding ideas tested against AlphaFold -> results/folding.json
 python -m circuit_kg extend     # verdict axes, modifiers, dividers, redox ladder, labels -> results/extend.json
+python -m circuit_kg databases  # Rhea, MetaNetX, Human-GEM, localisation, residue features, PDBe -> results/databases.json
 python -m pytest circuit_kg/tests -q
 ```
 
@@ -30,11 +31,13 @@ default place). It takes about 30 s. `kinetics` fetches 15 pages from the System
 Pathways - Reaction Kinetics database (SABIO-RK)
 once and then takes about 5 min. `complete` takes about 45 s. `folding` takes about 15 min.
 `extend` fetches 22 SABIO-RK pages and the UniProt annotations once, then takes
-about a minute.
+about a minute. `databases` takes about 12 min, most of it downloading 60
+experimental structures.
 
 The ideas behind `medium`, `kinetics` and `complete` come from the chromatography
 and ideal-gas papers in `maxwell`. The ideas behind `extend` come from the
-cytochrome P450 monograph and the dcat-ap-plus-p450 specification in `levinthal`. Their predictions were committed before the
+cytochrome P450 monograph and the dcat-ap-plus-p450 specification in `levinthal`. The `databases` stage adds curated databases
+that check or replace a supplied convention. Their predictions were committed before the
 code ran (`predictions/PREDICTIONS.md`), and the results are in
 `predictions/OUTCOMES.md`.
 
@@ -94,6 +97,19 @@ Each supplied convention is named where it is used:
   packing density 0.76.
 - `medium-as-slowest-rung`: when a ladder chain's floor is judged, its medium
   resistance is taken equal to its slowest rung's.
+- `mnx-xref`: a KEGG compound for a ChEBI id reached through a MetaNetX identifier.
+  It is used only for species that `conjugate-closure` left without one.
+- `brenda-same-reference`: a k_cat from the BRaunschweig ENzyme DAtabase (BRENDA) is paired with a K_m only when both come
+  from the same protein, the same substrate and the same reference.
+- `measured-window`: a per-compound concentration window read from
+  `data/raw/concentrations/*.csv` (columns `kegg,low_M,high_M,cell_type,source`).
+  It replaces `concentration-window` for the compounds it lists. Without such a
+  file the stage reports `absent` and names the file.
+
+A value predicted by a model (component contribution, a learned k_cat) carries the
+basis `estimated`. It composes above `derived`, and its ground verdict is
+`estimated`, never `composite`. A cycle whose every energy is derived or estimated
+is refused as non-falsifiable (`thermo.judge_cycle_guarded`).
 
 ## Modules
 
@@ -120,6 +136,11 @@ Each supplied convention is named where it is used:
 | `branching.py` | flux shares at branch species from k_cat/K_m and abundance |
 | `redox.py` | redox couple ladder from the Hess span; Moser-Dutton ruler on PDB distances |
 | `labels.py` | EC, Pfam and gene labels on structural classes with a shuffle null; stoichiometric signatures |
+| `xref.py` | Rhea mappings, directions and participants (SPARQL); MetaNetX KEGG rescue; Human-GEM comparison |
+| `localisation.py` | Human Protein Atlas and COMPARTMENTS cytosol support for every catalyst |
+| `features.py` | UniProt modified residues and active sites; slot check; M-CSA catalytic residues; DisProt disorder |
+| `structures.py` | PDBe best structure and SIFTS numbering; AlphaFold contacts against the experimental chain |
+| `loaders.py` | measured concentration windows and the BRENDA JSON release, each `absent` until its file is present |
 
 Edge weights used for cuts are always counts (stoichiometry, contacts, exposed
 atoms). Real-valued quantities such as Delta G or a conductance stay in the

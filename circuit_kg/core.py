@@ -27,10 +27,11 @@ class Tag(str, Enum):
     STATED = "stated"        # the source record asserts it
     SUPPLIED = "supplied"    # a named convention produced it
     DERIVED = "derived"      # the kernel computed it from other values
+    ESTIMATED = "estimated"  # a model predicted it (component contribution, ML k_cat, ...)
     ABSENT = "absent"        # neither source nor convention determines it
 
 
-_BASIS_ORDER = {Tag.STATED: 0, Tag.SUPPLIED: 1, Tag.DERIVED: 2}
+_BASIS_ORDER = {Tag.STATED: 0, Tag.SUPPLIED: 1, Tag.DERIVED: 2, Tag.ESTIMATED: 3}
 
 
 def combine(*tags: Tag) -> Tag:

@@ -333,3 +333,17 @@ def judge_cycle(z: dict, value: list, sigma: list, q: float) -> dict:
                "UNDECIDABLE" if a <= e_num + e_data else "INCONSISTENT")
     return {"length": len(z), "H": h, "eps_num": e_num, "eps_data": e_data,
             "Z": h / s if s else None, "verdict": verdict}
+
+
+def falsifiable(support_tags) -> bool:
+    """A cycle sum built only from species-derived energies (Hess span, Legendre transforms,
+    estimates) is zero by construction, so its test cannot fail: refuse it
+    (health-dcat-ap-plus-circuit thermo.py; Lemma: g = N^T f gives every cycle sum 0)."""
+    return any(t in ("stated", "supplied") for t in support_tags)
+
+
+def judge_cycle_guarded(z: dict, value: list, sigma: list, q: float, tags: list) -> dict:
+    """judge_cycle behind the falsifiability guard."""
+    if not falsifiable([tags[j] for j in z]):
+        return {"verdict": "REFUSED", "blocker": "non-falsifiable: every energy on the cycle is derived"}
+    return judge_cycle(z, value, sigma, q)

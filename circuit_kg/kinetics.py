@@ -163,9 +163,9 @@ def km_table(records) -> dict:
                   "spread": float(np.ptp(v)) if len(v) > 1 else 0.0} for key, v in acc.items()}
 
 
-def paxdb_ppm() -> dict:
+def paxdb_ppm(path=None) -> dict:
     out = {}
-    for line in PAXDB_FILE.read_text(encoding="utf-8").splitlines():
+    for line in (path or PAXDB_FILE).read_text(encoding="utf-8").splitlines():
         if line.startswith("#") or not line.strip():
             continue
         gene, _, ab = line.split("\t")[:3]

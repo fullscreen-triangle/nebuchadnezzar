@@ -491,6 +491,125 @@ def extend_stage() -> dict:
     return out
 
 
+def databases_stage() -> dict:
+    """Rhea, MetaNetX, Human-GEM, localisation, UniProt features, M-CSA, PDBe, DisProt, PaxDb
+    HeLa, and the concentration and BRENDA loaders (predictions R1, X1, L1, S1, C1, P1, D1, G1)."""
+    from . import annotations, attach, branching, features, hess, loaders, localisation, slot
+    from . import kinetics as kn
+    from . import medium as md
+    from . import structures, thermo, xref
+    from .core import RT
+    from .graph import CircuitKG, load_medium
+    from .proteins import AF_DIR
+    t0, timing = time.time(), {}
+    corpus = json.loads((DERIVED / "reactome_cytosol.json").read_text())
+    med = load_medium("cytosol")
+    chebi = thermo.Chebi()
+    smap = thermo.species_kegg(corpus, chebi)
+    tecr = thermo.load_tecrdb(pH_window=tuple(med["pH_window"]))
+    match = thermo.match_reactions(corpus, smap, tecr)
+    hs = hess.HessSpan(tecr)
+    sp = corpus["species"]
+    out = {}
+
+    # X1 -- MetaNetX supplies KEGG ids; how many identifier misses does it close?
+    rescued = xref.rescue_kegg(corpus, smap)
+    smap2 = {**smap, **rescued}
+    match2 = thermo.match_reactions(corpus, smap2, tecr)
+    blocked = {r for r, v in match.items() if v.get("blocker") == "participant without KEGG id"}
+    still = {r for r in blocked if match2[r].get("blocker") == "participant without KEGG id"}
+    un1 = hess.derive_unmeasured(corpus, match, smap, hs)
+    un2 = hess.derive_unmeasured(corpus, match2, smap2, hs)
+    out["X1_metanetx"] = {
+        "small_species_without_kegg_before": sum(1 for s, v in sp.items() if v["kind"] == "small"
+                                                 and not smap.get(s, {}).get("kegg")),
+        "species_given_kegg_by_mnx": len(rescued),
+        "reactions_blocked_by_missing_kegg": len(blocked), "of_which_unblocked": len(blocked - still),
+        "now_matched_to_tecrdb": sum(1 for r in blocked if match2[r]["label"] == "answered"),
+        "now_hess_derived": sum(1 for r in blocked if un2.get(r, {}).get("label") == "answered"),
+        "new_blockers_of_unblocked": dict(Counter(match2[r].get("blocker") for r in blocked - still)),
+        "hess_answered_before_after": [sum(v["label"] == "answered" for v in un1.values()),
+                                       sum(v["label"] == "answered" for v in un2.values())]}
+    timing["X1"] = time.time() - t0
+
+    # R1 -- Rhea
+    mpath = RESULTS / "medium.json"
+    mdir = json.loads(mpath.read_text()).get("per_reaction", {}) if mpath.exists() else {}
+    out["R1_rhea"] = xref.rhea_against_kernel(corpus, smap, chebi, mdir)
+    timing["R1"] = time.time() - t0
+
+    # G1 -- Human-GEM
+    out["G1_human_gem"] = xref.compare_gem(corpus, smap2, xref.human_gem())
+    timing["G1"] = time.time() - t0
+
+    # L1 -- localisation
+    ann = annotations.fetch({u for s in sp.values() for u in s["uniprot"]})
+    out["L1_localisation"] = localisation.scope_check(corpus, ann)
+
+    # S1, phospho-intermediates, C1, D1 -- residue evidence
+    slots = slot.carrier_slot(corpus, match, smap, hs)
+    loc = attach.locate_slots(corpus, slots)
+    feats = features.fetch_features({u for s in sp.values() for u in s["uniprot"]})
+
+    def letters_of(acc):
+        p = AF_DIR / f"AF-{acc}.graph.json"
+        return json.loads(p.read_text())["letters"] if p.exists() else None
+    out["S1_slots"] = features.slot_check(loc["slots"], loc["mismatches"], feats, letters_of)
+    cat_prots = {u.split("-")[0] for r in corpus["reactions"].values() for s, role in r["modifiers"]
+                 if role == "catalyst" for u in sp[s]["uniprot"]}
+    out["phospho_enzyme_intermediates"] = features.phospho_intermediates(feats, cat_prots)
+    out["C1_catalytic_hubs"] = features.catalytic_hubs(cat_prots)
+    timing["S1_C1"] = time.time() - t0
+    out["D1_disorder"] = features.disorder_test(loc["slots"], features.disprot_regions())
+    timing["D1"] = time.time() - t0
+
+    # P1 -- experimental structures
+    p1 = structures.compare(sorted(cat_prots), limit=60)
+    out["P1_structures"] = {k: v for k, v in p1.items() if k != "rows"}
+    out["P1_rows"] = p1["rows"]
+    timing["P1"] = time.time() - t0
+
+    # concentrations and BRENDA -- loaders
+    windows, why = loaders.concentration_windows()
+    if windows is None:
+        out["concentrations"] = why
+    else:
+        values = md.chemical_values(match, tecr, hess.derive_unmeasured(corpus, match, smap, hs),
+                                    slots)
+        L = md.Legendre()
+        d0 = md.direction_with_medium(values, L, med, tecr["q"]["gaussian"], RT)
+        d1 = md.direction_with_medium(values, L, med, tecr["q"]["gaussian"], RT,
+                                      windows={k: v[:2] for k, v in windows.items()})
+        out["concentrations"] = {"compounds_with_measured_windows": len(windows),
+                                 "direction_before": dict(Counter(v["label"] for v in d0.values())),
+                                 "direction_after": dict(Counter(v["label"] for v in d1.values()))}
+    rows, why = loaders.brenda_values()
+    out["brenda"] = why if rows is None else {"values": len(rows),
+                                              "same_reference_pairs": len(loaders.brenda_pairs(rows))}
+
+    # per-cell-type abundance: HeLa against whole organism, on the flux dividers
+    recs = kn.parameter_records()
+    spec, km = branching.rate_tables(recs)
+    total_M = float(sum(kn.TOTAL_PROTEIN_MOLECULES_M) / 2)
+    kg = CircuitKG(corpus, med, match)
+
+    def molar_from(ppm):
+        return {u: ppm[a["gene"].upper()] * 1e-6 * total_M for u, a in ann.items()
+                if a and a.get("gene") and a["gene"].upper() in ppm}
+    whole = branching.dividers(corpus, smap, kg.ambient, spec, km, molar_from(kn.paxdb_ppm()))
+    hela = branching.dividers(corpus, smap, kg.ambient, spec, km,
+                              molar_from(kn.paxdb_ppm(RAW / "paxdb-9606-hela-nagaraj-2011-cpc.txt")))
+    out["abundance_hela_vs_whole_organism"] = {
+        "dividers_answered": [sum(v["label"] == "answered" for v in whole.values()),
+                              sum(v["label"] == "answered" for v in hela.values())],
+        "shares": {sp[s]["name"]: {"whole_organism": whole[s].get("payload"), "hela": hela[s].get("payload")}
+                   for s in whole if whole[s]["label"] == "answered" or hela.get(s, {}).get("label") == "answered"}}
+    out["timing_s"] = {k: round(v, 1) for k, v in timing.items()}
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "databases.json").write_text(json.dumps(out, indent=1, default=str))
+    return out
+
+
 def kinetics_stage() -> dict:
     """K_m contacts: retention factors, the locality diagnostic, and test P1."""
     import numpy as np
@@ -538,7 +657,7 @@ def main():
     ap = argparse.ArgumentParser(prog="circuit_kg")
     ap.add_argument("stage", choices=["fetch", "extract", "build", "proteins", "attach", "medium",
                                           "kinetics", "complete",
-                                          "folding", "extend"])
+                                          "folding", "extend", "databases"])
     ap.add_argument("--radii", type=int, nargs="+", default=[1, 2])
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
@@ -561,6 +680,10 @@ def main():
         print(f"{len(ok)}/{len(acc)} AlphaFold models with contact graphs")
     elif a.stage == "attach":
         print(json.dumps(attach_stage(), indent=1))
+    elif a.stage == "databases":
+        o = databases_stage()
+        o.pop("P1_rows", None)
+        print(json.dumps(o, indent=1, default=str)[:15000])
     elif a.stage == "extend":
         o = extend_stage()
         print(json.dumps({k: v for k, v in o.items() if k not in ("X1_axes",)}, indent=1,

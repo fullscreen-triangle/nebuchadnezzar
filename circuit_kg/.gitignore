@@ -11,3 +11,13 @@ data/raw/paxdb-*.txt
 data/raw/sabio_all/
 data/raw/uniprot/
 data/raw/pdb/
+data/raw/rhea/
+data/raw/hpa/
+data/raw/compartments/
+data/raw/metanetx/
+data/raw/disprot/
+data/raw/mcsa/
+data/raw/humangem/
+data/raw/concentrations/
+data/raw/brenda/
+data/raw/brenda_*.json

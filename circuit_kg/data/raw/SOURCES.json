@@ -46,5 +46,77 @@
     "path": "C:\\Users\\kunda\\Documents\\systems\\nebuchadnezzar\\demo\\public\\homo_sapiens.3.1.sbml.tgz",
     "sha256": "c555ca402b5f03b3ba65e2e9ad293a8a370281916afaccf803e36e406209692d",
     "bytes": 58249878
+  },
+  "rhea/rhea2reactome.tsv": {
+    "url": "https://ftp.expasy.org/databases/rhea/tsv/rhea2reactome.tsv",
+    "retrieved": "2026-11-12",
+    "sha256": "6b326b61373be980efa5ab0c6455ec26e363170ec79e7f23f0ac02b5efbbba62",
+    "bytes": 51786
+  },
+  "rhea/rhea-directions.tsv": {
+    "url": "https://ftp.expasy.org/databases/rhea/tsv/rhea-directions.tsv",
+    "retrieved": "2026-11-12",
+    "sha256": "daeb374f4327c38808006613ca8bbef56d048f907a09ab9c55038baba2cf94f9",
+    "bytes": 456168
+  },
+  "rhea/rhea2ec.tsv": {
+    "url": "https://ftp.expasy.org/databases/rhea/tsv/rhea2ec.tsv",
+    "retrieved": "2026-11-12",
+    "sha256": "738662df828e9a5eb850e1d3b3e9e2b9dabd741e7ac6321765881111c6a8beb7",
+    "bytes": 195998
+  },
+  "rhea/participants.json": {
+    "url": "https://sparql.rhea-db.org/sparql (rh:containsN participants of the mapped master reactions; xref.rhea_participants)",
+    "retrieved": "2026-11-12",
+    "sha256": "595327838b835a2830ea82f9e76b2e6aff83ddc47e4abb7b19ebe19c613158eb",
+    "bytes": 43249
+  },
+  "metanetx/chem_xref.filtered.tsv": {
+    "url": "https://www.metanetx.org/ftp/latest/chem_xref.tsv (streamed, kept chebi: and kegg.compound: rows; scripts/stream_filters.py)",
+    "retrieved": "2026-11-12",
+    "sha256": "eb446933ff83b61d804df1b765d63234d7b942a74effafb955863aadb46daa56",
+    "bytes": 4165609
+  },
+  "humangem/Human-GEM.yml": {
+    "url": "https://raw.githubusercontent.com/SysBioChalmers/Human-GEM/main/model/Human-GEM.yml",
+    "retrieved": "2026-11-12",
+    "sha256": "daee00ca38930ffbfd2739b6c3be5e58dde4c11dd36b192b0b30ff7ee2c5a904",
+    "bytes": 7514158
+  },
+  "humangem/metabolites.tsv": {
+    "url": "https://raw.githubusercontent.com/SysBioChalmers/Human-GEM/main/model/metabolites.tsv",
+    "retrieved": "2026-11-12",
+    "sha256": "0b7509a37fe4e92bea3d1cbf2d0e7f87183ecf7bda81173770fa4a1a1ee32a96",
+    "bytes": 2499013
+  },
+  "hpa/subcellular_location.tsv.zip": {
+    "url": "https://www.proteinatlas.org/download/tsv/subcellular_location.tsv.zip",
+    "retrieved": "2026-11-12",
+    "sha256": "f01de8b4102bc0b8922d40cd036719830d3274392add11ea558229d652af3d08",
+    "bytes": 255142
+  },
+  "compartments/cytosol.tsv": {
+    "url": "https://download.jensenlab.org/human_compartment_integrated_full.tsv (streamed, kept GO:0005829 rows; scripts/stream_filters.py)",
+    "retrieved": "2026-11-12",
+    "sha256": "efe54699e35658138eea0c17882d6ffc63df5afda4caa62e9bae4389335c7aeb",
+    "bytes": 949675
+  },
+  "mcsa/residues.json": {
+    "url": "https://www.ebi.ac.uk/thornton-srv/m-csa/api/residues/?format=json",
+    "retrieved": "2026-11-12",
+    "sha256": "92dc99acf0d1967d6a446be3916fab602c904de7d44855925f5fc1c8781aca06",
+    "bytes": 5928656
+  },
+  "disprot/disprot.tsv": {
+    "url": "https://disprot.org/api/search?release=current&show_ambiguous=false&show_obsolete=false&format=tsv&namespace=all&get_consensus=false",
+    "retrieved": "2026-11-12",
+    "sha256": "21b940496a35fd795d6c23ea4c98085e4938ea91c2e929e02f58b31c328d22a0",
+    "bytes": 4658947
+  },
+  "paxdb-9606-hela-nagaraj-2011-cpc.txt": {
+    "url": "https://pax-db.org/downloads/latest/datasets/9606/9606-hela_Nagaraj_2011_cpc.txt",
+    "retrieved": "2026-11-12",
+    "sha256": "165478433c205712c7f10a027e9395547546d8d4511b4fd8d5d20f6747ff2f17",
+    "bytes": 260109
   }
 }

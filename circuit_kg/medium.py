@@ -342,7 +342,8 @@ def _sign(lo, hi):
     return "forward" if hi < 0 else "reverse" if lo > 0 else None
 
 
-def direction_with_medium(values: dict, L: Legendre, medium: dict, q: float, RT: float) -> dict:
+def direction_with_medium(values: dict, L: Legendre, medium: dict, q: float, RT: float,
+                          windows: dict | None = None) -> dict:
     """Direction over the medium window x concentration window, with and without crowding.
 
     blocker 'concentration': the sign of Delta_r G'm (every participant at 1 mM) is fixed
@@ -359,14 +360,17 @@ def direction_with_medium(values: dict, L: Legendre, medium: dict, q: float, RT:
                         "compounds": miss, "source": v["source"]}
             continue
         dmin, dmax = rng[0] - q * v["sigma"], rng[1] + q * v["sigma"]
-        lnq_max = sum(c * (hi_c if c > 0 else lo_c) for c in st.values())
-        lnq_min = sum(c * (lo_c if c > 0 else hi_c) for c in st.values())
+        win = {k: ((math.log(windows[k][0]), math.log(windows[k][1])) if windows and k in windows
+                   else (lo_c, hi_c)) for k in st}
+        lnq_max = sum(c * (win[k][1] if c > 0 else win[k][0]) for k, c in st.items())
+        lnq_min = sum(c * (win[k][0] if c > 0 else win[k][1]) for k, c in st.items())
         mm = RT * math.log(1e-3) * sum(st.values())
         cmin, cmax = crowding_shift_range(v["st"], medium, RT)
         plain = _sign(dmin + RT * lnq_min, dmax + RT * lnq_max)
         crowd = _sign(dmin + RT * lnq_min + cmin, dmax + RT * lnq_max + cmax)
         at_1mM = _sign(dmin + mm, dmax + mm)
         rec = {"source": v["source"], "dG_prime_range": [dmin, dmax],
+               "measured_windows": sum(1 for k in st if windows and k in windows),
                "RT_lnQ_range": [RT * lnq_min, RT * lnq_max], "crowding_range": [cmin, cmax],
                "dG_prime_m_sign_fixed": at_1mM,
                "conventions": ["medium-window", "concentration-window", "accessible-volume"]}
