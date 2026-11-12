@@ -238,3 +238,36 @@ When several rules match, the verdict is `underdetermined`.
   class agrees with that EC class in more than 60% of classifiable reactions, and
   above a shuffle null (EC labels permuted, 200 times, one-sided p < 0.05).
 - Against: agreement at or below 60%, or p ≥ 0.05.
+
+# Databases (Rhea, MetaNetX, localisation, UniProt features, M-CSA, PDBe, DisProt, Human-GEM)
+
+Sources fetched by `python -m circuit_kg databases`. Concentrations, BRENDA and per-cell-type
+abundance are loaders: a declared file under `data/raw/` makes them answer; without one the
+kernel says `absent` and names the file.
+
+- **R1 — curated direction against thermodynamics.** For Reactome reactions mapped to a
+  directional Rhea reaction (left-to-right or right-to-left), the sign of Delta_r G'm at 1 mM is
+  fixed across the medium window, so the kernel has a sign to compare. Prediction: that sign
+  agrees with Rhea's direction in more than 80% of such reactions. Against: 80% or less.
+- **X1 — identifier misses.** MetaNetX supplies a KEGG compound for a participant in at least a
+  quarter of the 197 reactions now blocked by "participant without KEGG id". Against: fewer.
+- **L1 — cytosol scope.** At least 80% of the catalyst proteins of the purely cytosolic
+  reactions have cytosol support in the Human Protein Atlas (main or additional location) or in
+  COMPARTMENTS (confidence at least 3). Against: below 80%.
+- **S1 — slots against curated positions.** At least 70% of the 206 located phosphosites
+  coincide with a UniProt modified-residue feature (a phospho-residue at the same position).
+  A single offset per protein explains at least a third of the 9 residue mismatches.
+  Against: either falls short.
+- **C1 — catalytic residues are contact hubs.** M-CSA catalytic residues have more heavy-atom
+  contacts than residues of the same amino-acid type in the same AlphaFold models (one-sided
+  Mann-Whitney p < 0.05). Against: p >= 0.05.
+- **P1 — AlphaFold contacts against experiment.** For proteins with an experimental structure
+  covering at least 80% of the AlphaFold model (pLDDT >= 90), the residue contact sets agree with
+  median Jaccard >= 0.6. Control: shifting the numbering by 3 residues drops the median below
+  0.2. Against: median below 0.6, or the control does not drop.
+- **D1 — measured disorder explains the phosphosite effect.** Outside DisProt disordered
+  regions, named sites do not have lower local order than same-type residues (one-sided p >=
+  0.05), while inside them the comparison is reported. Against: p < 0.05 outside disorder.
+- **G1 — Human-GEM agrees with Reactome.** For kernel reactions whose small-molecule
+  participant set equals that of a Human-GEM cytosolic reaction (by KEGG or ChEBI, ignoring H+),
+  the stoichiometric coefficients agree in at least 90%. Against: below 90%.
