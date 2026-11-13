@@ -1,0 +1,9 @@
+*.aux
+*.log
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.toc
+figures/*.png

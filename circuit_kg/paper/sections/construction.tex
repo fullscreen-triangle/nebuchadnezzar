@@ -1,0 +1,329 @@
+%==============================================================================
+\section{Construction from public data}
+\label{sec:construction}
+
+\Cref{tab:sources} lists the data the kernel reads.
+Every downloaded file is recorded with its address, retrieval date (9--12 November 2026) and SHA-256 digest.
+Only identifiers and measured values are taken from each source; nothing is copied from a source's own inferences.
+
+\begin{table}[t]
+\centering
+\caption{Data sources and what the kernel takes from each.}
+\label{tab:sources}
+\small
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+Source & Content used \\
+\midrule
+Reactome \citep{gillespie2022reactome} & SBML export for \textit{Homo sapiens}, 2{,}825 pathway files; reactions, species, compartments, modifiers \\
+ChEBI \citep{hastings2016chebi} & compounds, database accessions, ontology relations (conjugate acid/base, tautomer) \\
+TECRDB \citep{goldberg2004tecrdb} & apparent equilibrium constants, reverse-transformed to the chemical reference state \\
+eQuilibrator compound cache \citep{beber2022equilibrator} & microspecies (charge, protons, magnesium ions, relative energies) and masses per compound \\
+SABIO-RK \citep{wittig2012sabio} & every human wild-type kinetic law: 5{,}682 $K_m$, 3{,}089 $k_{\mathrm{cat}}$ and 771 $K_i$ records \\
+PaxDb \citep{wang2015paxdb,nagaraj2011hela} & whole-organism integrated abundances (3{,}048 proteins mapped); HeLa abundances \\
+UniProt \citep{uniprot2023} & EC numbers, Pfam domains and families for 3{,}207 proteins; modified residues and active sites with evidence codes \\
+AlphaFold Protein Structure Database \citep{varadi2022afdb} & predicted structures and per-residue confidence (pLDDT) \\
+Protein Data Bank \citep{berman2000pdb} & experimental coordinates \\
+PDBe best structures and SIFTS \citep{velankar2013sifts} & choice of experimental chain; residue numbering mapped to UniProt \\
+Rhea \citep{bansal2022rhea} & mappings to Reactome, reaction directions, participants with coefficients \\
+MetaNetX \citep{moretti2021metanetx} & chemical cross-references (ChEBI to KEGG) \\
+Human-GEM \citep{robinson2020humangem} & cytosolic reactions, metabolite identifiers, reversibility \\
+Human Protein Atlas \citep{thul2017hpa} & main and additional subcellular locations \\
+COMPARTMENTS \citep{binder2014compartments} & cytosol (GO:0005829) confidence scores \\
+M-CSA \citep{ribeiro2018mcsa} & catalytic residues in UniProt numbering \\
+DisProt \citep{quaglia2022disprot} & experimentally observed disordered regions \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{The cytosolic corpus}
+\label{sec:corpus}
+
+The Reactome export is streamed once.
+A reaction is kept when every species it references, whether reactant, product or modifier, lies in the compartment named \emph{cytosol}.
+Reactions are de-duplicated across pathway files, and the pathways each one appears in are recorded.
+The corpus has 2{,}914 reactions over 5{,}344 species: 4{,}103 macromolecules, 796 small molecules and 445 other entities.
+
+\subsection{Species identity}
+\label{sec:identity}
+
+Each small molecule is mapped from its ChEBI accession to a KEGG compound \citep{kanehisa2000kegg}, because TECRDB and eQuilibrator are keyed by KEGG.
+The basis of each mapping is recorded.
+It is \emph{stated} when the ChEBI record itself carries exactly one KEGG accession (239 species).
+It is \emph{supplied} under convention \conv{conjugate-closure} when the accession is found through the conjugate-acid, conjugate-base or tautomer relations (309).
+It is \emph{absent} when neither the record nor its closure carries one (235), and \emph{underdetermined} when several candidates remain (13).
+Protonation states share a reaction-level KEGG identifier, and TECRDB is protonation-agnostic, which justifies the closure.
+An underdetermined species keeps all candidates, and a reaction match is accepted only if exactly one combination of candidates matches a TECRDB reaction.
+The proton (C00080) is dropped on both sides of every reaction: the chemical reference state gives it zero formation energy, and Reactome states it inconsistently.
+
+\subsection{Reaction thermodynamics}
+\label{sec:thermo}
+
+\paragraph{Pooling.}
+TECRDB rows are kept when their temperature lies in 293.15--313.15\,K and their quality grade is A, B or C.
+Each row's chemical-reference $\DG$ is put into an orientation-free canonical form (a key and a sign).
+Rows from one study are averaged, and the reaction's value is the mean of its study means.
+Replicate variability is pooled over reactions measured by two or more studies,
+\begin{equation}
+  \sigma_{\mathrm{pool}}^2 = \frac{\sum_{\rho}\sum_{i\in\rho}(g_{\rho i}-\bar g_\rho)^2}{\sum_\rho (n_\rho-1)},
+  \qquad \sigma_\rho = \sigma_{\mathrm{pool}}/\sqrt{n_\rho},
+\end{equation}
+which gives $\sigma_{\mathrm{pool}}=2.68\kJ$ over 418 reactions.
+Tolerances use $q=2.576$ (two-sided Gaussian at $\alpha=0.01$) and, as a distribution-free alternative, the Chebyshev value $q=\alpha^{-1/2}=10$.
+
+\paragraph{Matching.}
+A Reactome reaction matches a TECRDB reaction when their canonical keys agree.
+A match that holds only once water is balanced is accepted under convention \conv{water-balance}.
+A reaction with a macromolecular participant is \vd{refused}, because TECRDB states small-molecule reactions only.
+
+\paragraph{Three-valued cycle test.}
+Let the matched reactions be the columns of a small-molecule stoichiometric matrix $S$.
+An integer basis of $\ker S$ is computed by exact rational elimination.
+For a basis vector $z$, the cycle sum $H=\sum_j z_j g_j$ must vanish.
+Its rounding tolerance is $\varepsilon_{\mathrm{num}}=\gamma_{|z|}\sum_j|z_j g_j|$, with $\gamma_n=nu/(1-nu)$ and unit roundoff $u=2^{-53}$ \citep{higham2002accuracy}.
+Its data tolerance is $\varepsilon_{\mathrm{data}}=q\,(\sum_j z_j^2\sigma_j^2)^{1/2}$.
+The verdict is
+\begin{equation}
+  \text{consistent if } |H|\le\varepsilon_{\mathrm{num}};\quad
+  \text{undecidable if } \varepsilon_{\mathrm{num}}<|H|\le\varepsilon_{\mathrm{num}}+\varepsilon_{\mathrm{data}};\quad
+  \text{inconsistent otherwise.}
+\end{equation}
+A planted defect in a synthetic cycle is flagged, and a consistent cycle passes (\cref{app:tests}).
+
+\paragraph{Hess's law.}
+Let $N$ be the compounds-by-reactions matrix of all measured TECRDB reactions, with values $g$ and standard errors $s$.
+Formation energies are fixed by the measurements only up to the left null space of $N$.
+The weighted least-squares estimate is
+\begin{equation}
+  \hat\mu = \arg\min_\mu \bigl\| W^{1/2}(N^\top\mu-g)\bigr\|_2,\qquad W=\operatorname{diag}(1/s^2).
+\end{equation}
+
+\begin{proposition}[Determinacy of Hess's law]
+\label{prop:hess}
+For a target reaction $b$, the value $b^\top\hat\mu$ is the same for every minimiser $\hat\mu$ if and only if $b\in\im N$.
+Its variance is $b^\top (NWN^\top)^{+} b$.
+\end{proposition}
+\begin{proof}
+Two minimisers differ by $u$ with $N^\top u=0$.
+If $b=Ny$, then $b^\top u=y^\top N^\top u=0$.
+If $b\notin\im N$, then $b$ has a component in $\ker N^\top$, and adding a multiple of that component to $\hat\mu$ leaves the residual unchanged while changing $b^\top\hat\mu$.
+The variance follows from the weighted normal equations.
+\end{proof}
+
+A target in the span is \vd{answered} under convention \conv{hess-span}; a target with a compound that was never measured, or outside the span, is \vd{absent}, and its blocker says which.
+Cycle inconsistency among the measured reactions shows up as the fit's $\chi^2$, which is reported in \cref{sec:res-thermo}.
+
+\begin{proposition}[Falsifiability guard]
+\label{prop:falsifiable}
+If every reaction energy in a cycle is computed from species energies, $g=N^\top f$ for some $f$, then every cycle sum vanishes identically.
+\end{proposition}
+\begin{proof}
+For $z\in\ker N$, $z^\top g = z^\top N^\top f = (Nz)^\top f = 0$.
+\end{proof}
+
+A cycle test built only from derived or estimated energies therefore cannot fail, and the kernel refuses it with the blocker ``non-falsifiable''.
+A cycle with at least one stated or supplied measurement is judged as above.
+This guard is what separates the kernel's cycle test from a check on component-contribution estimates \citep{noor2013component}, which are consistent by construction.
+
+\subsection{The medium: Legendre transform over the cytosolic window}
+\label{sec:legendre}
+
+The medium enters only through the Legendre transform of each compound \citep{alberty1998calculation}.
+Let compound $i$ have microspecies $j$ of charge $z_{ij}$, with $n^{\mathrm{H}}_{ij}$ protons and $n^{\mathrm{Mg}}_{ij}$ magnesium ions.
+Let $\Delta\Delta G_{ij}$ be its energy relative to the compound's reference microspecies.
+The transform is then
+\begin{align}
+  t_i &= -RT\ln\sum_j \exp\Bigl(-\frac{\Delta\Delta G_{ij}+\tau_{ij}}{RT}\Bigr),\\
+  \tau_{ij} &= n^{\mathrm{H}}_{ij}\,RT\ln10\,\mathrm{pH} + n^{\mathrm{Mg}}_{ij}\bigl(RT\ln10\,\mathrm{pMg}-\Delta_f G_{\mathrm{Mg}}(T)\bigr)\nonumber\\
+  &\quad - \alpha(T)\frac{\sqrt I}{1+1.6\sqrt I}\bigl(z_{ij}^2-n^{\mathrm{H}}_{ij}-4n^{\mathrm{Mg}}_{ij}\bigr),
+\end{align}
+a function of pH, $I$, $T$ and pMg, with the extended Debye--H\"uckel coefficient $\alpha(T)$ cubic in $T$, as in eQuilibrator \citep{beber2022equilibrator}.
+A reaction's transformed value is $\DGp=\DG+\sum_i\nu_i t_i$.
+Our implementation was checked against eQuilibrator's own transforms row by row (\cref{sec:res-medium}).
+
+The cytosolic window (convention \conv{medium-window}) is pH 6.8--7.6, ionic strength 0.1--0.25\,M and pMg 2.8--3.5, at 298.15\,K, sampled on a grid of $5\times3\times3=45$ conditions.
+The temperature is 298.15\,K because the TECRDB values are not temperature-corrected.
+The concentration window is 1\,\textmu M--10\,mM for every metabolite (convention \conv{concentration-window}).
+Crowding enters as an accessible-volume fraction $a\in[0.7,1]$ with $\mu=\mu^\circ+RT\ln(c/a)$ for every small solute (convention \conv{accessible-volume}).
+It shifts a reaction's affinity by $-RT\ln a\sum_i\nu_i$, water excluded, so only reactions that change the number of solute particles feel it.
+
+\subsection{Direction verdicts}
+\label{sec:direction}
+
+For a reaction with a chemical-reference value $\DG\pm\sigma$, let $[D_-,D_+]$ be the range of $\DGp$ over the medium grid widened by $q\sigma$.
+Let $\ln Q_\pm$ be the extreme reaction quotients over the concentration window (products at the top of their windows and reactants at the bottom, or the reverse).
+The verdict is
+\begin{equation}
+  \text{forward if } D_+ + RT\ln Q_+ < 0;\qquad
+  \text{reverse if } D_- + RT\ln Q_- > 0;\qquad
+  \text{\vd{undecidable} otherwise.}
+\end{equation}
+An undecidable verdict names its blocker.
+The blocker is \emph{concentration} when the sign of $\DGm$, the value with every participant at 1\,mM, is fixed across the medium window, so only concentrations leave the sign open.
+It is \emph{medium} when the medium window alone admits both signs.
+The base stage, before the medium transform existed, used TECRDB's transformed study means in the pH window, without $q\sigma$ and without the ionic-strength and magnesium ranges.
+
+\subsection{Carrier and slot: thermodynamics for protein-modifying reactions}
+\label{sec:slot}
+
+TECRDB refuses every reaction with a protein participant.
+Many such reactions are phosphorylations in which the same protein entity appears on both sides and only small molecules and modified residues change.
+We decompose such a reaction into a carrier, the polypeptide whose identity is inert, and slots, the side chains that change:
+\begin{align}
+  \text{kinase:}\quad & \mathrm{X}+\mathrm{ATP}\to\mathrm{pX}+\mathrm{ADP}\qquad(\mathrm X\in\{\mathrm{Ser},\mathrm{Thr},\mathrm{Tyr}\}),\\
+  \text{phosphatase:}\quad & \mathrm{pX}+\mathrm{H_2O}\to\mathrm X+\mathrm{P_i}.
+\end{align}
+The slot reaction is small-molecule chemistry and can be put to TECRDB again, through Hess's law.
+Four conventions are named on every such value:
+\conv{carrier-slot} (the carrier contributes nothing to $\DG$);
+\conv{free-residue} (a residue in a protein reacts like the free amino acid);
+\conv{slot-from-name} (new sites are read from Reactome species names); and
+\conv{hess-span}.
+A reaction whose names state a number of changed sites inconsistent with its kinase or phosphatase steps is \vd{underdetermined}, and the blocker states both counts.
+
+\subsection{Catalysts as closed ladders}
+\label{sec:enzyme}
+
+In the base graph a catalyst is a modifier, its node law reads $0=0$ and its state is underdetermined.
+Under convention \conv{enzyme-cycle-2}, every catalysed junction $r$ with catalyst $E$ is expanded into a binding rung and a catalytic rung:
+\begin{equation}
+  r^{\mathrm{bind}}:\ E+\text{reactants}\to E{\cdot}r,\qquad
+  r^{\mathrm{cat}}:\ E{\cdot}r\to E+\text{products}.
+\end{equation}
+
+\begin{proposition}[Enzyme totals]
+\label{prop:enzyme}
+The expansion leaves every net stoichiometry unchanged.
+If $E$ takes part in no reaction other than as a catalyst, $E+\sum_r E{\cdot}r$ is a left null vector of the expanded matrix, i.e.\ a conservation law.
+\end{proposition}
+\begin{proof}
+Summing the two rungs cancels $E$ and $E{\cdot}r$ and restores the net reaction.
+In $r^{\mathrm{bind}}$ the total loses one $E$ and gains one $E{\cdot}r$; in $r^{\mathrm{cat}}$ the reverse.
+No other column contains $E$ or $E{\cdot}r$, so every column sums to zero against the total.
+\end{proof}
+
+When $E$ is also made, consumed or modified by another reaction, the total is broken, and the kernel classifies what breaks it (\cref{sec:res-extend}).
+
+\subsection{Proteins as contact graphs}
+\label{sec:proteins}
+\label{sec:attach}
+
+Each protein with a slot is represented by its AlphaFold model as a residue graph.
+The weight between two residues is the number of heavy-atom pairs closer than 4.5\,\AA.
+A residue's medium weight is the number of its heavy atoms with more than 1\,\AA$^2$ of solvent-accessible surface, computed by the Shrake--Rupley method with a 1.4\,\AA\ probe and 192 points per atom \citep{shrake1973environment}.
+A buried residue still receives medium weight 1 (convention \conv{medium-floor-residue}), so every residue touches the medium.
+The vectorised surface computation was checked against the brute-force loop on 300 sampled atoms and against the analytic area of an isolated sphere.
+
+A protein is attached through its slots.
+Each named, positioned site of a carrier reaction is located in the protein's UniProt sequence, the residue type is checked, and an edge of weight 1 joins the junction to the residue vertex.
+By \cref{prop:monotone}, this expansion cannot lower any existing item's separation cost.
+
+\subsection{Kinetics: retention and locality}
+\label{sec:kinetics}
+
+We treat the cytosol as a chromatographic column in which free diffusion is transit and a stay bound to a protein is a contact.
+A molecule that alternates between a free and a bound state moves, on long scales, at its free velocity divided by $1+k$, with retention factor $k$ \citep{giddings1991unified}.
+In the circuit, fast binding raises the capacitance in \cref{eq:node} from $c/RT$ to $(1+k)c/RT$.
+For a metabolite $S$ bound by enzymes $E$,
+\begin{equation}
+  k_S=\sum_E\frac{[E]_{\mathrm{free}}}{K_d(E,S)}\ \ge\ \sum_E\frac{[E]_{\mathrm{free}}}{K_m(E,S)},
+\end{equation}
+because $K_m=(k_{\mathrm{off}}+k_{\mathrm{cat}})/k_{\mathrm{on}}\ge K_d$.
+Since $[E]_{\mathrm{free}}\le[E]_{\mathrm{total}}$, the $K_m$-based value is reported per unit free enzyme and, under convention \conv{protein-ppm-to-molar}, at total enzyme.
+That convention converts PaxDb parts per million to molar using 2--6\,mM total protein molecules \citep{milo2013protein}.
+
+The carrier can be dropped from the description only when contacts are local, i.e.\ when one item's binding does not depend on how many others are present.
+An enzyme's sites are shared by all its substrates, so the readout for one substrate departs from its dilute limit by the factor $1/(1+\sum_S c_S/K_S)$.
+We report, for each enzyme, the concentration $c^\ast=0.1/\sum_S K_S^{-1}$ at which that departure reaches 10\% with every substrate at $c^\ast$.
+
+\subsection{Completion}
+\label{sec:complete}
+
+A completion of source $S$ into target $P$ is a set of junctions, each fired in an allowed direction, that turns $S$ into $P$.
+The other inputs are the medium and the 2{,}241 proteins that no reaction makes, taken as present (convention \conv{scope-from-source}); a complex is made, so a complex holding a small ligand is not a free source of that ligand.
+The search computes the forward scope, the closure of the source under junctions whose inputs are all available.
+It then works backward from the target, keeping only junctions in the scope that produce a needed species and requiring their inputs in turn.
+A blocked species is reached but never spent as an input, so a completion of a target cannot pass through the target itself.
+The outcomes map onto verdicts: no completion is \vd{certified-empty} relative to the allowed directions; exactly one is \vd{answered} (an order-determined ladder); several are \vd{underdetermined}, and the branch points are named.
+
+Three direction semantics are compared:
+\emph{as annotated} (Reactome's direction only);
+\emph{reversible} (both directions unless thermodynamics decides); and
+\emph{fixed at 1\,mM} (as reversible, but also fixing the sign wherever $\DGm$ has a fixed sign across the medium window).
+The third is a counterfactual: it shows what measured concentrations near 1\,mM would add (\cref{sec:res-complete}).
+
+\subsection{Modifiers, flux dividers and the redox ladder}
+\label{sec:modifiers}
+
+\paragraph{Modifiers.}
+An inhibitor edge scales the junction's prefactor by $1/(1+[I]/K_i)$ over the concentration window, as an additive term in $\ln k_r$.
+Without a $K_i$ in SABIO-RK the stack is \vd{absent}; a macromolecular binding partner is \vd{refused}, because no $K_i$ applies to it.
+Reactome's loss-of-function variant reactions are attached as modifiers on their wild-type edge, not as competing siblings (convention \conv{loss-of-function-variant}).
+
+\paragraph{Flux dividers.}
+At a small-molecule branch point, branch $i$'s share in the dilute limit is
+\begin{equation}
+  \phi_i=\frac{(k_{\mathrm{cat}}/K_m)_i[E_i]}{\sum_j (k_{\mathrm{cat}}/K_m)_j[E_j]}
+\end{equation}
+(convention \conv{dilute-limit-share}).
+The verdict is \vd{answered} only when every sibling has $k_{\mathrm{cat}}$, $K_m$ and abundance; otherwise the missing sibling is named.
+SABIO-RK records name no substrate on $k_{\mathrm{cat}}$, so each $k_{\mathrm{cat}}$ is paired with the $K_m$ values of the same kinetic law.
+
+\paragraph{Redox ladder.}
+Couple potential differences $\Delta E'^\circ=-\DGp/(nF)$ come from the Hess span with the Legendre transform at pH 7, $I=0.25$\,M and 298.15\,K, without magnesium (convention \conv{textbook-standard-conditions}).
+For intramolecular electron transfer, the Moser--Dutton ruler gives \citep{moser1992nature,page1999natural}
+\begin{equation}
+  \log_{10}k_{\mathrm{ET}} = 13-(1.2-0.8\rho)(R-3.6)-3.1\frac{(\Delta G+\lambda)^2}{\lambda},
+\end{equation}
+with edge distance $R$ in \AA\ (taken as 3.6\,\AA\ when shorter), packing density $\rho=0.76$, reorganisation energy $\lambda=0.7$\,eV and driving force $\Delta G=0$ (convention \conv{moser-dutton-defaults}).
+
+\subsection{Labels and stoichiometric signatures}
+\label{sec:labels}
+
+Junctions receive the EC class of their catalyst, truncated to levels 1--4, along with Pfam and gene labels from UniProt.
+Labels are compared with the classes of colour refinement against 200 shuffles of the same labels among the same junctions.
+Independently, each reaction receives a class from its stoichiometry alone by six fixed rules.
+A reaction is an \emph{oxidoreductase} when an NAD, NADP, flavin adenine dinucleotide, glutathione or thioredoxin couple changes state.
+It is a \emph{hydrolase} when water is consumed and there are more small products than reactants other than water.
+It is a \emph{ligase} when a nucleoside triphosphate is split alongside a bond formation.
+It is a \emph{transferase} for ATP to ADP with a phosphorylated product, for S-adenosylmethionine to S-adenosylhomocysteine, or for a coenzyme~A ester.
+It is an \emph{isomerase} when one small molecule goes in and one with the identical formula comes out.
+It is a \emph{lyase} when one small molecule goes in, two come out and no water is involved.
+When several rules match, the verdict is \vd{underdetermined}; a reaction with a macromolecular participant is \vd{refused}.
+
+\subsection{Cross-checks against curated databases}
+\label{sec:xref}
+
+\paragraph{Rhea.}
+Rhea's mapping to Reactome gives, for each kernel reaction, the directional Rhea reaction (left-to-right or right-to-left) that matches Reactome's orientation.
+Participants with coefficients are read from Rhea's public graph-query service, where the coefficient is encoded in the predicate.
+The curated direction is then compared with the sign of $\DGm$ wherever that sign is fixed across the medium window.
+
+\paragraph{MetaNetX.}
+For a species left without a KEGG compound by \conv{conjugate-closure}, a KEGG compound reached through a MetaNetX identifier is supplied under convention \conv{mnx-xref}.
+
+\paragraph{Human-GEM.}
+Kernel reactions whose small-molecule participants all carry KEGG identifiers are matched to Human-GEM cytosolic reactions by participant set, ignoring the proton.
+Coefficients and reversibility are compared, the coefficients up to an overall sign.
+
+\paragraph{Localisation.}
+A catalyst has cytosol support when the Human Protein Atlas lists the cytosol as a main or additional location, or COMPARTMENTS gives it a cytosol confidence of at least 3.
+
+\paragraph{Residue evidence.}
+Located slots are compared with UniProt modified-residue features of phospho type, and the Evidence and Conclusion Ontology (ECO) code of each matched feature is read \citep{giglio2019eco}.
+For each protein with residue mismatches, the single numbering offset in $[-120,120]$ that moves the most mismatched sites onto a phospho-residue of the named type is reported.
+M-CSA catalytic residues are compared with residues of the same amino-acid types in the same AlphaFold contact graphs.
+DisProt regions split the phosphosite comparison of \cref{sec:res-folding} into inside and outside measured disorder.
+
+\paragraph{Experimental structures.}
+For high-confidence AlphaFold models, the first X-ray chain covering at least 80\% of the model is taken from PDBe's best-structure list, and its numbering is mapped to UniProt through the Structure Integration with Function, Taxonomy and Sequences resource (SIFTS).
+Contact sets (residue pairs with $|i-j|\ge3$ in contact) are compared by the Jaccard index, against a control that shifts one numbering by three residues.
+
+\subsection{Loaders for measurements not yet present}
+\label{sec:loaders}
+
+Two further sources are wired as loaders.
+A per-compound concentration window can be declared in a table with columns \texttt{kegg}, \texttt{low\_M}, \texttt{high\_M}, \texttt{cell\_type} and \texttt{source}; it replaces the global window for the compounds it lists (convention \conv{measured-window}).
+The BRENDA release can be read from its JSON export \citep{chang2021brenda}, with a $k_{\mathrm{cat}}$ paired to a $K_m$ only when both come from the same protein, substrate and reference (convention \conv{brenda-same-reference}).
+Without the files, each loader returns \vd{absent} and names the file it needs.
+At the time of writing, neither file was present (\cref{sec:limitations}).

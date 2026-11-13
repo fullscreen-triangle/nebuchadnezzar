@@ -1,0 +1,121 @@
+%==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What typed verdicts buy}
+\label{sec:disc-verdicts}
+
+An inference engine asked for the Gibbs energy of 2{,}914 cytosolic reactions returns 75 values and silence.
+The kernel returns 2{,}914 verdicts, and the silence is resolved by cause.
+For 2{,}244 reactions the question is outside what TECRDB can state; for 398 no measurement exists; for 197 the reaction cannot even be put to TECRDB, because a participant has no identifier it uses.
+These three populations need different remedies.
+The first needs a different kind of model, such as the carrier/slot decomposition, which recovered 96.
+The second needs measurement or estimation.
+The third needs cross-references, and I1 (\cref{sec:res-db}) shows how far those go: MetaNetX moved 33 reactions from the third population into the second and none into the answered set.
+The gate letters made that movement visible as a change from \textsf{open} to $-$.
+
+The payload rule (V1) did real work.
+A missing $\DG$ never became zero, a missing $K_m$ never became a typical value, and an undecided direction never became the curated one.
+Every downstream count in this paper, from 156 concentration-blocked directions to 3 answered branch points, inherits that discipline.
+The rule also makes failures cheap to diagnose: the S1 parser fault surfaced as an implausibly low fraction rather than as silently wrong slot energies, because the slot check reads curated features directly.
+
+Basis tags and ground verdicts answer a different question: not ``is there a value?'' but ``what kind of value is it?''.
+The AlphaFold contact graphs are icons, models of their object; A1 shows that on 60 proteins they agree with indices, crystal structures, at a median Jaccard index of 0.90 (\cref{fig:structures}).
+That agreement licenses using them where no crystal structure exists, but it does not turn them into measurements, and the ground verdict keeps saying so.
+The falsifiability guard (\cref{prop:falsifiable}) is the same idea applied to cycles: a consistency check that cannot fail is refused, not passed.
+
+\subsection{Concentrations are the binding constraint}
+\label{sec:disc-conc}
+
+Three independent results point to the same missing datum.
+M2b found that for 156 of 199 undecided reactions the medium fixes the sign of $\DGm$, so only concentrations remain.
+R1 found that the curated directions which disagree with the 1\,mM sign are those of reactions running uphill at 1\,mM, such as triose-phosphate isomerase and glyceraldehyde-3-phosphate dehydrogenase, which glycolysis pulls forward by removing product.
+The completion survey found that fixing those directions adds 11\% more unique completions (\cref{sec:res-complete}).
+Absolute concentrations measured in mammalian cells \citep{park2016concentrations} are therefore the single most valuable addition to the kernel.
+The loader for them exists (\cref{sec:loaders}); its file does not yet.
+
+The same result reframes what a ``direction'' annotation is.
+A curated direction is a statement about the physiological concentration regime, not about the reaction.
+The kernel's direction verdict makes the dependence explicit: its blocker names the concentration window, and its remedy names the measurement.
+
+\subsection{Enzymes are not dilute}
+\label{sec:disc-locality}
+
+The chromatographic reading of the cytosol gives two numbers per contact, and they point in opposite directions.
+From the metabolite's side, retention is negligible: the median $k$ is 0.001--0.003, so binding barely changes a metabolite's capacitance.
+From the enzyme's side, contacts are non-local (\cref{sec:res-kinetics}): the median enzyme departs from its dilute limit at 2.4\,\textmu M of substrate, and 221 of 223 depart by more than 10\% at 1\,mM.
+The consequence for modelling is concrete.
+Enzyme--substrate states cannot be folded into metabolite capacitances; they must stay explicit, with conserved enzyme totals, which is what the two-rung expansion provides.
+The failure of the glucose divider in E3 is the same fact seen from the flux side: shares computed in the dilute limit are wrong where the enzyme is saturated.
+
+\subsection{What failed, and why that matters}
+\label{sec:disc-negative}
+
+The coupled-oscillator account of folding failed every test it could fail.
+Its sequence coupling carries less contact information than a hydrophobicity product (F1).
+Its eigenvalue count misses even with the true contact graph as coupling (F2).
+Its phase-lock groups lose to contiguous blocks (F3), and its dynamics add nothing to the static coupling they run on ($p=0.14$).
+F4 appeared to rescue a weak effect by attributing it to disorder, and D1 then removed the rescue, because the effect persists outside measured disordered regions.
+The pattern argues against adopting the account as a structure source and for keeping AlphaFold's counted contact graph, whose agreement with experiment A1 established (\cref{fig:structures}).
+
+M3 failed in an instructive way.
+The two reactions whose direction the kernel decides clear zero by 0.28\kJ; a crowding shift of 0.92\kJ\ removes both.
+A direction verdict that a plausible change of convention can overturn is not robust, and the kernel reports it as such.
+
+G1 held, but only 23 of its 324 cases could have failed (\cref{sec:res-db}), and the paper says so.
+A check is only as strong as its discriminating cases, which is why the check markers distinguish \emph{pass} from \emph{non-discriminating}.
+
+\subsection{Limitations and threats to validity}
+\label{sec:limitations}
+
+\paragraph{Scope of the corpus.}
+The corpus is defined by Reactome's compartment annotations.
+L1 found 78 reactions none of whose catalysts has cytosol support, including secreted fibrinogen chains; these are likely annotation errors that the filter inherited.
+Reactions that span compartments, including all transport, are excluded by construction.
+
+\paragraph{Coverage of measured thermodynamics.}
+Only 61 distinct TECRDB reactions match the corpus, and they close no cycle, so the cycle test is \vd{certified-empty} rather than informative.
+The wider TECRDB set is inconsistent at $\chi^2/\nu=4.11$, so its quoted uncertainties are optimistic by a factor of about two.
+The pooled $\sigma$ of 2.68\kJ\ is applied uniformly and does not capture reaction-specific error.
+
+\paragraph{Conventions are supplied, not measured.}
+The medium window, the concentration window, the ambient list, the conversion from parts per million to molar and the accessible-volume range are typical cytosolic values, not measurements for any cell type.
+Each is named on every value it affects, and each enters the stage digest, but a different choice changes the numbers.
+Abundances are whole-organism integrated values except in the HeLa comparison.
+
+\paragraph{Temperature.}
+Transforms are evaluated at 298.15\,K because TECRDB values are not temperature-corrected.
+The concentration term of the direction verdict and the junction law use $RT$ at 310\,K (2.577\kJ).
+The mismatch scales $RT\ln Q$ by about 4\%, and it is not negligible.
+Evaluating the concentration term at 298.15\,K as well would decide eight further reactions forward.
+All eight are cAMP hydrolysis by phosphodiesterases, with Hess-derived values, and they clear zero by 0.8\kJ.
+Like the two pyrophosphatase verdicts, these sit within a convention's reach of the boundary.
+A consistent treatment would correct the standard values to 310\,K before any of them is relied on.
+
+\paragraph{Multiple testing.}
+The 23 claims were tested at $\alpha=0.05$ without correction, as declared.
+Most decisive outcomes are far from the threshold, for example C1 ($p=2.7\times10^{-18}$) and the shuffle tests ($p=0.005$, the smallest attainable with 200 permutations).
+F4a ($p=0.012$) and the pLDDT difference within it ($p=0.043$) would not survive a Bonferroni correction over 23 claims, and should be read as suggestive.
+
+\paragraph{Single runs and implementation faults.}
+Each stage was run once on fixed data.
+One implementation fault was found during the work and is reported with its effect: the UniProt parser initially truncated notes at semicolons, which lowered S1 from 81.6\% to 19\% until it was fixed.
+The test suite (\cref{app:tests}) guards each such fault found so far, but it cannot exclude faults not yet found.
+
+\paragraph{Missing data sources.}
+Two sources the design anticipates could not be obtained under their terms.
+The supplementary concentration tables of \citet{park2016concentrations} require a publisher login, and the Human Metabolome Database refused scripted downloads \citep{wishart2022hmdb}.
+BRENDA requires a licence to be accepted interactively \citep{chang2021brenda}, and PhosphoSitePlus requires registration under a non-commercial licence \citep{hornbeck2015psp}.
+Their loaders are in place, and their verdicts are \vd{absent} until the files are supplied.
+
+%==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+A knowledge graph of biochemistry need not infer.
+When its edges are element laws and its nodes are solutions, its structure yields rank, conservation laws, blocked reactions and cycle constraints without any parameter.
+When its answers are typed verdicts with non-launderable provenance, every gap is named by cause, and every remedy is explicit.
+Applied to the human cytosol, the kernel shows how little of the network public measurements determine (\cref{tab:outcomes,fig:coverage}): 201 of 2{,}914 reaction energies, 2 robust directions, 3 flux dividers.
+It also shows precisely what would determine more (\cref{sec:disc-conc}).
+Concentrations would decide most directions; measurement, not identifiers, limits thermodynamic coverage; enzyme saturation, not metabolite sequestration, governs the contacts.
+The pre-registered audit kept the kernel honest about all of this, including the claims that failed.

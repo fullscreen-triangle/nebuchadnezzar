@@ -1,0 +1,56 @@
+%==============================================================================
+\section{Protocol: claims committed before code}
+\label{sec:protocol}
+
+The kernel was built in stages, and each stage after the first followed one protocol.
+First, the claims the stage would test were written in a plain-text record, each with a statement of the outcome that would count against it.
+Where a control was needed to make the test able to fail, the record named it too.
+Second, the record was committed to version control.
+Third, the code that tested the claims was written and run, and its outcome was recorded in a separate file that never edits the first.
+The commit history therefore orders each claim before its test \citep{nosek2018preregistration}.
+
+Three kinds of entry are distinguished in the record.
+\emph{Predictions} state a direction and a threshold in advance.
+\emph{Measurements} are instruments whose numbers are reported but not predicted, such as the census of gate letters; they are not counted as claims.
+\emph{Reproductions} re-run an analysis that had been run before the record was written; they are labelled as such and are not counted either.
+
+The record uses short identifiers that repeat across stages.
+\Cref{tab:ids} maps them to the identifiers used in this paper.
+Each claim's full text is reproduced in \cref{app:claims}.
+
+\begin{table}[t]
+\centering
+\caption{Claims tested, with the commit that recorded each before its code was written.
+``Record'' gives the identifier in the repository's prediction file.
+Each stage name refers to a section of the paper.}
+\label{tab:ids}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lp{3.6cm}p{3.4cm}ll@{}}
+\toprule
+Stage & This paper & Record & Recorded in & Kind \\
+\midrule
+Medium (\cref{sec:res-medium}) & M1; M2a, M2b; M3a, M3b & M1; M2; M3 & \texttt{de6f210} & predictions \\
+Kinetics (\cref{sec:res-kinetics}) & K1 & P1 & \texttt{de6f210} & prediction \\
+Folding (\cref{sec:res-folding}) & F1 & F1 & \texttt{d77d09c} & reproduction \\
+ & F2; F3; F4a, F4b & F2; F3; F4 & \texttt{d77d09c} & predictions \\
+ & F5 & F5 & \texttt{d77d09c} & measurement \\
+Extensions (\cref{sec:res-extend}) & E1--E3 & X1--X3 & \texttt{cddf153} & measurements \\
+ & E4a, E4b, E4c; E5; E6 & X4a, X4b, X4c; X5; X6 & \texttt{cddf153} & predictions \\
+Databases (\cref{sec:res-db}) & R1, I1, L1, S1, C1, A1, D1, G1 & R1, X1, L1, S1, C1, P1, D1, G1 & \texttt{b1d7fc8} & predictions \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Statistics.}
+Paired per-reaction comparisons use the Wilcoxon signed-rank test \citep{wilcoxon1945individual}; comparisons of two samples use the Mann--Whitney test \citep{mann1947test}, one-sided where the claim states a direction.
+Agreement between partitions uses the adjusted Rand index \citep{hubert1985comparing}.
+Label and signature tests use empirical $p$-values from 200 permutations of the labels.
+The threshold is $\alpha=0.05$ throughout, as written in the record.
+No correction for multiple testing was declared in advance, and none is applied; \cref{sec:limitations} discusses the consequence.
+
+\paragraph{Counting outcomes.}
+A claim with two parts that can fail separately is counted as two (M2, M3, F4, E4).
+S1 also has two parts, but its record states a single verdict for both, so it is counted once.
+E4c could not be tested because the kinetic constant it needs is not in SABIO-RK; it is counted as untestable, not as a failure, as its record specifies.
+The resulting 23 claims are listed with their outcomes in \cref{tab:outcomes}.

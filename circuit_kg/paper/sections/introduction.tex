@@ -1,0 +1,111 @@
+%==============================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Curated pathway resources describe human biochemistry as a graph of typed assertions.
+Reactome states which entities take part in a reaction, in which compartment and with which catalyst \citep{gillespie2022reactome}.
+Rhea states balanced reaction equations over a chemical ontology \citep{bansal2022rhea}.
+Genome-scale models such as Human-GEM state stoichiometric matrices with bounds on fluxes \citep{robinson2020humangem}.
+A knowledge graph built on such resources answers a question by inference over its triples \citep{hogan2021knowledge}.
+
+Inference has two weaknesses for a physical system.
+The first is semantic.
+Under the open-world assumption, the absence of a triple means nothing; under the closed-world assumption, it means that the fact is false.
+Neither reading matches what a biochemist needs to know: whether a value was measured and found to be empty, never measured, outside the scope of the source, or measured but too noisy to decide.
+The second weakness is physical.
+A reaction network is not an arbitrary relational structure.
+Its stoichiometric matrix fixes conservation laws, steady flux modes and thermodynamic cycles independently of any rate constant \citep{feinberg2019foundations,schuster1994efm}.
+Its reactions are driven by affinities, which are differences of chemical potential, exactly as currents in an electrical network are driven by differences of voltage \citep{oster1971network,schnakenberg1976network}.
+An inference engine that treats a reaction as a labelled edge discards this structure.
+
+This paper describes a kernel that keeps it.
+In a \emph{circuit knowledge graph}, each reaction is a junction whose edges carry element laws: mass-action flux in flux--force form, and Kirchhoff's current law at every species.
+A species' value, its chemical potential, is never stored.
+It is whatever solves the node's law from the node's contacts, and when the data needed to solve it are missing, the answer is a verdict that names what is missing.
+The cytosol is the electrical ground: ambient cofactors are folded into a single medium vertex, and every item touches it.
+This reading follows the network thermodynamics of \citet{oster1971network}, and it keeps the energetic constraints that thermodynamics-based flux analysis imposes \citep{beard2002energy,henry2007tfba} as structural facts rather than optimisation constraints.
+
+The central design decision is that nothing is inferred.
+Every function returns a typed verdict (\cref{sec:verdicts}).
+A verdict other than \vd{answered} may not carry a payload, and must name its blocker; this is enforced by the type, not by convention.
+The labels distinguish a well-posed question with an empty answer (\vd{certified-empty}) from a question whose required datum is missing (\vd{absent}).
+They also separate several admissible readings with no rule to select one (\vd{underdetermined}) from data that cannot resolve the answer within tolerance (\vd{undecidable}).
+A question the graph cannot state is \vd{refused}, and a composite power below its declared target is \vd{subfloor}.
+On top of the label, every value carries a provenance basis (stated, supplied, derived or estimated) that composes as a maximum and therefore cannot be laundered.
+Every empty answer carries a letter that says why it is empty, and every fact carries a ground verdict computed from its provenance chain.
+
+We built the kernel over the 2{,}914 Reactome reactions whose every reactant, product and modifier lies in the cytosol.
+We then extended it, stage by stage, with public measurements.
+The measurements are equilibrium constants from the Thermodynamics of Enzyme-Catalyzed Reactions Database (TECRDB) \citep{goldberg2004tecrdb}, transformed to cytosolic conditions with eQuilibrator's Legendre transform \citep{alberty2003thermodynamics,beber2022equilibrator}.
+They include kinetic constants from the System for the Analysis of Biochemical Pathways -- Reaction Kinetics (SABIO-RK) \citep{wittig2012sabio} and protein abundances from PaxDb \citep{wang2015paxdb}.
+They include protein structures from the AlphaFold Protein Structure Database \citep{jumper2021alphafold,varadi2022afdb} and the Protein Data Bank \citep{berman2000pdb}.
+Finally, they include cross-references, localisation, residue annotations and disorder from Rhea, MetaNetX, Human-GEM, the Human Protein Atlas, COMPARTMENTS, UniProt, the Mechanism and Catalytic Site Atlas (M-CSA) and DisProt \citep{bansal2022rhea,moretti2021metanetx,robinson2020humangem,thul2017hpa,binder2014compartments,uniprot2023,ribeiro2018mcsa,quaglia2022disprot}.
+
+Each extension was organised around claims that were written down, with the outcome that would count against them, and committed to version control before the code that tested them existed \citep{nosek2018preregistration}.
+Several of those claims failed.
+We report every outcome, and we treat a failed claim as a result.
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+  \item A formal model of a biochemical knowledge graph in which edges are element laws, node values are solutions, the medium is ground, and answers are typed verdicts with non-launderable provenance (\cref{sec:model}).
+  \item Structural results that hold without any rate constant: rank, conservation laws and blocked junctions; a three-valued cycle test with explicit tolerances; the determinacy condition for Hess's law; and a guard that refuses cycle tests which cannot fail (\cref{sec:model,sec:construction}).
+  \item Separation costs on counted weights, with a proof that attaching new structure never lowers them, and a control showing that real-valued weights do (\cref{sec:cuts,sec:res-proteins}).
+  \item A complete construction from public data, with every supplied convention named on the values it produces (\cref{sec:construction,app:conventions}).
+  \item A pre-registered audit of 23 claims across seven stages, with outcomes, controls and the reasons for each failure (\cref{sec:protocol,sec:results}).
+\end{enumerate}
+
+\paragraph{Principal findings.}
+Measured thermodynamics determine 75 of the 2{,}914 reactions directly; Hess's law and a carrier/slot decomposition raise this to 201 (\cref{sec:res-thermo}).
+For 156 of the 199 reactions whose direction is undecided, the cytosolic medium fixes the sign of the affinity at 1\,mM, so only concentrations block the answer (\cref{sec:res-medium}).
+Where the kernel disagrees with curated directions, the reactions are those that run uphill at 1\,mM and are pulled forward by product removal (\cref{sec:res-db}).
+Enzymes are not dilute: their sites saturate at micromolar substrate (\cref{sec:res-kinetics}).
+AlphaFold contact graphs reproduce crystal-structure contacts, and catalytic residues are contact hubs within them (\cref{sec:res-db}).
+A coupled-oscillator account of folding adds nothing to the contact graph it runs on (\cref{sec:res-folding}).
+
+%==============================================================================
+\section{Background and related work}
+\label{sec:related}
+
+\paragraph{Pathway knowledge bases and genome-scale models.}
+Reactome curates reactions as events over physical entities in compartments, with catalysts and regulators as modifiers \citep{gillespie2022reactome}.
+Rhea curates balanced equations over the Chemical Entities of Biological Interest (ChEBI) ontology \citep{bansal2022rhea,hastings2016chebi}.
+MetaNetX reconciles the namespaces of metabolic models \citep{moretti2021metanetx}.
+Human-GEM is a consensus genome-scale model of human metabolism \citep{robinson2020humangem}.
+Flux balance analysis optimises an objective over the null space of such a matrix under flux bounds \citep{orth2010fba}.
+The circuit knowledge graph shares the stoichiometric matrix with these models, but it does not optimise; it reports what the matrix and the measurements determine, and names what they leave open.
+
+\paragraph{Thermodynamics of reaction networks.}
+Network thermodynamics represents a reaction network as an electrical circuit whose currents are fluxes and whose potentials are chemical potentials \citep{oster1971network}.
+Schnakenberg's cycle decomposition gives the entropy production of a network as a sum over cycle affinities \citep{schnakenberg1976network}.
+Later work treats open networks with emergent cycles and broken conservation laws \citep{polettini2014irreversible,rao2016nonequilibrium}.
+Energy-balance analysis \citep{beard2002energy} and thermodynamics-based flux analysis \citep{henry2007tfba} require that no flux mode run around a cycle with zero net affinity.
+Network-embedded thermodynamic analysis checks metabolome data for consistency with these constraints \citep{kummel2006net}.
+Our kernel takes the element-law reading literally: each junction's law and each node's law are the edges and vertices of the graph.
+
+\paragraph{Gibbs energies of reaction.}
+Measured apparent equilibrium constants are collected in TECRDB \citep{goldberg2004tecrdb}.
+Transforming them between conditions requires Alberty's Legendre transform over the microspecies of each reactant \citep{alberty1998calculation,alberty2003thermodynamics}.
+Group-contribution and component-contribution methods estimate formation energies for compounds that were never measured \citep{jankowski2008group,noor2013component}.
+eQuilibrator implements both \citep{flamholz2012equilibrator,beber2022equilibrator}.
+We use eQuilibrator's microspecies data and transform, but deliberately not its estimates: a value that a model predicted carries the basis \vd{estimated} and is never reported as measured (\cref{sec:basis}).
+We also show that cycle tests built only from species-level energies are non-falsifiable, which is why the kernel's cycle test uses reaction-level measurements only (\cref{prop:falsifiable}).
+
+\paragraph{Metabolite concentrations, kinetics and abundance.}
+Absolute concentrations of central metabolites have been measured in bacteria, yeast and mammalian cells \citep{bennett2009absolute,park2016concentrations}.
+Kinetic constants are collected in SABIO-RK and the BRaunschweig ENzyme DAtabase (BRENDA) \citep{wittig2012sabio,chang2021brenda}; their in vitro values relate only loosely to in vivo rates \citep{davidi2016global}, and their distribution is broad \citep{bareven2011moderately}.
+Protein abundances are integrated across studies in PaxDb \citep{wang2015paxdb}.
+Total protein concentration constrains the conversion from parts per million to molar \citep{milo2013protein}.
+Macromolecular crowding reduces the volume available to solutes \citep{minton2001crowding,zhou2008crowding}.
+
+\paragraph{Protein structure.}
+AlphaFold predicts structures with per-residue confidence \citep{jumper2021alphafold}, and its database covers the human proteome \citep{tunyasuvunakool2021human,varadi2022afdb}.
+Low-confidence regions coincide with intrinsic disorder \citep{ruff2021alphafold}, which in turn is enriched at phosphorylation sites \citep{iakoucheva2004disorder}.
+Solvent accessibility follows the Shrake--Rupley construction \citep{shrake1973environment}; secondary structure follows the hydrogen-bond assignment of \citet{kabsch1983dssp}.
+Sequence-only contact prediction has a long history, of which coevolutionary coupling is the best-established form \citep{morcos2011dca}.
+
+\paragraph{Missing values, provenance and verdicts.}
+Strong Kleene logic gives a third truth value for propositions whose value is not determined \citep{kleene1952introduction}.
+The verdict labels refine that third value by its cause.
+Provenance standards such as the Provenance Ontology (PROV-O) of the World Wide Web Consortium record which activity generated which entity from which inputs \citep{lebo2013provo}.
+We compute a ground verdict from such a chain, using Peirce's distinction between symbol, index and icon \citep{peirce1932collected} to say whether a fact rests on a measurement of its object, on a model of it, or on neither.
+The verdicts make data reuse more honest in the sense of the principles that data be findable, accessible, interoperable and reusable \citep{wilkinson2016fair}: a reused value carries the conditions under which it is valid.

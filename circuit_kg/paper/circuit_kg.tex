@@ -1,0 +1,111 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,width=0.95\linewidth}
+\setlength{\emergencystretch}{3em}
+
+\hypersetup{
+  pdftitle={Circuit knowledge graphs: reactions as element laws, typed verdicts in place of inference, and a pre-registered audit of human cytosolic biochemistry},
+  pdfauthor={Kundai Farai Sachikonye}
+}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\kJ}{\ensuremath{\,\mathrm{kJ\,mol^{-1}}}}
+\newcommand{\DG}{\ensuremath{\Delta_r G^\circ}}
+\newcommand{\DGp}{\ensuremath{\Delta_r G'^\circ}}
+\newcommand{\DGm}{\ensuremath{\Delta_r G'_{\mathrm{m}}}}
+\newcommand{\vd}[1]{\textsf{#1}}
+\newcommand{\conv}[1]{\texttt{#1}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\rank}{\operatorname{rank}}
+
+\begin{document}
+
+\title{\textbf{Circuit Knowledge Graphs}\\[6pt]
+{\Large Reactions as Element Laws, Typed Verdicts in Place of Inference,\\ and a Pre-registered Audit of Human Cytosolic Biochemistry}}
+
+\author{
+Kundai Farai Sachikonye\\
+Technical University of Munich, School of Life Sciences\\
+\texttt{kundai.sachikonye@wzw.tum.de}
+}
+
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Knowledge graphs of biochemistry store curated assertions and answer questions by inference.
+Inference under an open world cannot tell a fact that is false from a fact that was never measured.
+We describe a \emph{circuit knowledge graph}, in which reactions are junctions carrying element laws and species are nodes whose values are the solutions of those laws.
+The cytosolic medium is the electrical ground.
+Every computation returns a typed verdict instead of an inferred triple: \vd{answered}, \vd{certified-empty}, \vd{absent}, \vd{underdetermined}, \vd{undecidable}, \vd{refused} or \vd{subfloor}.
+A verdict other than \vd{answered} carries no payload and names its blocker.
+Each value carries a provenance basis that composes without laundering, and each empty answer carries a letter saying why it is empty.
+We built the graph over the 2{,}914 human reactions in Reactome whose every participant and modifier is cytosolic.
+We joined them to measured reaction thermodynamics, kinetic constants, protein abundances, AlphaFold structures and thirteen further curated resources.
+The analyses were organised around 23 claims written down and committed before the code that tested them was run.
+Measured thermodynamics determine only 75 of the 2{,}914 reactions; Hess's law adds 30 and a carrier/slot decomposition of protein phosphorylation adds 96.
+Under the cytosolic window of pH, ionic strength and free magnesium, the direction of 156 of 199 undecided reactions is blocked by concentrations alone.
+The 17 disagreements with curated directions are reactions that run uphill at 1\,mM.
+Enzymes leave the dilute regime at a median of 2.4\,\textmu M, so enzyme--substrate states cannot be folded into metabolite capacitances.
+AlphaFold contact graphs agree with crystal structures (median Jaccard index 0.90, against 0.14 for a shifted control).
+A coupled-oscillator account of folding fails every test it was given.
+Of the 23 pre-registered claims, 14 held, 8 failed and 1 could not be tested for want of data.
+The failures are as informative as the successes, because each verdict states what would decide it.
+\end{abstract}
+
+\noindent\textbf{Keywords:} knowledge graphs; reaction networks; network thermodynamics; Legendre transform; Hess's law; provenance; AlphaFold; pre-registration; three-valued logic.
+
+\tableofcontents
+\clearpage
+
+\input{sections/introduction}
+\input{sections/model}
+\input{sections/construction}
+\input{sections/protocol}
+\input{sections/results}
+\input{sections/discussion}
+
+\section*{Data and code availability}
+The kernel is the Python package \texttt{circuit\_kg} (about 5{,}900 lines), on branch \texttt{circuit-kg} of the author's \texttt{nebuchadnezzar} repository.
+The results reported here are from commit \texttt{15fb81a}.
+The hypotheses were committed in \texttt{de6f210}, \texttt{d77d09c}, \texttt{cddf153} and \texttt{b1d7fc8}, each before the code that tested them.
+Every downloaded file is recorded with its address, retrieval date and SHA-256 digest in \texttt{data/raw/SOURCES.json}.
+Every number in this paper is read from \texttt{results/*.json}; the figures are drawn from those files by \texttt{paper/figures/make\_figures.py}.
+The commands that regenerate each stage are listed in \cref{app:reproduce}.
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\appendix
+\input{sections/appendix}
+
+\end{document}
