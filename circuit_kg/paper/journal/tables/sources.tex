@@ -1,0 +1,29 @@
+\begin{table*}[t]
+\centering
+\caption{Public resources and what is taken from each. Every file is recorded with its address, retrieval date and SHA-256 digest.}
+\label{tab:sources}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X l>{\raggedright\arraybackslash}X@{}}
+\toprule
+Resource & Content used & Resource & Content used \\
+\midrule
+Reactome \citep{gillespie2022reactome} & SBML export for \textit{Homo sapiens}: reactions, species, compartments, modifiers &
+PDBe and SIFTS \citep{velankar2013sifts} & choice of experimental chain; residue numbering mapped to UniProt \\
+ChEBI \citep{hastings2016chebi} & compounds, accessions, conjugate acid/base and tautomer relations &
+Rhea \citep{bansal2022rhea} & mappings to Reactome, directions, participants with coefficients \\
+TECRDB \citep{goldberg2004tecrdb} & apparent equilibrium constants, reverse-transformed to the chemical reference state &
+MetaNetX \citep{moretti2021metanetx} & chemical cross-references (ChEBI to KEGG) \\
+eQuilibrator \citep{beber2022equilibrator} & microspecies: charge, protons, magnesium ions, relative energies &
+Human-GEM \citep{robinson2020humangem} & cytosolic reactions, metabolite identifiers, reversibility \\
+SABIO-RK \citep{wittig2012sabio} & human wild-type kinetic laws: 5{,}682 $K_m$, 3{,}089 $k_{\mathrm{cat}}$, 771 $K_i$ records &
+Human Protein Atlas \citep{thul2017hpa} & main and additional subcellular locations \\
+PaxDb \citep{wang2015paxdb,nagaraj2011hela} & integrated whole-organism abundances (3{,}048 proteins); HeLa abundances &
+COMPARTMENTS \citep{binder2014compartments} & cytosol (GO:0005829) confidence scores \\
+UniProt \citep{uniprot2023} & EC numbers, Pfam families, modified residues and active sites with evidence codes &
+M-CSA \citep{ribeiro2018mcsa} & catalytic residues in UniProt numbering \\
+AlphaFold DB \citep{varadi2022afdb} & predicted structures with per-residue confidence (pLDDT) &
+DisProt \citep{quaglia2022disprot} & experimentally observed disordered regions \\
+Protein Data Bank \citep{berman2000pdb} & experimental coordinates & & \\
+\bottomrule
+\end{tabularx}
+\end{table*}

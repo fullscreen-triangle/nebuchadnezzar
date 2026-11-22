@@ -1,0 +1,4835 @@
+{
+ "software_version": "0.1.0a1",
+ "kernel": {
+  "structure": {
+   "internal_species": 5330,
+   "junctions": 2914,
+   "ambient_species_folded": 14,
+   "rank": 2667,
+   "conservation_laws": 2663,
+   "steady_flux_modes": 247,
+   "boundary_species": 4002,
+   "blocked_if_only_medium_open": 2364,
+   "blocked_if_boundary_species_also_open": 95,
+   "spectral_gap": [
+    1.1417681751415991e-05,
+    3.552714205567442e-15
+   ],
+   "species_roles": {
+    "participant": 4014,
+    "modifier": 724,
+    "participant+modifier": 589,
+    "": 3
+   }
+  },
+  "verdicts": {
+   "reaction-energy": {
+    "refused": 2244,
+    "answered": 75,
+    "absent": 595
+   },
+   "hess-energy": {
+    "absent": 367,
+    "answered": 30,
+    "certified-empty": 1
+   },
+   "direction": {
+    "refused": 2244,
+    "undecidable": 95,
+    "absent": 564,
+    "answered": 10,
+    "certified-empty": 1
+   },
+   "node-solve": {
+    "absent": 4603,
+    "underdetermined": 727
+   },
+   "cycle-consistency": {
+    "certified-empty": 1
+   }
+  },
+  "gates": {
+   "reaction-energy": {
+    "-": 398,
+    "open": 197
+   },
+   "hess-energy": {
+    "-": 43,
+    "open": 324,
+    "+": 1
+   },
+   "direction": {
+    "-": 43,
+    "open": 521,
+    "+": 1
+   },
+   "node-solve": {
+    "?": 4603
+   },
+   "cycle-consistency": {
+    "+": 1
+   }
+  },
+  "bases": {
+   "reaction-energy": {
+    "supplied": 75
+   },
+   "hess-energy": {
+    "supplied": 30
+   },
+   "direction": {
+    "supplied": 10
+   }
+  },
+  "blockers": {
+   "reaction-energy": {
+    "a participant is a macromolecule or unresolved entity; TECRDB states small-molecule reactions only": 2244,
+    "no TECRDB measurement of this reaction": 398,
+    "participant without KEGG id": 197
+   },
+   "hess-energy": {
+    "compound never measured in any TECRDB reaction": 324,
+    "reaction is not a combination of measured reactions": 43
+   },
+   "direction": {
+    "a participant is a macromolecule or unresolved entity; TECRDB states small-molecule reactions only": 2244,
+    "compound never measured in any TECRDB reaction": 324,
+    "participant without KEGG id": 197,
+    "concentration": 52,
+    "reaction is not a combination of measured reactions": 43,
+    "medium": 43
+   },
+   "node-solve": {
+    "steady-state potential needs the contacts' laws and states": 4603,
+    "node law is identically 0 = 0: the species only modulates junctions, so no current constrains it": 727
+   }
+  },
+  "conventions_used": {
+   "conjugate-closure": 74,
+   "kegg-candidate-selected-by-tecrdb-match": 3,
+   "water-balance": 1,
+   "hess-span": 38,
+   "medium-window": 10,
+   "concentration-window": 10
+  },
+  "hess_fit": {
+   "measured_reactions": 418,
+   "compounds": 495,
+   "chi2": 275.5530882440467,
+   "dof": 67,
+   "chi2_per_dof": 4.112732660358906,
+   "birge_ratio": 2.0279873422580588
+  },
+  "directions": [
+   {
+    "reaction": "reaction_109415",
+    "name": "AMP + H2O => adenosine + orthophosphate [NT5C1B]",
+    "source": "measured",
+    "g0": -12.928703456154047,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -19.16157714048981,
+     -8.279183971665177
+    ],
+    "dG_prime_m_range": [
+     -36.276414675210845,
+     -25.39402150638621
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_111524",
+    "name": "IMP + L-Aspartate + GTP => Adenylosuccinate + GDP + Pi [ADSS]",
+    "source": "measured",
+    "g0": 100.31375706125421,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -6.5597906574130125,
+     19.012336522546327
+    ],
+    "dG_prime_m_range": [
+     -6.5597906574130125,
+     19.012336522546327
+    ],
+    "RT_lnQ_range": [
+     -68.45935013888413,
+     68.45935013888413
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_111955",
+    "name": "cAMP hydrolysis by Cam-PDE 1",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_111962",
+    "name": "PDE4A,C,D hydrolyse cAMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_1237160",
+    "name": "MTA is cleaved and phosphorylated",
+    "source": "measured",
+    "g0": 10.96876475615138,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     3.352384189150966,
+     18.506408211234955
+    ],
+    "dG_prime_m_range": [
+     3.352384189150966,
+     18.506408211234955
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_162425",
+    "name": "p-S295-PDE3B hydrolyses cAMP to AMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_163741",
+    "name": "D-glyceraldehyde 3-phosphate + sedoheptulose 7-phosphate<=> xylulose 5-phosphate+ribose 5-phosphate ",
+    "source": "measured",
+    "g0": 1.08548544754163,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -3.9483983045413913,
+     6.05952472794882
+    ],
+    "dG_prime_m_range": [
+     -3.9483983045413913,
+     6.05952472794882
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_174392",
+    "name": "PAPSS1,2 transfer SO4(2-) group to ATP to form APS",
+    "source": "measured",
+    "g0": 43.79509058832332,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     37.79527253579108,
+     46.99746543320952
+    ],
+    "dG_prime_m_range": [
+     37.79527253579108,
+     46.99746543320952
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_174401",
+    "name": "AHCY:NAD+ tetramer hydrolyses AdoHcy",
+    "source": "measured",
+    "g0": 34.760772050477165,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     27.84743562408103,
+     41.65995689274217
+    ],
+    "dG_prime_m_range": [
+     10.732598089359996,
+     24.54511935802114
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_177784",
+    "name": "RPIA isomerizes ribose 5-phosphate to D-ribulose 5-phosphate",
+    "source": "measured",
+    "g0": 2.3942035836507443,
+    "sigma": 0.9470224191964967,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -0.19447056567840315,
+     4.945986838228242
+    ],
+    "dG_prime_m_range": [
+     -0.19447056567840315,
+     4.945986838228242
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_191382",
+    "name": "Isopentenyl pyrophosphate rearranges to dimethylallyl pyrophosphate",
+    "source": "measured",
+    "g0": -4.9050228532067965,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -11.790624653299009,
+     2.1769891354122564
+    ],
+    "dG_prime_m_range": [
+     -11.790624653299009,
+     2.1769891354122564
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_191422",
+    "name": "Mevalonate-5-phosphate is further phosphorylated",
+    "source": "measured",
+    "g0": -43.72110046938532,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -5.323457849665694,
+     5.669439342880885
+    ],
+    "dG_prime_m_range": [
+     -5.323457849665694,
+     5.669439342880885
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_197186",
+    "name": "NAPRT1 dimer transfers PRIB to NCA to form NAMN",
+    "source": "hess",
+    "g0": 4.639030447992933,
+    "sigma": 5.609747052952122,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -49.8867537157947,
+     -15.797917279522046
+    ],
+    "dG_prime_m_range": [
+     -67.00159125051573,
+     -32.91275481424308
+    ],
+    "RT_lnQ_range": [
+     -102.68902520832619,
+     57.04945844907011
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_197198",
+    "name": "NADK:Zn2+ tetramer phosphorylates NAD+ to NADP+",
+    "source": "measured",
+    "g0": 28.59524206049504,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -21.50515531615671,
+     0.03146606074222724
+    ],
+    "dG_prime_m_range": [
+     -21.50515531615671,
+     0.03146606074222724
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_197963",
+    "name": "DHFR2 reduces FOLA to DHF",
+    "source": "hess",
+    "g0": -67.28672873927958,
+    "sigma": 5.9506067559334666,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -35.91689651140088,
+     7.047330200319822
+    ],
+    "dG_prime_m_range": [
+     -35.91689651140088,
+     7.047330200319822
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_197972",
+    "name": "DHF is reduced to tetrahydrofolate (THF)",
+    "source": "measured",
+    "g0": -71.70392335184884,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -31.259252941879048,
+     -18.44021777690825
+    ],
+    "dG_prime_m_range": [
+     -31.259252941879048,
+     -18.44021777690825
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_199803",
+    "name": "RPE dimers isomerize XY5P to RU5P",
+    "source": "measured",
+    "g0": 1.1543835461664416,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -1.9304135290523101,
+     4.2481103980299135
+    ],
+    "dG_prime_m_range": [
+     -1.9304135290523101,
+     4.2481103980299135
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_200318",
+    "name": "creatine + ATP => phosphocreatine + ADP [CKB,CKM]",
+    "source": "measured",
+    "g0": 52.037922382625986,
+    "sigma": 0.6696459745495321,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     10.314268131377625,
+     20.816505526223843
+    ],
+    "dG_prime_m_range": [
+     10.314268131377625,
+     20.816505526223843
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_2509827",
+    "name": "ITPA hydrolyses ITP to IMP",
+    "source": "measured",
+    "g0": 72.73184308137462,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -28.112340308218045,
+     -3.7867571731742427
+    ],
+    "dG_prime_m_range": [
+     -45.22717784293908,
+     -20.901594707895278
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_264622",
+    "name": "Cho is acetylated to AcCho by CHAT",
+    "source": "measured",
+    "g0": -12.36784277088577,
+    "sigma": 1.3392919490990642,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -15.680531499000463,
+     -7.291381108674643
+    ],
+    "dG_prime_m_range": [
+     -15.680531499000463,
+     -7.291381108674643
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_418553",
+    "name": "cAMP degradation by Phosphodiesterases",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_446201",
+    "name": "PMM1,2 isomerise Man6P to Man1P",
+    "source": "measured",
+    "g0": 4.067246851168775,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     0.09638266580454591,
+     8.256815004986501
+    ],
+    "dG_prime_m_range": [
+     0.09638266580454591,
+     8.256815004986501
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_446221",
+    "name": "GMPPB converts Mannose-1-phosphate to GDP-Mannose",
+    "source": "measured",
+    "g0": -6.661725175633036,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -16.120384142307167,
+     -0.5492538746372766
+    ],
+    "dG_prime_m_range": [
+     -16.120384142307167,
+     -0.5492538746372766
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_517444",
+    "name": "TAT aminates HPP",
+    "source": "measured",
+    "g0": 1.199540116626906,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -7.3485557277837135,
+     6.909363018815151
+    ],
+    "dG_prime_m_range": [
+     -7.3485557277837135,
+     6.909363018815151
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5211224",
+    "name": "Anthrax cya catalyzes the conversion of ATP to cAMP",
+    "source": "measured",
+    "g0": 45.362033374198546,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -5.322137859231555,
+     8.154451229789766
+    ],
+    "dG_prime_m_range": [
+     -22.436975393952586,
+     -8.960386304931268
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_5362564",
+    "name": "ADH1A,1C,4 oxidise atROL to atRAL in vitro",
+    "source": "measured",
+    "g0": 53.71144703567197,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     0.3212947595815603,
+     20.05454949740809
+    ],
+    "dG_prime_m_range": [
+     0.3212947595815603,
+     20.05454949740809
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_5615668",
+    "name": "AKR1C3 reduces atRAL to atROL",
+    "source": "hess",
+    "g0": -57.472715583245986,
+    "sigma": 5.621606306792891,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -28.236007828308935,
+     7.092292491209571
+    ],
+    "dG_prime_m_range": [
+     -28.236007828308935,
+     7.092292491209571
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5652172",
+    "name": "AKR1B1 reduces Glc to D-sorbitol",
+    "source": "hess",
+    "g0": -56.846910825984814,
+    "sigma": 3.0880529399055816,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -21.084080240759224,
+     1.1929977176848086
+    ],
+    "dG_prime_m_range": [
+     -21.084080240759224,
+     1.1929977176848086
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5662471",
+    "name": "SORD tetramer oxidizes xylitol to D-xylulose",
+    "source": "measured",
+    "g0": 62.29555842641775,
+    "sigma": 1.0935272973034162,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     12.98816522853403,
+     24.55581535646651
+    ],
+    "dG_prime_m_range": [
+     12.98816522853403,
+     24.55581535646651
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_5693390",
+    "name": "HSD17B11 dehydrogenates EST17b to E1",
+    "source": "hess",
+    "g0": 51.099962900237955,
+    "sigma": 5.621609969728641,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -13.465054609315183,
+     21.863264580397804
+    ],
+    "dG_prime_m_range": [
+     -13.465054609315183,
+     21.863264580397804
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5694071",
+    "name": "GLO1 dimer:2xZn2+ transforms MGXL and GSH to (R)-S-LGSH",
+    "source": "measured",
+    "g0": -23.507675707334464,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -30.38447688380127,
+     -16.567677013405245
+    ],
+    "dG_prime_m_range": [
+     -13.269639349080236,
+     0.5471605213157886
+    ],
+    "RT_lnQ_range": [
+     -11.409891689814023,
+     57.04945844907011
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5694494",
+    "name": "AACS ligates CoA-SH to ACA, forming ACA-CoA",
+    "source": "hess",
+    "g0": 49.04712711466235,
+    "sigma": 3.9524243582804193,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -11.87316868341909,
+     15.930127223599564
+    ],
+    "dG_prime_m_range": [
+     -11.87316868341909,
+     15.930127223599564
+    ],
+    "RT_lnQ_range": [
+     -68.45935013888413,
+     68.45935013888413
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_5696457",
+    "name": "BDH2 dehydrogenates 3HBA",
+    "source": "measured",
+    "g0": 54.08681395103124,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     4.513439648995856,
+     16.635288524061792
+    ],
+    "dG_prime_m_range": [
+     4.513439648995856,
+     16.635288524061792
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_6783939",
+    "name": "PYCR2 decamer reduces (S)-1-pyrroline-5-carboxylate to L-Pro",
+    "source": "measured",
+    "g0": -138.3742129026048,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -61.27286909844721,
+     -36.37780005066865
+    ],
+    "dG_prime_m_range": [
+     -61.27286909844721,
+     -36.37780005066865
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_6783955",
+    "name": "PYCR3 decamer reduces (S)-1-pyrroline-5-carboxylate to L-Pro",
+    "source": "measured",
+    "g0": -138.3742129026048,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -61.27286909844721,
+     -36.37780005066865
+    ],
+    "dG_prime_m_range": [
+     -61.27286909844721,
+     -36.37780005066865
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_6787321",
+    "name": "DERA cleaves dR5P to GA3P and CH3CHO",
+    "source": "measured",
+    "g0": 20.800684904898727,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     16.817164518015886,
+     24.866135168418957
+    ],
+    "dG_prime_m_range": [
+     -0.2976730167051471,
+     7.751297633697924
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_6787329",
+    "name": "PGM2:Mg2+ isomerises R1P to R5P",
+    "source": "measured",
+    "g0": -8.37058822663523,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -15.43724956937854,
+     -1.4936202317618523
+    ],
+    "dG_prime_m_range": [
+     -15.43724956937854,
+     -1.4936202317618523
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_6788912",
+    "name": "LHPP:Mg2+ dimer hydrolyses PPi",
+    "source": "measured",
+    "g0": 14.402897320126243,
+    "sigma": 1.0935272973034162,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -22.65490706283633,
+     -12.14436872849451
+    ],
+    "dG_prime_m_range": [
+     -39.76974459755736,
+     -29.259206263215543
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_6799495",
+    "name": "GLYCTK phosphorylates DGA to 3PDGA",
+    "source": "hess",
+    "g0": 31.57127885245441,
+    "sigma": 4.72052903877738,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -23.888407910805885,
+     7.655742470549509
+    ],
+    "dG_prime_m_range": [
+     -23.888407910805885,
+     7.655742470549509
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_6810464",
+    "name": "NUDT14 hydrolyses UDP-Glc to G1P and UMP",
+    "source": "hess",
+    "g0": 53.17670856270486,
+    "sigma": 7.526044890450169,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -57.78976683445482,
+     -9.074988891141338
+    ],
+    "dG_prime_m_range": [
+     -74.90460436917584,
+     -26.18982642586237
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_6810594",
+    "name": "HSD17B14 tetramer oxidises estradiol (E2) to estrone (E1)",
+    "source": "hess",
+    "g0": 51.099962900237955,
+    "sigma": 5.621609969728641,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -13.465054609315183,
+     21.863264580397804
+    ],
+    "dG_prime_m_range": [
+     -13.465054609315183,
+     21.863264580397804
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_6813749",
+    "name": "ALDH1A1 oxidises GA to DGA",
+    "source": "hess",
+    "g0": 35.11210277436573,
+    "sigma": 6.689438763776204,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -73.59130909554912,
+     -28.26580241895748
+    ],
+    "dG_prime_m_range": [
+     -73.59130909554912,
+     -28.26580241895748
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70286",
+    "name": "UTP + D-glucose 1-phosphate => pyrophosphate + UDP-glucose",
+    "source": "measured",
+    "g0": -1.5466151874198306,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -11.25438508265162,
+     0.4846373040910221
+    ],
+    "dG_prime_m_range": [
+     -11.25438508265162,
+     0.4846373040910221
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70349",
+    "name": "DAK dimer phosphorylates D-glyceraldehyde to form D-glyceraldehyde 3-phosphate",
+    "source": "hess",
+    "g0": 17.194874999219522,
+    "sigma": 4.438993642435287,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -34.272554172336164,
+     -4.583528502867743
+    ],
+    "dG_prime_m_range": [
+     -34.272554172336164,
+     -4.583528502867743
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70369",
+    "name": "GALE:NAD+ dimer reversibly epimerises UDP-Gal to UDP-Glc",
+    "source": "measured",
+    "g0": -2.936461342137404,
+    "sigma": 0.8470426022158674,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -5.11829849827935,
+     -0.7546241859954588
+    ],
+    "dG_prime_m_range": [
+     -5.11829849827935,
+     -0.7546241859954588
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70449",
+    "name": "GADPH tetramer dehydrogenates GA3P",
+    "source": "measured",
+    "g0": 55.51025451556035,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -1.9371783216996117,
+     12.628321418129339
+    ],
+    "dG_prime_m_range": [
+     15.177659213021421,
+     29.743158952850372
+    ],
+    "RT_lnQ_range": [
+     -34.22967506944207,
+     79.86924182869815
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_70454",
+    "name": "TPI1 dimer isomerizes DHAP to GA3P",
+    "source": "measured",
+    "g0": 7.695177538580219,
+    "sigma": 1.0124095514934572,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     4.984955659798597,
+     10.404681397641232
+    ],
+    "dG_prime_m_range": [
+     4.984955659798597,
+     10.404681397641232
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_70481",
+    "name": "TPI1 dimer isomerizes GA3P to DHAP",
+    "source": "measured",
+    "g0": -7.695177538580219,
+    "sigma": 1.0124095514934572,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -10.404681397641232,
+     -4.984955659798597
+    ],
+    "dG_prime_m_range": [
+     -10.404681397641232,
+     -4.984955659798597
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70482",
+    "name": "GAPDH tetramers reduce 1,3BPG to GA3P",
+    "source": "measured",
+    "g0": -55.51025451556035,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -12.628321418129339,
+     1.9371783216996117
+    ],
+    "dG_prime_m_range": [
+     -29.743158952850372,
+     -15.177659213021421
+    ],
+    "RT_lnQ_range": [
+     -79.86924182869815,
+     34.22967506944207
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70486",
+    "name": "PGK complexes (PGK1,2) phosphorylate 3PG to form 1,3BPG",
+    "source": "measured",
+    "g0": 20.227758540520124,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     16.861522654875372,
+     25.93049154448949
+    ],
+    "dG_prime_m_range": [
+     16.861522654875372,
+     25.93049154448949
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_70494",
+    "name": "Enolase dimers (ENO1,2,3) convert PEP to 2PG",
+    "source": "measured",
+    "g0": 2.6154113187029933,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -1.3282361426643354,
+     6.902905516968067
+    ],
+    "dG_prime_m_range": [
+     -1.3282361426643354,
+     6.902905516968067
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70510",
+    "name": "LDH tetramer oxidises LACT to PYR",
+    "source": "measured",
+    "g0": 69.16840121146912,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     20.50596197169462,
+     30.40482880329004
+    ],
+    "dG_prime_m_range": [
+     20.50596197169462,
+     30.40482880329004
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_70523",
+    "name": "PXLP-K314-GPT transaminates L-Ala to form PYR",
+    "source": "measured",
+    "g0": -1.0586045946513756,
+    "sigma": 0.8470426022158674,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -2.327657851372192,
+     2.683497806135849
+    ],
+    "dG_prime_m_range": [
+     -2.327657851372192,
+     2.683497806135849
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70524",
+    "name": "PXLP-K314-GPT transaminates PYR to form L-Ala",
+    "source": "measured",
+    "g0": 1.0586045946513756,
+    "sigma": 0.8470426022158674,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -2.683497806135849,
+     2.327657851372192
+    ],
+    "dG_prime_m_range": [
+     -2.683497806135849,
+     2.327657851372192
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70573",
+    "name": "argininosuccinate <=> fumarate + arginine",
+    "source": "measured",
+    "g0": 14.67222936668406,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     4.564954505228743,
+     19.23534322194103
+    ],
+    "dG_prime_m_range": [
+     -12.54988302949229,
+     2.120505687219996
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70577",
+    "name": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+    "source": "measured",
+    "g0": 87.80349572722636,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -12.59701154501064,
+     11.642251337471885
+    ],
+    "dG_prime_m_range": [
+     -12.59701154501064,
+     11.642251337471885
+    ],
+    "RT_lnQ_range": [
+     -68.45935013888413,
+     68.45935013888413
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_70581",
+    "name": "oxaloacetate + glutamate <=> aspartate + alpha-ketoglutarate [GOT1]",
+    "source": "measured",
+    "g0": -4.425288881413459,
+    "sigma": 0.9470224191964967,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -6.880519567895466,
+     -1.951465486017665
+    ],
+    "dG_prime_m_range": [
+     -6.880519567895466,
+     -1.951465486017665
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70592",
+    "name": "PXLP-K259-GOT1 transaminates 2-OG and L-Asp",
+    "source": "measured",
+    "g0": 4.425288881413459,
+    "sigma": 0.9470224191964967,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     1.951465486017665,
+     6.880519567895466
+    ],
+    "dG_prime_m_range": [
+     1.951465486017665,
+     6.880519567895466
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_70903",
+    "name": "urocanate + H2O => 4-imidazolone-5-propanoate",
+    "source": "measured",
+    "g0": -10.921675363108966,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -17.697216580156606,
+     -2.809206652560004
+    ],
+    "dG_prime_m_range": [
+     -17.697216580156606,
+     -2.809206652560004
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_70920",
+    "name": "N-formiminoglutamate + tetrahydrofolate => glutamate + 5-formiminotetrahydrofolate",
+    "source": "measured",
+    "g0": 0.5865063001384847,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -18.233366010731235,
+     0.12506740301840225
+    ],
+    "dG_prime_m_range": [
+     -18.233366010731235,
+     0.12506740301840225
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71155",
+    "name": "TAT deaminates tyrosine",
+    "source": "measured",
+    "g0": -1.199540116626906,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -6.909363018815151,
+     7.3485557277837135
+    ],
+    "dG_prime_m_range": [
+     -6.909363018815151,
+     7.3485557277837135
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71296",
+    "name": "PGLS hydrolyzes D-glucono-1,5-lactone 6-phosphate",
+    "source": "hess",
+    "g0": 23.3403995579567,
+    "sigma": 6.5160164135456835,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -41.78554302800925,
+     -2.447378028514713
+    ],
+    "dG_prime_m_range": [
+     -41.78554302800925,
+     -2.447378028514713
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71303",
+    "name": "RPE dimers isomerise RU5P to XY5P",
+    "source": "measured",
+    "g0": -1.1543835461664416,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -4.2481103980299135,
+     1.9304135290523101
+    ],
+    "dG_prime_m_range": [
+     -4.2481103980299135,
+     1.9304135290523101
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71306",
+    "name": "RPIA isomerizes D-ribulose 5-phosphate to ribose 5-phosphate",
+    "source": "measured",
+    "g0": -2.3942035836507443,
+    "sigma": 0.9470224191964967,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -4.945986838228242,
+     0.19447056567840315
+    ],
+    "dG_prime_m_range": [
+     -4.945986838228242,
+     0.19447056567840315
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71324",
+    "name": "ribose 5-phosphate + xylulose 5-phosphate <=> sedoheptulose 7-phosphate + D-glyceraldehyde 3-phosphate",
+    "source": "measured",
+    "g0": -1.08548544754163,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -6.05952472794882,
+     3.9483983045413913
+    ],
+    "dG_prime_m_range": [
+     -6.05952472794882,
+     3.9483983045413913
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71445",
+    "name": "PGAM dimers isomerise 2PG to 3PG",
+    "source": "measured",
+    "g0": -4.919765146501085,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -6.943133693989897,
+     -2.2685265307886864
+    ],
+    "dG_prime_m_range": [
+     -6.943133693989897,
+     -2.2685265307886864
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71654",
+    "name": "PGAM dimers isomerise 3PG to 2PG",
+    "source": "measured",
+    "g0": 4.919765146501085,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     2.2685265307886864,
+     6.943133693989897
+    ],
+    "dG_prime_m_range": [
+     2.2685265307886864,
+     6.943133693989897
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_71660",
+    "name": "Enolase dimers dehydrates 2PG",
+    "source": "measured",
+    "g0": -2.6154113187029933,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -6.902905516968067,
+     1.3282361426643354
+    ],
+    "dG_prime_m_range": [
+     -6.902905516968067,
+     1.3282361426643354
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71682",
+    "name": "glutathione (oxidized) + NADPH + H+ => 2 glutathione (reduced) + NADP+",
+    "source": "measured",
+    "g0": -59.90900503877817,
+    "sigma": 1.3392919490990642,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -18.54849344476398,
+     -4.953068817061175
+    ],
+    "dG_prime_m_range": [
+     -35.66333097948501,
+     -22.06790635178221
+    ],
+    "RT_lnQ_range": [
+     -79.86924182869815,
+     34.22967506944207
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71691",
+    "name": "acetaldehyde + NAD+ => acetate + NADH + H+ [cytosolic]",
+    "source": "hess",
+    "g0": 36.63603159287844,
+    "sigma": 4.398340167963368,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -66.16430815453856,
+     -32.63288918595823
+    ],
+    "dG_prime_m_range": [
+     -66.16430815453856,
+     -32.63288918595823
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71707",
+    "name": "ethanol + NAD+ => acetaldehyde + NADH + H+",
+    "source": "measured",
+    "g0": 66.30218703835975,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     17.81987394722542,
+     27.73745031513921
+    ],
+    "dG_prime_m_range": [
+     17.81987394722542,
+     27.73745031513921
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_71732",
+    "name": "PPA1 hydrolyzes pyrophosphate to orthophosphate",
+    "source": "measured",
+    "g0": 14.402897320126243,
+    "sigma": 1.0935272973034162,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -22.65490706283633,
+     -12.14436872849451
+    ],
+    "dG_prime_m_range": [
+     -39.76974459755736,
+     -29.259206263215543
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71735",
+    "name": "acetate + CoA + ATP => acetyl-CoA + AMP + pyrophosphate [cytosolic]",
+    "source": "measured",
+    "g0": 43.22508891361982,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -10.553272190266258,
+     4.047703357667745
+    ],
+    "dG_prime_m_range": [
+     -10.553272190266258,
+     4.047703357667745
+    ],
+    "RT_lnQ_range": [
+     -68.45935013888413,
+     68.45935013888413
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_71849",
+    "name": "LDH tetramer reduces PYR to LACT",
+    "source": "measured",
+    "g0": -69.16840121146912,
+    "sigma": 0.7732405673358433,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -30.40482880329004,
+     -20.50596197169462
+    ],
+    "dG_prime_m_range": [
+     -30.40482880329004,
+     -20.50596197169462
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_71850",
+    "name": "PGK complexes dephosphorylate 1,3BPG",
+    "source": "measured",
+    "g0": -20.227758540520124,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -25.93049154448949,
+     -16.861522654875372
+    ],
+    "dG_prime_m_range": [
+     -25.93049154448949,
+     -16.861522654875372
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_73567",
+    "name": "UMPS dimer transfers phosphoribosyl group to ORO to form OMP",
+    "source": "measured",
+    "g0": 56.272495408697274,
+    "sigma": 1.1978991359614783,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -0.3507129115330936,
+     15.280562874532805
+    ],
+    "dG_prime_m_range": [
+     -0.3507129115330936,
+     15.280562874532805
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73571",
+    "name": "CAD hexamer dehydrates N-carb-L-Asp to (S)-DHO",
+    "source": "measured",
+    "g0": -38.71724916177136,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -1.5066035936550666,
+     11.853660230817335
+    ],
+    "dG_prime_m_range": [
+     -1.5066035936550666,
+     11.853660230817335
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73573",
+    "name": "CAD hexamer transforms CAP to N-carb-L-Asp",
+    "source": "measured",
+    "g0": 18.992899014984225,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -30.380786488368756,
+     -14.904542707573041
+    ],
+    "dG_prime_m_range": [
+     -30.380786488368756,
+     -14.904542707573041
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_73577",
+    "name": "CAD hexamer transforms L-Gln to CAP",
+    "source": "hess",
+    "g0": 70.20832803128832,
+    "sigma": 8.362799257300408,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -37.22621507218328,
+     22.599869513761657
+    ],
+    "dG_prime_m_range": [
+     -54.34105260690431,
+     5.485031979040624
+    ],
+    "RT_lnQ_range": [
+     -125.50880858795425,
+     79.86924182869815
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73580",
+    "name": "PRPS dimers pyrophosphorylate R5P using ATP",
+    "source": "measured",
+    "g0": 42.05967303188494,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -12.603853361681281,
+     5.090857225765468
+    ],
+    "dG_prime_m_range": [
+     -12.603853361681281,
+     5.090857225765468
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73589",
+    "name": "5,6-dihydrouracil + H2O => beta-ureidopropionate",
+    "source": "measured",
+    "g0": 33.221188660390595,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -18.645728311939443,
+     0.1674875743845181
+    ],
+    "dG_prime_m_range": [
+     -18.645728311939443,
+     0.1674875743845181
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73800",
+    "name": "SAICAR => AICAR + Fumarate",
+    "source": "measured",
+    "g0": 4.254831638856613,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     13.287600294228929,
+     33.08892592184133
+    ],
+    "dG_prime_m_range": [
+     -3.8272372404921047,
+     15.974088387120297
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_73828",
+    "name": "adenylosuccinate => adenosine 5'-monophosphate + fumarate",
+    "source": "measured",
+    "g0": 5.379303454828263,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     9.52933864177653,
+     23.757561178567467
+    ],
+    "dG_prime_m_range": [
+     -7.5854988929445035,
+     6.642723643846434
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_74213",
+    "name": "APRT catalyzes the conversion of adenine to AMP",
+    "source": "measured",
+    "g0": 22.614158227832952,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -27.191654480218702,
+     -10.54306092020434
+    ],
+    "dG_prime_m_range": [
+     -27.191654480218702,
+     -10.54306092020434
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_75848",
+    "name": "ACLY tetramer transforms CIT to Ac-CoA",
+    "source": "measured",
+    "g0": -6.849790812221628,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -6.498609662946971,
+     11.051691988953344
+    ],
+    "dG_prime_m_range": [
+     -23.613447197668005,
+     -6.063145545767689
+    ],
+    "RT_lnQ_range": [
+     -102.68902520832619,
+     57.04945844907011
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_75887",
+    "name": "Conversion of Glycerol to Glycerol-3-phosphate",
+    "source": "hess",
+    "g0": 21.39474895408719,
+    "sigma": 7.7965977684834185,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -38.752942211944344,
+     8.020827232639991
+    ],
+    "dG_prime_m_range": [
+     -38.752942211944344,
+     8.020827232639991
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_75889",
+    "name": "DHAP is converted to G3P by GPD1/GPD1L",
+    "source": "measured",
+    "g0": -67.13343931804218,
+    "sigma": 1.3392919490990642,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -30.281482774879034,
+     -17.227421018363746
+    ],
+    "dG_prime_m_range": [
+     -30.281482774879034,
+     -17.227421018363746
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_804969",
+    "name": "HSD17B1 hydrogenates E1 to EST17b",
+    "source": "hess",
+    "g0": -51.099962900237955,
+    "sigma": 5.621609969728641,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -21.863264580397804,
+     13.465054609315183
+    ],
+    "dG_prime_m_range": [
+     -21.863264580397804,
+     13.465054609315183
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_880053",
+    "name": "2-oxoglutarate + NADPH + H+ => (R)-2-hydroxyglutarate + NADP+ [mutant IDH1]",
+    "source": "hess",
+    "g0": -73.94525378907636,
+    "sigma": 5.621610144154094,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -44.69894803030815,
+     -9.352502863571596
+    ],
+    "dG_prime_m_range": [
+     -44.69894803030815,
+     -9.352502863571596
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_8848215",
+    "name": "ACAT2 condenses 2 Ac-CoA to form ACA-CoA",
+    "source": "measured",
+    "g0": 25.261718789118323,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     21.28523485145046,
+     29.941019734056553
+    ],
+    "dG_prime_m_range": [
+     21.28523485145046,
+     29.941019734056553
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_8848355",
+    "name": "PNPLA4 hydrolyzes retinyl palmitate",
+    "source": "measured",
+    "g0": 61.39000404042854,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     9.509993246845282,
+     28.250369852381013
+    ],
+    "dG_prime_m_range": [
+     -7.604844287875752,
+     11.13553231765998
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_893593",
+    "name": "phenylalanine + pyruvate => keto-phenylpyruvate + alanine",
+    "source": "hess",
+    "g0": -0.9635127159209169,
+    "sigma": 5.6265217378693375,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -15.395811453769417,
+     13.924823376349918
+    ],
+    "dG_prime_m_range": [
+     -15.395811453769417,
+     13.924823376349918
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_893616",
+    "name": "glutamine + pyruvate => 2-oxoglutaramate + alanine",
+    "source": "measured",
+    "g0": -14.95445674578213,
+    "sigma": 2.6785838981981285,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -21.801415683787525,
+     -7.673386201935397
+    ],
+    "dG_prime_m_range": [
+     -21.801415683787525,
+     -7.673386201935397
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_8955794",
+    "name": "PGP:Mg2+ dimer hydrolyses G3P to glycerol",
+    "source": "hess",
+    "g0": -8.861716403406938,
+    "sigma": 7.695226848820347,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -29.974457625710823,
+     10.74093635624882
+    ],
+    "dG_prime_m_range": [
+     -47.08929516043186,
+     -6.373901178472213
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_8955844",
+    "name": "RBKS phosphorylates ribose to R5P",
+    "source": "hess",
+    "g0": 26.824267142957066,
+    "sigma": 5.697363432773444,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -27.888844214605815,
+     8.260955718269042
+    ],
+    "dG_prime_m_range": [
+     -27.888844214605815,
+     8.260955718269042
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_9629675",
+    "name": "PDE3A hydrolyses cAMP to AMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_9644869",
+    "name": "p-S54-PDE4B hydrolyses cAMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_9705507",
+    "name": "PDE3B hydrolyses cAMP to AMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_9708261",
+    "name": "PDE4A hydrolyses cAMP to AMP",
+    "source": "hess",
+    "g0": 7.800794444467151,
+    "sigma": 3.9329669963799136,
+    "label": "answered",
+    "payload": "forward",
+    "blocker": null,
+    "dG_prime_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "dG_prime_m_range": [
+     -49.13346733273623,
+     -23.6290876196924
+    ],
+    "RT_lnQ_range": [
+     -22.819783379628046,
+     22.819783379628046
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_9709098",
+    "name": "DHFR dimer reduces FOLA to DHF",
+    "source": "hess",
+    "g0": -67.28672873927958,
+    "sigma": 5.9506067559334666,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "medium",
+    "dG_prime_range": [
+     -35.91689651140088,
+     7.047330200319822
+    ],
+    "dG_prime_m_range": [
+     -35.91689651140088,
+     7.047330200319822
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": null
+   },
+   {
+    "reaction": "reaction_977324",
+    "name": "PSPH:Mg2+ dimer dephosphorylates O-P-Ser",
+    "source": "measured",
+    "g0": -11.918529220986551,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -17.177846914686672,
+     -8.094719514462724
+    ],
+    "dG_prime_m_range": [
+     -34.2926844494077,
+     -25.209557049183758
+    ],
+    "RT_lnQ_range": [
+     -57.04945844907011,
+     11.409891689814023
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_977333",
+    "name": "PXLP-K200-PSAT1 dimer transfers amino group from L-Glu to 3POPA",
+    "source": "measured",
+    "g0": -11.97828762276691,
+    "sigma": 1.8940448383929933,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -15.57278358761582,
+     -4.69970793295359
+    ],
+    "dG_prime_m_range": [
+     -15.57278358761582,
+     -4.69970793295359
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_977348",
+    "name": "PHGDH tetramer dehydrogenates 3PG",
+    "source": "measured",
+    "g0": 70.69645436901779,
+    "sigma": 1.5464811346716867,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     19.808006115551187,
+     33.827362679992085
+    ],
+    "dG_prime_m_range": [
+     19.808006115551187,
+     33.827362679992085
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "reverse"
+   },
+   {
+    "reaction": "reaction_9856871",
+    "name": "MDH1 reduces OA",
+    "source": "measured",
+    "g0": -71.5385753284842,
+    "sigma": 0.7158816591990548,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -32.69446740989962,
+     -23.18903297793492
+    ],
+    "dG_prime_m_range": [
+     -32.69446740989962,
+     -23.18903297793492
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   },
+   {
+    "reaction": "reaction_9909159",
+    "name": "HK1 phosphorylates Mannose to Man6P",
+    "source": "hess",
+    "g0": 22.54393893261092,
+    "sigma": 3.903228586260874,
+    "label": "undecidable",
+    "payload": null,
+    "blocker": "concentration",
+    "dG_prime_range": [
+     -27.552416427158555,
+     -0.6854623882906239
+    ],
+    "dG_prime_m_range": [
+     -27.552416427158555,
+     -0.6854623882906239
+    ],
+    "RT_lnQ_range": [
+     -45.63956675925609,
+     45.63956675925609
+    ],
+    "sign_fixed_at_1mM": "forward"
+   }
+  ],
+  "answers": 11557,
+  "timing_s": {
+   "structure": 238.78613930000574,
+   "answers": 3.0644754999957513
+  }
+ },
+ "surface": {
+  "reaction": "reaction_70577",
+  "name": "ASS1 tetramer:NMRAL1 dimer:NADPH transforms L-Asp and L-Cit to ARSUA",
+  "source": "measured",
+  "sigma": 2.6785838981981285,
+  "ph": [
+   6.8,
+   6.828571428571428,
+   6.857142857142857,
+   6.885714285714285,
+   6.914285714285714,
+   6.942857142857143,
+   6.9714285714285715,
+   7.0,
+   7.0285714285714285,
+   7.057142857142857,
+   7.085714285714285,
+   7.114285714285714,
+   7.142857142857142,
+   7.171428571428571,
+   7.199999999999999,
+   7.228571428571429,
+   7.257142857142857,
+   7.285714285714286,
+   7.314285714285714,
+   7.3428571428571425,
+   7.371428571428571,
+   7.3999999999999995,
+   7.428571428571428,
+   7.457142857142856,
+   7.485714285714286,
+   7.514285714285714,
+   7.542857142857143,
+   7.571428571428571,
+   7.6
+  ],
+  "pmg": [
+   2.8,
+   2.8249999999999997,
+   2.8499999999999996,
+   2.875,
+   2.9,
+   2.925,
+   2.9499999999999997,
+   2.9749999999999996,
+   3.0,
+   3.025,
+   3.05,
+   3.0749999999999997,
+   3.0999999999999996,
+   3.125,
+   3.15,
+   3.175,
+   3.1999999999999997,
+   3.225,
+   3.25,
+   3.275,
+   3.3,
+   3.325,
+   3.35,
+   3.375,
+   3.4,
+   3.425,
+   3.45,
+   3.475,
+   3.5
+  ],
+  "ionic_strength": {
+   "0.1": [
+    [
+     4.030607265892485,
+     3.71776612549192,
+     3.404128286484678,
+     3.0897438645914406,
+     2.7746600910370205,
+     2.4589214975971743,
+     2.142570090550379,
+     1.825645514635852,
+     1.5081852080337228,
+     1.1902245492616146,
+     0.8717969968220984,
+     0.5529342223430547,
+     0.2336662379205734,
+     -0.08597848169850408,
+     -0.40597288147003496,
+     -0.7262912123730132,
+     -1.0469089211208313,
+     -1.3678025427335854,
+     -1.6889495954225424,
+     -2.010328477268132,
+     -2.331918364159634,
+     -2.6536991084701924,
+     -2.9756511379357846,
+     -3.2977553542088174,
+     -3.619993030537586,
+     -3.942345708039767,
+     -4.264795090018339,
+     -4.587322933778097,
+     -4.909910939402636
+    ],
+    [
+     4.061031219804562,
+     3.7482280919089987,
+     3.4346196258737507,
+     3.1202565412215506,
+     2.8051865827104336,
+     2.4894547142250474,
+     2.173103300532688,
+     1.8561722781056176,
+     1.5386993161144744,
+     1.2207199685807097,
+     0.9022678185914117,
+     0.5833746154026755,
+     0.26407040519629277,
+     -0.05561634380640612,
+     -0.37565862120052884,
+     -0.6960307585970043,
+     -1.0167083175552136,
+     -1.3376679806700906,
+     -1.658887445229908,
+     -1.9803453188957576,
+     -2.30202101683156,
+     -2.623894659737772,
+     -2.9459469722224014,
+     -3.268159180955223,
+     -3.5905129120339154,
+     -3.912990087001873,
+     -4.235572816941186,
+     -4.5582432940754245,
+     -4.880983680314586
+    ],
+    [
+     4.090635262784502,
+     3.7778672020295687,
+     3.464285309684641,
+     3.1499409406551138,
+     2.834882380726839,
+     2.5191550498885533,
+     2.202801692420593,
+     1.88586255506479,
+     1.5683755544654048,
+     1.2503764349653181,
+     0.9318989177457695,
+     0.6129748421999182,
+     0.2936343003866284,
+     -0.026094234674616246,
+     -0.34618378613814116,
+     -0.6666087552175952,
+     -0.9873448071599853,
+     -1.3083687606960268,
+     -1.6296584803355074,
+     -1.951192770926042,
+     -2.2729512738725646,
+     -2.5949143644399157,
+     -2.9170630495362104,
+     -3.239378865410032,
+     -3.561843774646519,
+     -3.8844400618925476,
+     -4.207150227697781,
+     -4.52995687988917,
+     -4.852842621882274
+    ],
+    [
+     4.119470734533564,
+     3.806734883519283,
+     3.4931768262832463,
+     3.178848586840644,
+     2.8637990213812543,
+     2.548074031619052,
+     2.231716763766684,
+     1.9147677945469184,
+     1.5972653055352737,
+     1.2792452470068554,
+     0.9607414923619615,
+     0.6417859841016877,
+     0.3224088722725753,
+     0.0026386461987328858,
+     -0.3174977396944598,
+     -0.6379747452453159,
+     -0.9587681283897211,
+     -1.2798548328095478,
+     -1.6012128787237145,
+     -1.9228212562008196,
+     -2.244659820359317,
+     -2.5667091878385975,
+     -2.8889506339194497,
+     -3.2113659896882893,
+     -3.533937538615106,
+     -3.85664791193156,
+     -4.179479982194749,
+     -4.502416754406823,
+     -4.825441254084836
+    ],
+    [
+     4.14758954937119,
+     3.8348831570488926,
+     3.52134627430857,
+     3.2070316302893787,
+     2.8919886829686163,
+     2.576263843159353,
+     2.2599006829350117,
+     1.9429401299978224,
+     1.6254206493910885,
+     1.3073784138193503,
+     0.9888474637393472,
+     0.6698598582815691,
+     0.35044581798373997,
+     0.030633860244932976,
+     -0.28954907165851296,
+     -0.6100774851957169,
+     -0.9309272200844418,
+     -1.2520753339669284,
+     -1.5734999915440824,
+     -1.895180356512725,
+     -2.217096485625831,
+     -2.539229224232969,
+     -2.8615601026522484,
+     -3.1840712327256426,
+     -3.506745203912402,
+     -3.829564978278569,
+     -4.152513783737874,
+     -4.47557500489259,
+     -4.798732070845659
+    ],
+    [
+     4.175044071752922,
+     3.8623645124792745,
+     3.5488462394446003,
+     3.2345427253478363,
+     2.9195040634812983,
+     2.60377720300923,
+     2.2874061674250186,
+     1.9704322578107565,
+     1.6528942424012882,
+     1.3348285338164203,
+     1.016269355213666,
+     0.6972488965083983,
+     0.3777974617227926,
+     0.057943608435692795,
+     -0.2622857197443693,
+     -0.5828650668363764,
+     -0.9037703434590014,
+     -1.2249787103511665,
+     -1.546468465696563,
+     -1.8682189355384082,
+     -2.1902103665807147,
+     -2.512423820693158,
+     -2.8348410704362834,
+     -3.157444494930502,
+     -3.480216975398804,
+     -3.803141789712555,
+     -4.126202505260977,
+     -4.449382869487437,
+     -4.772666697418373
+    ],
+    [
+     4.201887000357573,
+     3.889231793819448,
+     3.5757296801506016,
+     3.2614349166111367,
+     2.946398267616445,
+     2.6306672519446863,
+     2.3142863718258866,
+     1.9972973256411422,
+     1.6797392058391267,
+     1.3616486835349804,
+     1.0430601811369513,
+     0.7240060342338381,
+     0.4045166438915828,
+     0.08462062040027263,
+     -0.23565508053277995,
+     -0.5562850282375678,
+     -0.8772451933063223,
+     -1.1985128287765576,
+     -1.5200663554736877,
+     -1.8418852507606118,
+     -2.1639499399489353,
+     -2.4862416896545767,
+     -2.808742502375054,
+     -3.131435011591435,
+     -3.454302376685206,
+     -3.7773281769764537,
+     -4.100496304182258,
+     -4.423790852601115,
+     -4.747196006336964
+    ],
+    [
+     4.2281712602888035,
+     3.9155380925002135,
+     3.602049821905979,
+     3.2877615340400723,
+     2.972724702670206,
+     2.6569874495978354,
+     2.340594784992362,
+     2.0235888300947806,
+     1.7060090240057377,
+     1.3878923161198315,
+     1.0692733456538406,
+     0.7501846095874214,
+     0.4306566202512556,
+     0.11071805368507626,
+     -0.20960411017156844,
+     -0.5302844544824268,
+     -0.8512989987711137,
+     -1.1726250775691653,
+     -1.4942412236006533,
+     -1.816127054713121,
+     -2.1382631637622183,
+     -2.460631010696062,
+     -2.7832128160814875,
+     -3.105991455347663,
+     -3.4289503529995784,
+     -3.7520733760832456,
+     -4.075344726175359,
+     -4.398748829179937,
+     -4.722270222210597
+    ],
+    [
+     4.253949902810035,
+     3.9413366483940706,
+     3.6278600594040142,
+     3.3135760962195207,
+     2.9985369827574857,
+     2.6827914795377126,
+     2.366385135891136,
+     2.049360523250101,
+     1.7317574513402576,
+     1.413613168939122,
+     1.0949625507441567,
+     0.7758382717726988,
+     0.45627097059863786,
+     0.13628940264717926,
+     -0.18407941532566952,
+     -0.5048100685246766,
+     -0.8258786141712164,
+     -1.147262457408857,
+     -1.4689402321480713,
+     -1.7908916860142483,
+     -2.1130975685610167,
+     -2.435539521957054,
+     -2.7581999733536406,
+     -3.0810620281683043,
+     -3.404109363512731,
+     -3.7273261210173416,
+     -4.050696798291398,
+     -4.374206138281949,
+     -4.697839015781966
+    ],
+    [
+     4.2792760119275215,
+     3.966680757892817,
+     3.6532138660088265,
+     3.3389322210828993,
+     3.023888840689864,
+     2.708133162192297,
+     2.391711307464419,
+     2.074666327361996,
+     1.7570384278712652,
+     1.4388651796901684,
+     1.1201817129010294,
+     0.8010208982356914,
+     0.48141351634714624,
+     0.16138841637368273,
+     -0.15902733499106603,
+     -0.4798083127999746,
+     -0.8009306004696839,
+     -1.1223716627238502,
+     -1.4441102239063923,
+     -1.7661261507743404,
+     -2.088400338889329,
+     -2.410914601773385,
+     -2.733651561997277,
+     -3.0565945434059643,
+     -3.3797274636699797,
+     -3.703034726392417,
+     -4.026501111976955,
+     -4.350111666496133,
+     -4.673851587785435
+    ],
+    [
+     4.304202617029063,
+     3.991623688260546,
+     3.678164709700326,
+     3.36388354332243,
+     3.0488340467346404,
+     2.733066374842764,
+     2.416627257744352,
+     2.099560256992021,
+     1.7819060022565907,
+     1.4637024102554221,
+     1.1449848877010425,
+     0.825786519866341,
+     0.5061382462757535,
+     0.1860690248947492,
+     -0.1343940138905566,
+     -0.4552254223056309,
+     -0.776401298107686,
+     -1.0978991543416043,
+     -1.4196977949185623,
+     -1.741777195072956,
+     -2.0641183857746057,
+     -2.38670334120971,
+     -2.709514868469597,
+     -3.0325364986038323,
+     -3.3557523782075407,
+     -3.6791471607225787,
+     -4.0027058966494735,
+     -4.326413921866589,
+     -4.650256743258552
+    ],
+    [
+     4.328782610719912,
+     4.0162185973992734,
+     3.7027659746398456,
+     3.3884836376326746,
+     3.0734263334071272,
+     2.757644977839135,
+     2.4411869473774175,
+     2.1240963477204957,
+     1.806414261575327,
+     1.4881789774667311,
+     1.1694262014479762,
+     0.8501892534168007,
+     0.5304992496296279,
+     0.21038527288393993,
+     -0.11012546826080438,
+     -0.43100748995132676,
+     -0.7522368919950679,
+     -1.0737912241914103,
+     -1.3956493589628565,
+     -1.7177913692882214,
+     -2.0401984109646776,
+     -2.3628526082696055,
+     -2.6857369421149144,
+     -3.008835139816398,
+     -3.3321315656108084,
+     -3.6556111110722043,
+     -3.979259084587653,
+     -4.303061099064308,
+     -4.627002957047608
+    ],
+    [
+     4.3530686709262625,
+     4.040518458095988,
+     3.7270708874316085,
+     3.4127859468504482,
+     3.0977193253602024,
+     2.7819227461120306,
+     2.465444272626854,
+     2.148328590523164,
+     1.8306172669603882,
+     1.5123489898773812,
+     1.1935597889725784,
+     0.8742832402301417,
+     0.5545506556796624,
+     0.2343912599529574,
+     -0.08616764491173967,
+     -0.4071005250597466,
+     -0.7283834695333837,
+     -1.049994052927815,
+     -1.3719112048518411,
+     -1.6941150851395435,
+     -2.0165869637862954,
+     -2.3393091046322354,
+     -2.6622646518467548,
+     -2.9854375182907518,
+     -3.308812274859207,
+     -3.632374039916641,
+     -3.9561083679590467,
+     -4.280001136642369,
+     -4.604038431332498
+    ],
+    [
+     4.3771131862827986,
+     4.064575985767277,
+     3.7511324470902707,
+     3.436843714012383,
+     3.1217664733948993,
+     2.805953304997473,
+     2.48945300288446,
+     2.1723108708367533,
+     1.854568994090613,
+     1.5362664895648948,
+     1.217439736630098,
+     0.8981225903212078,
+     0.5783465787804687,
+     0.25814108658320833,
+     -0.06246647451476406,
+     -0.38345050596743135,
+     -0.7047870726172789,
+     -1.0264537614159792,
+     -1.3484295474821977,
+     -1.6706946663817064,
+     -1.9932304915516,
+     -2.316019415844522,
+     -2.6390447361904137,
+     -2.962290540430587,
+     -3.285741595367682,
+     -3.609383235123829,
+     -3.933201248902975,
+     -4.257181767269714,
+     -4.581311146068089
+    ],
+    [
+     4.400968183796266,
+     4.0884435686808445,
+     3.7750033576926114,
+     3.460709917297521,
+     3.1456209915531588,
+     2.829790069346899,
+     2.5132667216521156,
+     2.196096911281046,
+     1.8783232775244585,
+     1.5599853979466332,
+     1.2411200294744447,
+     0.9217613307914405,
+     0.6019410679133159,
+     0.28168880469124247,
+     -0.038967920121677935,
+     -0.3600034277242514,
+     -0.6813937446081866,
+     -1.003116457071343,
+     -1.3251505736242564,
+     -1.6474763941249932,
+     -1.97007538449364,
+     -2.2929300559415253,
+     -2.6160238476644793,
+     -2.939341012004462,
+     -3.262866501091054,
+     -3.5865858540179545,
+     -3.9104850836153275,
+     -4.234550561898487,
+     -4.55876890329003
+    ],
+    [
+     4.42468525773981,
+     4.1121731996109645,
+     3.798735962659265,
+     3.4844372067994698,
+     3.169335796242848,
+     2.8534861848552,
+     2.536938769940406,
+     2.219740216982217,
+     1.9019337578104967,
+     1.5835594645431854,
+     1.2646545015487334,
+     0.9452533575230007,
+     0.6253880596621855,
+     0.3050883717723707,
+     -0.015618021961046225,
+     -0.3367053459360534,
+     -0.6581495733248914,
+     -0.9799282760895096,
+     -1.302020483487155,
+     -1.6244065478216783,
+     -1.9470680162525298,
+     -2.2699875075224156,
+     -2.593148592518247,
+     -2.9165356776200326,
+     -3.2401338898063443,
+     -3.563928962540359,
+     -3.8879071214505814,
+     -4.212054968870035,
+     -4.536359366289645
+    ],
+    [
+     4.448315498746382,
+     4.135816407870465,
+     3.822382179603636,
+     3.5080778420588956,
+     3.1929634463094487,
+     2.8770944705333648,
+     2.560522190990554,
+     2.2432940224060474,
+     1.9254538302866138,
+     1.6070422176095178,
+     1.2880967882108223,
+     0.9686523890663636,
+     0.6487413335410963,
+     0.32839360754573477,
+     0.007637060410701224,
+     -0.31350241782436683,
+     -0.6350007311154116,
+     -0.9568354226383065,
+     -1.278985529120547,
+     -1.6014314429760645,
+     -1.9241547809855604,
+     -2.2471382583367188,
+     -2.5703655668802696,
+     -2.893821256514144,
+     -3.2174906186224064,
+     -3.541359570546234,
+     -3.86541454007957,
+     -4.189642349002298,
+     -4.514030094692345
+    ],
+    [
+     4.47190942206052,
+     4.159424190670251,
+     3.845993434683777,
+     3.5316836292771256,
+     3.216556082976325,
+     2.9006673612288694,
+     2.584069675233053,
+     2.2668112386035943,
+     1.948936594473679,
+     1.6304869155283939,
+     1.3115002793876727,
+     0.9920119216215824,
+     0.6720544685714174,
+     0.35165815200238626,
+     0.03085100750135439,
+     -0.2903409416030911,
+     -0.6118935131168257,
+     -0.933784206101592,
+     -1.2559920507539175,
+     -1.5784974666699156,
+     -1.901282128174131,
+     -2.2243288354680146,
+     -2.5476213904035205,
+     -2.871144475743023,
+     -3.1948835367883532,
+     -3.518824664317009,
+     -3.8429544777764306,
+     -4.167260007722717,
+     -4.491728576504812
+    ],
+    [
+     4.495516893940788,
+     4.183046942776258,
+     3.8696205954072127,
+     3.555305857150728,
+     3.240165368574452,
+     2.924256849114471,
+     2.60763350438512,
+     2.290344399774284,
+     1.9724348029528471,
+     1.653946497858982,
+     1.3349180726522434,
+     1.015385184004657,
+     0.6953807999974231,
+     0.3749354237391742,
+     0.05407729971270214,
+     -0.2671673952777667,
+     -0.5887743747996694,
+     -0.9107210774850785,
+     -1.2329865121663772,
+     -1.5555511120058156,
+     -1.8783965962370814,
+     -2.2015058382109203,
+     -2.524862738498797,
+     -2.848452101858271,
+     -3.1722595169038925,
+     -3.496271237376533,
+     -3.8204740639224894,
+     -4.144855225333714,
+     -4.469402258217912
+    ],
+    [
+     4.519187055235392,
+     4.206734383460429,
+     3.893313900871334,
+     3.578995230286722,
+     3.2638424230117096,
+     2.947914423070614,
+     2.6312654936120623,
+     2.3139456080573098,
+     1.9960008086393088,
+     1.6774735349451646,
+     1.3584029250199308,
+     1.0388250914870412,
+     0.7187733750340328,
+     0.39827857747511075,
+     0.07736917649330621,
+     -0.24392847598304002,
+     -0.5655899699179656,
+     -0.8875926660963671,
+     -1.2099155362101612,
+     -1.5325390125794058,
+     -1.8554448460575088,
+     -2.1786159707546915,
+     -2.502036374269011,
+     -2.825690972184276,
+     -3.149565485624322,
+     -3.473646320715517,
+     -3.7979204488296148,
+     -4.122375286514654,
+     -4.446998574058881
+    ],
+    [
+     4.542968241216471,
+     4.230535479799272,
+     3.9171228884532354,
+     3.602801799197067,
+     3.2876377569546946,
+     2.97169100493349,
+     2.655016930700043,
+     2.337666475487339,
+     2.0196865093768963,
+     1.701120174999204,
+     1.3820072023762293,
+     1.0623841974217783,
+     0.7422849065438584,
+     0.4217404596452923,
+     0.10077959371241718,
+     -0.22057114096017472,
+     -0.5422871899652648,
+     -0.8643458176002525,
+     -1.1867259415847968,
+     -1.509407978086216,
+     -1.8323736955316292,
+     -2.1556060757737043,
+     -2.479089181244518,
+     -2.8028080267952475,
+     -3.1267484549734093,
+     -3.4508970135274524,
+     -3.775240833982849,
+     -4.099767510153725,
+     -4.424464975498296
+    ],
+    [
+     4.566907896811443,
+     4.2544983654224495,
+     3.9410963160345034,
+     3.626774885919957,
+     3.311601200754211,
+     2.9956368816062593,
+     2.6789385112260504,
+     2.361558062088278,
+     2.043543288811037,
+     1.7249380876132534,
+     1.4057828254749154,
+     1.0861146415822702,
+     0.7659677235769493,
+     0.4453735609953071,
+     0.12436117817000536,
+     -0.197042651264411,
+     -0.5188132062307034,
+     -0.8409276345503542,
+     -1.1633647819639066,
+     -1.4861050321621008,
+     -1.809130156233465,
+     -2.1324231700305347,
+     -2.455968198024067,
+     -2.779750342296353,
+     -3.103755555359413,
+     -3.427970515549788,
+     -3.7523825038014422,
+     -4.076979280615461,
+     -4.4017489620999015
+    ],
+    [
+     4.591052486466737,
+     4.278670253904778,
+     3.9652820789050054,
+     3.650963004387421,
+     3.3357818281944844,
+     3.0198016320941576,
+     2.7030802687653193,
+     2.3856708091226153,
+     2.0676219525462045,
+     1.7489784026790574,
+     1.4297812114815258,
+     1.1100680941839016,
+     0.7898737177222017,
+     0.4692299651212295,
+     0.14816617818618738,
+     -0.1732906192654866,
+     -0.49511551552078004,
+     -0.817285520461752,
+     -1.139779388545918,
+     -1.4625774535319636,
+     -1.7856614732797027,
+     -2.1090144830632482,
+     -2.432620655899683,
+     -2.756465168485562,
+     -3.0805340713742737,
+     -3.4048141621014167,
+     -3.7292928600045627,
+     -4.053958081522325,
+     -4.378798114807324
+    ],
+    [
+     4.615447397968154,
+     4.303097346074168,
+     3.989727120579545,
+     3.6754137747289803,
+     3.3602278742338,
+     3.0442340485993498,
+     2.727491499239221,
+     2.4100544665795667,
+     2.091972658647336,
+     1.7732916437689425,
+     1.4540532100914731,
+     1.1342956945997855,
+     0.8140542842776028,
+     0.49336129195020817,
+     0.17224640925277868,
+     -0.14926306096234043,
+     -0.47114199057821793,
+     -0.7933672284662237,
+     -1.1159174170719837,
+     -1.4387728215123445,
+     -1.7619151694365485,
+     -2.085327500018167,
+     -2.4089940205190317,
+     -2.732899968956218,
+     -3.0570314814432606,
+     -3.3813754628750132,
+     -3.705919459639432,
+     -4.0306515331126604,
+     -4.355560132724605
+    ],
+    [
+     4.640136839661949,
+     4.327824730626929,
+     4.014477336863337,
+     3.7001738308048004,
+     3.384986645978387,
+     3.0689820508825676,
+     2.752220678583825,
+     2.4347580140517664,
+     2.1166448416086894,
+     1.797927655075199,
+     1.4786490333090967,
+     1.1588479838386263,
+     0.8385602572897994,
+     0.5178186352047476,
+     0.1966531937790421,
+     -0.12490845409573126,
+     -0.44684093618732845,
+     -0.7691209155418903,
+     -1.0917269003096237,
+     -1.4146390668787774,
+     -1.7378390944913065,
+     -2.061310009638447,
+     -2.3850360386119576,
+     -2.7090024666695456,
+     -3.0331955023461035,
+     -3.3576021455096736,
+     -3.68221005780984,
+     -4.007007434219901,
+     -4.331982874430224
+    ],
+    [
+     4.665163730649823,
+     4.352896277552844,
+     4.039577472622085,
+     3.7252887203697753,
+     3.4101044262521043,
+     3.094092593209524,
+     2.7773153730199454,
+     2.459829574246413,
+     2.141687129011956,
+     1.8229355211019254,
+     1.5036181780508002,
+     1.1837748299342081,
+     0.8634418375941948,
+     0.5426524929556251,
+     0.22143729402066015,
+     -0.10017580297611062,
+     -0.4221611518939028,
+     -0.7444952032593903,
+     -1.0671563069567185,
+     -1.3901245290509507,
+     -1.7133814808442196,
+     -2.036910158387201,
+     -2.3606947907528877,
+     -2.6847206954722935,
+     -3.0089741395973135,
+     -3.3334422049427133,
+     -3.6581126560941186,
+     -3.9829738098547125,
+     -4.308014404824945
+    ],
+    [
+     4.690569583678524,
+     4.378354524028367,
+     4.065071010834998,
+     3.750802797390037,
+     3.435626369225446,
+     3.1196115633028683,
+     2.802822141297696,
+     2.4853163184706943,
+     2.1671472501752476,
+     1.8483634783819696,
+     1.5290093408225118,
+     1.2091253454636615,
+     0.8887485130532866,
+     0.5679126904478551,
+     0.24664883736667775,
+     -0.07501471087348932,
+     -0.3970520022046742,
+     -0.7194392459220182,
+     -1.0421546078495396,
+     -1.3651780204985755,
+     -1.688491006234841,
+     -2.0120765116096493,
+     -2.3359187510846198,
+     -2.660003058491185,
+     -2.984315744626116,
+     -3.30884395947308,
+     -3.633575557602768,
+     -3.9584989653542664,
+     -4.283603048463448
+    ],
+    [
+     4.716394380601372,
+     4.404240552573327,
+     4.091000053667784,
+     3.7767591061848123,
+     3.4615963877217553,
+     3.145583672858237,
+     2.828786428432039,
+     2.5112643635600023,
+     2.1930719362185016,
+     1.874258818607558,
+     1.5548703238269752,
+     1.2349477965277345,
+     0.9145289702922526,
+     0.593648294478129,
+     0.27233723322839865,
+     -0.04937546073941235,
+     -0.37146349504953946,
+     -0.6939028068956361,
+     -1.0166713502901814,
+     -1.3397488991886632,
+     -1.6631168644328511,
+     -1.986758122591965,
+     -2.3106568548571715,
+     -2.6347983942697795,
+     -2.9591690796137584,
+     -3.283756114418935,
+     -3.60854742955226,
+     -3.9335315479750363,
+     -4.258697450267647
+    ],
+    [
+     4.742676440478903,
+     4.430593861452252,
+     4.117405195461146,
+     3.8031992572145725,
+     3.4880570319524793,
+     3.172052339318924,
+     2.855252450562915,
+     2.5377186598333026,
+     2.219506811091236,
+     1.900667782681893,
+     1.5812479319663169,
+     1.2612895026208832,
+     0.9408309973408393,
+     0.6199075186974312,
+     0.29855108089142846,
+     -0.023209104928383795,
+     -0.3453463691958234,
+     -0.6678363438396957,
+     -0.9906567412149627,
+     -1.3137871498156812,
+     -1.6372088446511555,
+     -1.9609046102747527,
+     -2.284858574560104,
+     -2.60905605142878,
+     -2.9334833908052644,
+     -3.2581278341740756,
+     -3.582977374177432,
+     -3.9080206167622293,
+     -4.233246644448656
+    ]
+   ],
+   "0.25": [
+    [
+     3.327712155285411,
+     3.010818757317992,
+     2.693283540648139,
+     2.375147688437522,
+     2.056449332877804,
+     1.7372237905147756,
+     1.4175037791115699,
+     1.0973196178755131,
+     0.7766994127567557,
+     0.455669228413484,
+     0.13425324834062735,
+     -0.18752607543970612,
+     -0.5096478817989976,
+     -0.832092767801015,
+     -1.1548426626833646,
+     -1.4778807074003737,
+     -1.801191138636824,
+     -2.124759176246954,
+     -2.4485709130965745,
+     -2.7726132063125135,
+     -3.096873568958614,
+     -3.4213400611668305,
+     -3.746001179778233,
+     -4.0708457455356495,
+     -4.395862786900608,
+     -4.721041419569616,
+     -5.046370720784381,
+     -5.371839597564673,
+     -5.697436648017657
+    ],
+    [
+     3.3580812966389146,
+     3.0411706677286645,
+     2.7236126903436286,
+     2.4054491631880808,
+     2.0867187335546475,
+     1.767457143399696,
+     1.447697455805013,
+     1.127470263740605,
+     0.8068038829266868,
+     0.48572453047344766,
+     0.16425649088157002,
+     -0.15757772912573387,
+     -0.4797572555335421,
+     -0.8022627104361675,
+     -1.1250760826411863,
+     -1.4481806043047811,
+     -1.7715606324495923,
+     -2.0952015342782317,
+     -2.4190895752053905,
+     -2.743211808579673,
+     -3.0675559660719784,
+     -3.3921103477288455,
+     -3.716863710705553,
+     -4.041805155693652,
+     -4.366924010090571,
+     -4.692209706949512,
+     -5.0176516587877416,
+     -5.343239125346855,
+     -5.668961074440432
+    ],
+    [
+     3.388510702113507,
+     3.071583559677009,
+     2.7540033948297094,
+     2.4358126678224323,
+     2.117050582178507,
+     1.7977533420548468,
+     1.477954388806296,
+     1.1576846187540184,
+     0.8369725840438775,
+     0.5158446783619581,
+     0.19432530916887458,
+     -0.12756294198803175,
+     -0.4497991696211159,
+     -0.7723640035247001,
+     -1.0952394757573813,
+     -1.4184088941470065,
+     -1.7418567211155107,
+     -2.0655684566835646,
+     -2.3895305245366956,
+     -2.713730160075812,
+     -3.0381552993959815,
+     -3.362794468145836,
+     -3.6876366692611384,
+     -4.01267126854421,
+     -4.337887877112536,
+     -4.6632762297284955,
+     -4.9888260580549115,
+     -5.3145269579102035,
+     -5.640368249630029
+    ],
+    [
+     3.4190581450447723,
+     3.1021156456829146,
+     2.784514260403597,
+     2.466297160100993,
+     2.1475041485020654,
+     1.8281719313568772,
+     1.508334363613443,
+     1.1880226766706699,
+     0.8672656876758253,
+     0.5460899927262233,
+     0.2245201457180599,
+     -0.09742117552607965,
+     -0.4197130142952403,
+     -0.7423359897561852,
+     -1.0652721600539792,
+     -1.3885048924545629,
+     -1.7120187392677337,
+     -2.0357993183553447,
+     -2.359833197063523,
+     -2.6841077784540914,
+     -3.0086111887376603,
+     -3.333332164828022,
+     -3.6582599409664738,
+     -3.9833841333690145,
+     -4.308694621876981,
+     -4.634181427599998,
+     -4.9598345855700074,
+     -5.285644011448795,
+     -5.611599361375994
+    ],
+    [
+     3.4497806327302385,
+     3.1328244199026756,
+     2.8152032201566897,
+     2.4969609673499633,
+     2.178138112374512,
+     1.8587719047091866,
+     1.538896650726059,
+     1.2185439509081277,
+     0.8977429180417573,
+     0.5765203783242612,
+     0.2549010572103896,
+     -0.06709224828423999,
+     -0.3894385091906827,
+     -0.7121183146009855,
+     -1.03511373061977,
+     -1.358408166902933,
+     -1.6819862494567417,
+     -2.005833698457451,
+     -2.329937209872611,
+     -2.654284339713996,
+     -2.9788633897890406,
+     -3.303663293820506,
+     -3.6286735028591295,
+     -3.953883868898089,
+     -4.2792845256468866,
+     -4.604865765416804,
+     -4.930617911113615,
+     -5.256531182355303,
+     -5.582595554765277
+    ],
+    [
+     3.4807342616594212,
+     3.1637665160787662,
+     2.8461273945489154,
+     2.527861649561345,
+     2.20901042924865,
+     1.889611571840959,
+     1.5696998756144183,
+     1.2493073465661553,
+     0.9284634259623488,
+     0.6071951997768963,
+     0.2855275919342546,
+     -0.03651645684217897,
+     -0.3589158228789131,
+     -0.6816510445039796,
+     -1.0047041765737106,
+     -1.3280586531529082,
+     -1.6516991569665436,
+     -1.9756114943220666,
+     -2.299782474236423,
+     -2.624199790545873,
+     -2.9488519058263876,
+     -3.2737279359518254,
+     -3.5988175341736053,
+     -3.924110773606259,
+     -4.249598027031112,
+     -4.575269842952508,
+     -4.901116816867244,
+     -5.227129456733024,
+     -5.553298041677323
+    ],
+    [
+     3.5119740686360217,
+     3.194997561377562,
+     2.8773429478826245,
+     2.5590558584070493,
+     2.240178191640638,
+     1.9207484226015765,
+     1.6008018847375922,
+     1.2803710285530485,
+     0.9594856589735343,
+     0.6381731535544475,
+     0.3164586635272997,
+     -0.005634700437127549,
+     -0.32808569596934944,
+     -0.650874788575976,
+     -0.9739840014534877,
+     -1.297396774048167,
+     -1.6210978279230233,
+     -1.945073038569177,
+     -2.269309311843841,
+     -2.5937944637665,
+     -2.918517102450352,
+     -3.2434665109609853,
+     -3.568632529945063,
+     -3.8940054388735064,
+     -4.219575834782205,
+     -4.54533450742079,
+     -4.871272309723082,
+     -5.197380022577619,
+     -5.523648212896575
+    ],
+    [
+     3.5435538771742756,
+     3.2265720254500536,
+     2.9089049399715066,
+     2.5905991914425783,
+     2.2716974857806633,
+     1.952238985963021,
+     1.6322596067945767,
+     1.3117922849735066,
+     0.9908672267428926,
+     0.6695121353105549,
+     0.34775242010888974,
+     0.025611389858767097,
+     -0.29688956870919014,
+     -0.619730824727327,
+     -0.942894347993871,
+     -1.26636356314296,
+     -1.5901232116773656,
+     -1.914159220446919,
+     -2.2384585751962334,
+     -2.563009197866137,
+     -2.8877998263729125,
+     -3.2128198956228573,
+     -3.5380594185571965,
+     -3.863508866041599,
+     -4.1891590444462565,
+     -4.515000969791259,
+     -4.841025737351316,
+     -5.167224385659921,
+     -5.493587753891603
+    ],
+    [
+     3.575526138686058,
+     3.258543064188956,
+     2.940867172433599,
+     2.6225460408848846,
+     2.3036232428028995,
+     1.9841386835433639,
+     1.6641289084886637,
+     1.3436273850406621,
+     1.022664761026789,
+     0.7012691017738177,
+     0.3794661080035837,
+     0.05727931658290686,
+     -0.26526971392573273,
+     -0.5881612311061701,
+     -0.911377128168084,
+     -1.2349007934497251,
+     -1.5587169683610966,
+     -1.882811612296365,
+     -2.207171773081342,
+     -2.5317854615890667,
+     -2.856641529199834,
+     -3.181729546815319,
+     -3.5070396841865943,
+     -3.8325625883250325,
+     -4.158289259817053,
+     -4.484210925873555,
+     -4.810318908986147,
+     -5.136604490097312,
+     -5.463058765237776
+    ],
+    [
+     3.607941768141785,
+     3.290962357812731,
+     2.973282029190699,
+     2.654949436497617,
+     2.33600908397338,
+     2.016501677111563,
+     1.6964644442370798,
+     1.375931430905183,
+     1.0549337695262864,
+     0.7334999265400199,
+     0.41165592936565076,
+     0.08942557523923256,
+     -0.23316937604286636,
+     -0.556109023587311,
+     -0.8793751592515093,
+     -1.2029511121828875,
+     -1.5268216024113883,
+     -1.8509726019550783,
+     -2.175391201949566,
+     -2.5000654843785526,
+     -2.824984397036161,
+     -3.15013763038192,
+     -3.475515495005567,
+     -3.8011087984359904,
+     -4.126908720073544,
+     -4.452906683044972,
+     -4.779094221823954,
+     -5.105462844494724,
+     -5.432003888579317
+    ],
+    [
+     3.6408499740603872,
+     3.323879943068931,
+     3.0062003109173645,
+     2.6878608822855483,
+     2.3689071596071187,
+     2.049380709687938,
+     1.7293194993978602,
+     1.4087582029413568,
+     1.0877284831572922,
+     0.7662592492382316,
+     0.4443768931573402,
+     0.12210550699293776,
+     -0.2005329167608636,
+     -0.5235182999294068,
+     -0.8468323065500556,
+     -1.1704581821528848,
+     -1.494380602728171,
+     -1.818585531775767,
+     -2.1430600838894236,
+     -2.4677923933992645,
+     -2.7927714866466715,
+     -3.1179871565152837,
+     -3.4434298378809274,
+     -3.7690904826843337,
+     -4.094960433358466,
+     -4.4210312933886655,
+     -4.747294793801217,
+     -5.07374265443903,
+     -5.400366438913949
+    ],
+    [
+     3.674298082875424,
+     3.3573440395504974,
+     3.0396710633715145,
+     2.7213301868748374,
+     2.402367981503602,
+     2.0828269400206807,
+     1.7627458267561167,
+     1.4421599981941142,
+     1.1211016963988811,
+     0.7996003177138107,
+     0.4776826590875487,
+     0.15537314428567583,
+     -0.16730596785137664,
+     -0.4903343910640672,
+     -0.813693633278632,
+     -1.1373668303256466,
+     -1.4613385900035212,
+     -1.7855948448127776,
+     -2.110122711763921,
+     -2.434910357711516,
+     -2.7599468687568844,
+     -3.0852221222725404,
+     -3.4107266601854747,
+     -3.7364515621660814,
+     -4.062388317431129,
+     -4.388528693890208,
+     -4.71486460340796,
+     -5.041387962006439,
+     -5.3680905438635875
+    ],
+    [
+     3.708331357941887,
+     3.3914008703202114,
+     3.0737413997441934,
+     2.7554052876591584,
+     2.4364402489303245,
+     2.116889770422489,
+     1.7967934762039874,
+     1.4761874618804711,
+     1.1551046005770047,
+     0.833574823043449,
+     0.511625374298518,
+     0.18928104912603771,
+     -0.13343559133832628,
+     -0.45650401982564404,
+     -0.7799055579156686,
+     -1.1036232038856326,
+     -1.4276414715780277,
+     -1.7519462385603504,
+     -2.0765246019078916,
+     -2.4013647400176126,
+     -2.726455778929477,
+     -3.051787661666509,
+     -3.3773510191827256,
+     -3.7031370415262757,
+     -4.029137347880038,
+     -4.3553438541773914,
+     -4.681748637035668,
+     -5.008343792788224,
+     -5.335121290456669
+    ],
+    [
+     3.7429928136624255,
+     3.426094477252235,
+     3.1084563173713775,
+     2.790132068995689,
+     2.4711706683837917,
+     2.1516166681408038,
+     1.8315106177463747,
+     1.5108894120319007,
+     1.1897866101269017,
+     0.8682327273887438,
+     0.5462555027681617,
+     0.22388014398924838,
+     -0.09887044715688376,
+     -0.42197546723323853,
+     -0.7454160191817039,
+     -1.069174933980463,
+     -1.3932366040278623,
+     -1.717586826452731,
+     -2.042212654628571,
+     -2.367102256234631,
+     -2.6922447762888453,
+     -3.0176302036142317,
+     -3.343249239284006,
+     -3.669093165596479,
+     -3.9951537142191285,
+     -4.321422932150341,
+     -4.647893044208587,
+     -4.974556310800409,
+     -5.301404879778175
+    ],
+    [
+     3.7783230254432,
+     3.4614665317351125,
+     3.1438585093888776,
+     2.8255541749703923,
+     2.5066037675818222,
+     2.187052980666948,
+     1.8669433581828514,
+     1.5463126575786816,
+     1.2251951820939837,
+     0.9036220849050949,
+     0.5816216476088982,
+     0.25921953547501175,
+     -0.06356096817924595,
+     -0.3866987462533018,
+     -0.7101746485890601,
+     -1.0339713071206518,
+     -1.3580729634750526,
+     -1.6824653071593332,
+     -2.0071353225469295,
+     -2.3320711429543337,
+     -2.6572619101696375,
+     -2.9826976378532493,
+     -3.30836907729352,
+     -3.634267584043215,
+     -3.9603849840121086,
+     -4.286713437648842,
+     -4.613245300866453,
+     -4.939972981446573,
+     -5.266888789687442
+    ],
+    [
+     3.8143599364314866,
+     3.4975561416070775,
+     3.1799881721285317,
+     2.8617128174656443,
+     2.542781704369048,
+     2.22324174560444,
+     1.9031355520306477,
+     1.5825018103973605,
+     1.2613756293444283,
+     0.9397888561386196,
+     0.6177703666537298,
+     0.29534633107127206,
+     -0.027459542295474648,
+     -0.35062578275088185,
+     -0.6741329503073814,
+     -0.997963444005137,
+     -1.3221013234282566,
+     -1.646532141489189,
+     -1.9712427866269593,
+     -2.2962213326581207,
+     -2.6214568945830763,
+     -2.9469394887144347,
+     -3.2726598955640895,
+     -3.5986095239660756,
+     -3.9247802749763707,
+     -4.251164404127877,
+     -4.577754380678044,
+     -4.904542742531959,
+     -5.231521945591936
+    ],
+    [
+     3.8511386622082853,
+     3.534399655437454,
+     3.2168828093057016,
+     2.8986465805131445,
+     2.5797440714495394,
+     2.260223495953909,
+     1.9401286074990765,
+     1.6194990920716634,
+     1.2983709281902236,
+     0.9767767165671728,
+     0.6547459819443873,
+     0.33230544960369457,
+     0.009479298999707453,
+     -0.3137106031294081,
+     -0.6372444878753925,
+     -0.9611044853334363,
+     -1.2852744397297613,
+     -1.609739736518378,
+     -1.9344871395301482,
+     -2.259504636349476,
+     -2.584781290175698,
+     -2.910307096467733,
+     -3.236072842775144,
+     -3.562069970175031,
+     -3.888290434814877,
+     -4.214726568106272,
+     -4.541370934159232,
+     -4.868216183115493,
+     -5.195254899090429
+    ],
+    [
+     3.8886912948608767,
+     3.5720304654950894,
+     3.25457703426045,
+     2.9363912221355974,
+     2.6175276980942215,
+     2.2980360619042983,
+     1.9779612885388076,
+     1.6573441363492236,
+     1.3362215213610114,
+     1.014626860170182,
+     0.692590383962596,
+     0.3701394261726989,
+     0.047298686270181634,
+     -0.2759095279255064,
+     -0.5994650770576584,
+     -0.9233497839360609,
+     -1.2475472419789924,
+     -1.5720426363331228,
+     -1.8968225757085122,
+     -2.2218749330347976,
+     -2.547188693139816,
+     -2.872753805706253,
+     -3.1985610418450108,
+     -3.5246018526684395,
+     -3.8508682283160454,
+     -4.177352555934846,
+     -4.504047475168392,
+     -4.8309457297782785,
+     -5.15804001407335
+    ],
+    [
+     3.9270467080674223,
+     3.6104788109739445,
+     3.293102371773415,
+     2.9749794751245133,
+     2.656166450203017,
+     2.3367143704489024,
+     2.016669514242352,
+     1.6960737885051174,
+     1.374965117485516,
+     1.0533777991512068,
+     0.7313428316835768,
+     0.4088882126078204,
+     0.08603921305254403,
+     -0.23718137040478382,
+     -0.5607529839248002,
+     -0.8846571023318859,
+     -1.2088770305663559,
+     -1.5333977185499919,
+     -1.8582055874319678,
+     -2.1832883652757857,
+     -2.508634930322984,
+     -2.834235160041459,
+     -3.1600797842432087,
+     -3.486160240610303,
+     -3.8124685310323514,
+     -4.138997077221944,
+     -4.465738574118774,
+     -4.792685839674874,
+     -5.119831659654807
+    ],
+    [
+     3.966230365043856,
+     3.6497715832597066,
+     3.332487061159071,
+     3.0144408484028133,
+     2.695691030315942,
+     2.3762902443716882,
+     2.0562861570752773,
+     1.7357219030528483,
+     1.4146364884727234,
+     1.0930651611436986,
+     0.7710397497450856,
+     0.44858897470246006,
+     0.1257387332342148,
+     -0.19748763897294452,
+     -0.5210691270109749,
+     -0.8449868145956145,
+     -1.1692236782361363,
+     -1.4937643955612714,
+     -1.8185951657120825,
+     -2.143703539804193,
+     -2.469078259542613,
+     -2.7947091021401604,
+     -3.1205867297763064,
+     -3.4467025418859123,
+     -3.7730485286386113,
+     -4.099617124027333,
+     -4.426401057047343,
+     -4.753393199508565,
+     -5.080586409093627
+    ],
+    [
+     4.0062641313888605,
+     3.689932135216253,
+     3.3727558625668905,
+     3.0548014308453446,
+     2.736128779389986,
+     2.4167922023560493,
+     2.0968408416450472,
+     1.7763191414511255,
+     1.4552672663940882,
+     1.1337214854754336,
+     0.8117145242499362,
+     0.4892758877010408,
+     0.16643215633789055,
+     -0.1567927420024091,
+     -0.48037728217630615,
+     -0.8043021112025883,
+     -1.1285498348651402,
+     -1.4531048192214087,
+     -1.777953004877105,
+     -2.1030817319731625,
+     -2.428479573912597,
+     -2.7541361779282454,
+     -3.080042110676146,
+     -3.406188707094003,
+     -3.7325679208449003,
+     -4.059172174719748,
+     -4.385994209437314,
+     -4.713026929352083,
+     -5.040263243645114
+    ],
+    [
+     4.04716609503393,
+     3.7309800966444016,
+     3.413929868589179,
+     3.0960836996007117,
+     2.777503482331184,
+     2.458245262164695,
+     2.138359745907195,
+     1.817892771664873,
+     1.4968857416832577,
+     1.1753760202436467,
+     0.853397298934027,
+     0.5309799317262502,
+     0.2081512423621632,
+     -0.11506419345747076,
+     -0.4386442885949293,
+     -0.7625692052955912,
+     -1.0868211339433458,
+     -1.4113840874856862,
+     -1.7362437093292158,
+     -2.0613870926015636,
+     -2.3868026087548344,
+     -2.7124797435584753,
+     -3.0384089386189146,
+     -3.3645814366146,
+     -3.6909891285232845,
+     -4.017624401170366,
+     -4.344479983497223,
+     -4.671548790026719,
+     -4.998823760059537
+    ],
+    [
+     4.088950395630235,
+     3.7729311982045317,
+     3.456026323424652,
+     3.138306335120518,
+     2.8198351794499956,
+     2.500670749009686,
+     2.1808654068819067,
+     1.8604664716080777,
+     1.5395166646330551,
+     1.2180545221583259,
+     0.8961147736001465,
+     0.5737286890224311,
+     0.2509243980142344,
+     -0.07227281751264059,
+     -0.39584025409467927,
+     -0.7197575386306028,
+     -1.0440063990331794,
+     -1.3685704513073063,
+     -1.6934350008162085,
+     -2.0185868555719537,
+     -2.344014149482092,
+     -2.6697061735473255,
+     -2.9956532130964035,
+     -3.3218463892019656,
+     -3.6482775025097283,
+     -3.97493887776173,
+     -4.30182320737984,
+     -4.628923392542475,
+     -4.956232380253397
+    ],
+    [
+     4.131627065811102,
+     3.815797106212557,
+     3.499058451969603,
+     3.1814840452358055,
+     2.863139986131017,
+     2.5440861113673634,
+     2.224376533102344,
+     1.904060138651829,
+     1.5831810523477259,
+     1.2617790612674469,
+     0.9398900069058698,
+     0.6175461450617092,
+     0.29477647635255266,
+     -0.028392950181597598,
+     -0.3519387578895987,
+     -0.6758399852776904,
+     -1.0000778483149872,
+     -1.3246355199254651,
+     -1.6494979243738328,
+     -1.9746515443534065,
+     -2.3000842386439047,
+     -2.6257850682957553,
+     -2.951744129369928,
+     -3.277952390341767,
+     -3.6044015323446104,
+     -3.9310837904985476,
+     -4.257991794650735,
+     -4.585118407911892,
+     -4.912456561469668
+    ],
+    [
+     4.175201886822009,
+     3.8595852707831853,
+     3.5430353012929743,
+     3.225627400703928,
+     2.9074299231277507,
+     2.5885047466194635,
+     2.2689078261369957,
+     1.9486897075149443,
+     1.6278960034210002,
+     1.3065678328028696,
+     0.9847422257153937,
+     0.662452495691781,
+     0.33972858199533107,
+     0.016597364172497464,
+     -0.30691704861115454,
+     -0.6307930509949813,
+     -0.9550112951602898,
+     -1.2795544625043078,
+     -1.6044070509224468,
+     -1.9295551754613882,
+     -2.254986380168276,
+     -2.5806894590421336,
+     -2.906654284079906,
+     -3.232871638468083,
+     -3.5593330530570313,
+     -3.8860306443266666,
+     -4.21295695211623,
+     -4.540104775478568,
+     -4.8674670050938005
+    ],
+    [
+     4.219676261034095,
+     3.9042987898287436,
+     3.5879615969899703,
+     3.2707426847117347,
+     2.952712759935679,
+     2.633935838951828,
+     2.3144698136079285,
+     1.994366978922102,
+     1.673674522716368,
+     1.3524349785052152,
+     1.0306866433431594,
+     0.7084639626353635,
+     0.3857978841666352,
+     0.06271618370041665,
+     -0.2607562354000095,
+     -0.5845970660751902,
+     -0.908786342546847,
+     -1.2333062039655545,
+     -1.5581406743785067,
+     -1.8832754567290806,
+     -2.2086977386861975,
+     -2.5343960081558237,
+     -2.86035987642893,
+     -3.1865799069707066,
+     -3.513047447943933,
+     -3.8397544666342185,
+     -4.166693384013598,
+     -4.493856907756964,
+     -4.821237862118011
+    ],
+    [
+     4.265047103812179,
+     3.949936291400803,
+     3.633837616907698,
+     3.316831758826396,
+     2.998991873737026,
+     2.680384211993413,
+     2.361068696158867,
+     2.041099461486823,
+     1.7205253586768947,
+     1.3993904198307234,
+     1.0777342890755506,
+     0.75559261970281,
+     0.4329974399392711,
+     0.10997748963151821,
+     -0.213441469749597,
+     -0.5372363693609543,
+     -0.8613865690406612,
+     -1.1858736127511804,
+     -1.5106810010334186,
+     -1.8357939781588186,
+     -2.1611993317331155,
+     -2.486885202572722,
+     -2.812840902757472,
+     -3.139056739828362,
+     -3.4655238451822754,
+     -3.792234004786934,
+     -4.119179490410062,
+     -4.446352889654264,
+     -4.773746933146782
+    ],
+    [
+     4.311306757141864,
+     3.9964918368061433,
+     3.6806590846932465,
+     3.363891947852011,
+     3.046266126377276,
+     2.727850198659638,
+     2.40870621084602,
+     2.088890229265729,
+     1.7684528556139583,
+     1.4474397054776489,
+     1.1258918514010645,
+     0.8038462321388522,
+     0.48133603006678527,
+     0.15839101893013208,
+     -0.16496211572862762,
+     -0.48869948107758887,
+     -0.8127997040012644,
+     -1.1372436781843192,
+     -1.4620143288839529,
+     -1.7870963930519395,
+     -2.112476212529174,
+     -2.4381415380951523,
+     -2.764081342243145,
+     -3.09028563860457,
+     -3.4167453060369155,
+     -3.743451915459815,
+     -4.070397557594362,
+     -4.397574669857505,
+     -4.72497586073078
+    ],
+    [
+     4.358442927280038,
+     4.043954846805349,
+     3.728417085508994,
+     3.4119159459658874,
+     3.09452976176712,
+     2.776329530601487,
+     2.4573795133574947,
+     2.1377377974075387,
+     1.8174568233841626,
+     1.4965838756490655,
+     1.1751615373532047,
+     0.8532281114985096,
+     0.530818009804392,
+     0.2079621114276904,
+     -0.1153119062030612,
+     -0.43897926211266736,
+     -0.7630177896471935,
+     -1.0874076750830284,
+     -1.4121312145747709,
+     -1.737172587088736,
+     -2.0625176410194683,
+     -2.3881536922399675,
+     -2.714069331422735,
+     -3.0402542385183153,
+     -3.3666990023665733,
+     -3.6933949434900626,
+     -4.020333938185814,
+     -4.347508242128953,
+     -4.6749103117792
+    ]
+   ]
+  },
+  "balance": 0.45225447660552714
+ },
+ "catalogue": {
+  "triples_per_graph": {
+   "stated": 140195,
+   "catalogue": 13,
+   "prov": 37,
+   "supplied": 68,
+   "derived": 106522
+  },
+  "triples_total": 246834,
+  "trig_bytes": 13389702,
+  "conforms": true,
+  "violations": 0,
+  "instances_of_extension_classes": {
+   "StoichiometricContact": 10634,
+   "Species": 5344,
+   "CytosolicReaction": 2914,
+   "ModifierContact": 1912,
+   "CircuitDataset": 1,
+   "CircuitAnalysis": 1,
+   "Convention": 10,
+   "CytosolicMedium": 1,
+   "Verdict": 11557,
+   "GibbsEnergyOfReaction": 105
+  },
+  "timing_s": {
+   "emit": 41.14711749998969,
+   "serialise": 93.64237119999598,
+   "validate": 134.59123560000444
+  }
+ },
+ "comparison": {
+  "medium_b": {
+   "name": "cytosol",
+   "ambient_chebi": {
+    "15377": "H2O",
+    "15378": "H+",
+    "43474": "Pi",
+    "30616": "ATP",
+    "456216": "ADP",
+    "456215": "AMP",
+    "57540": "NAD+",
+    "57945": "NADH",
+    "58349": "NADP+",
+    "57783": "NADPH",
+    "16526": "CO2",
+    "15379": "O2",
+    "33019": "PPi",
+    "57287": "CoA-SH"
+   },
+   "ph": [
+    7.1,
+    7.3
+   ],
+   "ionic_strength": [
+    0.15,
+    0.2
+   ],
+   "pmg": [
+    3.0,
+    3.2
+   ],
+   "temperature": 298.15,
+   "concentration": [
+    1e-06,
+    0.01
+   ],
+   "accessible_volume": [
+    0.7,
+    1.0
+   ]
+  },
+  "verdicts_a": 11557,
+  "verdicts_b": 11557,
+  "shared_iris": 11557,
+  "joined": [
+   {
+    "question": "ReactionEnergy",
+    "a": "Refused",
+    "b": "Refused",
+    "n": 2244
+   },
+   {
+    "question": "Direction",
+    "a": "Refused",
+    "b": "Refused",
+    "n": 2244
+   },
+   {
+    "question": "ReactionEnergy",
+    "a": "Answered",
+    "b": "Answered",
+    "n": 75
+   },
+   {
+    "question": "HessEnergy",
+    "a": "Answered",
+    "b": "Answered",
+    "n": 30
+   },
+   {
+    "question": "Direction",
+    "a": "Answered",
+    "b": "Answered",
+    "n": 10
+   },
+   {
+    "question": "ReactionEnergy",
+    "a": "Absent",
+    "b": "Absent",
+    "n": 595
+   },
+   {
+    "question": "HessEnergy",
+    "a": "Absent",
+    "b": "Absent",
+    "n": 367
+   },
+   {
+    "question": "Direction",
+    "a": "Absent",
+    "b": "Absent",
+    "n": 564
+   },
+   {
+    "question": "NodeSolve",
+    "a": "Absent",
+    "b": "Absent",
+    "n": 4603
+   },
+   {
+    "question": "HessEnergy",
+    "a": "CertifiedEmpty",
+    "b": "CertifiedEmpty",
+    "n": 1
+   },
+   {
+    "question": "Direction",
+    "a": "CertifiedEmpty",
+    "b": "CertifiedEmpty",
+    "n": 1
+   },
+   {
+    "question": "CycleConsistency",
+    "a": "CertifiedEmpty",
+    "b": "CertifiedEmpty",
+    "n": 1
+   },
+   {
+    "question": "Direction",
+    "a": "Undecidable",
+    "b": "Undecidable",
+    "n": 94
+   },
+   {
+    "question": "Direction",
+    "a": "Undecidable",
+    "b": "Answered",
+    "n": 1
+   },
+   {
+    "question": "NodeSolve",
+    "a": "Underdetermined",
+    "b": "Underdetermined",
+    "n": 727
+   }
+  ],
+  "changed": [
+   {
+    "question": "Direction",
+    "a": "Undecidable",
+    "b": "Answered",
+    "n": 1
+   }
+  ],
+  "changed_total": 1,
+  "direction_changes": [
+   {
+    "reaction": "reaction_6810464",
+    "name": "NUDT14 hydrolyses UDP-Glc to G1P and UMP",
+    "a": "undecidable",
+    "b": "answered",
+    "payload_b": "forward",
+    "blocker_a": "concentration"
+   }
+  ],
+  "conventions_digest_differs": true,
+  "timing_s": {
+   "sparql_join": 0.08293119999871124
+  }
+ },
+ "controls": {
+  "unaltered": {
+   "conforms": true,
+   "results": 0,
+   "seconds": 4.809978500008583,
+   "triples": 5509
+  },
+  "defects": {
+   "V1: payload on a non-answered verdict": {
+    "conforms": false,
+    "results": 1,
+    "components": {
+     "OrConstraintComponent": 1
+    },
+    "seconds": 5.943867599999066
+   },
+   "V2: blocker removed from an absent verdict": {
+    "conforms": false,
+    "results": 1,
+    "components": {
+     "OrConstraintComponent": 1
+    },
+    "seconds": 2.5885663999943063
+   },
+   "gate letter on an answered verdict": {
+    "conforms": false,
+    "results": 1,
+    "components": {
+     "OrConstraintComponent": 1
+    },
+    "seconds": 4.117731099991943
+   },
+   "supplied basis without a convention": {
+    "conforms": false,
+    "results": 1,
+    "components": {
+     "OrConstraintComponent": 1
+    },
+    "seconds": 5.766438599996036
+   },
+   "label outside the vocabulary": {
+    "conforms": false,
+    "results": 2,
+    "components": {
+     "InConstraintComponent": 1,
+     "OrConstraintComponent": 1
+    },
+    "seconds": 4.327626800004509
+   },
+   "stage digest not a SHA-256": {
+    "conforms": false,
+    "results": 1,
+    "components": {
+     "PatternConstraintComponent": 1
+    },
+    "seconds": 3.649635000008857
+   }
+  }
+ },
+ "scaling": [
+  {
+   "reactions": 125,
+   "verdicts": 559,
+   "triples": 11812,
+   "emit_s": 5.01258300000336,
+   "validate_s": 11.292062000007718,
+   "conforms": true
+  },
+  {
+   "reactions": 250,
+   "verdicts": 1092,
+   "triples": 24086,
+   "emit_s": 2.907931199995801,
+   "validate_s": 19.750031600007787,
+   "conforms": true
+  },
+  {
+   "reactions": 500,
+   "verdicts": 2162,
+   "triples": 46840,
+   "emit_s": 5.1829291000030935,
+   "validate_s": 29.418115299995407,
+   "conforms": true
+  },
+  {
+   "reactions": 1000,
+   "verdicts": 4224,
+   "triples": 90083,
+   "emit_s": 8.706670699990354,
+   "validate_s": 61.43545350000204,
+   "conforms": true
+  },
+  {
+   "reactions": 2000,
+   "verdicts": 8141,
+   "triples": 173590,
+   "emit_s": 17.255782099993667,
+   "validate_s": 124.07619870000053,
+   "conforms": true
+  }
+ ],
+ "schema": {
+  "classes_by_schema": {
+   "https://w3id.org/nfdi-de/dcat-ap-plus/homo-sapien/": 10,
+   "https://w3id.org/nfdi-de/dcat-ap-plus": 51,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/chemistry/entity/": 15,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/materials/": 8,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/chemistry/reaction/": 10,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/chemistry/": 5
+  },
+  "slots_by_schema": {
+   "https://w3id.org/nfdi-de/dcat-ap-plus/homo-sapien/": 44,
+   "https://w3id.org/nfdi-de/dcat-ap-plus": 96,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/chemistry/entity/": 10,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/materials/": 8,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/chemistry/reaction/": 11
+  },
+  "enums_by_schema": {
+   "https://w3id.org/nfdi-de/dcat-ap-plus/homo-sapien/": 7,
+   "https://w3id.org/nfdi-de/dcat-ap-plus": 4,
+   "https://w3id.org/nfdi-de/dcat-ap-plus/materials/": 1
+  },
+  "classes": 99,
+  "slots": 169,
+  "enums": 12,
+  "extension_classes": {
+   "CircuitDataset": {
+    "ancestry": [
+     "CircuitDataset",
+     "AnalysisDataset",
+     "Dataset"
+    ],
+    "class_uri": "hs:CircuitDataset",
+    "slots": 1
+   },
+   "CircuitAnalysis": {
+    "ancestry": [
+     "CircuitAnalysis",
+     "DataAnalysis",
+     "DataGeneratingActivity",
+     "Activity"
+    ],
+    "class_uri": "hs:CircuitAnalysis",
+    "slots": 3
+   },
+   "CytosolicMedium": {
+    "ancestry": [
+     "CytosolicMedium",
+     "Surrounding"
+    ],
+    "class_uri": "hs:CytosolicMedium",
+    "slots": 12
+   },
+   "Convention": {
+    "ancestry": [
+     "Convention",
+     "Plan"
+    ],
+    "class_uri": "hs:Convention",
+    "slots": 2
+   },
+   "CytosolicReaction": {
+    "ancestry": [
+     "CytosolicReaction",
+     "ChemicalReaction",
+     "EvaluatedActivity",
+     "Activity"
+    ],
+    "class_uri": "hs:CytosolicReaction",
+    "slots": 5
+   },
+   "Species": {
+    "ancestry": [
+     "Species",
+     "ChemicalEntity",
+     "Entity"
+    ],
+    "class_uri": "hs:Species",
+    "slots": 6
+   },
+   "StoichiometricContact": {
+    "ancestry": [
+     "StoichiometricContact"
+    ],
+    "class_uri": "hs:StoichiometricContact",
+    "slots": 3
+   },
+   "ModifierContact": {
+    "ancestry": [
+     "ModifierContact"
+    ],
+    "class_uri": "hs:ModifierContact",
+    "slots": 2
+   },
+   "Verdict": {
+    "ancestry": [
+     "Verdict",
+     "QualitativeAttribute"
+    ],
+    "class_uri": "hs:Verdict",
+    "slots": 10
+   },
+   "GibbsEnergyOfReaction": {
+    "ancestry": [
+     "GibbsEnergyOfReaction",
+     "QuantitativeAttribute"
+    ],
+    "class_uri": "hs:GibbsEnergyOfReaction",
+    "slots": 2
+   }
+  },
+  "pydantic_models": 100
+ },
+ "scidats": {
+  "rows": 11557,
+  "bytes": 101269,
+  "profile": "homo-sapien",
+  "round_trip_equal": true,
+  "metadata_class_read": "CircuitDataset",
+  "metadata_triples": 6,
+  "network_attempts": 0,
+  "timing_s": {
+   "write": 39.02251390001038,
+   "read": 5.226787899999181
+  }
+ }
+}

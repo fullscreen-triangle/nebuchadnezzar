@@ -1,0 +1,96 @@
+%==============================================================================
+\section{Named conventions}
+\label{app:conventions}
+
+Every supplied value names the convention that produced it (\cref{tab:conventions}).
+The extension declares those it uses as \term{hs:Convention} plans in the supplied graph and associates each with the run.
+
+\begin{table*}[t]
+\centering
+\caption{Conventions supplied by the research implementation. Those marked $\ast$ are registered by the extension, which declares each one it uses as a PROV-O plan.}
+\label{tab:conventions}
+\footnotesize
+\newcolumntype{C}{>{\raggedright\arraybackslash\ttfamily\hyphenchar\font=`\-}p{3.3cm}}%
+\begin{tabularx}{\textwidth}{@{}C>{\raggedright\arraybackslash}XC>{\raggedright\arraybackslash}X@{}}
+\toprule
+\normalfont Convention & Meaning & \normalfont Convention & Meaning \\
+\midrule
+ambient-reservoir$^\ast$ & the 14 cofactors of \cref{sec:graph} are chemostatted and merged into the medium &
+slot-from-name$^\ast$ & modified residues are read from Reactome species names \\
+medium-floor$^\ast$ & every vertex has a medium edge of weight 1 &
+enzyme-cycle-2$^\ast$ & each catalysed reaction becomes a binding and a catalytic step \\
+modifier-unit-weight$^\ast$ & every modifier edge has weight 1 &
+medium-floor-residue & a buried residue still receives a medium edge of weight 1 \\
+conjugate-closure$^\ast$ & a KEGG compound reached through conjugate acids, bases and tautomers &
+protein-ppm-to-molar$^\ast$ & PaxDb parts per million times 2--6\,mM total protein molecules \\
+water-balance$^\ast$ & a TECRDB match that holds once water is balanced &
+scope-from-source$^\ast$ & a route may use the source, the medium and the proteins no reaction makes \\
+concentration-window$^\ast$ & 1\,\textmu M to 10\,mM for every metabolite &
+dilute-limit-share$^\ast$ & a branch's share is $(k_{\mathrm{cat}}/K_m)[E]$ over its siblings' sum \\
+medium-window$^\ast$ & pH 6.8--7.6, ionic strength 0.1--0.25\,M, pMg 2.8--3.5, 298.15\,K &
+loss-of-function-variant$^\ast$ & Reactome's ``Defective \dots'' reactions are modifiers on their wild-type edge \\
+accessible-volume$^\ast$ & $\mu=\mu^\circ+RT\ln(c/a)$ with $a\in[0.7,1]$ for every small solute &
+textbook-standard-conditions & redox couples at pH 7, $I=0.25$\,M, 298.15\,K, no magnesium \\
+hess-span$^\ast$ & a \DG\ derived from measured reactions by Hess's law &
+moser-dutton-defaults & reorganisation energy 0.7\,eV, driving force 0, packing density 0.76 \\
+pH-window & pH 6.8 to 7.6 (first stage only) &
+medium-as-slowest-rung & a chain's medium resistance equals its slowest step's \\
+carrier-slot$^\ast$ & a protein unchanged across a reaction adds nothing to its \DG &
+mnx-xref & a KEGG compound reached through MetaNetX where conjugate closure found none \\
+free-residue$^\ast$ & a residue in a protein reacts like the free amino acid &
+measured-window$^\ast$ & a per-compound concentration window from a declared table \\
+kegg-candidate-selected-by-tecrdb-match$^\ast$ & one of several KEGG candidates, selected because exactly one combination matches &
+brenda-same-reference & a BRENDA $k_{\mathrm{cat}}$ pairs with a $K_m$ of the same protein, substrate and reference \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+%==============================================================================
+\section{Reproduction}
+\label{app:reproduce}
+
+\paragraph{Research implementation}
+From the root of the repository, the stages run in order as \texttt{python -m circuit\_kg} with the subcommands \texttt{fetch}, \texttt{extract}, \texttt{build} (about 13\,min, mostly singular value decompositions), \texttt{proteins}, \texttt{attach}, \texttt{medium}, \texttt{kinetics}, \texttt{complete}, \texttt{folding}, \texttt{extend} and \texttt{databases}.
+Each writes one results file.
+The first run of a network-dependent stage downloads and caches its sources.
+The 53 tests run with \texttt{python -m pytest circuit\_kg/tests}.
+
+\paragraph{Extension}
+\texttt{uv sync} installs the extension with its development dependencies, and \texttt{uv run pytest} runs its 89 tests, nine of which execute the example notebooks.
+The command line offers \texttt{summary}, \texttt{emit -o catalogue.trig}, \texttt{validate catalogue.trig} (exit status 1 on a violation) and \texttt{reactome} to read an SBML export into the corpus exchange format.
+
+\paragraph{This manuscript}
+\texttt{scripts/full\_inputs.py} writes the extension's inputs for the full corpus from the research implementation's prepared data.
+\texttt{scripts/extension\_audit.py}, run in the extension's environment, writes \texttt{data/extension.json}.
+\texttt{scripts/make\_numbers.py} turns it and the research implementation's results into the macros and the reproduction table used in the text.
+\texttt{figures/make\_figures.py} draws all four figures from the results files, and no number is typed in.
+
+%==============================================================================
+\section{Text of the claims}
+\label{app:claims}
+
+The claims are given as recorded, with identifiers mapped as in \cref{tab:outcomes}.
+Each states what would count against it.
+
+\begin{description}[style=unboxed,leftmargin=0pt,itemsep=2pt,font=\normalfont\bfseries]
+\item[M1] On TECRDB reactions measured under three or more conditions, hold out one condition at a time. The transform model's mean absolute error approaches the replicate noise and is below the constant model's.
+Its largest advantage is where the held-out transform moved by more than 1\kJ; in extrapolation it is no worse than an affine model in pH. \emph{Against:} error above twice the replicate noise, no advantage where the medium moved, or the affine model better in extrapolation.
+\item[M2] More than the first stage's 3 reactions receive a direction (M2a). For most of the rest the sign of \DGm\ is fixed across the medium window, so the blocker is the concentration window (M2b). \emph{Against:} for most reactions the medium window alone admits both signs.
+\item[M3] Crowding with $a\in[0.7,1]$ changes at most a few directions (M3a), and the dilute bound stays below $10^{-2}$ per particle for every metabolite at 10\,mM (M3b). \emph{Against:} more than 5\% of decided directions change, or the bound exceeds $10^{-2}$.
+\item[K1] Under leave-one-protein-out validation, a ridge map from five AlphaFold descriptors does not reduce the error of a substrate baseline for $\log_{10}K_m$ (one-sided Wilcoxon $p\ge0.05$). \emph{Against:} $p<0.05$ with lower mean error.
+\item[F2] The number of eigenvalues of $K$ above $\lambda_c=K_0e^{-1/2}\bar L$ equals the number of secondary-structure elements. \emph{Against:} an exact-match rate no higher than a length-only baseline.
+\item[F3] Phase-locked groups from $K_{\mathrm{AF}}$ beat equal contiguous blocks per protein (one-sided Wilcoxon $p<0.05$).
+\item[F4] Named sites have lower local order than same-type residues (F4a); within confidence strata below 70 and at least 70 the difference has one-sided $p\ge0.05$ (F4b).
+\item[E4] The NAD and NADP couples lie within 10\,mV (E4a), and \DGp\ of NADPH + GSSG $\to$ NADP$^+$ + 2\,GSH is within 10\kJ\ of $-16\kJ$ (E4b).
+For glutathione reductase and thioredoxin reductase~1 the electron-transfer rate from the flavin--cysteine edge distance exceeds the measured $k_{\mathrm{cat}}$, and a control at 25\,\AA\ falls below it (E4c). A value that cannot be derived is recorded as \st{absent}, not as a failure.
+\item[E5] Real EC labels split fewer shared structural classes than labels shuffled among the same reactions (200 shuffles, $p<0.05$).
+\item[E6] On reactions whose catalyst has a single EC class, the stoichiometric class agrees with it in more than 60\% of classifiable reactions and above a shuffle null.
+\item[R1] For reactions mapped to a directional Rhea reaction, a fixed sign of \DGm\ agrees with Rhea's direction in more than 80\%.
+\item[I1] MetaNetX supplies a KEGG compound for a participant in at least a quarter of the 197 reactions blocked by a missing identifier.
+\item[L1] At least 80\% of catalysts have cytosol support in the Human Protein Atlas or COMPARTMENTS (confidence at least 3).
+\item[S1] At least 70\% of the 206 located phosphosites coincide with a UniProt phospho-residue, and one numbering offset per protein explains at least a third of the 9 residue mismatches.
+\item[C1] M-CSA catalytic residues have more heavy-atom contacts than same-type residues in the same AlphaFold models (one-sided Mann--Whitney $p<0.05$).
+\item[A1] For proteins with an experimental structure covering at least 80\% of a high-confidence AlphaFold model, the median Jaccard index of contact sets is at least 0.6, and shifting the numbering by 3 residues drops it below 0.2.
+\item[D1] Outside DisProt disordered regions, named sites do not have lower local order than same-type residues (one-sided $p\ge0.05$).
+\item[G1] Where a reaction's small-molecule participants equal those of a Human-GEM cytosolic reaction, the coefficients agree in at least 90\%.
+\end{description}

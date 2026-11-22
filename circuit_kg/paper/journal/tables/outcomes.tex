@@ -1,0 +1,35 @@
+\begin{table*}[t]
+\centering
+\caption{Outcomes of the 23 pre-registered claims. ``Record'' is the identifier in the repository's prediction file, and ``Commit'' the commit that recorded the claim before its code was written.}
+\label{tab:outcomes}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}lll>{\raggedright\arraybackslash}Xl>{\raggedright\arraybackslash}p{5.0cm}@{}}
+\toprule
+ID & Record & Commit & Claim & Outcome & Key result \\
+\midrule
+M1  & M1  & \texttt{de6f210} & the Legendre transform transfers between conditions & holds & error 1.13$\times$ (interpolation) and 1.88$\times$ (extrapolation) the replicate noise \\
+M2a & M2  & \texttt{de6f210} & more than 3 reactions receive a direction & fails & 2 answered \\
+M2b & M2  & \texttt{de6f210} & concentrations, not the medium, block most of the rest & holds & 156 of 199 \\
+M3a & M3  & \texttt{de6f210} & crowding changes at most 5\% of decided directions & fails & 2 of 2 changed \\
+M3b & M3  & \texttt{de6f210} & dilute bound below $10^{-2}$ for every metabolite at 10\,mM & fails & largest 0.027 \\
+K1  & P1  & \texttt{de6f210} & AlphaFold descriptors do not improve $K_m$ prediction & holds & $p=0.94$; planted effect $p=0.007$ \\
+F2  & F2  & \texttt{d77d09c} & eigenvalue count equals the number of secondary-structure elements & fails & 0 and 3 exact, against 23 for length alone \\
+F3  & F3  & \texttt{d77d09c} & phase-locked groups beat contiguous blocks & fails & adjusted Rand index 0.067 against 0.486 \\
+F4a & F4  & \texttt{d77d09c} & phosphosites have lower local order & holds & $p=0.012$ \\
+F4b & F4  & \texttt{d77d09c} & no difference within confidence strata & holds (weak) & $p=0.39$ and $0.13$ \\
+E4a & X4a & \texttt{cddf153} & NAD and NADP couples within 10\,mV & holds & 1.6\,mV \\
+E4b & X4b & \texttt{cddf153} & NADPH reduces GSSG with $\DGp$ in $-16\pm10\kJ$ & holds & $-13.8\kJ$ \\
+E4c & X4c & \texttt{cddf153} & electron-transfer rate exceeds $k_{\mathrm{cat}}$ & untestable & no $k_{\mathrm{cat}}$ in SABIO-RK \\
+E5  & X5  & \texttt{cddf153} & EC labels split fewer classes than shuffled labels & holds & 4 against 53.7; $p=0.005$ \\
+E6  & X6  & \texttt{cddf153} & stoichiometric rules agree with EC classes above 60\% and the null & holds & 93.5\% against 32.5\% \\
+R1  & R1  & \texttt{b1d7fc8} & sign of \DGm\ agrees with the curated direction above 80\% & fails & 72.6\% \\
+I1  & X1  & \texttt{b1d7fc8} & MetaNetX unblocks at least a quarter of 197 reactions & fails & 34 (17\%) \\
+L1  & L1  & \texttt{b1d7fc8} & at least 80\% of catalysts have cytosol support & holds & 95.1\% \\
+S1  & S1  & \texttt{b1d7fc8} & at least 70\% of sites on phospho-residues; offsets explain a third of mismatches & holds & 81.6\%; 5 of 9 \\
+C1  & C1  & \texttt{b1d7fc8} & catalytic residues have more contacts & holds & $p=2.7\times10^{-18}$; control $p=0.46$ \\
+A1  & P1  & \texttt{b1d7fc8} & median contact Jaccard at least 0.6; shifted control below 0.2 & holds & 0.90; 0.14 \\
+D1  & D1  & \texttt{b1d7fc8} & outside measured disorder, sites do not have lower order & fails & $p=0.0012$ \\
+G1  & G1  & \texttt{b1d7fc8} & Human-GEM coefficients agree in at least 90\% & holds & 324 of 324 (23 discriminating) \\
+\bottomrule
+\end{tabularx}
+\end{table*}

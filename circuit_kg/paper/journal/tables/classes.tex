@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\centering
+\caption{The ten classes of the extension. ``Specialises'' gives the ancestry in DCAT-AP-PLUS (DAP) and Chem-DCAT-AP (CDA) as recorded in the merged schema; ``Also typed as'' gives the RDF classes the emitter asserts besides the extension's own; ``Graph'' is the named graph that holds the instances.}
+\label{tab:classes}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{4.3cm}>{\raggedright\arraybackslash}p{2.3cm}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+Class & Specialises & Also typed as & Graph & Model element \\
+\midrule
+\term{CytosolicReaction} & CDA ChemicalReaction $\to$ DAP EvaluatedActivity $\to$ Activity & \term{SIO:010345}, \term{prov:Activity} & stated & reaction vertex, with contacts, reversibility and pathways \\
+\term{Species} & CDA ChemicalEntity $\to$ DAP Entity & \term{CHEBI:23367} & stated & species vertex, with ChEBI, KEGG (and the basis of that mapping) or UniProt identifiers \\
+\term{StoichiometricContact} & -- & -- & stated & stoichiometric edge: species, signed coefficient, basis \\
+\term{ModifierContact} & -- & -- & stated & modifier edge: species and role (catalyst, stimulator, inhibitor) \\
+\term{CytosolicMedium} & DAP Surrounding & \term{prov:Location} & supplied & windows of pH, $I$, pMg, $T$, concentration and accessible volume; chemostatted species \\
+\term{Convention} & DAP Plan & \term{prov:Plan} & supplied & named convention with its meaning \\
+\term{Verdict} & DAP QualitativeAttribute & \term{prov:Entity} & derived & typed result: status, question, subject, basis, absence code, blocker, remedy \\
+\term{GibbsEnergyOfReaction} & DAP QuantitativeAttribute & \term{qudt:Quantity} & derived & answered \DG\ in \kJ, with standard uncertainty and reference state \\
+\term{CircuitAnalysis} & DAP DataAnalysis $\to$ DataGeneratingActivity $\to$ Activity & \term{prov:Activity} & provenance & the run: inputs used, stage digest, software version, conventions as plans \\
+\term{CircuitDataset} & DAP AnalysisDataset $\to$ Dataset & \term{dcat:Dataset} & catalogue & the derived graph as a dataset of verdicts, with its distribution \\
+\bottomrule
+\end{tabularx}
+\end{table*}
